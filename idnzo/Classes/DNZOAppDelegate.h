@@ -7,10 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <sqlite3.h>
 
 @interface DNZOAppDelegate : NSObject <UIApplicationDelegate> {
   UIWindow *window;
   UINavigationController *navigationController;
+  sqlite3 *database;
 }
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;
