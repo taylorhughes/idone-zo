@@ -8,14 +8,18 @@
 
 #import "DNZODataObject.h"
 
-static sqlite3 *db = nil;
+static sqlite3 *database = nil;
 
 @implementation DNZODataObject
 
 @synthesize key, remoteKey;
 
 + (void) setDatabase:(sqlite3*)dbToSet {
-  db = dbToSet;
+  database = dbToSet;
+}
+
++ (sqlite3 *) database {
+  return database;
 }
 
 - (void) save {

@@ -12,6 +12,7 @@ static NSString *DATABASE_FILENAME     = @"dnzo.sqlite";
 static NSString *DATABASE_SQL_FILENAME = @"tasks.sql";
 
 @interface DNZOAppDelegate (Private)
+- (void) openDatabase;
 - (void) createDatabaseIfNeeded;
 @end
 
@@ -20,14 +21,14 @@ static NSString *DATABASE_SQL_FILENAME = @"tasks.sql";
 @synthesize window, navigationController;
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application {
+  [self openDatabase];
   // Create the database if it doesn't exist yet
   [self createDatabaseIfNeeded];
-
+  
   // Add the current view in the navigationController to the main window.
   [window addSubview:navigationController.view];
   [window makeKeyAndVisible];
 }
-
 
 - (void)dealloc {
   [navigationController release];
@@ -35,36 +36,48 @@ static NSString *DATABASE_SQL_FILENAME = @"tasks.sql";
   [super dealloc];
 }
 
-- (void)createDatabaseIfNeeded {
-  NSFileManager *fileManager = [NSFileManager defaultManager];
+- (void)openDatabase {
   NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
   NSString *documentsDirectory = [paths objectAtIndex:0];
   NSString *databasePath = [documentsDirectory stringByAppendingPathComponent:DATABASE_FILENAME];
-  
-  if ([fileManager fileExistsAtPath:databasePath]) {
-    NSLog(@"Database already exists!");
-    return;
-  } else {
-    NSLog(@"Attempting to create database...");
-  }
-  
-  // Open the database. This should create a new blank database.
+
   if (sqlite3_open([databasePath UTF8String], &database) != SQLITE_OK) {
     sqlite3_close(database);
-    NSAssert1(0, @"Failed to create database with message '%s'.", sqlite3_errmsg(database));
+    NSAssert1(0, @"Failed to open or create database with message '%s'.", sqlite3_errmsg(database));
+  }
+  
+  [DNZODataObject setDatabase:database];
+}
+
+- (void)createDatabaseIfNeeded {
+  char *dbError;
+  
+  const char *testSQL = "SELECT key FROM tasks LIMIT 1;"; 
+  sqlite3_exec(database, testSQL, NULL, NULL, &dbError);
+  if (!dbError) {
+    NSLog(@"Database already exists.");
+    return;
+  }
+  
+  NSString *sqlPath = [
+    [[NSBundle mainBundle] resourcePath] 
+    stringByAppendingPathComponent:DATABASE_SQL_FILENAME
+  ];
+  
+  // Read SQL from the SQL file in the resources directory
+  const char *createSQL = [[NSString stringWithContentsOfFile:sqlPath] UTF8String];
+  sqlite3_exec(database, createSQL, NULL, NULL, &dbError);
+  if (dbError) {
+    NSAssert1(0, @"Failed to create database tables with message '%s'.", dbError);
   } else {
-    NSLog(@"Created the database, now adding the tables...");
-    
-    NSString *sqlPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:DATABASE_SQL_FILENAME];
-    
-    const char *sql = [[NSString stringWithContentsOfFile:sqlPath] UTF8String];
-    char *error;
-    sqlite3_exec(database, sql, NULL, NULL, &error);
-    if (error) {
-      NSAssert1(0, @"Failed to create database tables with message '%s'.", error);
-    } else {
-      NSLog(@"Created the database tables.");
-    }
+    NSLog(@"Created the database tables.");
+  }
+}
+
+// Save all changes to the database, then close it.
+- (void)applicationWillTerminate:(UIApplication *)application {
+  if (sqlite3_close(database) != SQLITE_OK) {
+    NSAssert1(0, @"Error: failed to close database with message '%s'.", sqlite3_errmsg(database));
   }
 }
 

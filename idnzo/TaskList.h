@@ -7,15 +7,13 @@
 //
 
 #import "DNZODataObject.h"
+#import <sqlite3.h>
 
-@class Task;
+@class Task, DNZODataObject;
 
 @interface TaskList : DNZODataObject {
-  
   NSString *name;
-  
   NSArray  *tasks;
-  
 }
 
 @property (copy, nonatomic)   NSString *name;
@@ -25,6 +23,7 @@
 + (NSArray*) findAll;
 + (id) findByRemoteKey:(NSString*)remoteKey;
 
+- (id) initWithPrimaryKey:(NSInteger)key;
 - (void) addTask:(Task*)task;
 - (void) removeTask:(Task*)task;
 

@@ -14,12 +14,21 @@
 @synthesize tableView;
 @synthesize listViewController, navigationController;
 
+@synthesize taskLists;
+
 - (ListViewController *)listViewController {
   // Instantiate the detail view controller if necessary.
   if (listViewController == nil) {
     listViewController = [[ListViewController alloc] initWithNibName:@"ListView" bundle:nil];
   }
   return listViewController;
+}
+
+- (NSArray *) taskLists {
+  if (taskLists == nil) {
+    taskLists = [TaskList findAll];
+  }
+  return taskLists;
 }
 
 #pragma mark Table Delegate and Data Source Methods
@@ -32,8 +41,7 @@
 
 // One row per book, the number of books is the number of rows.
 - (NSInteger)tableView:(UITableView *)tv numberOfRowsInSection:(NSInteger)section {
-  //AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-  return 3;
+  return [self.taskLists count];
 }
 
 // The accessory type is the image displayed on the far right of each table cell. In order for the delegate method
@@ -53,17 +61,8 @@
   //AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
   //Book *book = (Book *)[appDelegate.books objectAtIndex:indexPath.row];
   
-  switch(indexPath.row) {
-  case 0:
-    cell.text = @"A thing";
-    break;
-  case 1:
-    cell.text = @"Another thing";
-    break;
-  case 2:
-    cell.text = @"Third thing";
-    break;
-  }
+  TaskList *taskList = [taskLists objectAtIndex:indexPath.row];
+  cell.text = taskList.name;
   
   return cell;
 }

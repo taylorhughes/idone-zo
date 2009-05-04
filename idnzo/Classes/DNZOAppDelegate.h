@@ -8,10 +8,14 @@
 
 #import <UIKit/UIKit.h>
 #import <sqlite3.h>
+#import "DNZODataObject.h"
+
+@class DNZODataObject;
 
 @interface DNZOAppDelegate : NSObject <UIApplicationDelegate> {
   UIWindow *window;
   UINavigationController *navigationController;
+  
   sqlite3 *database;
 }
 

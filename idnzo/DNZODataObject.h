@@ -9,10 +9,8 @@
 #import <sqlite3.h>
 
 @interface DNZODataObject : NSObject {
-  
   NSInteger key;
-  NSString *remoteKey;
-  
+  NSString *remoteKey;  
 }
 
 // Local database key
@@ -21,7 +19,8 @@
 @property (copy, nonatomic) NSString *remoteKey;
 
 // Static members
-+ (void) setDatabase:(sqlite3 *)db;
++ (void) setDatabase:(sqlite3 *)dbToSet;
++ (sqlite3 *)database;
 
 // Instance members
 - (void) save;
