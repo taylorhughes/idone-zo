@@ -57,10 +57,8 @@
 		34D1B2380FAE50AE009F90F9 /* TaskList.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D1B2370FAE50AE009F90F9 /* TaskList.m */; };
 		34D1B2600FAE58CA009F90F9 /* Task.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D1B22D0FAE5016009F90F9 /* Task.m */; };
 		34D1B2610FAE58CA009F90F9 /* TaskList.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D1B2370FAE50AE009F90F9 /* TaskList.m */; };
-		34D1B3340FAE6E02009F90F9 /* tasks.sql in Resources */ = {isa = PBXBuildFile; fileRef = 34D1B3330FAE6E02009F90F9 /* tasks.sql */; };
 		34D1B35F0FAE76FE009F90F9 /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 34D1B35E0FAE76FE009F90F9 /* libsqlite3.0.dylib */; };
 		34D1B3600FAE76FE009F90F9 /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 34D1B35E0FAE76FE009F90F9 /* libsqlite3.0.dylib */; };
-		34D1B3C00FAE7BEC009F90F9 /* tasks.sql in Resources */ = {isa = PBXBuildFile; fileRef = 34D1B3330FAE6E02009F90F9 /* tasks.sql */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -119,7 +117,6 @@
 		34D1B22D0FAE5016009F90F9 /* Task.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Task.m; sourceTree = "<group>"; };
 		34D1B2360FAE50AE009F90F9 /* TaskList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskList.h; sourceTree = "<group>"; };
 		34D1B2370FAE50AE009F90F9 /* TaskList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaskList.m; sourceTree = "<group>"; };
-		34D1B3330FAE6E02009F90F9 /* tasks.sql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = tasks.sql; sourceTree = "<group>"; };
 		34D1B35E0FAE76FE009F90F9 /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -204,7 +201,6 @@
 				28AD733E0D9D9553002E5188 /* MainWindow.xib */,
 				3490B7FC0FA5516F004195D9 /* ListView.xib */,
 				8D1107310486CEB800E47090 /* Info.plist */,
-				34D1B3330FAE6E02009F90F9 /* tasks.sql */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -341,7 +337,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				34D1B3C00FAE7BEC009F90F9 /* tasks.sql in Resources */,
 				28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */,
 				3490B7FD0FA5516F004195D9 /* ListView.xib in Resources */,
 			);
@@ -351,7 +346,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				34D1B3340FAE6E02009F90F9 /* tasks.sql in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
