@@ -55,6 +55,7 @@
 		34770B310FAFE4A300AD8397 /* ListView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34770B2F0FAFE4A300AD8397 /* ListView.xib */; };
 		34770B320FAFE4A300AD8397 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34770B300FAFE4A300AD8397 /* MainWindow.xib */; };
 		34770B350FAFE4C200AD8397 /* TaskTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 34770B340FAFE4C200AD8397 /* TaskTest.m */; };
+		34770B440FAFE67B00AD8397 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 34770B430FAFE67B00AD8397 /* icon.png */; };
 		348E18D10FA7DE7A00B75000 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 348E18D00FA7DE7A00B75000 /* SenTestingKit.framework */; };
 		348E19860FA7E04900B75000 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		348E19870FA7E04900B75000 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765FC0DF74451002DB57D /* CoreGraphics.framework */; };
@@ -114,6 +115,7 @@
 		34770B300FAFE4A300AD8397 /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = MainWindow.xib; path = Resources/MainWindow.xib; sourceTree = "<group>"; };
 		34770B330FAFE4C200AD8397 /* TaskTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TaskTest.h; path = Test/TaskTest.h; sourceTree = "<group>"; };
 		34770B340FAFE4C200AD8397 /* TaskTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TaskTest.m; path = Test/TaskTest.m; sourceTree = "<group>"; };
+		34770B430FAFE67B00AD8397 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon.png; path = Resources/icon.png; sourceTree = "<group>"; };
 		348E18C60FA7DE1E00B75000 /* Test.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Test.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		348E18C70FA7DE1E00B75000 /* Test-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Test-Info.plist"; sourceTree = "<group>"; };
 		348E18D00FA7DE7A00B75000 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -200,6 +202,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				34770B430FAFE67B00AD8397 /* icon.png */,
 				34770B2F0FAFE4A300AD8397 /* ListView.xib */,
 				34770B300FAFE4A300AD8397 /* MainWindow.xib */,
 				8D1107310486CEB800E47090 /* Info.plist */,
@@ -341,6 +344,7 @@
 			files = (
 				34770B310FAFE4A300AD8397 /* ListView.xib in Resources */,
 				34770B320FAFE4A300AD8397 /* MainWindow.xib in Resources */,
+				34770B440FAFE67B00AD8397 /* icon.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
