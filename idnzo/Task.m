@@ -13,12 +13,15 @@
 @synthesize taskList;
 @synthesize body, contexts, project, due;
 
-+ (id) findByRemoteKey:(NSString *)aRemoteKey {
-  return nil;
+- (void)dealloc {
+  [taskList release];
+  
+  [body release];
+  [contexts release];
+  [project release];
+  [due release];
+  
+  [super dealloc];
 }
-
-//+ (NSArray*) findAllByTaskList:(TaskList *)taskList {
-//  return nil;
-//}
 
 @end

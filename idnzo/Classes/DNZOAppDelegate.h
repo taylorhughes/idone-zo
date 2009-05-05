@@ -7,16 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <sqlite3.h>
-#import "DNZODataObject.h"
 
-@class DNZODataObject;
+#import "SQLiteInstanceManager.h"
+#import "TaskList.h"
+#import "Task.h"
+
+@class SQLiteInstanceManager, TaskList, Task;
 
 @interface DNZOAppDelegate : NSObject <UIApplicationDelegate> {
   UIWindow *window;
   UINavigationController *navigationController;
-  
-  sqlite3 *database;
 }
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;

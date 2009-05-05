@@ -26,7 +26,7 @@
 
 - (NSArray *) taskLists {
   if (taskLists == nil) {
-    taskLists = [TaskList findAll];
+    self.taskLists = [TaskList allObjects];
   }
   return taskLists;
 }
@@ -61,25 +61,19 @@
   //AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
   //Book *book = (Book *)[appDelegate.books objectAtIndex:indexPath.row];
   
-  TaskList *taskList = [taskLists objectAtIndex:indexPath.row];
+  TaskList *taskList = [self.taskLists objectAtIndex:indexPath.row];
   cell.text = taskList.name;
   
   return cell;
 }
 
 - (NSIndexPath *)tableView:(UITableView *)tv willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-  // Inspect the book (method defined above).
-  //AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-  //Book *book = [appDelegate.books objectAtIndex:indexPath.row];
-  
   ListViewController *controller = self.listViewController;
+
+  TaskList *clickedList = [self.taskLists objectAtIndex:indexPath.row];
+  controller.taskList = clickedList;
   
-  // Set the detail controller's inspected item to the currently-selected book.
-  controller.contents = [NSString stringWithFormat:@"You clicked %d", indexPath.row];
-                         
-  // "Push" the detail view on to the navigation controller's stack.
   [self.navigationController pushViewController:controller animated:YES];
-  //[controller setEditing:NO animated:NO];
   
   return nil;
 }

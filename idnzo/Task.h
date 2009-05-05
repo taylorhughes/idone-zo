@@ -6,11 +6,11 @@
 //  Copyright 2009 __MyCompanyName__. All rights reserved.
 //
 
-#import "DNZODataObject.h"
+#import "SQLitePersistentObject.h"
 
 @class TaskList;
 
-@interface Task : DNZODataObject {
+@interface Task : SQLitePersistentObject {
   
   TaskList *taskList;
   
@@ -21,15 +21,11 @@
   
 }
 
-@property (retain, nonatomic, readonly) TaskList *taskList;
+@property (retain, nonatomic) TaskList *taskList;
 
 @property (copy, nonatomic)   NSString *body;
 @property (copy, nonatomic)   NSString *project;
 @property (retain, nonatomic) NSArray  *contexts;
 @property (copy, nonatomic)   NSDate   *due;
-
-// Static members
-//+ (NSArray*) findAllByTaskList:(TaskList*)taskList;
-+ (id) findByRemoteKey:(NSString*)remoteKey;
 
 @end

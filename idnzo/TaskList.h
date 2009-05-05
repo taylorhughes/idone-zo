@@ -6,25 +6,12 @@
 //  Copyright 2009 __MyCompanyName__. All rights reserved.
 //
 
-#import "DNZODataObject.h"
-#import <sqlite3.h>
+#import "SQLitePersistentObject.h"
 
-@class Task, DNZODataObject;
-
-@interface TaskList : DNZODataObject {
+@interface TaskList : SQLitePersistentObject {
   NSString *name;
-  NSArray  *tasks;
 }
 
-@property (copy, nonatomic)   NSString *name;
-@property (retain, nonatomic) NSArray  *tasks;
-
-// Static members
-+ (NSArray*) findAll;
-+ (id) findByRemoteKey:(NSString*)remoteKey;
-
-- (id) initWithPrimaryKey:(NSInteger)key;
-- (void) addTask:(Task*)task;
-- (void) removeTask:(Task*)task;
+@property (copy, nonatomic) NSString *name;
 
 @end

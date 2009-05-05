@@ -11,6 +11,6 @@
   NSArray *taskLists;
 }
 
-@property (retain, nonatomic) NSArray* taskLists;
+@property (retain, nonatomic) NSArray *taskLists;
 
 @end

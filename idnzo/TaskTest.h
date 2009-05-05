@@ -7,6 +7,9 @@
 //
 
 #import <SenTestingKit/SenTestingKit.h>
+#import "TaskList.h"
+
+@class TaskList;
 
 @interface TaskFactoryTest : SenTestCase {
 

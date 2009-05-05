@@ -1,26 +1,41 @@
 #import "ListViewController.h"
 
-@interface ListViewController ()
-
-@property (nonatomic, retain) UITableView *tableView;
-
-@end
 
 @implementation ListViewController
 
 @synthesize tableView;
-@synthesize contents;
+@synthesize taskList;
+@synthesize tasks;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
   if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
     // Title displayed by the navigation controller.
-    self.title = @"Contents!";
+    self.title = @"Loading...";
   }
   return self;
 }
 
+- (void)setTaskList:(TaskList *)list {
+  if (taskList) {
+    [taskList release];
+  }
+  if (tasks) {
+    [tasks release];
+    tasks = nil;
+  }
+  taskList = [list retain];
+  self.title = [taskList name];
+}
+
+- (NSArray *)tasks {
+  if (!tasks) {
+    tasks = [[taskList findRelated:[Task class]]  retain];
+  }
+  return tasks;
+}
+
 - (void)viewWillAppear:(BOOL)animated {
-  // Redisplay the data.
+  NSLog(@"Reloading data...");
   [tableView reloadData];
 }
 
@@ -31,8 +46,7 @@
 
 // One row per book, the number of books is the number of rows.
 - (NSInteger)tableView:(UITableView *)tv numberOfRowsInSection:(NSInteger)section {
-  //AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-  return 1;
+  return [self.tasks count];
 }
 
 // The accessory type is the image displayed on the far right of each table cell. In order for the delegate method
@@ -48,11 +62,18 @@
     cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:@"MyIdentifier"] autorelease];
   }
   
-  if (self.contents) {
-    cell.text = self.contents;
-  }
+  Task *task = [self.tasks objectAtIndex:indexPath.row];
+  NSLog(@"Setting task body...");
+  cell.text = task.body;
   
   return cell;
+}
+
+- (void)dealloc {
+  [tableView release];
+  [taskList release];
+  [tasks release];
+  [super dealloc];
 }
 
 @end

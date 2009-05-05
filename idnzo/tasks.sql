@@ -16,13 +16,3 @@ CREATE TABLE tasks (
   'project' TEXT,
   'due' NUMERIC
 );
-
-INSERT INTO task_lists 
-  (name) 
-  VALUES 
-  ('Tasks');
-  
-INSERT INTO task_lists 
-  (name) 
-  VALUES 
-  ('Life');

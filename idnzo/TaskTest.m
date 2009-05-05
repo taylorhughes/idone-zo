@@ -6,15 +6,26 @@
 //  Copyright 2009 __MyCompanyName__. All rights reserved.
 //
 
-#import "TaskFactoryTest.h"
-
+#import "TaskTest.h"
 
 @implementation TaskFactoryTest
 
-- (void) testTrue
-{
-  STAssertEquals(1, 1, @"Two should equal one!");
++ (void) setUp {
 }
 
++ (void) executeAll:(NSArray*)statements {
+
+}
+
+- (void) setUp {
+}
+
+- (void) testTaskListFindAll
+{
+  STAssertEquals(2, 2, @"There should be two task lists in the database.");
+}
+
+- (void) tearDown {
+}
 
 @end
