@@ -1,18 +1,19 @@
-#import "ListViewController.h"
 
+#import "ListViewController.h"
 
 @implementation ListViewController
 
 @synthesize tableView;
 @synthesize taskList;
 @synthesize tasks;
+@synthesize editViewController;
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-  if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-    // Title displayed by the navigation controller.
-    self.title = @"Loading...";
+- (EditViewController *)editViewController {
+  // Instantiate the detail view controller if necessary.
+  if (editViewController == nil) {
+    editViewController = [[EditViewController alloc] initWithNibName:@"EditView" bundle:nil];
   }
-  return self;
+  return editViewController;
 }
 
 - (void)setTaskList:(TaskList *)list {
@@ -69,10 +70,22 @@
   return cell;
 }
 
+- (NSIndexPath *)tableView:(UITableView *)tv willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+  EditViewController *controller = self.editViewController;
+  
+  Task *clickedTask = [self.tasks objectAtIndex:indexPath.row];
+  controller.task = clickedTask;
+  
+  [self.navigationController pushViewController:controller animated:YES];
+  
+  return nil;
+}
+
 - (void)dealloc {
   [tableView release];
   [taskList release];
   [tasks release];
+  [editViewController release];
   [super dealloc];
 }
 

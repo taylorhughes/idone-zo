@@ -56,6 +56,8 @@
 		34770B320FAFE4A300AD8397 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34770B300FAFE4A300AD8397 /* MainWindow.xib */; };
 		34770B350FAFE4C200AD8397 /* TaskTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 34770B340FAFE4C200AD8397 /* TaskTest.m */; };
 		34770B440FAFE67B00AD8397 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 34770B430FAFE67B00AD8397 /* icon.png */; };
+		34770B500FAFED2400AD8397 /* EditView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34770B4F0FAFED2400AD8397 /* EditView.xib */; };
+		34770B5A0FAFED7000AD8397 /* EditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34770B590FAFED7000AD8397 /* EditViewController.m */; };
 		348E18D10FA7DE7A00B75000 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 348E18D00FA7DE7A00B75000 /* SenTestingKit.framework */; };
 		348E19860FA7E04900B75000 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		348E19870FA7E04900B75000 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765FC0DF74451002DB57D /* CoreGraphics.framework */; };
@@ -116,6 +118,9 @@
 		34770B330FAFE4C200AD8397 /* TaskTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TaskTest.h; path = Test/TaskTest.h; sourceTree = "<group>"; };
 		34770B340FAFE4C200AD8397 /* TaskTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TaskTest.m; path = Test/TaskTest.m; sourceTree = "<group>"; };
 		34770B430FAFE67B00AD8397 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon.png; path = Resources/icon.png; sourceTree = "<group>"; };
+		34770B4F0FAFED2400AD8397 /* EditView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = EditView.xib; path = Resources/EditView.xib; sourceTree = "<group>"; };
+		34770B580FAFED7000AD8397 /* EditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditViewController.h; sourceTree = "<group>"; };
+		34770B590FAFED7000AD8397 /* EditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditViewController.m; sourceTree = "<group>"; };
 		348E18C60FA7DE1E00B75000 /* Test.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Test.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		348E18C70FA7DE1E00B75000 /* Test-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Test-Info.plist"; sourceTree = "<group>"; };
 		348E18D00FA7DE7A00B75000 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -155,12 +160,14 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				34770B260FAFE45B00AD8397 /* ListViewController.h */,
-				34770B270FAFE45B00AD8397 /* ListViewController.m */,
 				34770B280FAFE45B00AD8397 /* MainViewController.h */,
 				34770B290FAFE45B00AD8397 /* MainViewController.m */,
+				34770B260FAFE45B00AD8397 /* ListViewController.h */,
+				34770B270FAFE45B00AD8397 /* ListViewController.m */,
 				1D3623240D0F684500981E51 /* DNZOAppDelegate.h */,
 				1D3623250D0F684500981E51 /* DNZOAppDelegate.m */,
+				34770B580FAFED7000AD8397 /* EditViewController.h */,
+				34770B590FAFED7000AD8397 /* EditViewController.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -203,6 +210,7 @@
 			isa = PBXGroup;
 			children = (
 				34770B430FAFE67B00AD8397 /* icon.png */,
+				34770B4F0FAFED2400AD8397 /* EditView.xib */,
 				34770B2F0FAFE4A300AD8397 /* ListView.xib */,
 				34770B300FAFE4A300AD8397 /* MainWindow.xib */,
 				8D1107310486CEB800E47090 /* Info.plist */,
@@ -345,6 +353,7 @@
 				34770B310FAFE4A300AD8397 /* ListView.xib in Resources */,
 				34770B320FAFE4A300AD8397 /* MainWindow.xib in Resources */,
 				34770B440FAFE67B00AD8397 /* icon.png in Resources */,
+				34770B500FAFED2400AD8397 /* EditView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -400,6 +409,7 @@
 				34770B250FAFE44E00AD8397 /* TaskList.m in Sources */,
 				34770B2C0FAFE45B00AD8397 /* ListViewController.m in Sources */,
 				34770B2D0FAFE45B00AD8397 /* MainViewController.m in Sources */,
+				34770B5A0FAFED7000AD8397 /* EditViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
