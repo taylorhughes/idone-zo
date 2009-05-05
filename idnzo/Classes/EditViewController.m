@@ -15,8 +15,12 @@
 
 - (void)viewDidLoad {
   [super viewDidLoad];
-  
-  self.body.text = self.task.body;
+  if ([self.task existsInDB]) {
+    self.title = @"Edit task";
+    self.body.text = self.task.body;    
+  } else {
+    self.title = @"Add task";
+  }
 }
 
 - (void)dealloc {

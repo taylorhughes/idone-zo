@@ -17,4 +17,6 @@
 @property (retain, readonly, nonatomic) NSArray *tasks;
 @property (retain, nonatomic) EditViewController *editViewController;
 
+- (IBAction) addNewTask:(id)sender;
+
 @end

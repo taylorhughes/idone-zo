@@ -36,7 +36,6 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-  NSLog(@"Reloading data...");
   [tableView reloadData];
 }
 
@@ -79,6 +78,17 @@
   [self.navigationController pushViewController:controller animated:YES];
   
   return nil;
+}
+
+- (IBAction)addNewTask:(id)sender {
+  EditViewController *controller = self.editViewController;
+  
+  Task *task = [[Task alloc] init];
+  task.taskList = self.taskList;
+  controller.task = task;
+  [task release];
+  
+  [self.navigationController pushViewController:controller animated:YES];
 }
 
 - (void)dealloc {

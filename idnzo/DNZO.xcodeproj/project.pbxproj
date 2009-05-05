@@ -210,9 +210,9 @@
 			isa = PBXGroup;
 			children = (
 				34770B430FAFE67B00AD8397 /* icon.png */,
-				34770B4F0FAFED2400AD8397 /* EditView.xib */,
-				34770B2F0FAFE4A300AD8397 /* ListView.xib */,
 				34770B300FAFE4A300AD8397 /* MainWindow.xib */,
+				34770B2F0FAFE4A300AD8397 /* ListView.xib */,
+				34770B4F0FAFED2400AD8397 /* EditView.xib */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 			);
 			name = Resources;
