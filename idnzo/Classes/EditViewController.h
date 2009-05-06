@@ -10,19 +10,10 @@
 
 @class Task;
 
-@interface EditViewController : UIViewController <UITextFieldDelegate> {
-  IBOutlet UITextField *body;
-  IBOutlet UIButton *saveButton;
-  IBOutlet UIButton *cancelButton;
+@interface EditViewController : UITableViewController {
   Task *task;
 }
 
 @property (retain, nonatomic) Task *task;
-@property (retain, nonatomic) IBOutlet UITextField *body;
-@property (retain, nonatomic) IBOutlet UIButton *saveButton;
-@property (retain, nonatomic) IBOutlet UIButton *cancelButton;
-
-- (IBAction) save:(id) sender;
-- (IBAction) cancel:(id)sender;
 
 @end

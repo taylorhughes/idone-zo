@@ -3,11 +3,8 @@
 
 @class ListViewController, TaskList;
 
-@interface MainViewController : UIViewController {
+@interface MainViewController : UITableViewController {
   ListViewController *listViewController;
-  IBOutlet UINavigationController *navigationController;
-  IBOutlet UITableView *tableView;
-  
   NSArray *taskLists;
 }
 

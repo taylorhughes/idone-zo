@@ -3,18 +3,14 @@
 
 @interface MainViewController ()
 
-@property (nonatomic, retain) UINavigationController *navigationController;
 @property (nonatomic, retain) ListViewController *listViewController;
-@property (nonatomic, retain) UITableView *tableView;
 
 @end
 
 @implementation MainViewController
 
-@synthesize tableView;
-@synthesize listViewController, navigationController;
-
 @synthesize taskLists;
+@synthesize listViewController;
 
 - (ListViewController *)listViewController {
   // Instantiate the detail view controller if necessary.

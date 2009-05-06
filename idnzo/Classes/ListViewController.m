@@ -6,14 +6,14 @@
 @synthesize tableView;
 @synthesize taskList;
 @synthesize tasks;
-@synthesize editViewController;
+@synthesize taskViewController;
 
-- (EditViewController *)editViewController {
+- (TaskViewController *)taskViewController {
   // Instantiate the detail view controller if necessary.
-  if (editViewController == nil) {
-    editViewController = [[EditViewController alloc] initWithNibName:@"EditView" bundle:nil];
+  if (taskViewController == nil) {
+    taskViewController = [[TaskViewController alloc] initWithNibName:@"TaskView" bundle:nil];
   }
-  return editViewController;
+  return taskViewController;
 }
 
 - (void)setTaskList:(TaskList *)list {
@@ -70,7 +70,7 @@
 }
 
 - (NSIndexPath *)tableView:(UITableView *)tv willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-  EditViewController *controller = self.editViewController;
+  TaskViewController *controller = self.taskViewController;
   
   Task *clickedTask = [self.tasks objectAtIndex:indexPath.row];
   controller.task = clickedTask;
@@ -81,21 +81,21 @@
 }
 
 - (IBAction)addNewTask:(id)sender {
-  EditViewController *controller = self.editViewController;
+  //TaskViewController *controller = self.taskViewController;
   
   Task *task = [[Task alloc] init];
   task.taskList = self.taskList;
-  controller.task = task;
+  //controller.task = task;
   [task release];
   
-  [self.navigationController pushViewController:controller animated:YES];
+  //[self.navigationController pushViewController:controller animated:YES];
 }
 
 - (void)dealloc {
   [tableView release];
   [taskList release];
   [tasks release];
-  [editViewController release];
+  [taskViewController release];
   [super dealloc];
 }
 
