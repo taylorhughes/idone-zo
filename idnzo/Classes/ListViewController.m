@@ -8,15 +8,18 @@
 @synthesize tasks;
 @synthesize taskViewController;
 
-- (TaskViewController *)taskViewController {
+- (TaskViewController *)taskViewController
+{
   // Instantiate the detail view controller if necessary.
-  if (taskViewController == nil) {
+  if (taskViewController == nil)
+  {
     taskViewController = [[TaskViewController alloc] initWithNibName:@"TaskView" bundle:nil];
   }
   return taskViewController;
 }
 
-- (void)setTaskList:(TaskList *)list {
+- (void)setTaskList:(TaskList *)list
+{
   if (taskList) {
     [taskList release];
   }
@@ -28,24 +31,33 @@
   self.title = [taskList name];
 }
 
-- (NSArray *)tasks {
+- (NSArray *)tasks
+{
   if (!tasks) {
     tasks = [[taskList findRelated:[Task class]]  retain];
   }
   return tasks;
 }
 
-- (void)viewWillAppear:(BOOL)animated {
+- (void)viewWillAppear:(BOOL)animated
+{
   [tableView reloadData];
 }
 
+- (UITableViewCellAccessoryType)tableView:(UITableView *)tv accessoryTypeForRowWithIndexPath:(NSIndexPath *)indexPath
+{
+  return UITableViewCellAccessoryDisclosureIndicator;
+}
+
 // This table will always only have one section.
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tv {
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tv
+{
   return 1;
 }
 
 // One row per book, the number of books is the number of rows.
-- (NSInteger)tableView:(UITableView *)tv numberOfRowsInSection:(NSInteger)section {
+- (NSInteger)tableView:(UITableView *)tv numberOfRowsInSection:(NSInteger)section
+{
   return [self.tasks count];
 }
 
@@ -55,21 +67,23 @@
 //  return UITableViewCellAccessoryDisclosureIndicator;
 //}
 
-- (UITableViewCell *)tableView:(UITableView *)tv cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCell *)tableView:(UITableView *)tv cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
   UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"MyIdentifier"];
-  if (cell == nil) {
+  if (cell == nil)
+  {
     // Create a new cell. CGRectZero allows the cell to determine the appropriate size.
     cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:@"MyIdentifier"] autorelease];
   }
   
   Task *task = [self.tasks objectAtIndex:indexPath.row];
-  NSLog(@"Setting task body...");
   cell.text = task.body;
   
   return cell;
 }
 
-- (NSIndexPath *)tableView:(UITableView *)tv willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+- (NSIndexPath *)tableView:(UITableView *)tv willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
   TaskViewController *controller = self.taskViewController;
   
   Task *clickedTask = [self.tasks objectAtIndex:indexPath.row];
@@ -80,7 +94,8 @@
   return nil;
 }
 
-- (IBAction)addNewTask:(id)sender {
+- (IBAction)addNewTask:(id)sender
+{
   //TaskViewController *controller = self.taskViewController;
   
   Task *task = [[Task alloc] init];

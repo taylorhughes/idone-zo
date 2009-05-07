@@ -18,6 +18,10 @@
 		341E1F000FB14F2900D5B454 /* TaskView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 341E1EFE0FB14F2900D5B454 /* TaskView.xib */; };
 		341E1F010FB14F2900D5B454 /* EditTaskView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 341E1EFD0FB14F2900D5B454 /* EditTaskView.xib */; };
 		341E1F020FB14F2900D5B454 /* TaskView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 341E1EFE0FB14F2900D5B454 /* TaskView.xib */; };
+		34205CB10FB2641800A9F048 /* TextFieldController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34205CB00FB2641800A9F048 /* TextFieldController.m */; };
+		34205CB20FB2641800A9F048 /* TextFieldController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34205CB00FB2641800A9F048 /* TextFieldController.m */; };
+		34205DA10FB2915500A9F048 /* BodyTextFieldView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34205DA00FB2915500A9F048 /* BodyTextFieldView.xib */; };
+		34205DA20FB2915500A9F048 /* BodyTextFieldView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34205DA00FB2915500A9F048 /* BodyTextFieldView.xib */; };
 		346DBAEC0FAFBD0100ACCD20 /* NSData-SQLitePersistence.m in Sources */ = {isa = PBXBuildFile; fileRef = 346DBACD0FAFBD0100ACCD20 /* NSData-SQLitePersistence.m */; };
 		346DBAED0FAFBD0100ACCD20 /* NSDate-SQLitePersistence.m in Sources */ = {isa = PBXBuildFile; fileRef = 346DBACF0FAFBD0100ACCD20 /* NSDate-SQLitePersistence.m */; };
 		346DBAEE0FAFBD0100ACCD20 /* NSMutableArray-MultipleSort.m in Sources */ = {isa = PBXBuildFile; fileRef = 346DBAD10FAFBD0100ACCD20 /* NSMutableArray-MultipleSort.m */; };
@@ -82,6 +86,9 @@
 		341E1E220FB138F000D5B454 /* TaskViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaskViewController.m; sourceTree = "<group>"; };
 		341E1EFD0FB14F2900D5B454 /* EditTaskView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = EditTaskView.xib; path = Resources/EditTaskView.xib; sourceTree = "<group>"; };
 		341E1EFE0FB14F2900D5B454 /* TaskView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = TaskView.xib; path = Resources/TaskView.xib; sourceTree = "<group>"; };
+		34205CAF0FB2641800A9F048 /* TextFieldController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextFieldController.h; sourceTree = "<group>"; };
+		34205CB00FB2641800A9F048 /* TextFieldController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextFieldController.m; sourceTree = "<group>"; };
+		34205DA00FB2915500A9F048 /* BodyTextFieldView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = BodyTextFieldView.xib; path = Resources/BodyTextFieldView.xib; sourceTree = "<group>"; };
 		346DBACC0FAFBD0100ACCD20 /* NSData-SQLitePersistence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSData-SQLitePersistence.h"; path = "SQLitePersistentObjects/NSData-SQLitePersistence.h"; sourceTree = "<group>"; };
 		346DBACD0FAFBD0100ACCD20 /* NSData-SQLitePersistence.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSData-SQLitePersistence.m"; path = "SQLitePersistentObjects/NSData-SQLitePersistence.m"; sourceTree = "<group>"; };
 		346DBACE0FAFBD0100ACCD20 /* NSDate-SQLitePersistence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSDate-SQLitePersistence.h"; path = "SQLitePersistentObjects/NSDate-SQLitePersistence.h"; sourceTree = "<group>"; };
@@ -178,6 +185,8 @@
 				341E1E220FB138F000D5B454 /* TaskViewController.m */,
 				34770B580FAFED7000AD8397 /* EditViewController.h */,
 				34770B590FAFED7000AD8397 /* EditViewController.m */,
+				34205CAF0FB2641800A9F048 /* TextFieldController.h */,
+				34205CB00FB2641800A9F048 /* TextFieldController.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -223,6 +232,7 @@
 				34770B2F0FAFE4A300AD8397 /* ListView.xib */,
 				341E1EFE0FB14F2900D5B454 /* TaskView.xib */,
 				341E1EFD0FB14F2900D5B454 /* EditTaskView.xib */,
+				34205DA00FB2915500A9F048 /* BodyTextFieldView.xib */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 				34770B430FAFE67B00AD8397 /* icon.png */,
 			);
@@ -366,6 +376,7 @@
 				34770B440FAFE67B00AD8397 /* icon.png in Resources */,
 				341E1F010FB14F2900D5B454 /* EditTaskView.xib in Resources */,
 				341E1F020FB14F2900D5B454 /* TaskView.xib in Resources */,
+				34205DA20FB2915500A9F048 /* BodyTextFieldView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -375,6 +386,7 @@
 			files = (
 				341E1EFF0FB14F2900D5B454 /* EditTaskView.xib in Resources */,
 				341E1F000FB14F2900D5B454 /* TaskView.xib in Resources */,
+				34205DA10FB2915500A9F048 /* BodyTextFieldView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -425,6 +437,7 @@
 				34770B2D0FAFE45B00AD8397 /* MainViewController.m in Sources */,
 				34770B5A0FAFED7000AD8397 /* EditViewController.m in Sources */,
 				341E1E230FB138F000D5B454 /* TaskViewController.m in Sources */,
+				34205CB20FB2641800A9F048 /* TextFieldController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -454,6 +467,7 @@
 				34770B2B0FAFE45B00AD8397 /* MainViewController.m in Sources */,
 				34770B350FAFE4C200AD8397 /* TaskTest.m in Sources */,
 				341E1E240FB138F000D5B454 /* TaskViewController.m in Sources */,
+				34205CB10FB2641800A9F048 /* TextFieldController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -7,11 +7,13 @@
 //
 
 #import "Task.h"
+#import "TextFieldController.h"
 
-@class Task;
+@class Task, TextFieldController;
 
 @interface EditViewController : UITableViewController {
   Task *task;
+  TextFieldController *textFieldController;
 }
 
 @property (retain, nonatomic) Task *task;

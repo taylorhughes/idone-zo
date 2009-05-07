@@ -12,7 +12,8 @@
 
 @synthesize name;
 
-- (void) dealloc {
+- (void) dealloc
+{
   [name dealloc];
   [super dealloc];
 }

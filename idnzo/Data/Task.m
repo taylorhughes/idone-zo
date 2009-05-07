@@ -13,7 +13,8 @@
 @synthesize taskList;
 @synthesize body, contexts, project, due;
 
-- (void)dealloc {
+- (void)dealloc
+{
   [taskList release];
   
   [body release];

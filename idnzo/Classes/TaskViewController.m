@@ -69,7 +69,8 @@
   return 0;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tv cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCell *)tableView:(UITableView *)tv cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
   UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"MyIdentifier"];
   if (cell == nil) {
     // Create a new cell. CGRectZero allows the cell to determine the appropriate size.
@@ -84,17 +85,17 @@
       
     case 1:
       switch ([indexPath row])
-    {
-      case 0:
-        cell.text = @"(project)";
-        break;
-      case 1:
-        cell.text = @"(contexts)";
-        break;
-      case 2:
-        cell.text = @"(due date)";
-        break;
-    }
+      {
+        case 0:
+          cell.text = @"(project)";
+          break;
+        case 1:
+          cell.text = @"(contexts)";
+          break;
+        case 2:
+          cell.text = @"(due date)";
+          break;
+      }
       break;
   }
   
@@ -111,7 +112,8 @@
 
 /*
 // Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
     // Return NO if you do not want the specified item to be editable.
     return YES;
 }
@@ -120,7 +122,8 @@
 
 /*
 // Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
     
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         // Delete the row from the data source

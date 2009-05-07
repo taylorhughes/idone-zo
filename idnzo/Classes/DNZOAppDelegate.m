@@ -19,7 +19,8 @@ static NSString *DATABASE_FILENAME     = @"dnzo.sqlite";
 
 @synthesize window, navigationController;
 
-- (void)applicationDidFinishLaunching:(UIApplication *)application {
+- (void)applicationDidFinishLaunching:(UIApplication *)application
+{
   [self openDatabase];
   [self createInitialObjects];
   
@@ -28,13 +29,15 @@ static NSString *DATABASE_FILENAME     = @"dnzo.sqlite";
   [window makeKeyAndVisible];
 }
 
-- (void)dealloc {
+- (void)dealloc
+{
   [navigationController release];
   [window release];
   [super dealloc];
 }
 
-- (void)openDatabase {
+- (void)openDatabase
+{
   NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
   NSString *documentsDirectory = [paths objectAtIndex:0];
   NSString *databasePath = [documentsDirectory stringByAppendingPathComponent:DATABASE_FILENAME];
@@ -42,7 +45,8 @@ static NSString *DATABASE_FILENAME     = @"dnzo.sqlite";
   [[SQLiteInstanceManager sharedManager] setDatabaseFilepath:databasePath];
 }
 
-- (void)createInitialObjects {
+- (void)createInitialObjects
+{
   if ([TaskList count] > 0) {
     return;
   }
@@ -77,7 +81,8 @@ static NSString *DATABASE_FILENAME     = @"dnzo.sqlite";
 }
 
 // Save all changes to the database, then close it.
-- (void)applicationWillTerminate:(UIApplication *)application {
+- (void)applicationWillTerminate:(UIApplication *)application
+{
 
 }
 

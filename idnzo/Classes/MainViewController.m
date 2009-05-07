@@ -12,16 +12,20 @@
 @synthesize taskLists;
 @synthesize listViewController;
 
-- (ListViewController *)listViewController {
+- (ListViewController *)listViewController
+{
   // Instantiate the detail view controller if necessary.
-  if (listViewController == nil) {
+  if (listViewController == nil)
+  {
     listViewController = [[ListViewController alloc] initWithNibName:@"ListView" bundle:nil];
   }
   return listViewController;
 }
 
-- (NSArray *) taskLists {
-  if (taskLists == nil) {
+- (NSArray *) taskLists
+{
+  if (taskLists == nil)
+  {
     self.taskLists = [TaskList allObjects];
   }
   return taskLists;
@@ -31,24 +35,29 @@
 // These methods are all part of either the UITableViewDelegate or UITableViewDataSource protocols.
 
 // This table will always only have one section.
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tv {
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tv
+{
   return 1;
 }
 
 // One row per book, the number of books is the number of rows.
-- (NSInteger)tableView:(UITableView *)tv numberOfRowsInSection:(NSInteger)section {
+- (NSInteger)tableView:(UITableView *)tv numberOfRowsInSection:(NSInteger)section
+{
   return [self.taskLists count];
 }
 
 // The accessory type is the image displayed on the far right of each table cell. In order for the delegate method
 // tableView:accessoryButtonClickedForRowWithIndexPath: to be called, you must return the "Detail Disclosure Button" type.
-- (UITableViewCellAccessoryType)tableView:(UITableView *)tv accessoryTypeForRowWithIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCellAccessoryType)tableView:(UITableView *)tv accessoryTypeForRowWithIndexPath:(NSIndexPath *)indexPath
+{
   return UITableViewCellAccessoryDisclosureIndicator;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tv cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCell *)tableView:(UITableView *)tv cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
   UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"MyIdentifier"];
-  if (cell == nil) {
+  if (cell == nil)
+  {
     // Create a new cell. CGRectZero allows the cell to determine the appropriate size.
     cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:@"MyIdentifier"] autorelease];
   }
@@ -63,7 +72,8 @@
   return cell;
 }
 
-- (NSIndexPath *)tableView:(UITableView *)tv willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+- (NSIndexPath *)tableView:(UITableView *)tv willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
   ListViewController *controller = self.listViewController;
 
   TaskList *clickedList = [self.taskLists objectAtIndex:indexPath.row];
