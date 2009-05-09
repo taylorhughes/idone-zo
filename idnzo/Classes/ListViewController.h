@@ -17,6 +17,6 @@
 @property (retain, readonly, nonatomic) NSArray *tasks;
 @property (retain, nonatomic) TaskViewController *taskViewController;
 
-- (IBAction) addNewTask:(id)sender;
+- (IBAction) archiveTasks:(id)sender;
 
 @end

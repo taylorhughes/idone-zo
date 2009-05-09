@@ -26,6 +26,7 @@
 - (void)refresh
 {
   self.body.text = self.task.body;
+  [self.body sizeToFit];
 }
 
 
@@ -37,14 +38,9 @@
 - (void)edit:(id)sender
 {
   // load editing view into modal view
-  EditViewController *evc = [[[EditViewController alloc] initWithNibName:@"EditTaskView" bundle:nil] autorelease];
-  UINavigationController *modalNavigationController = [[UINavigationController alloc] initWithRootViewController:evc];
-  
-  UIBarButtonItem *dismiss = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
-                                                       target:self action:@selector(dismissModalViewControllerAnimated:)] autorelease];
-  evc.navigationItem.rightBarButtonItem = dismiss;
-  evc.task = self.task;
-  
+  UINavigationController *modalNavigationController = [EditViewController navigationControllerWithTask:task 
+                                                                                         dismissTarget:self
+                                                                                         dismissAction:@selector(dismissModalViewControllerAnimated:)];
   [self.navigationController presentModalViewController:modalNavigationController animated:YES];
 }
 

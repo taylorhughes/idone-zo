@@ -18,4 +18,6 @@
 
 @property (retain, nonatomic) Task *task;
 
++ (UINavigationController*) navigationControllerWithTask:(Task*)task dismissTarget:(UIViewController*)target dismissAction:(SEL)action;
+
 @end

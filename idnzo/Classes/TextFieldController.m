@@ -12,6 +12,7 @@
 - (void) save:(id)sender;
 - (void) cancel:(id)sender;
 - (void) refresh;
+- (void) finish;
 @end
 
 @implementation TextFieldController
@@ -30,30 +31,20 @@
                                initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
                                target:self action:@selector(cancel:)] autorelease];
   
-  [self refresh];
-  
   self.navigationItem.rightBarButtonItem = save;
   self.navigationItem.leftBarButtonItem = cancel;
+  
+  self.textView.text = self.text;
+  
+  [textView becomeFirstResponder];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
   [super viewDidAppear:animated];
   
-  [self refresh];
-  
-  [textView becomeFirstResponder];
   // Put the cursor at the end
   textView.selectedRange = NSMakeRange(textView.text.length, 0);
-}
-
-- (void)refresh
-{
-  if (self.textView)
-  {
-    // Also update the text in the textView to match.
-    self.textView.text = self.text;
-  }
 }
 
 - (void)save:(id)sender
@@ -62,7 +53,7 @@
   
   if (target && saveAction)
   {
-    [target performSelector:saveAction];
+    [target performSelector:saveAction withObject:self];
   }
   
   [self.navigationController popViewControllerAnimated:YES];
@@ -70,8 +61,6 @@
 
 - (void)cancel:(id)sender
 {
-  // Reset the text
-  textView.text = self.text;
   [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -83,6 +72,7 @@
 
 - (void)dealloc
 {
+  [target release];
   [text release];
   [textView release];
   [super dealloc];

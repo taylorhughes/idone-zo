@@ -1,6 +1,10 @@
 
 #import "ListViewController.h"
 
+@interface ListViewController ()
+- (void)newTaskDismissed;
+@end
+
 @implementation ListViewController
 
 @synthesize tableView;
@@ -37,6 +41,15 @@
     tasks = [[taskList findRelated:[Task class]]  retain];
   }
   return tasks;
+}
+
+- (void)viewDidLoad
+{
+  [super viewDidLoad];
+  
+  UIBarButtonItem *add = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
+                                                   target:self action:@selector(addNewTask:)] autorelease];
+  self.navigationItem.rightBarButtonItem = add;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -94,16 +107,28 @@
   return nil;
 }
 
-- (IBAction)addNewTask:(id)sender
+- (IBAction)archiveTasks:(id)sender
 {
-  //TaskViewController *controller = self.taskViewController;
+}
+
+- (void)addNewTask:(id)sender
+{
+  EditViewController *controller = [[[EditViewController alloc] initWithNibName:@"EditTaskView" bundle:nil] autorelease];
   
   Task *task = [[Task alloc] init];
   task.taskList = self.taskList;
-  //controller.task = task;
+  controller.task = task;
   [task release];
   
-  //[self.navigationController pushViewController:controller animated:YES];
+  UINavigationController *modalNavigationController = [EditViewController navigationControllerWithTask:task dismissTarget:self dismissAction:@selector(newTaskDismissed)];
+  [self.navigationController presentModalViewController:modalNavigationController animated:YES];
+}
+
+- (void)newTaskDismissed
+{
+  tasks = nil;
+  [tableView reloadData];
+  [self dismissModalViewControllerAnimated:YES];
 }
 
 - (void)dealloc {
