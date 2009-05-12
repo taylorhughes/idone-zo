@@ -10,7 +10,7 @@
 
 @class Project;
 
-@interface EditProjectPicker : UITableViewController {
+@interface EditProjectPicker : UITableViewController <UITableViewDelegate, UITableViewDataSource> {
   NSArray *options;
   NSString *selected;
 }

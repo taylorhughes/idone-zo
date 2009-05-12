@@ -68,14 +68,10 @@
     cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:identifier] autorelease];
   }
   
-  UITextView *textView;
   switch ([indexPath section])
   {
     case 0:
-      // get text view for top cell
-      textView = [[[UITextView alloc] initWithFrame:cell.frame] autorelease];
-      textView.text = @"Add a project";
-      [cell addSubview:textView];
+      cell.text = self.selected;
       break;
       
     case 1:
@@ -86,7 +82,16 @@
   return cell;
 }
 
-- (void)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+  if ([indexPath section] == 1)
+  {
+    return UITableViewCellEditingStyleDelete;
+  }
+  return UITableViewCellEditingStyleNone;
+}
+
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
   if ([indexPath section] == 1)
   {
@@ -101,6 +106,7 @@
     }
     cell.selected = NO;
   }
+  return nil;
 }
 
 - (void)dealloc
