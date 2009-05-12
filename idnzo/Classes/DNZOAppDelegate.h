@@ -11,8 +11,9 @@
 #import "SQLiteInstanceManager.h"
 #import "TaskList.h"
 #import "Task.h"
+#import "Project.h"
 
-@class SQLiteInstanceManager, TaskList, Task;
+@class SQLiteInstanceManager, TaskList, Task, Project;
 
 @interface DNZOAppDelegate : NSObject <UIApplicationDelegate> {
   UIWindow *window;

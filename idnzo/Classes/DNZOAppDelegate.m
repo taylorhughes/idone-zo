@@ -70,11 +70,16 @@ static NSString *DATABASE_FILENAME     = @"dnzo.sqlite";
   
   NSLog(@"Adding task...");
   
+  Project *project = [[[Project alloc] init] autorelease];
+  project.name = @"DNZO";
+  [project save];
+  
   Task *task = [[[Task alloc] init] autorelease];
+  
   task.taskList = list;
   task.body = @"Welcome to DNZO!";
   task.contexts = [NSArray arrayWithObject:@"home"];
-  task.project = @"DNZO";
+  task.project = project;
   task.due = [NSDate dateWithTimeIntervalSinceNow:0];
   
   [task save];

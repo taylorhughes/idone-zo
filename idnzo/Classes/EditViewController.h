@@ -8,8 +8,10 @@
 
 #import "Task.h"
 #import "TextFieldController.h"
+#import "Project.h"
+#import "EditProjectPicker.h"
 
-@class Task, TextFieldController;
+@class Task, TextFieldController, Project, EditProjectPicker;
 
 @interface EditViewController : UITableViewController {
   Task *task;
@@ -19,7 +21,7 @@
   SEL dismissAction;
   
   NSString *body;
-  NSString *project;
+  Project  *project;
   NSArray  *contexts;
   NSDate   *due;
 }
@@ -27,7 +29,7 @@
 @property (retain, nonatomic) Task *task;
 
 @property (copy, nonatomic) NSString  *body;
-@property (copy, nonatomic) NSString  *project;
+@property (retain, nonatomic) Project   *project;
 @property (retain, nonatomic) NSArray *contexts;
 @property (copy, nonatomic) NSDate    *due;
 

@@ -219,7 +219,7 @@
   
   UILabel *title = (UILabel *)[cell viewWithTag:TITLE_TAG];
   UILabel *text  = (UILabel *)[cell viewWithTag:TEXT_TAG];
-	
+  
   switch ([indexPath section])
   {
     case 0:
@@ -233,7 +233,7 @@
       {
         case 0:
           title.text = @"project";
-          text.text = self.project;
+          text.text = self.project.name;
           break;
         case 1:
           title.text = @"contexts";
@@ -252,9 +252,8 @@
 
 - (NSIndexPath *)tableView:(UITableView *)tv willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-  
   UIViewController *controller = nil;
-    
+  
   switch ([indexPath section])
   {
     case 0:
@@ -269,7 +268,9 @@
     case 1:
       switch ([indexPath row])
       {
-        case 0:
+        case 0: //project
+          controller = [[[EditProjectPicker alloc] init] autorelease];
+          ((EditProjectPicker*)controller).options = [Project allObjects];
           break;
         case 1:
           break;
