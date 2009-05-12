@@ -11,8 +11,6 @@
 @interface TextFieldController ()
 - (void) save:(id)sender;
 - (void) cancel:(id)sender;
-- (void) refresh;
-- (void) finish;
 @end
 
 @implementation TextFieldController
@@ -24,12 +22,13 @@
 {
   [super viewDidLoad];
   
-  UIBarButtonItem *save = [[[UIBarButtonItem alloc]
-                             initWithBarButtonSystemItem:UIBarButtonSystemItemSave
-                             target:self action:@selector(save:)] autorelease];
-  UIBarButtonItem *cancel = [[[UIBarButtonItem alloc]
-                               initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
-                               target:self action:@selector(cancel:)] autorelease];
+  UIBarButtonItem *save   = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
+                                                                           target:self
+                                                                           action:@selector(save:)] autorelease];
+  
+  UIBarButtonItem *cancel = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
+                                                                           target:self
+                                                                           action:@selector(cancel:)] autorelease];
   
   self.navigationItem.rightBarButtonItem = save;
   self.navigationItem.leftBarButtonItem = cancel;

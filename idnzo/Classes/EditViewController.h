@@ -14,10 +14,24 @@
 @interface EditViewController : UITableViewController {
   Task *task;
   TextFieldController *textFieldController;
+  
+  NSObject *dismissTarget;
+  SEL dismissAction;
+  
+  NSString *body;
+  NSString *project;
+  NSArray  *contexts;
+  NSDate   *due;
 }
 
 @property (retain, nonatomic) Task *task;
 
+@property (copy, nonatomic) NSString  *body;
+@property (copy, nonatomic) NSString  *project;
+@property (retain, nonatomic) NSArray *contexts;
+@property (copy, nonatomic) NSDate    *due;
+
 + (UINavigationController*) navigationControllerWithTask:(Task*)task dismissTarget:(UIViewController*)target dismissAction:(SEL)action;
++ (UINavigationController*) navigationControllerWithTask:(Task*)task;
 
 @end

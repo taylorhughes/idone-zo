@@ -9,27 +9,76 @@
 #import "EditViewController.h"
 
 @interface EditViewController ()
+
+- (void) loadProperties:(Task*)task;
+
+- (void) save:(id)sender;
+- (void) cancel:(id)sender;
+
+- (void) dismiss;
+
 - (void) saveBody:(id)sender;
+
 - (UITableViewCell*) cellWithReuseIdentifier:(NSString *)identifier;
+
+@property (retain, nonatomic) NSObject *dismissTarget;
+@property (assign, nonatomic) SEL dismissAction;
+
 @end
 
 @implementation EditViewController
 
-@synthesize task;
+@synthesize task, dismissTarget, dismissAction;
+
+@synthesize body, project, contexts, due;
 
 + (UINavigationController*) navigationControllerWithTask:(Task*)task dismissTarget:(UIViewController*)target dismissAction:(SEL)action
 {
   // load editing view into modal view
   EditViewController *evc = [[[EditViewController alloc] initWithNibName:@"EditTaskView" bundle:nil] autorelease];
+  
+  if (target) evc.dismissTarget = target;
+  if (action) evc.dismissAction = action;
+  
   UINavigationController *modalNavigationController = [[[UINavigationController alloc] initWithRootViewController:evc] autorelease];
   
-  UIBarButtonItem *dismiss = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
-                                                                            target:target
-                                                                            action:action] autorelease];
-  evc.navigationItem.rightBarButtonItem = dismiss;
+  UIBarButtonItem *cancel = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
+                                                                           target:evc
+                                                                           action:@selector(cancel:)] autorelease];
+  UIBarButtonItem *save   = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave
+                                                                           target:evc
+                                                                           action:@selector(save:)] autorelease];
+  
+  evc.navigationItem.rightBarButtonItem = save;
+  evc.navigationItem.leftBarButtonItem = cancel;
   evc.task = task;
   
   return modalNavigationController;
+}
++ (UINavigationController*) navigationControllerWithTask:(Task*)task
+{
+  return [EditViewController navigationControllerWithTask:task dismissTarget:nil dismissAction:nil];
+}
+
+- (void)setTask:(Task*)newTask
+{
+  if (task)
+  {
+    [task release];
+  }
+  if ([newTask existsInDB])
+  {
+    [self loadProperties:newTask];
+  }
+  task = [newTask retain];
+}
+
+- (void)loadProperties:(Task*)newTask
+{
+  self.body = newTask.body;
+  self.contexts = newTask.contexts;
+  self.project = newTask.project;
+  self.due = newTask.due;
 }
 
 - (void)viewDidLoad
@@ -45,9 +94,40 @@
   }
 }
 
+- (void)save:(id)sender
+{
+  self.task.body = self.body;
+  self.task.project = self.project;
+  self.task.contexts = self.contexts;
+  self.task.due = self.due;
+  
+  [self.task save];
+  [self dismiss];
+}
+- (void)cancel:(id)sender
+{
+  [self dismiss];
+}
+- (void)dismiss
+{
+  if (dismissTarget && dismissAction)
+  {
+    [dismissTarget performSelector:dismissAction withObject:self];
+  }
+  [self.navigationController.parentViewController dismissModalViewControllerAnimated:YES];
+}
+
 - (void)dealloc
 {
   [task release];
+  
+  [body release];
+  [project release];
+  [contexts release];
+  [due release];
+  
+  [dismissTarget release];
+  
   [super dealloc];
 }
 
@@ -89,7 +169,7 @@
 #define PADDING 10
 #define LEFT_COLUMN_WIDTH 60
 #define TITLE_TAG 1
-#define BODY_TAG 2
+#define TEXT_TAG 2
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -113,16 +193,14 @@
   label.textAlignment = UITextAlignmentRight;
 	label.adjustsFontSizeToFitWidth = YES;
 	[cell.contentView addSubview:label];
-	//label.highlightedTextColor = [UIColor whiteColor];
 	[label release];
 	
 	rect = CGRectMake(PADDING * 2 + LEFT_COLUMN_WIDTH, PADDING, ROW_WIDTH - LEFT_COLUMN_WIDTH - PADDING * 3, ROW_HEIGHT - PADDING * 2);
 	label = [[UILabel alloc] initWithFrame:rect];
-	label.tag = BODY_TAG;
+	label.tag = TEXT_TAG;
 	label.font = [UIFont systemFontOfSize:18];
 	label.textAlignment = UITextAlignmentLeft;
 	[cell.contentView addSubview:label];
-	//label.highlightedTextColor = [UIColor whiteColor];
 	[label release];
 	
 	return cell;
@@ -140,13 +218,13 @@
 	}
   
   UILabel *title = (UILabel *)[cell viewWithTag:TITLE_TAG];
-  UILabel *body  = (UILabel *)[cell viewWithTag:BODY_TAG];
+  UILabel *text  = (UILabel *)[cell viewWithTag:TEXT_TAG];
 	
   switch ([indexPath section])
   {
     case 0:
       title.text = @"body";
-      body.text = self.task.body;
+      text.text = self.body;
       
       break;
       
@@ -155,12 +233,15 @@
       {
         case 0:
           title.text = @"project";
+          text.text = self.project;
           break;
         case 1:
           title.text = @"contexts";
+          text.text = [self.contexts componentsJoinedByString:@", "];
           break;
         case 2:
           title.text = @"due date";
+          text.text = [self.due descriptionWithCalendarFormat:@"%d/%m/%Y" timeZone:nil locale:nil];
           break;
       }
       break;
@@ -208,8 +289,7 @@
 
 - (void) saveBody:(id)sender
 {
-  self.task.body = [(TextFieldController*)sender text];
-  [self.task save];
+  self.body = [(TextFieldController*)sender text];
   [self.tableView reloadData];
 }
 

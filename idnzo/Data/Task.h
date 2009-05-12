@@ -8,7 +8,7 @@
 
 #import "SQLitePersistentObject.h"
 
-@class TaskList;
+@class TaskList, SQLitePersistentObject;
 
 @interface Task : SQLitePersistentObject {
   
@@ -27,5 +27,7 @@
 @property (copy, nonatomic)   NSString *project;
 @property (retain, nonatomic) NSArray  *contexts;
 @property (copy, nonatomic)   NSDate   *due;
+
+- (Task*) copy;
 
 @end

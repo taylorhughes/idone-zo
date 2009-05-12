@@ -120,7 +120,10 @@
   controller.task = task;
   [task release];
   
-  UINavigationController *modalNavigationController = [EditViewController navigationControllerWithTask:task dismissTarget:self dismissAction:@selector(newTaskDismissed)];
+  UINavigationController *modalNavigationController = [EditViewController navigationControllerWithTask:controller.task
+                                                                                         dismissTarget:self  
+                                                                                         dismissAction:@selector(newTaskDismissed)];
+  
   [self.navigationController presentModalViewController:modalNavigationController animated:YES];
 }
 
@@ -128,7 +131,6 @@
 {
   tasks = nil;
   [tableView reloadData];
-  [self dismissModalViewControllerAnimated:YES];
 }
 
 - (void)dealloc {
