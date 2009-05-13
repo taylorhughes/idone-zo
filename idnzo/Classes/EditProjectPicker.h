@@ -7,8 +7,9 @@
 //
 
 #import "Project.h"
+#import "TextViewCell.h"
 
-@class Project;
+@class Project, TextViewCell;
 
 @interface EditProjectPicker : UITableViewController <UITableViewDelegate, UITableViewDataSource> {
   NSArray *options;

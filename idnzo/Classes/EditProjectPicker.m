@@ -8,22 +8,19 @@
 
 #import "EditProjectPicker.h"
 
+@interface EditProjectPicker()
+@end
+
 @implementation EditProjectPicker
 
 @synthesize options, selected;
 
-/*
-- (id)initWithStyle:(UITableViewStyle)style {
-    // Override initWithStyle: if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
-    if (self = [super initWithStyle:style]) {
-    }
-    return self;
-}
-*/
-
 - (void)viewDidLoad
 {
-  self.tableView = [[[UITableView alloc] initWithFrame:self.tableView.frame style:UITableViewStyleGrouped] autorelease];
+  self.tableView = [[[UITableView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame] style:UITableViewStyleGrouped] autorelease];
+  self.tableView.delegate = self;
+  self.tableView.dataSource = self;
+  self.tableView.autoresizesSubviews = YES;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -57,24 +54,31 @@
   return 0;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	return 50.0;
+}
 
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-  static NSString *identifier = @"Cell";
-  
-  UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
-  if (cell == nil) {
-    cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:identifier] autorelease];
-  }
+  UITableViewCell *cell = nil;
   
   switch ([indexPath section])
   {
     case 0:
-      cell.text = self.selected;
+      cell = [tableView dequeueReusableCellWithIdentifier:@"TableViewCell"];
+      if (cell == nil) {
+        cell = [[[TextViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:@"TableViewCell"] autorelease];
+      }
+      ((TextViewCell*)cell).view.text = self.selected;
       break;
       
     case 1:
+      cell = [tableView dequeueReusableCellWithIdentifier:@"NormalCell"];
+      if (cell == nil) {
+        cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:@"NormalCell"] autorelease];
+      }
       cell.text = ((Project*)[self.options objectAtIndex:[indexPath row]]).name;
       break;
   }
@@ -98,12 +102,15 @@
     UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
     if (cell.accessoryType == UITableViewCellAccessoryCheckmark)
     {
+      self.selected = nil;
       cell.accessoryType = UITableViewCellAccessoryNone;
     }
     else
     {
+      self.selected = cell.text;
       cell.accessoryType = UITableViewCellAccessoryCheckmark;
     }
+    [self.tableView reloadData];
     cell.selected = NO;
   }
   return nil;

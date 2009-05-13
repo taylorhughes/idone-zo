@@ -22,6 +22,8 @@
 		34205CB20FB2641800A9F048 /* TextFieldController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34205CB00FB2641800A9F048 /* TextFieldController.m */; };
 		34205DA10FB2915500A9F048 /* BodyTextFieldView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34205DA00FB2915500A9F048 /* BodyTextFieldView.xib */; };
 		34205DA20FB2915500A9F048 /* BodyTextFieldView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34205DA00FB2915500A9F048 /* BodyTextFieldView.xib */; };
+		345A19120FBA6F29000BBC22 /* TextViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 345A19110FBA6F29000BBC22 /* TextViewCell.m */; };
+		345A19130FBA6F29000BBC22 /* TextViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 345A19110FBA6F29000BBC22 /* TextViewCell.m */; };
 		346DBAEC0FAFBD0100ACCD20 /* NSData-SQLitePersistence.m in Sources */ = {isa = PBXBuildFile; fileRef = 346DBACD0FAFBD0100ACCD20 /* NSData-SQLitePersistence.m */; };
 		346DBAED0FAFBD0100ACCD20 /* NSDate-SQLitePersistence.m in Sources */ = {isa = PBXBuildFile; fileRef = 346DBACF0FAFBD0100ACCD20 /* NSDate-SQLitePersistence.m */; };
 		346DBAEE0FAFBD0100ACCD20 /* NSMutableArray-MultipleSort.m in Sources */ = {isa = PBXBuildFile; fileRef = 346DBAD10FAFBD0100ACCD20 /* NSMutableArray-MultipleSort.m */; };
@@ -95,6 +97,8 @@
 		34205CAF0FB2641800A9F048 /* TextFieldController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextFieldController.h; sourceTree = "<group>"; };
 		34205CB00FB2641800A9F048 /* TextFieldController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextFieldController.m; sourceTree = "<group>"; };
 		34205DA00FB2915500A9F048 /* BodyTextFieldView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = BodyTextFieldView.xib; path = Resources/BodyTextFieldView.xib; sourceTree = "<group>"; };
+		345A19100FBA6F29000BBC22 /* TextViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextViewCell.h; sourceTree = "<group>"; };
+		345A19110FBA6F29000BBC22 /* TextViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextViewCell.m; sourceTree = "<group>"; };
 		346DBACC0FAFBD0100ACCD20 /* NSData-SQLitePersistence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSData-SQLitePersistence.h"; path = "SQLitePersistentObjects/NSData-SQLitePersistence.h"; sourceTree = "<group>"; };
 		346DBACD0FAFBD0100ACCD20 /* NSData-SQLitePersistence.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSData-SQLitePersistence.m"; path = "SQLitePersistentObjects/NSData-SQLitePersistence.m"; sourceTree = "<group>"; };
 		346DBACE0FAFBD0100ACCD20 /* NSDate-SQLitePersistence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSDate-SQLitePersistence.h"; path = "SQLitePersistentObjects/NSDate-SQLitePersistence.h"; sourceTree = "<group>"; };
@@ -201,6 +205,8 @@
 				34205CB00FB2641800A9F048 /* TextFieldController.m */,
 				34C51AC20FB92A9D0024A5CD /* EditProjectPicker.h */,
 				34C51AC30FB92A9D0024A5CD /* EditProjectPicker.m */,
+				345A19100FBA6F29000BBC22 /* TextViewCell.h */,
+				345A19110FBA6F29000BBC22 /* TextViewCell.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -459,6 +465,7 @@
 				34C51AC50FB92A9D0024A5CD /* EditProjectPicker.m in Sources */,
 				34C51BA80FB936EA0024A5CD /* Context.m in Sources */,
 				34C51BA90FB936EA0024A5CD /* Project.m in Sources */,
+				345A19130FBA6F29000BBC22 /* TextViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -492,6 +499,7 @@
 				34C51AC40FB92A9D0024A5CD /* EditProjectPicker.m in Sources */,
 				34C51BA60FB936EA0024A5CD /* Context.m in Sources */,
 				34C51BA70FB936EA0024A5CD /* Project.m in Sources */,
+				345A19120FBA6F29000BBC22 /* TextViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
