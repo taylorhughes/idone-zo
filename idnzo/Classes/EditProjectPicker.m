@@ -9,18 +9,76 @@
 #import "EditProjectPicker.h"
 
 @interface EditProjectPicker()
+- (void) save:(id)sender;
+- (void) cancel:(id)sender;
+- (void) createTextView;
 @end
 
 @implementation EditProjectPicker
 
-@synthesize options, selected;
+@synthesize options, target, saveAction;
+
+- (id)init
+{
+  self = [super init];
+  [self createTextView];
+  return self;
+}
 
 - (void)viewDidLoad
 {
+  UIBarButtonItem *save   = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
+                                                                           target:self
+                                                                           action:@selector(save:)] autorelease];
+  
+  UIBarButtonItem *cancel = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
+                                                                           target:self
+                                                                           action:@selector(cancel:)] autorelease];
+  
+  self.navigationItem.rightBarButtonItem = save;
+  self.navigationItem.leftBarButtonItem = cancel;
+  
   self.tableView = [[[UITableView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame] style:UITableViewStyleGrouped] autorelease];
   self.tableView.delegate = self;
   self.tableView.dataSource = self;
   self.tableView.autoresizesSubviews = YES;
+}
+
+- (void)createTextView
+{
+  CGRect frame = CGRectMake(0.0, 0.0, 100.0, 100.0);
+  
+	textView = [[[UITextView alloc] initWithFrame:frame] retain];
+  textView.textColor = [UIColor blackColor];
+  textView.font = [UIFont systemFontOfSize:18.0];
+  textView.backgroundColor = [UIColor whiteColor];
+	
+	textView.returnKeyType = UIReturnKeyDefault;
+  textView.keyboardType = UIKeyboardTypeDefault;
+}
+
+- (NSString*)selected
+{
+  return textView.text;
+}
+- (void)setSelected:(NSString *)newSelected
+{
+  textView.text = newSelected;
+}
+
+- (void)save:(id)sender
+{  
+  if (target && saveAction)
+  {
+    [target performSelector:saveAction withObject:self];
+  }
+  
+  [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)cancel:(id)sender
+{
+  [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -71,7 +129,7 @@
       if (cell == nil) {
         cell = [[[TextViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:@"TableViewCell"] autorelease];
       }
-      ((TextViewCell*)cell).view.text = self.selected;
+      ((TextViewCell*)cell).view = textView;
       break;
       
     case 1:
@@ -80,19 +138,14 @@
         cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:@"NormalCell"] autorelease];
       }
       cell.text = ((Project*)[self.options objectAtIndex:[indexPath row]]).name;
+      if ([cell.text isEqualTo:self.selected])
+      {
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+      }
       break;
   }
   
   return cell;
-}
-
-- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-  if ([indexPath section] == 1)
-  {
-    return UITableViewCellEditingStyleDelete;
-  }
-  return UITableViewCellEditingStyleNone;
 }
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -119,7 +172,7 @@
 - (void)dealloc
 {
   [options release];
-  [selected release];
+  [textView release];
   [super dealloc];
 }
 

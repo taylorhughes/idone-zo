@@ -18,6 +18,7 @@
 - (void) dismiss;
 
 - (void) saveBody:(id)sender;
+- (void) saveProject:(id)sender;
 
 - (UITableViewCell*) cellWithReuseIdentifier:(NSString *)identifier;
 
@@ -271,6 +272,9 @@
         case 0: //project
           controller = [[[EditProjectPicker alloc] init] autorelease];
           ((EditProjectPicker*)controller).options = [Project allObjects];
+          ((EditProjectPicker*)controller).selected = self.project.name;
+          ((EditProjectPicker*)controller).target = self;
+          ((EditProjectPicker*)controller).saveAction = @selector(saveProject:);
           break;
         case 1:
           break;
@@ -291,6 +295,32 @@
 - (void) saveBody:(id)sender
 {
   self.body = [(TextFieldController*)sender text];
+  [self.tableView reloadData];
+}
+- (void) saveProject:(id)sender
+{
+  NSString *newProject = [(EditProjectPicker*)sender selected];
+  
+  Project *existingProject = nil;
+  for (Project *someProject in [Project allObjects])
+  {
+    if ([someProject.name isEqualTo:newProject])
+    {
+      existingProject = someProject;
+      break;
+    }
+  }
+  
+  if (existingProject)
+  {
+    self.project = existingProject;
+  }
+  else
+  {
+    self.project = [[[Project alloc] init] autorelease];
+    self.project.name = newProject;
+  }
+  
   [self.tableView reloadData];
 }
 

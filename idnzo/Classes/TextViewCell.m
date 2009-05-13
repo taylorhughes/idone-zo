@@ -25,24 +25,8 @@
 	{
 		// turn off selection use
 		self.selectionStyle = UITableViewCellSelectionStyleNone;
-    self.view = [self createTextView];
 	}
 	return self;
-}
-
-- (UITextView *)createTextView
-{
-  CGRect frame = CGRectMake(0.0, 0.0, 100.0, 100.0);
-  
-	UITextView *textView = [[[UITextView alloc] initWithFrame:frame] autorelease];
-  textView.textColor = [UIColor blackColor];
-  textView.font = [UIFont systemFontOfSize:18.0];
-  textView.backgroundColor = [UIColor whiteColor];
-	
-	textView.returnKeyType = UIReturnKeyDefault;
-  textView.keyboardType = UIKeyboardTypeDefault;
-  
-  return textView;
 }
 
 - (void)setView:(UITextView *)inView
@@ -56,7 +40,6 @@
 - (void)layoutSubviews
 {
 	[super layoutSubviews];
-	
 	CGRect contentRect = [self.contentView bounds];
 	
 	// inset the text view within the cell

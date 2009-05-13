@@ -13,10 +13,16 @@
 
 @interface EditProjectPicker : UITableViewController <UITableViewDelegate, UITableViewDataSource> {
   NSArray *options;
-  NSString *selected;
+  NSObject *target;
+  UITextView *textView;
+  SEL saveAction;
 }
 
-@property (copy, nonatomic)   NSString *selected;
+- (NSString *)selected;
+- (void)setSelected:(NSString*)newSelected;
+
 @property (retain, nonatomic) NSArray  *options;
+@property (nonatomic, retain) NSObject *target;
+@property (nonatomic) SEL saveAction;
 
 @end
