@@ -10,8 +10,6 @@
 
 @interface EditViewController ()
 
-- (void) loadProperties:(Task*)task;
-
 - (void) save:(id)sender;
 - (void) cancel:(id)sender;
 
@@ -30,8 +28,6 @@
 @implementation EditViewController
 
 @synthesize task, dismissTarget, dismissAction;
-
-@synthesize body, project, contexts, due;
 
 + (UINavigationController*) navigationControllerWithTask:(Task*)task dismissTarget:(UIViewController*)target dismissAction:(SEL)action
 {
@@ -67,19 +63,7 @@
   {
     [task release];
   }
-  if ([newTask existsInDB])
-  {
-    [self loadProperties:newTask];
-  }
   task = [newTask retain];
-}
-
-- (void)loadProperties:(Task*)newTask
-{
-  self.body = newTask.body;
-  self.contexts = newTask.contexts;
-  self.project = newTask.project;
-  self.due = newTask.due;
 }
 
 - (void)viewDidLoad
@@ -97,16 +81,12 @@
 
 - (void)save:(id)sender
 {
-  self.task.body = self.body;
-  self.task.project = self.project;
-  self.task.contexts = self.contexts;
-  self.task.due = self.due;
-  
   [self.task save];
   [self dismiss];
 }
 - (void)cancel:(id)sender
 {
+  [self.task revert];
   [self dismiss];
 }
 - (void)dismiss
@@ -122,10 +102,6 @@
 {
   [task release];
   
-  [body release];
-  [project release];
-  [contexts release];
-  [due release];
   
   [dismissTarget release];
   
@@ -225,7 +201,7 @@
   {
     case 0:
       title.text = @"body";
-      text.text = self.body;
+      text.text = self.task.body;
       
       break;
       
@@ -234,15 +210,15 @@
       {
         case 0:
           title.text = @"project";
-          text.text = self.project.name;
+          text.text = self.task.project.name;
           break;
         case 1:
           title.text = @"contexts";
-          text.text = [self.contexts componentsJoinedByString:@", "];
+          text.text = [self.task.contexts componentsJoinedByString:@", "];
           break;
         case 2:
           title.text = @"due date";
-          text.text = [self.due descriptionWithCalendarFormat:@"%d/%m/%Y" timeZone:nil locale:nil];
+          text.text = [self.task.due descriptionWithCalendarFormat:@"%d/%m/%Y" timeZone:nil locale:nil];
           break;
       }
       break;
@@ -271,8 +247,8 @@
       {
         case 0: //project
           controller = [[[EditProjectPicker alloc] init] autorelease];
-          ((EditProjectPicker*)controller).options = [Project allObjects];
-          ((EditProjectPicker*)controller).selected = self.project.name;
+          ((EditProjectPicker*)controller).options = [Project projectNames];
+          ((EditProjectPicker*)controller).selected = self.task.project.name;
           ((EditProjectPicker*)controller).target = self;
           ((EditProjectPicker*)controller).saveAction = @selector(saveProject:);
           break;
@@ -294,31 +270,24 @@
 
 - (void) saveBody:(id)sender
 {
-  self.body = [(TextFieldController*)sender text];
+  self.task.body = [(TextFieldController*)sender text];
   [self.tableView reloadData];
 }
 - (void) saveProject:(id)sender
 {
-  NSString *newProject = [(EditProjectPicker*)sender selected];
+  NSString *newProject = [[(EditProjectPicker*)sender selected] 
+                           stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
   
-  Project *existingProject = nil;
-  for (Project *someProject in [Project allObjects])
-  {
-    if ([someProject.name isEqualTo:newProject])
-    {
-      existingProject = someProject;
-      break;
-    }
-  }
+  Project *existingProject = [Project findProjectWithName:newProject];
   
   if (existingProject)
   {
-    self.project = existingProject;
+    self.task.project = existingProject;
   }
   else
   {
-    self.project = [[[Project alloc] init] autorelease];
-    self.project.name = newProject;
+    self.task.project = [[[Project alloc] init] autorelease];
+    self.task.project.name = newProject;
   }
   
   [self.tableView reloadData];

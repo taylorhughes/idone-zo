@@ -11,11 +11,12 @@
 
 @class Project, TextViewCell;
 
-@interface EditProjectPicker : UITableViewController <UITableViewDelegate, UITableViewDataSource> {
+@interface EditProjectPicker : UITableViewController <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate> {
   NSArray *options;
   NSObject *target;
   UITextView *textView;
   SEL saveAction;
+  NSInteger selectedIndex;
 }
 
 - (NSString *)selected;

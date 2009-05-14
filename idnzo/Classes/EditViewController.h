@@ -19,19 +19,9 @@
   
   NSObject *dismissTarget;
   SEL dismissAction;
-  
-  NSString *body;
-  Project  *project;
-  NSArray  *contexts;
-  NSDate   *due;
 }
 
 @property (retain, nonatomic) Task *task;
-
-@property (copy, nonatomic) NSString  *body;
-@property (retain, nonatomic) Project   *project;
-@property (retain, nonatomic) NSArray *contexts;
-@property (copy, nonatomic) NSDate    *due;
 
 + (UINavigationController*) navigationControllerWithTask:(Task*)task dismissTarget:(UIViewController*)target dismissAction:(SEL)action;
 + (UINavigationController*) navigationControllerWithTask:(Task*)task;

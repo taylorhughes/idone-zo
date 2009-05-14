@@ -44,6 +44,30 @@
   self.tableView.autoresizesSubviews = YES;
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{ 
+  [super viewWillAppear:animated];
+  
+  if (options && ![self.tableView indexPathForSelectedRow])
+  {
+    for (NSInteger i = 0; i < self.options.count; i++)
+    {
+      NSString *option = (NSString*)[self.options objectAtIndex:i];
+      if ([option isEqualTo:self.selected])
+      {
+        NSIndexPath *path = [NSIndexPath indexPathForRow:i inSection:1];
+        [self.tableView selectRowAtIndexPath:path animated:NO scrollPosition:UITableViewScrollPositionTop];
+        UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:path];
+        cell.selected = YES;
+        break;
+      }
+    }
+  }
+
+  // this needs to come after setting selected to YES
+  [self.tableView reloadData];
+}
+
 - (void)createTextView
 {
   CGRect frame = CGRectMake(0.0, 0.0, 100.0, 100.0);
@@ -52,7 +76,7 @@
   textView.textColor = [UIColor blackColor];
   textView.font = [UIFont systemFontOfSize:18.0];
   textView.backgroundColor = [UIColor whiteColor];
-	
+	textView.delegate = self;
 	textView.returnKeyType = UIReturnKeyDefault;
   textView.keyboardType = UIKeyboardTypeDefault;
 }
@@ -81,15 +105,25 @@
   [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-  [super viewWillAppear:animated];
-  [self.tableView reloadData];
-}
-
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning]; // Releases the view if it doesn't have a superview
     // Release anything that's not essential, such as cached data
+}
+
+#pragma mark Text view methods
+
+- (void)textViewDidChange:(UITextView *)textView
+{
+  NSIndexPath *path = [self.tableView indexPathForSelectedRow];
+  if (path)
+  {
+    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:path];
+    if (![cell.text isEqualTo:self.selected])
+    {
+      [self.tableView deselectRowAtIndexPath:path animated:NO];
+      [self.tableView reloadData];
+    }
+  }
 }
 
 #pragma mark Table view methods
@@ -136,11 +170,17 @@
       cell = [tableView dequeueReusableCellWithIdentifier:@"NormalCell"];
       if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:@"NormalCell"] autorelease];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
       }
-      cell.text = ((Project*)[self.options objectAtIndex:[indexPath row]]).name;
-      if ([cell.text isEqualTo:self.selected])
+      
+      cell.text = [self.options objectAtIndex:[indexPath row]];
+      if (cell.selected)
       {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
+      }
+      else
+      {
+        cell.accessoryType = UITableViewCellAccessoryNone;
       }
       break;
   }
@@ -151,22 +191,20 @@
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
   if ([indexPath section] == 1)
-  {
+  {    
     UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
-    if (cell.accessoryType == UITableViewCellAccessoryCheckmark)
-    {
-      self.selected = nil;
-      cell.accessoryType = UITableViewCellAccessoryNone;
-    }
-    else
-    {
-      self.selected = cell.text;
-      cell.accessoryType = UITableViewCellAccessoryCheckmark;
-    }
-    [self.tableView reloadData];
-    cell.selected = NO;
+    self.selected = cell.text;
+
+    [self save:self];
+    return indexPath;
   }
+  
   return nil;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath;
+{
+  [self.tableView reloadData];
 }
 
 - (void)dealloc

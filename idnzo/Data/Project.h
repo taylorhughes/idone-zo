@@ -12,6 +12,9 @@
   NSString *name;
 }
 
++ (NSArray *) projectNames;
++ (Project *) findProjectWithName:(NSString *)name;
+
 @property (copy, nonatomic) NSString *name;
 
 @end
