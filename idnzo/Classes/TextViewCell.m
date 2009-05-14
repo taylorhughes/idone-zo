@@ -6,7 +6,7 @@
 //  Copyright 2009 __MyCompanyName__. All rights reserved.
 //
 
-#define CELL_PADDING 8.0
+#define CELL_PADDING 10.0
 
 #import "TextViewCell.h"
 
@@ -29,7 +29,7 @@
 	return self;
 }
 
-- (void)setView:(UITextView *)inView
+- (void)setView:(UIView *)inView
 {
 	view = inView;
 	[self.view retain];

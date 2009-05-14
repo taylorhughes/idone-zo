@@ -8,9 +8,9 @@
 
 @interface TextViewCell : UITableViewCell
 {
-  UITextView *view;
+  UIView *view;
 }
 
-@property (nonatomic, retain) UITextView *view;
+@property (nonatomic, retain) UIView *view;
 
 @end

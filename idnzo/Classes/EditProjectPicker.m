@@ -11,8 +11,10 @@
 @interface EditProjectPicker()
 - (void) save:(id)sender;
 - (void) cancel:(id)sender;
-- (void) createTextView;
+- (void) createtextField;
 @end
+
+#define FONT_SIZE 18.0
 
 @implementation EditProjectPicker
 
@@ -21,7 +23,7 @@
 - (id)init
 {
   self = [super init];
-  [self createTextView];
+  [self createtextField];
   return self;
 }
 
@@ -68,26 +70,28 @@
   [self.tableView reloadData];
 }
 
-- (void)createTextView
+- (void)createtextField
 {
   CGRect frame = CGRectMake(0.0, 0.0, 100.0, 100.0);
   
-	textView = [[[UITextView alloc] initWithFrame:frame] retain];
-  textView.textColor = [UIColor blackColor];
-  textView.font = [UIFont systemFontOfSize:18.0];
-  textView.backgroundColor = [UIColor whiteColor];
-	textView.delegate = self;
-	textView.returnKeyType = UIReturnKeyDefault;
-  textView.keyboardType = UIKeyboardTypeDefault;
+	textField = [[[UITextField alloc] initWithFrame:frame] retain];
+  textField.textColor = [UIColor blackColor];
+  textField.font = [UIFont boldSystemFontOfSize:FONT_SIZE];
+  textField.backgroundColor = [UIColor whiteColor];
+	textField.delegate = self;
+	textField.returnKeyType = UIReturnKeyDone;
+  textField.keyboardType = UIKeyboardTypeDefault;
+  textField.autocorrectionType = UITextAutocorrectionTypeNo;
+  textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
 }
 
 - (NSString*)selected
 {
-  return textView.text;
+  return textField.text;
 }
 - (void)setSelected:(NSString *)newSelected
 {
-  textView.text = newSelected;
+  textField.text = newSelected;
 }
 
 - (void)save:(id)sender
@@ -112,18 +116,15 @@
 
 #pragma mark Text view methods
 
-- (void)textViewDidChange:(UITextView *)textView
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
   NSIndexPath *path = [self.tableView indexPathForSelectedRow];
   if (path)
   {
-    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:path];
-    if (![cell.text isEqualTo:self.selected])
-    {
-      [self.tableView deselectRowAtIndexPath:path animated:NO];
-      [self.tableView reloadData];
-    }
+    [self.tableView deselectRowAtIndexPath:path animated:NO];
+    [self.tableView reloadData];
   }
+  return YES;
 }
 
 #pragma mark Table view methods
@@ -148,7 +149,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	return 50.0;
+	return 40.0;
 }
 
 // Customize the appearance of table view cells.
@@ -163,7 +164,7 @@
       if (cell == nil) {
         cell = [[[TextViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:@"TableViewCell"] autorelease];
       }
-      ((TextViewCell*)cell).view = textView;
+      ((TextViewCell*)cell).view = textField;
       break;
       
     case 1:
@@ -171,6 +172,7 @@
       if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:@"NormalCell"] autorelease];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.font = [UIFont systemFontOfSize:FONT_SIZE];
       }
       
       cell.text = [self.options objectAtIndex:[indexPath row]];
@@ -210,7 +212,7 @@
 - (void)dealloc
 {
   [options release];
-  [textView release];
+  [textField release];
   [super dealloc];
 }
 
