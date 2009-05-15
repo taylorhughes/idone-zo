@@ -55,7 +55,7 @@
     for (NSInteger i = 0; i < self.options.count; i++)
     {
       NSString *option = (NSString*)[self.options objectAtIndex:i];
-      if ([option isEqualTo:self.selected])
+      if ([option isEqualToString:self.selected])
       {
         NSIndexPath *path = [NSIndexPath indexPathForRow:i inSection:1];
         [self.tableView selectRowAtIndexPath:path animated:NO scrollPosition:UITableViewScrollPositionTop];
