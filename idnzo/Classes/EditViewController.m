@@ -214,11 +214,11 @@
           break;
         case 1:
           title.text = @"contexts";
-          text.text = [self.task.contexts componentsJoinedByString:@", "];
+          text.text = self.task.contextsString;
           break;
         case 2:
           title.text = @"due date";
-          text.text = [self.task.due descriptionWithCalendarFormat:@"%d/%m/%Y" timeZone:nil locale:nil];
+          text.text = self.task.dueString;
           break;
       }
       break;

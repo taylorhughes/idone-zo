@@ -12,6 +12,10 @@
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765FC0DF74451002DB57D /* CoreGraphics.framework */; };
+		3416EC260FC22C3D00D8BD53 /* TaskCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3416EC230FC22C3D00D8BD53 /* TaskCell.m */; };
+		3416EC270FC22C3D00D8BD53 /* TaskCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3416EC250FC22C3D00D8BD53 /* TaskCellView.m */; };
+		3416EC280FC22C3D00D8BD53 /* TaskCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3416EC230FC22C3D00D8BD53 /* TaskCell.m */; };
+		3416EC290FC22C3D00D8BD53 /* TaskCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3416EC250FC22C3D00D8BD53 /* TaskCellView.m */; };
 		341E1E230FB138F000D5B454 /* TaskViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 341E1E220FB138F000D5B454 /* TaskViewController.m */; };
 		341E1E240FB138F000D5B454 /* TaskViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 341E1E220FB138F000D5B454 /* TaskViewController.m */; };
 		341E1EFF0FB14F2900D5B454 /* EditTaskView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 341E1EFD0FB14F2900D5B454 /* EditTaskView.xib */; };
@@ -90,6 +94,10 @@
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		288765FC0DF74451002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		3416EC220FC22C3D00D8BD53 /* TaskCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskCell.h; sourceTree = "<group>"; };
+		3416EC230FC22C3D00D8BD53 /* TaskCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaskCell.m; sourceTree = "<group>"; };
+		3416EC240FC22C3D00D8BD53 /* TaskCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskCellView.h; sourceTree = "<group>"; };
+		3416EC250FC22C3D00D8BD53 /* TaskCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaskCellView.m; sourceTree = "<group>"; };
 		341E1E210FB138F000D5B454 /* TaskViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskViewController.h; sourceTree = "<group>"; };
 		341E1E220FB138F000D5B454 /* TaskViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaskViewController.m; sourceTree = "<group>"; };
 		341E1EFD0FB14F2900D5B454 /* EditTaskView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = EditTaskView.xib; path = Resources/EditTaskView.xib; sourceTree = "<group>"; };
@@ -207,6 +215,10 @@
 				34C51AC30FB92A9D0024A5CD /* EditProjectPicker.m */,
 				345A19100FBA6F29000BBC22 /* TextViewCell.h */,
 				345A19110FBA6F29000BBC22 /* TextViewCell.m */,
+				3416EC220FC22C3D00D8BD53 /* TaskCell.h */,
+				3416EC230FC22C3D00D8BD53 /* TaskCell.m */,
+				3416EC240FC22C3D00D8BD53 /* TaskCellView.h */,
+				3416EC250FC22C3D00D8BD53 /* TaskCellView.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -466,6 +478,8 @@
 				34C51BA80FB936EA0024A5CD /* Context.m in Sources */,
 				34C51BA90FB936EA0024A5CD /* Project.m in Sources */,
 				345A19130FBA6F29000BBC22 /* TextViewCell.m in Sources */,
+				3416EC280FC22C3D00D8BD53 /* TaskCell.m in Sources */,
+				3416EC290FC22C3D00D8BD53 /* TaskCellView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -500,6 +514,8 @@
 				34C51BA60FB936EA0024A5CD /* Context.m in Sources */,
 				34C51BA70FB936EA0024A5CD /* Project.m in Sources */,
 				345A19120FBA6F29000BBC22 /* TextViewCell.m in Sources */,
+				3416EC260FC22C3D00D8BD53 /* TaskCell.m in Sources */,
+				3416EC270FC22C3D00D8BD53 /* TaskCellView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

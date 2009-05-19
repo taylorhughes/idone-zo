@@ -28,4 +28,7 @@
 @property (retain, nonatomic) NSArray  *contexts;
 @property (copy, nonatomic)   NSDate   *due;
 
+- (NSString *)contextsString;
+- (NSString *)dueString;
+
 @end

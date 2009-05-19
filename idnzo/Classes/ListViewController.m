@@ -74,23 +74,21 @@
   return [self.tasks count];
 }
 
-// The accessory type is the image displayed on the far right of each table cell. In order for the delegate method
-// tableView:accessoryButtonClickedForRowWithIndexPath: to be called, you must return the "Detail Disclosure Button" type.
-//- (UITableViewCellAccessoryType)tableView:(UITableView *)tv accessoryTypeForRowWithIndexPath:(NSIndexPath *)indexPath {
-//  return UITableViewCellAccessoryDisclosureIndicator;
-//}
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	return [TaskCellView height];
+}
 
 - (UITableViewCell *)tableView:(UITableView *)tv cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-  UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"MyIdentifier"];
+  TaskCell *cell = (TaskCell*)[self.tableView dequeueReusableCellWithIdentifier:@"MyIdentifier"];
   if (cell == nil)
   {
     // Create a new cell. CGRectZero allows the cell to determine the appropriate size.
-    cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:@"MyIdentifier"] autorelease];
+    cell = [[[TaskCell alloc] initWithFrame:CGRectZero reuseIdentifier:@"MyIdentifier"] autorelease];
   }
   
-  Task *task = [self.tasks objectAtIndex:indexPath.row];
-  cell.text = task.body;
+  cell.task = [self.tasks objectAtIndex:indexPath.row];
   
   return cell;
 }

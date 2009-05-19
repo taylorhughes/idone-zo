@@ -2,8 +2,10 @@
 #import "TaskList.h"
 #import "Task.h"
 #import "TaskViewController.h"
+#import "TaskCell.h"
+#import "TaskCellView.h"
 
-@class TaskList, Task, TaskViewController;
+@class TaskList, Task, TaskViewController, TaskCell, TaskCellView;
 
 @interface ListViewController : UIViewController {
   IBOutlet UITableView *tableView;

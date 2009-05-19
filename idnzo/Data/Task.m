@@ -25,4 +25,18 @@
   [super dealloc];
 }
 
+- (NSString *)contextsString
+{
+  if (!self.contexts || [self.contexts count] == 0)
+  {
+    return nil;
+  }
+  return [@"@" stringByAppendingString:[self.contexts componentsJoinedByString:@" @"]];
+}
+
+- (NSString *)dueString
+{
+  return [self.due descriptionWithCalendarFormat:@"%d/%m/%Y" timeZone:nil locale:nil];
+}
+
 @end
