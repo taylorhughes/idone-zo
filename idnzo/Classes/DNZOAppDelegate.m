@@ -80,7 +80,7 @@ static NSString *DATABASE_FILENAME     = @"dnzo.sqlite";
   task.body = @"Welcome to DNZO!";
   task.contexts = [NSArray arrayWithObject:@"home"];
   task.project = project;
-  task.due = [NSDate dateWithTimeIntervalSinceNow:0];
+  task.due = [NSDate date];
   
   [task save];
 }

@@ -89,8 +89,8 @@
 
 /* Begin PBXFileReference section */
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		1D3623240D0F684500981E51 /* DNZOAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNZOAppDelegate.h; sourceTree = "<group>"; };
-		1D3623250D0F684500981E51 /* DNZOAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DNZOAppDelegate.m; sourceTree = "<group>"; };
+		1D3623240D0F684500981E51 /* DNZOAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DNZOAppDelegate.h; path = Classes/DNZOAppDelegate.h; sourceTree = "<group>"; };
+		1D3623250D0F684500981E51 /* DNZOAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DNZOAppDelegate.m; path = Classes/DNZOAppDelegate.m; sourceTree = "<group>"; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		288765FC0DF74451002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -98,8 +98,8 @@
 		3416EC230FC22C3D00D8BD53 /* TaskCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaskCell.m; sourceTree = "<group>"; };
 		3416EC240FC22C3D00D8BD53 /* TaskCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskCellView.h; sourceTree = "<group>"; };
 		3416EC250FC22C3D00D8BD53 /* TaskCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaskCellView.m; sourceTree = "<group>"; };
-		341E1E210FB138F000D5B454 /* TaskViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskViewController.h; sourceTree = "<group>"; };
-		341E1E220FB138F000D5B454 /* TaskViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaskViewController.m; sourceTree = "<group>"; };
+		341E1E210FB138F000D5B454 /* TaskViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TaskViewController.h; path = Classes/TaskViewController.h; sourceTree = "<group>"; };
+		341E1E220FB138F000D5B454 /* TaskViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TaskViewController.m; path = Classes/TaskViewController.m; sourceTree = "<group>"; };
 		341E1EFD0FB14F2900D5B454 /* EditTaskView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = EditTaskView.xib; path = Resources/EditTaskView.xib; sourceTree = "<group>"; };
 		341E1EFE0FB14F2900D5B454 /* TaskView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = TaskView.xib; path = Resources/TaskView.xib; sourceTree = "<group>"; };
 		34205CAF0FB2641800A9F048 /* TextFieldController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextFieldController.h; sourceTree = "<group>"; };
@@ -143,17 +143,17 @@
 		34770B1F0FAFE44E00AD8397 /* Task.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Task.m; path = Data/Task.m; sourceTree = "<group>"; };
 		34770B200FAFE44E00AD8397 /* TaskList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TaskList.h; path = Data/TaskList.h; sourceTree = "<group>"; };
 		34770B210FAFE44E00AD8397 /* TaskList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TaskList.m; path = Data/TaskList.m; sourceTree = "<group>"; };
-		34770B260FAFE45B00AD8397 /* ListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ListViewController.h; sourceTree = "<group>"; };
-		34770B270FAFE45B00AD8397 /* ListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ListViewController.m; sourceTree = "<group>"; };
-		34770B280FAFE45B00AD8397 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
-		34770B290FAFE45B00AD8397 /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
+		34770B260FAFE45B00AD8397 /* ListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ListViewController.h; path = Classes/ListViewController.h; sourceTree = "<group>"; };
+		34770B270FAFE45B00AD8397 /* ListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ListViewController.m; path = Classes/ListViewController.m; sourceTree = "<group>"; };
+		34770B280FAFE45B00AD8397 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MainViewController.h; path = Classes/MainViewController.h; sourceTree = "<group>"; };
+		34770B290FAFE45B00AD8397 /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MainViewController.m; path = Classes/MainViewController.m; sourceTree = "<group>"; };
 		34770B2F0FAFE4A300AD8397 /* ListView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ListView.xib; path = Resources/ListView.xib; sourceTree = "<group>"; };
 		34770B300FAFE4A300AD8397 /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = MainWindow.xib; path = Resources/MainWindow.xib; sourceTree = "<group>"; };
 		34770B330FAFE4C200AD8397 /* TaskTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TaskTest.h; path = Test/TaskTest.h; sourceTree = "<group>"; };
 		34770B340FAFE4C200AD8397 /* TaskTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TaskTest.m; path = Test/TaskTest.m; sourceTree = "<group>"; };
 		34770B430FAFE67B00AD8397 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon.png; path = Resources/icon.png; sourceTree = "<group>"; };
-		34770B580FAFED7000AD8397 /* EditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditViewController.h; sourceTree = "<group>"; };
-		34770B590FAFED7000AD8397 /* EditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditViewController.m; sourceTree = "<group>"; };
+		34770B580FAFED7000AD8397 /* EditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EditViewController.h; path = Classes/EditViewController.h; sourceTree = "<group>"; };
+		34770B590FAFED7000AD8397 /* EditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EditViewController.m; path = Classes/EditViewController.m; sourceTree = "<group>"; };
 		348E18C60FA7DE1E00B75000 /* Test.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Test.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		348E18C70FA7DE1E00B75000 /* Test-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Test-Info.plist"; sourceTree = "<group>"; };
 		348E18D00FA7DE7A00B75000 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -196,19 +196,9 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		080E96DDFE201D6D7F000001 /* Classes */ = {
+		080E96DDFE201D6D7F000001 /* Subviews */ = {
 			isa = PBXGroup;
 			children = (
-				1D3623240D0F684500981E51 /* DNZOAppDelegate.h */,
-				1D3623250D0F684500981E51 /* DNZOAppDelegate.m */,
-				34770B280FAFE45B00AD8397 /* MainViewController.h */,
-				34770B290FAFE45B00AD8397 /* MainViewController.m */,
-				34770B260FAFE45B00AD8397 /* ListViewController.h */,
-				34770B270FAFE45B00AD8397 /* ListViewController.m */,
-				341E1E210FB138F000D5B454 /* TaskViewController.h */,
-				341E1E220FB138F000D5B454 /* TaskViewController.m */,
-				34770B580FAFED7000AD8397 /* EditViewController.h */,
-				34770B590FAFED7000AD8397 /* EditViewController.m */,
 				34205CAF0FB2641800A9F048 /* TextFieldController.h */,
 				34205CB00FB2641800A9F048 /* TextFieldController.m */,
 				34C51AC20FB92A9D0024A5CD /* EditProjectPicker.h */,
@@ -220,6 +210,7 @@
 				3416EC240FC22C3D00D8BD53 /* TaskCellView.h */,
 				3416EC250FC22C3D00D8BD53 /* TaskCellView.m */,
 			);
+			name = Subviews;
 			path = Classes;
 			sourceTree = "<group>";
 		};
@@ -235,26 +226,21 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				3490B9A60FA7DB15004195D9 /* DNZO_Prefix.pch */,
+				29B97316FDCFA39411CA2CEA /* main.m */,
+				1D3623240D0F684500981E51 /* DNZOAppDelegate.h */,
+				1D3623250D0F684500981E51 /* DNZOAppDelegate.m */,
 				346DBACA0FAFBCDB00ACCD20 /* SQLitePersistentObjects */,
 				34D1B22A0FAE4FC8009F90F9 /* Data */,
-				080E96DDFE201D6D7F000001 /* Classes */,
+				3416ECEA0FC2567C00D8BD53 /* Main Views */,
+				080E96DDFE201D6D7F000001 /* Subviews */,
 				348E18D50FA7DE8D00B75000 /* Test Cases */,
-				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
 				348E18C70FA7DE1E00B75000 /* Test-Info.plist */,
 			);
 			name = CustomTemplate;
-			sourceTree = "<group>";
-		};
-		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
-			isa = PBXGroup;
-			children = (
-				3490B9A60FA7DB15004195D9 /* DNZO_Prefix.pch */,
-				29B97316FDCFA39411CA2CEA /* main.m */,
-			);
-			name = "Other Sources";
 			sourceTree = "<group>";
 		};
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
@@ -281,6 +267,21 @@
 				288765FC0DF74451002DB57D /* CoreGraphics.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		3416ECEA0FC2567C00D8BD53 /* Main Views */ = {
+			isa = PBXGroup;
+			children = (
+				34770B280FAFE45B00AD8397 /* MainViewController.h */,
+				34770B290FAFE45B00AD8397 /* MainViewController.m */,
+				34770B260FAFE45B00AD8397 /* ListViewController.h */,
+				34770B270FAFE45B00AD8397 /* ListViewController.m */,
+				341E1E210FB138F000D5B454 /* TaskViewController.h */,
+				341E1E220FB138F000D5B454 /* TaskViewController.m */,
+				34770B580FAFED7000AD8397 /* EditViewController.h */,
+				34770B590FAFED7000AD8397 /* EditViewController.m */,
+			);
+			name = "Main Views";
 			sourceTree = "<group>";
 		};
 		346DBACA0FAFBCDB00ACCD20 /* SQLitePersistentObjects */ = {

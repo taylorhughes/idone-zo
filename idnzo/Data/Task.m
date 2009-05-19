@@ -36,7 +36,14 @@
 
 - (NSString *)dueString
 {
-  return [self.due descriptionWithCalendarFormat:@"%d/%m/%Y" timeZone:nil locale:nil];
+  NSString *format = @"%b %e";
+  // See if the years are the same. Is there an easier way?
+  if (![[   [NSDate date] descriptionWithCalendarFormat:@"%Y" timeZone:nil locale:nil] 
+        isEqual:[self.due descriptionWithCalendarFormat:@"%Y" timeZone:nil locale:nil]])
+  {
+    format = [format stringByAppendingString:@" %y"];
+  }
+  return [self.due descriptionWithCalendarFormat:format timeZone:nil locale:nil];
 }
 
 @end
