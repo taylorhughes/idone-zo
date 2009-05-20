@@ -13,7 +13,7 @@
 
 @class Task, TextFieldController, Project, EditProjectPicker;
 
-@interface EditViewController : UITableViewController {
+@interface EditViewController : UITableViewController <UITextViewDelegate> {
   Task *task;
   TextFieldController *textFieldController;
   

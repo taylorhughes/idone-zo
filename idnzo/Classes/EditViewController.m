@@ -15,10 +15,10 @@
 
 - (void) dismiss;
 
-- (void) saveBody:(id)sender;
 - (void) saveProject:(id)sender;
 
-- (UITableViewCell*) cellWithReuseIdentifier:(NSString *)identifier;
+- (UITableViewCell*) detailCellWithReuseIdentifier:(NSString *)identifier;
+- (UITableViewCell*) bodyCellWithReuseIdentifier:(NSString *)identifier;
 
 @property (retain, nonatomic) NSObject *dismissTarget;
 @property (assign, nonatomic) SEL dismissAction;
@@ -79,8 +79,24 @@
   }
 }
 
+#define BODY_ROW_HEIGHT 100
+#define DETAIL_ROW_HEIGHT 50
+#define ROW_WIDTH 280
+
+#define PADDING 10
+#define TEXTVIEW_PADDING 5
+#define LEFT_COLUMN_WIDTH 60
+#define TITLE_TAG 1
+#define TEXT_TAG 2
+#define TEXTVIEW_TAG 3
+
+#define SMALL_FONT_SIZE 12.0
+#define REGULAR_FONT_SIZE 18.0
+
 - (void)save:(id)sender
 {
+  UITextView *textView = (UITextView*)[[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]] viewWithTag:TEXTVIEW_TAG];
+  self.task.body = textView.text;
   [self.task save];
   [self dismiss];
 }
@@ -101,8 +117,7 @@
 - (void)dealloc
 {
   [task release];
-  
-  
+  [textFieldController release];
   [dismissTarget release];
   
   [super dealloc];
@@ -110,6 +125,10 @@
 
 - (UITableViewCellAccessoryType)tableView:(UITableView *)tv accessoryTypeForRowWithIndexPath:(NSIndexPath *)indexPath
 {
+  if (indexPath.section == 0)
+  {
+    return UITableViewCellAccessoryNone;
+  }
   return UITableViewCellAccessoryDisclosureIndicator;
 }
 
@@ -122,7 +141,7 @@
 {
   switch(section)
   {
-    case 0: return nil; //@"Task Body";
+    case 0: return @"Task Body";
     case 1: return @"Task Details";
   }
   return nil;
@@ -140,42 +159,64 @@
   return 0;
 }
 
-#define ROW_HEIGHT 50
-#define ROW_WIDTH 280
-
-#define PADDING 10
-#define LEFT_COLUMN_WIDTH 60
-#define TITLE_TAG 1
-#define TEXT_TAG 2
-
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-  return ROW_HEIGHT;
+  if (indexPath.section == 0) {
+    return BODY_ROW_HEIGHT;
+  }
+  return DETAIL_ROW_HEIGHT;
 }
 
-- (UITableViewCell *)cellWithReuseIdentifier:(NSString *)identifier
+- (UITableViewCell *)bodyCellWithReuseIdentifier:(NSString *)identifier
 {
-	CGRect rect;
+  CGRect rect = CGRectMake(TEXTVIEW_PADDING, TEXTVIEW_PADDING, ROW_WIDTH - TEXTVIEW_PADDING * 2, BODY_ROW_HEIGHT - TEXTVIEW_PADDING * 2);
+  UITableViewCell *cell = [[[UITableViewCell alloc] initWithFrame:rect reuseIdentifier:identifier] autorelease];
+  UITextView *textView = [[[UITextView alloc] initWithFrame:rect] autorelease];
+  textView.tag = TEXTVIEW_TAG;
+  textView.delegate = self;
+  textView.returnKeyType = UIReturnKeyDone;
+  textView.font = [UIFont systemFontOfSize:REGULAR_FONT_SIZE];
+  [cell.contentView addSubview:textView];
   
-	rect = CGRectMake(0.0, 0.0, ROW_WIDTH, ROW_HEIGHT);
+  return cell;
+}
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+  if ([text isEqual:@"\n"])
+  {
+    [textView resignFirstResponder];
+    return NO;
+  }
+  return YES;
+}
+
+- (void)textViewDidChange:(UITextView *)textView
+{
+  self.task.body = textView.text;
+}
+
+- (UITableViewCell *)detailCellWithReuseIdentifier:(NSString *)identifier
+{
+	CGRect rect = CGRectMake(0.0, 0.0, ROW_WIDTH, DETAIL_ROW_HEIGHT);
 	
 	UITableViewCell *cell = [[[UITableViewCell alloc] initWithFrame:rect reuseIdentifier:identifier] autorelease];
 	
 	UILabel *label;
 	
-	rect = CGRectMake(PADDING, PADDING, LEFT_COLUMN_WIDTH, ROW_HEIGHT - PADDING * 2);
+	rect = CGRectMake(PADDING, PADDING, LEFT_COLUMN_WIDTH, DETAIL_ROW_HEIGHT - PADDING * 2);
 	label = [[UILabel alloc] initWithFrame:rect];
 	label.tag = TITLE_TAG;
-	label.font = [UIFont boldSystemFontOfSize:13];
+	label.font = [UIFont boldSystemFontOfSize:SMALL_FONT_SIZE];
   label.textAlignment = UITextAlignmentRight;
 	label.adjustsFontSizeToFitWidth = YES;
 	[cell.contentView addSubview:label];
 	[label release];
 	
-	rect = CGRectMake(PADDING * 2 + LEFT_COLUMN_WIDTH, PADDING, ROW_WIDTH - LEFT_COLUMN_WIDTH - PADDING * 3, ROW_HEIGHT - PADDING * 2);
+	rect = CGRectMake(PADDING * 2 + LEFT_COLUMN_WIDTH, PADDING, ROW_WIDTH - LEFT_COLUMN_WIDTH - PADDING * 3, DETAIL_ROW_HEIGHT - PADDING * 2);
 	label = [[UILabel alloc] initWithFrame:rect];
 	label.tag = TEXT_TAG;
-	label.font = [UIFont systemFontOfSize:18];
+	label.font = [UIFont systemFontOfSize:REGULAR_FONT_SIZE];
 	label.textAlignment = UITextAlignmentLeft;
 	[cell.contentView addSubview:label];
 	[label release];
@@ -185,27 +226,31 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tv cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	static NSString *identifier = @"CellIdentifier";
-	
-	UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:identifier];
-	
-	if (cell == nil)
-  {
-		cell = [self cellWithReuseIdentifier:identifier];
-	}
+	UITableViewCell *cell;
   
-  UILabel *title = (UILabel *)[cell viewWithTag:TITLE_TAG];
-  UILabel *text  = (UILabel *)[cell viewWithTag:TEXT_TAG];
+  UILabel *title;
+  UILabel *text;
   
   switch ([indexPath section])
   {
     case 0:
-      title.text = @"body";
-      text.text = self.task.body;
+      cell = [self.tableView dequeueReusableCellWithIdentifier:@"BodyCell"];
+      if (cell == nil) {
+        cell = [self bodyCellWithReuseIdentifier:@"BodyCell"];
+      }
+      
+      ((UITextView*)[cell viewWithTag:TEXTVIEW_TAG]).text = self.task.body;
       
       break;
       
     case 1:
+      cell = [self.tableView dequeueReusableCellWithIdentifier:@"DetailCell"];
+      if (cell == nil) {
+        cell = [self detailCellWithReuseIdentifier:@"DetailCell"];
+      }
+      title = (UILabel *)[cell viewWithTag:TITLE_TAG];
+      text  = (UILabel *)[cell viewWithTag:TEXT_TAG];
+      
       switch ([indexPath row])
       {
         case 0:
@@ -234,12 +279,6 @@
   switch ([indexPath section])
   {
     case 0:
-      controller = [[[TextFieldController alloc] initWithNibName:@"BodyTextFieldView" bundle:nil] autorelease];
-      
-      ((TextFieldController*)controller).text = task.body;
-      ((TextFieldController*)controller).target = self;
-      ((TextFieldController*)controller).saveAction = @selector(saveBody:);
-      
       break;
       
     case 1:
@@ -268,11 +307,6 @@
   return nil;
 }
 
-- (void) saveBody:(id)sender
-{
-  self.task.body = [(TextFieldController*)sender text];
-  [self.tableView reloadData];
-}
 - (void) saveProject:(id)sender
 {
   NSString *newProject = [[(EditProjectPicker*)sender selected] 
