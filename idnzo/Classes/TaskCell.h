@@ -17,5 +17,6 @@
 }
 
 @property (nonatomic, retain) Task *task;
+@property (nonatomic, retain, readonly) TaskCellView *taskCellView;
 
 @end

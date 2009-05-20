@@ -12,7 +12,7 @@
 
 @implementation TaskCell
 
-@synthesize task;
+@synthesize task, taskCellView;
 
 - (void)setTask:(Task *)newTask
 {

@@ -12,11 +12,14 @@
 @class Task, Project;
 
 @interface TaskCellView : UIView {
-  Task *task;  
+  Task *task;
+  BOOL wasCompleted;
 }
 
 @property (nonatomic, retain) Task *task;
+@property (nonatomic, assign) BOOL wasCompleted;
 
 + (NSInteger) height;
+// Indicates whether the checkbox was clicked/touched with the latest event
 
 @end

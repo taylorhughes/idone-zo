@@ -17,15 +17,16 @@ static UIImage *checked;
 
 @implementation TaskCellView
 
-@synthesize task;
+@synthesize task, wasCompleted;
 
 #define PADDING 10.0
-#define IMAGE_WIDTH 17.0
+#define IMAGE_WIDTH 15.0
 #define IMAGE_HEIGHT 20.0
 #define IMAGE_TOP 10.0
 #define IMAGE_LEFT 10.0
 #define MAIN_FONT_SIZE 20.0
 #define SECONDARY_FONT_SIZE 14.0
+#define TOUCH_BUFFER 10.0
 
 + (void) initialize
 {
@@ -47,6 +48,7 @@ static UIImage *checked;
   {
 		self.opaque = YES;
     self.backgroundColor = [UIColor whiteColor];
+    self.multipleTouchEnabled = YES;
   }
   return self;
 }
@@ -59,6 +61,18 @@ static UIImage *checked;
   }
   task = [newTask retain];
 	[self setNeedsDisplay];
+}
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+  UITouch *touch = (UITouch*) [[touches allObjects] objectAtIndex:0];
+  CGPoint relative = [touch locationInView:self];
+  if (relative.x >= IMAGE_LEFT - TOUCH_BUFFER && relative.x <= IMAGE_LEFT + IMAGE_WIDTH  + TOUCH_BUFFER &&
+      relative.y >= IMAGE_TOP  - TOUCH_BUFFER && relative.y <= IMAGE_TOP  + IMAGE_HEIGHT + TOUCH_BUFFER)
+  {
+    // hit the checkbox
+    self.wasCompleted = YES;
+  }
 }
 
 - (NSArray*)getDetails

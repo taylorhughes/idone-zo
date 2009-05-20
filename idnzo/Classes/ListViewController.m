@@ -94,13 +94,24 @@
 }
 
 - (NSIndexPath *)tableView:(UITableView *)tv willSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-  TaskViewController *controller = self.taskViewController;
-  
+{ 
+  TaskCell *cell = (TaskCell*)[self.tableView cellForRowAtIndexPath:indexPath];
   Task *clickedTask = [self.tasks objectAtIndex:indexPath.row];
-  controller.task = clickedTask;
   
-  [self.navigationController pushViewController:controller animated:YES];
+  if (cell.taskCellView.wasCompleted)
+  {
+    cell.taskCellView.wasCompleted = NO;
+    clickedTask.complete = !clickedTask.complete;
+    [clickedTask save];
+    [self.tableView reloadData];
+  }
+  else
+  {
+    TaskViewController *controller = self.taskViewController;
+    controller.task = clickedTask;
+    
+    [self.navigationController pushViewController:controller animated:YES];    
+  }
   
   return nil;
 }
