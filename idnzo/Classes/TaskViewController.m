@@ -35,6 +35,14 @@
 - (void)refresh
 {
   self.body.text = self.task.body;
+  if (self.task.complete)
+  {
+    [self.completeButton setTitle:@"Uncomplete" forState:UIControlStateNormal];
+  }
+  else
+  {
+    [self.completeButton setTitle:@"Complete" forState:UIControlStateNormal];
+  }
 
   CGRect frame = [self.body frame];
   CGSize size = [self.body sizeThatFits:CGSizeMake(frame.size.width, MAX_BODY_HEIGHT)];
@@ -48,10 +56,22 @@
   [self.navigationController presentModalViewController:modal animated:YES];
 }
 
+- (IBAction) complete:(id)sender
+{
+  self.task.complete = !self.task.complete;
+  [self.task save];
+  [self refresh];
+}
+
 #pragma mark Table view methods
 
-- (void)dealloc {
-    [super dealloc];
+- (void)dealloc
+{
+  [task release];
+  [body release];
+  [deleteButton release];
+  [completeButton release];
+  [super dealloc];
 }
 
 @end

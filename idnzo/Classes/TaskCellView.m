@@ -8,6 +8,9 @@
 
 #import "TaskCellView.h"
 
+static UIImage *unchecked;
+static UIImage *checked;
+
 @interface TaskCellView()
 - (NSArray *)getDetails;
 @end
@@ -17,8 +20,21 @@
 @synthesize task;
 
 #define PADDING 10.0
+#define IMAGE_WIDTH 17.0
+#define IMAGE_HEIGHT 20.0
+#define IMAGE_TOP 10.0
+#define IMAGE_LEFT 10.0
 #define MAIN_FONT_SIZE 20.0
 #define SECONDARY_FONT_SIZE 14.0
+
++ (void) initialize
+{
+  if (self == [TaskCellView class])
+  {
+    checked = [[UIImage imageNamed:@"checked.png"] retain];
+    unchecked = [[UIImage imageNamed:@"unchecked.png"] retain];
+  }
+}
 
 + (NSInteger) height
 {
@@ -27,7 +43,8 @@
 
 - (id)initWithFrame:(CGRect)frame
 {
-  if (self = [super initWithFrame:frame]) {
+  if (self = [super initWithFrame:frame])
+  {
 		self.opaque = YES;
     self.backgroundColor = [UIColor whiteColor];
   }
@@ -68,7 +85,9 @@
 }
 
 - (void)drawRect:(CGRect)rect
-{  
+{ 
+	CGContextRef context = UIGraphicsGetCurrentContext();
+	
 	// Color and font for the main text items (time zone name, time)
 	UIColor *mainTextColor = [UIColor blackColor];
 	UIFont *mainFont = [UIFont boldSystemFontOfSize:MAIN_FONT_SIZE];
@@ -77,10 +96,30 @@
 	UIColor *secondaryTextColor = [UIColor darkGrayColor];
 	UIFont *secondaryFont = [UIFont systemFontOfSize:SECONDARY_FONT_SIZE];
   
-  [mainTextColor set];
+  UIImage *image;
+  if (task.complete)
+  {
+    image = checked;
+  }
+  else
+  {
+    image = unchecked;
+  }
+  [image drawInRect:CGRectMake(IMAGE_LEFT, IMAGE_TOP, image.size.width, image.size.height)];
+  
+  if (self.task.complete)
+  {
+    [secondaryTextColor set];
+  }
+  else
+  {
+    [mainTextColor set];
+  }
 
-  CGFloat width = self.bounds.size.width - 2 * PADDING;
-  CGPoint point = CGPointMake(PADDING, PADDING);
+  CGFloat left  = IMAGE_LEFT + IMAGE_WIDTH + PADDING;
+  
+  CGFloat width = self.bounds.size.width - left - PADDING;
+  CGPoint point = CGPointMake(left, PADDING);
   
   [self.task.body drawAtPoint:point 
                      forWidth:width
@@ -90,10 +129,25 @@
                 lineBreakMode:UILineBreakModeTailTruncation
            baselineAdjustment:UIBaselineAdjustmentAlignBaselines];
   
+  CGSize titleSize = [self.task.body sizeWithFont:mainFont constrainedToSize:CGSizeMake(width, MAIN_FONT_SIZE) lineBreakMode:UILineBreakModeTailTruncation];
+  CGFloat lineTop = PADDING + floor(MAIN_FONT_SIZE * 0.67);
+
+  // DRAW STRIKETHROUGH
+  if (self.task.complete)
+  {
+    CGContextSetLineWidth(context, 2.0f);
+    CGContextSetStrokeColorWithColor(context, [[UIColor darkGrayColor] CGColor]);
+      
+    CGContextMoveToPoint(context, left, lineTop);
+    CGContextAddLineToPoint(context, left + titleSize.width, lineTop);
+    CGContextStrokePath(context);
+  }
+    
+  // DRAW DETAIL STUFF
+  
   [secondaryTextColor set];
   
   NSArray *details = [self getDetails];
-  CGFloat left = PADDING;
   CGFloat detailWidth = (width - [details count] * PADDING) / [details count];
   for (NSString *detail in details)
   {

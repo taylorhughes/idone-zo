@@ -24,5 +24,6 @@
 @property (nonatomic, retain) Task *task;
 
 - (void) refresh;
+- (IBAction) complete:(id)sender;
 
 @end

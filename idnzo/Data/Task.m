@@ -11,7 +11,7 @@
 @implementation Task
 
 @synthesize taskList;
-@synthesize body, contexts, project, due;
+@synthesize body, contexts, project, due, complete;
 
 - (void)dealloc
 {

@@ -19,6 +19,8 @@
   NSArray  *contexts;
   NSDate   *due;
   
+  BOOL      complete;
+  
 }
 
 @property (retain, nonatomic) TaskList *taskList;
@@ -27,6 +29,7 @@
 @property (retain, nonatomic) Project  *project;
 @property (retain, nonatomic) NSArray  *contexts;
 @property (copy, nonatomic)   NSDate   *due;
+@property (assign, nonatomic) BOOL      complete;
 
 - (NSString *)contextsString;
 - (NSString *)dueString;

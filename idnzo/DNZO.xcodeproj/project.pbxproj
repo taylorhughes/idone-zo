@@ -77,6 +77,10 @@
 		348E19860FA7E04900B75000 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		348E19870FA7E04900B75000 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765FC0DF74451002DB57D /* CoreGraphics.framework */; };
 		348E199C0FA7E07100B75000 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
+		34B7D83E0FC3860600A91E43 /* checked.png in Resources */ = {isa = PBXBuildFile; fileRef = 34B7D83C0FC3860600A91E43 /* checked.png */; };
+		34B7D83F0FC3860600A91E43 /* unchecked.png in Resources */ = {isa = PBXBuildFile; fileRef = 34B7D83D0FC3860600A91E43 /* unchecked.png */; };
+		34B7D8400FC3860600A91E43 /* checked.png in Resources */ = {isa = PBXBuildFile; fileRef = 34B7D83C0FC3860600A91E43 /* checked.png */; };
+		34B7D8410FC3860600A91E43 /* unchecked.png in Resources */ = {isa = PBXBuildFile; fileRef = 34B7D83D0FC3860600A91E43 /* unchecked.png */; };
 		34C51AC40FB92A9D0024A5CD /* EditProjectPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C51AC30FB92A9D0024A5CD /* EditProjectPicker.m */; };
 		34C51AC50FB92A9D0024A5CD /* EditProjectPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C51AC30FB92A9D0024A5CD /* EditProjectPicker.m */; };
 		34C51BA60FB936EA0024A5CD /* Context.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C51BA30FB936EA0024A5CD /* Context.m */; };
@@ -159,6 +163,8 @@
 		348E18D00FA7DE7A00B75000 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		3490B9A60FA7DB15004195D9 /* DNZO_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNZO_Prefix.pch; sourceTree = "<group>"; };
 		3490B9C20FA7DD60004195D9 /* DNZO.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DNZO.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		34B7D83C0FC3860600A91E43 /* checked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = checked.png; path = Resources/checked.png; sourceTree = "<group>"; };
+		34B7D83D0FC3860600A91E43 /* unchecked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = unchecked.png; path = Resources/unchecked.png; sourceTree = "<group>"; };
 		34C51AC20FB92A9D0024A5CD /* EditProjectPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditProjectPicker.h; sourceTree = "<group>"; };
 		34C51AC30FB92A9D0024A5CD /* EditProjectPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditProjectPicker.m; sourceTree = "<group>"; };
 		34C51BA20FB936EA0024A5CD /* Context.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Context.h; path = Data/Context.h; sourceTree = "<group>"; };
@@ -253,6 +259,8 @@
 				34205DA00FB2915500A9F048 /* BodyTextFieldView.xib */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 				34770B430FAFE67B00AD8397 /* icon.png */,
+				34B7D83C0FC3860600A91E43 /* checked.png */,
+				34B7D83D0FC3860600A91E43 /* unchecked.png */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -414,6 +422,8 @@
 				341E1F010FB14F2900D5B454 /* EditTaskView.xib in Resources */,
 				341E1F020FB14F2900D5B454 /* TaskView.xib in Resources */,
 				34205DA20FB2915500A9F048 /* BodyTextFieldView.xib in Resources */,
+				34B7D8400FC3860600A91E43 /* checked.png in Resources */,
+				34B7D8410FC3860600A91E43 /* unchecked.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -424,6 +434,8 @@
 				341E1EFF0FB14F2900D5B454 /* EditTaskView.xib in Resources */,
 				341E1F000FB14F2900D5B454 /* TaskView.xib in Resources */,
 				34205DA10FB2915500A9F048 /* BodyTextFieldView.xib in Resources */,
+				34B7D83E0FC3860600A91E43 /* checked.png in Resources */,
+				34B7D83F0FC3860600A91E43 /* unchecked.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
