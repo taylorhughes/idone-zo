@@ -73,6 +73,8 @@ static UIImage *checked;
     // hit the checkbox
     self.wasCompleted = YES;
   }
+  
+  [super touchesBegan:touches withEvent:event];
 }
 
 - (NSArray*)getDetails

@@ -57,11 +57,6 @@
   [tableView reloadData];
 }
 
-- (UITableViewCellAccessoryType)tableView:(UITableView *)tv accessoryTypeForRowWithIndexPath:(NSIndexPath *)indexPath
-{
-  return UITableViewCellAccessoryDisclosureIndicator;
-}
-
 // This table will always only have one section.
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tv
 {
@@ -86,6 +81,7 @@
   {
     // Create a new cell. CGRectZero allows the cell to determine the appropriate size.
     cell = [[[TaskCell alloc] initWithFrame:CGRectZero reuseIdentifier:@"MyIdentifier"] autorelease];
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
   }
   
   cell.task = [self.tasks objectAtIndex:indexPath.row];
@@ -97,6 +93,8 @@
 { 
   TaskCell *cell = (TaskCell*)[self.tableView cellForRowAtIndexPath:indexPath];
   Task *clickedTask = [self.tasks objectAtIndex:indexPath.row];
+  
+  NSLog(@"Got here!");
   
   if (cell.taskCellView.wasCompleted)
   {

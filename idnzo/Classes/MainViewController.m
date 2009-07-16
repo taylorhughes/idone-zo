@@ -46,13 +46,6 @@
   return [self.taskLists count];
 }
 
-// The accessory type is the image displayed on the far right of each table cell. In order for the delegate method
-// tableView:accessoryButtonClickedForRowWithIndexPath: to be called, you must return the "Detail Disclosure Button" type.
-- (UITableViewCellAccessoryType)tableView:(UITableView *)tv accessoryTypeForRowWithIndexPath:(NSIndexPath *)indexPath
-{
-  return UITableViewCellAccessoryDisclosureIndicator;
-}
-
 - (UITableViewCell *)tableView:(UITableView *)tv cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
   UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"MyIdentifier"];
@@ -60,6 +53,7 @@
   {
     // Create a new cell. CGRectZero allows the cell to determine the appropriate size.
     cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:@"MyIdentifier"] autorelease];
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
   }
   
   // Retrieve the book object matching the row from the application delegate's array.
@@ -67,7 +61,7 @@
   //Book *book = (Book *)[appDelegate.books objectAtIndex:indexPath.row];
   
   TaskList *taskList = [self.taskLists objectAtIndex:indexPath.row];
-  cell.text = taskList.name;
+  cell.textLabel.text = taskList.name;
   
   return cell;
 }
