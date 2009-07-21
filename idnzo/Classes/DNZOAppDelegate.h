@@ -6,22 +6,31 @@
 //  Copyright __MyCompanyName__ 2009. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "MainViewController.h"
+#import "Context.h"
 
-#import "SQLiteInstanceManager.h"
-#import "TaskList.h"
-#import "Task.h"
-#import "Project.h"
-
-@class SQLiteInstanceManager, TaskList, Task, Project;
+@class Project, Context, TaskList, Task;
 
 @interface DNZOAppDelegate : NSObject <UIApplicationDelegate> {
   UIWindow *window;
+  
   UINavigationController *navigationController;
+  MainViewController *mainController;
+  
+  NSManagedObjectModel *managedObjectModel;
+  NSManagedObjectContext *managedObjectContext;	    
+  NSPersistentStoreCoordinator *persistentStoreCoordinator;  
 }
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;
 @property (nonatomic, retain) IBOutlet UINavigationController *navigationController;
+@property (nonatomic, retain) IBOutlet MainViewController *mainController;
+
+@property (nonatomic, retain, readonly) NSManagedObjectModel *managedObjectModel;
+@property (nonatomic, retain, readonly) NSManagedObjectContext *managedObjectContext;
+@property (nonatomic, retain, readonly) NSPersistentStoreCoordinator *persistentStoreCoordinator;
+
+@property (nonatomic, readonly) NSString *applicationDocumentsDirectory;
 
 @end
 

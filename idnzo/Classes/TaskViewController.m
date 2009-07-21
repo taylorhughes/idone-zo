@@ -35,7 +35,7 @@
 - (void)refresh
 {
   self.body.text = self.task.body;
-  if (self.task.complete)
+  if (self.task.isComplete)
   {
     [self.completeButton setTitle:@"Uncomplete" forState:UIControlStateNormal];
   }
@@ -58,8 +58,8 @@
 
 - (IBAction) complete:(id)sender
 {
-  self.task.complete = !self.task.complete;
-  [self.task save];
+  self.task.isComplete = !self.task.isComplete;
+//  [self.task save];
   [self refresh];
 }
 

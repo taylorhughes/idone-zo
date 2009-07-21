@@ -69,7 +69,7 @@
 - (void)viewDidLoad
 {
   [super viewDidLoad];
-  if ([self.task existsInDB])
+  if ([self.task objectID])
   {
     self.title = @"Edit task";
   }
@@ -97,12 +97,16 @@
 {
   UITextView *textView = (UITextView*)[[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]] viewWithTag:TEXTVIEW_TAG];
   self.task.body = textView.text;
-  [self.task save];
+  NSError *error;
+  if (![[self.task managedObjectContext] save:&error])
+  {
+    NSLog(@"Error!");
+  }
   [self dismiss];
 }
 - (void)cancel:(id)sender
 {
-  [self.task revert];
+  [[self.task managedObjectContext] rollback];
   [self dismiss];
 }
 - (void)dismiss
@@ -121,15 +125,6 @@
   [dismissTarget release];
   
   [super dealloc];
-}
-
-- (UITableViewCellAccessoryType)tableView:(UITableView *)tv accessoryTypeForRowWithIndexPath:(NSIndexPath *)indexPath
-{
-  if (indexPath.section == 0)
-  {
-    return UITableViewCellAccessoryNone;
-  }
-  return UITableViewCellAccessoryDisclosureIndicator;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tv
@@ -177,6 +172,7 @@
   textView.returnKeyType = UIReturnKeyDone;
   textView.font = [UIFont systemFontOfSize:REGULAR_FONT_SIZE];
   [cell.contentView addSubview:textView];
+  cell.accessoryType = UITableViewCellAccessoryNone;
   
   return cell;
 }
@@ -247,6 +243,7 @@
       cell = [self.tableView dequeueReusableCellWithIdentifier:@"DetailCell"];
       if (cell == nil) {
         cell = [self detailCellWithReuseIdentifier:@"DetailCell"];
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
       }
       title = (UILabel *)[cell viewWithTag:TITLE_TAG];
       text  = (UILabel *)[cell viewWithTag:TEXT_TAG];
@@ -259,11 +256,11 @@
           break;
         case 1:
           title.text = @"contexts";
-          text.text = self.task.contextsString;
+          //text.text = self.task.contextsString;
           break;
         case 2:
           title.text = @"due date";
-          text.text = self.task.dueString;
+          //text.text = self.task.dueString;
           break;
       }
       break;

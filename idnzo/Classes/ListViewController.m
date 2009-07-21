@@ -11,6 +11,7 @@
 @synthesize taskList;
 @synthesize tasks;
 @synthesize taskViewController;
+@synthesize managedObjectContext;
 
 - (TaskViewController *)taskViewController
 {
@@ -37,8 +38,9 @@
 
 - (NSArray *)tasks
 {
-  if (!tasks) {
-    tasks = [[taskList findRelated:[Task class]]  retain];
+  if (!tasks)
+  {
+    tasks = [[[taskList tasks] allObjects] retain];
   }
   return tasks;
 }
@@ -66,7 +68,8 @@
 // One row per book, the number of books is the number of rows.
 - (NSInteger)tableView:(UITableView *)tv numberOfRowsInSection:(NSInteger)section
 {
-  return [self.tasks count];
+  NSInteger count = [self.tasks count];
+  return count;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -84,8 +87,8 @@
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
   }
   
-  cell.task = [self.tasks objectAtIndex:indexPath.row];
-  
+  Task *task = [self.tasks objectAtIndex:indexPath.row];
+  cell.task = task;
   return cell;
 }
 
@@ -94,13 +97,11 @@
   TaskCell *cell = (TaskCell*)[self.tableView cellForRowAtIndexPath:indexPath];
   Task *clickedTask = [self.tasks objectAtIndex:indexPath.row];
   
-  NSLog(@"Got here!");
-  
   if (cell.taskCellView.wasCompleted)
   {
     cell.taskCellView.wasCompleted = NO;
-    clickedTask.complete = !clickedTask.complete;
-    [clickedTask save];
+    clickedTask.isComplete = !clickedTask.isComplete;
+    //[clickedTask save];
     [self.tableView reloadData];
   }
   else
@@ -122,7 +123,7 @@
 {
   EditViewController *controller = [[[EditViewController alloc] initWithNibName:@"EditTaskView" bundle:nil] autorelease];
   
-  Task *task = [[Task alloc] init];
+  Task *task = (Task*)[NSEntityDescription insertNewObjectForEntityForName:@"Task" inManagedObjectContext:self.managedObjectContext];
   task.taskList = self.taskList;
   controller.task = task;
   [task release];
@@ -145,6 +146,7 @@
   [taskList release];
   [tasks release];
   [taskViewController release];
+  [managedObjectContext release];
   [super dealloc];
 }
 

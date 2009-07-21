@@ -8,25 +8,150 @@
 
 #import "DNZOAppDelegate.h"
 
-static NSString *DATABASE_FILENAME     = @"dnzo.sqlite";
-
 @interface DNZOAppDelegate (Private)
-- (void) openDatabase;
-- (void) createInitialObjects;
+- (void)createInitialObjects;
 @end
 
 @implementation DNZOAppDelegate
 
-@synthesize window, navigationController;
+@synthesize window, navigationController, mainController;
+
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application
 {
-  [self openDatabase];
+  self.mainController.managedObjectContext = [self managedObjectContext];
+  
   [self createInitialObjects];
   
   // Add the current view in the navigationController to the main window.
   [window addSubview:navigationController.view];
   [window makeKeyAndVisible];
+}
+
+/**
+ Performs the save action for the application, which is to send the save:
+ message to the application's managed object context.
+ */
+- (IBAction)saveAction:(id)sender
+{
+  NSError *error;
+  if (![[self managedObjectContext] save:&error])
+  {
+    // Handle error
+    NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+    exit(-1);  // Fail
+  }
+}
+/**
+ Returns the managed object context for the application.
+ If the context doesn't already exist, it is created and bound to the persistent store coordinator for the application.
+ */
+- (NSManagedObjectContext *) managedObjectContext
+{
+  if (managedObjectContext != nil)
+  {
+    return managedObjectContext;
+  }
+	
+  NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
+  if (coordinator != nil)
+  {
+    managedObjectContext = [[NSManagedObjectContext alloc] init];
+    [managedObjectContext setPersistentStoreCoordinator:coordinator];
+  }
+  return managedObjectContext;
+}
+
+
+/**
+ Returns the managed object model for the application.
+ If the model doesn't already exist, it is created by merging all of the models found in the application bundle.
+ */
+- (NSManagedObjectModel *)managedObjectModel
+{
+  if (managedObjectModel != nil)
+  {
+    return managedObjectModel;
+  }
+  managedObjectModel = [[NSManagedObjectModel mergedModelFromBundles:nil] retain];    
+  return managedObjectModel;
+}
+
+
+/**
+ Returns the persistent store coordinator for the application.
+ If the coordinator doesn't already exist, it is created and the application's store added to it.
+ */
+- (NSPersistentStoreCoordinator *)persistentStoreCoordinator
+{
+	if (persistentStoreCoordinator != nil)
+  {
+    return persistentStoreCoordinator;
+  }
+	
+  NSURL *storeUrl = [NSURL fileURLWithPath: [[self applicationDocumentsDirectory] stringByAppendingPathComponent:@"donezo.sqlite"]];
+	
+	NSError *error;
+  persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
+  if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeUrl options:nil error:&error]) {
+    // Handle error
+  }    
+	
+  return persistentStoreCoordinator;
+}
+
+/**
+ Returns the path to the application's documents directory.
+ */
+- (NSString *)applicationDocumentsDirectory
+{
+  NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+  NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
+  return basePath;
+}
+
+- (void)createInitialObjects
+{   
+  NSLog(@"Adding TaskList...");
+  
+  TaskList *list = (TaskList*)[NSEntityDescription insertNewObjectForEntityForName:@"TaskList" inManagedObjectContext:self.managedObjectContext];
+  
+  list.name = @"Tasks";
+  
+  NSLog(@"Adding task...");
+  
+  Project *project = (Project*)[NSEntityDescription insertNewObjectForEntityForName:@"Project" inManagedObjectContext:self.managedObjectContext];
+  project.name = @"Done-zo";
+  
+  Context *context = (Context*)[NSEntityDescription insertNewObjectForEntityForName:@"Context" inManagedObjectContext:self.managedObjectContext];
+  context.name = @"home";
+  
+  Task *task = (Task*)[NSEntityDescription insertNewObjectForEntityForName:@"Task" inManagedObjectContext:self.managedObjectContext];
+  
+  task.taskList = list;
+  task.body = @"Welcome to Done-zo!";
+  
+  task.contexts = [NSSet setWithObjects:context, nil];
+  task.project = project;
+  task.dueDate = [NSDate date];
+  
+  NSError *error;
+  [self.managedObjectContext save:&error];
+}
+
+// Save all changes to the database, then close it.
+- (void)applicationWillTerminate:(UIApplication *)application
+{
+  NSError *error;
+  if (managedObjectContext != nil)
+  {
+    if ([managedObjectContext hasChanges] && ![managedObjectContext save:&error])
+    {
+			// Handle error
+			NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+			exit(-1);  // Fail
+    } 
+  }
 }
 
 - (void)dealloc
@@ -36,59 +161,5 @@ static NSString *DATABASE_FILENAME     = @"dnzo.sqlite";
   [super dealloc];
 }
 
-- (void)openDatabase
-{
-  NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-  NSString *documentsDirectory = [paths objectAtIndex:0];
-  NSString *databasePath = [documentsDirectory stringByAppendingPathComponent:DATABASE_FILENAME];
-  
-  [[SQLiteInstanceManager sharedManager] setDatabaseFilepath:databasePath];
-}
-
-- (void)createInitialObjects
-{
-  if ([TaskList count] > 0) {
-    return;
-  }
-  
-  /*
-  NSLog(@"Deleting existing items...");
-  for (TaskList *taskList in [TaskList allObjects]) {
-    [taskList deleteObject];
-  }
-  for (Task *task in [Task allObjects]) {
-    [task deleteObject];
-  }
-  */
-  
-  NSLog(@"Adding TaskList...");
-  
-  TaskList *list = [[[TaskList alloc] init] autorelease];
-  
-  [list setName:@"Tasks"];
-  [list save];
-  
-  NSLog(@"Adding task...");
-  
-  Project *project = [[[Project alloc] init] autorelease];
-  project.name = @"DNZO";
-  [project save];
-  
-  Task *task = [[[Task alloc] init] autorelease];
-  
-  task.taskList = list;
-  task.body = @"Welcome to DNZO!";
-  task.contexts = [NSArray arrayWithObject:@"home"];
-  task.project = project;
-  task.due = [NSDate date];
-  
-  [task save];
-}
-
-// Save all changes to the database, then close it.
-- (void)applicationWillTerminate:(UIApplication *)application
-{
-
-}
 
 @end

@@ -22,7 +22,7 @@ static UIImage *checked;
 #define PADDING 10.0
 #define IMAGE_WIDTH 15.0
 #define IMAGE_HEIGHT 20.0
-#define IMAGE_TOP 10.0
+#define IMAGE_TOP 11.0
 #define IMAGE_LEFT 10.0
 #define MAIN_FONT_SIZE 20.0
 #define SECONDARY_FONT_SIZE 14.0
@@ -88,7 +88,7 @@ static UIImage *checked;
   {
     [array addObject:task.contextsString];
   }
-  if (task.due)
+  if (task.dueDate)
   {
     [array addObject:task.dueString];
   }
@@ -113,7 +113,7 @@ static UIImage *checked;
 	UIFont *secondaryFont = [UIFont systemFontOfSize:SECONDARY_FONT_SIZE];
   
   UIImage *image;
-  if (task.complete)
+  if (task.isComplete)
   {
     image = checked;
   }
@@ -123,7 +123,7 @@ static UIImage *checked;
   }
   [image drawInRect:CGRectMake(IMAGE_LEFT, IMAGE_TOP, image.size.width, image.size.height)];
   
-  if (self.task.complete)
+  if (task.isComplete)
   {
     [secondaryTextColor set];
   }
@@ -149,7 +149,7 @@ static UIImage *checked;
   CGFloat lineTop = PADDING + floor(MAIN_FONT_SIZE * 0.67);
 
   // DRAW STRIKETHROUGH
-  if (self.task.complete)
+  if (task.isComplete)
   {
     CGContextSetLineWidth(context, 2.0f);
     CGContextSetStrokeColorWithColor(context, [[UIColor darkGrayColor] CGColor]);

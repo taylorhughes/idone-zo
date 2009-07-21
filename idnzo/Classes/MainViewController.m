@@ -1,5 +1,5 @@
+
 #import "MainViewController.h"
-#import "ListViewController.h"
 
 @interface MainViewController ()
 
@@ -11,6 +11,15 @@
 
 @synthesize taskLists;
 @synthesize listViewController;
+@synthesize managedObjectContext;
+
+- (void) dealloc
+{
+  [taskLists release];
+  [listViewController release];
+  [managedObjectContext release];
+  [super dealloc];
+}
 
 - (ListViewController *)listViewController
 {
@@ -18,6 +27,7 @@
   if (listViewController == nil)
   {
     listViewController = [[ListViewController alloc] initWithNibName:@"ListView" bundle:nil];
+    listViewController.managedObjectContext = self.managedObjectContext;
   }
   return listViewController;
 }
@@ -26,7 +36,23 @@
 {
   if (taskLists == nil)
   {
-    self.taskLists = [TaskList allObjects];
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"TaskList" inManagedObjectContext:self.managedObjectContext];
+    request.entity = entity;
+    
+    NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
+    NSArray *sorters = [NSArray arrayWithObjects:sort, nil];
+    request.sortDescriptors = sorters;
+    [sort release];
+    
+    NSError *error;
+    
+    self.taskLists = [managedObjectContext executeFetchRequest:request error:&error];
+    if (self.taskLists == nil)
+    {
+      // handle error
+      NSLog(@"No task lists!");
+    }
   }
   return taskLists;
 }
