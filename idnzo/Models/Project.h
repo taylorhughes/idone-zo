@@ -13,8 +13,8 @@
 {
 }
 
-+ (NSArray*) projectNames;
-+ (Project*) findProjectWithName:(NSString*)name;
++ (NSArray*) projectNames:(NSManagedObjectContext*)context;
++ (Project*) findProjectWithName:(NSString*)name inContext:(NSManagedObjectContext*)context;
 
 @property (nonatomic, retain) NSString * name;
 

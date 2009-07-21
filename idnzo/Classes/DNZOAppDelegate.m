@@ -14,14 +14,30 @@
 
 @implementation DNZOAppDelegate
 
+BOOL firstRun;
+
 @synthesize window, navigationController, mainController;
+
+- (id) init
+{
+  self = [super init];
+  if (self != nil)
+  {
+    // Re-set by persistent store coordinator
+    firstRun = NO;
+  }
+  return self;
+}
 
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application
-{
+{  
   self.mainController.managedObjectContext = [self managedObjectContext];
   
-  [self createInitialObjects];
+  if (firstRun)
+  {
+    [self createInitialObjects];
+  }
   
   // Add the current view in the navigationController to the main window.
   [window addSubview:navigationController.view];
@@ -89,13 +105,16 @@
     return persistentStoreCoordinator;
   }
 	
-  NSURL *storeUrl = [NSURL fileURLWithPath: [[self applicationDocumentsDirectory] stringByAppendingPathComponent:@"donezo.sqlite"]];
-	
+  NSString *path = [[self applicationDocumentsDirectory] stringByAppendingPathComponent:@"donezo.sqlite"];
+  NSURL *storeUrl = [NSURL fileURLWithPath:path];
+	firstRun = ![[NSFileManager defaultManager] fileExistsAtPath:path];
+  
 	NSError *error;
   persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
-  if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeUrl options:nil error:&error]) {
+  if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeUrl options:nil error:&error])
+  {
     // Handle error
-  }    
+  }
 	
   return persistentStoreCoordinator;
 }

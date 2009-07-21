@@ -14,6 +14,7 @@
   NSArray *tasks;
   TaskViewController *taskViewController;
   NSManagedObjectContext *managedObjectContext;
+  NSManagedObjectContext *addingContext;
 }
 
 @property (nonatomic, retain) UITableView *tableView;

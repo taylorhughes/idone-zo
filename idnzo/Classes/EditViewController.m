@@ -13,7 +13,7 @@
 - (void) save:(id)sender;
 - (void) cancel:(id)sender;
 
-- (void) dismiss;
+- (void) dismiss:(BOOL)saved;
 
 - (void) saveProject:(id)sender;
 
@@ -21,21 +21,23 @@
 - (UITableViewCell*) bodyCellWithReuseIdentifier:(NSString *)identifier;
 
 @property (retain, nonatomic) NSObject *dismissTarget;
-@property (assign, nonatomic) SEL dismissAction;
+@property (assign, nonatomic) SEL cancelAction;
+@property (assign, nonatomic) SEL saveAction;
 
 @end
 
 @implementation EditViewController
 
-@synthesize task, dismissTarget, dismissAction;
+@synthesize task, dismissTarget, saveAction, cancelAction;
 
-+ (UINavigationController*) navigationControllerWithTask:(Task*)task dismissTarget:(UIViewController*)target dismissAction:(SEL)action
++ (UINavigationController*) navigationControllerWithTask:(Task*)task dismissTarget:(UIViewController*)target saveAction:(SEL)saveAction cancelAction:(SEL)cancelAction
 {
   // load editing view into modal view
   EditViewController *evc = [[[EditViewController alloc] initWithNibName:@"EditTaskView" bundle:nil] autorelease];
   
-  if (target) evc.dismissTarget = target;
-  if (action) evc.dismissAction = action;
+  evc.dismissTarget = target;
+  evc.saveAction = saveAction;
+  evc.cancelAction = cancelAction;
   
   UINavigationController *modalNavigationController = [[[UINavigationController alloc] initWithRootViewController:evc] autorelease];
   
@@ -54,7 +56,7 @@
 }
 + (UINavigationController*) navigationControllerWithTask:(Task*)task
 {
-  return [EditViewController navigationControllerWithTask:task dismissTarget:nil dismissAction:nil];
+  return [EditViewController navigationControllerWithTask:task dismissTarget:nil saveAction:nil cancelAction:nil];
 }
 
 - (void)setTask:(Task*)newTask
@@ -97,23 +99,17 @@
 {
   UITextView *textView = (UITextView*)[[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]] viewWithTag:TEXTVIEW_TAG];
   self.task.body = textView.text;
-  NSError *error;
-  if (![[self.task managedObjectContext] save:&error])
-  {
-    NSLog(@"Error!");
-  }
-  [self dismiss];
+  [self dismiss:YES];
 }
 - (void)cancel:(id)sender
 {
-  [[self.task managedObjectContext] rollback];
-  [self dismiss];
+  [self dismiss:NO];
 }
-- (void)dismiss
+- (void)dismiss:(BOOL)saved
 {
-  if (dismissTarget && dismissAction)
+  if (dismissTarget)
   {
-    [dismissTarget performSelector:dismissAction withObject:self];
+    [dismissTarget performSelector:(saved ? saveAction : cancelAction) withObject:self];
   }
   [self.navigationController.parentViewController dismissModalViewControllerAnimated:YES];
 }
@@ -283,7 +279,7 @@
       {
         case 0: //project
           controller = [[[EditProjectPicker alloc] init] autorelease];
-          ((EditProjectPicker*)controller).options = [Project projectNames];
+          ((EditProjectPicker*)controller).options = [Project projectNames:[self.task managedObjectContext]];
           ((EditProjectPicker*)controller).selected = self.task.project.name;
           ((EditProjectPicker*)controller).target = self;
           ((EditProjectPicker*)controller).saveAction = @selector(saveProject:);
@@ -309,7 +305,7 @@
   NSString *newProject = [[(EditProjectPicker*)sender selected] 
                            stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
   
-  Project *existingProject = [Project findProjectWithName:newProject];
+  Project *existingProject = [Project findProjectWithName:newProject inContext:[self.task managedObjectContext]];
   
   if (existingProject)
   {
@@ -317,7 +313,7 @@
   }
   else
   {
-    self.task.project = [[[Project alloc] init] autorelease];
+    self.task.project = (Project*)[NSEntityDescription insertNewObjectForEntityForName:@"Project" inManagedObjectContext:[self.task managedObjectContext]];
     self.task.project.name = newProject;
   }
   

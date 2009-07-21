@@ -18,12 +18,13 @@
   TextFieldController *textFieldController;
   
   NSObject *dismissTarget;
-  SEL dismissAction;
+  SEL saveAction;
+  SEL cancelAction;
 }
 
 @property (retain, nonatomic) Task *task;
 
-+ (UINavigationController*) navigationControllerWithTask:(Task*)task dismissTarget:(UIViewController*)target dismissAction:(SEL)action;
++ (UINavigationController*) navigationControllerWithTask:(Task*)task dismissTarget:(UIViewController*)target saveAction:(SEL)saveAction cancelAction:(SEL)cancelAction;
 + (UINavigationController*) navigationControllerWithTask:(Task*)task;
 
 @end

@@ -1,8 +1,14 @@
 
 #import "ListViewController.h"
 
-@interface ListViewController ()
-- (void)newTaskDismissed;
+@interface ListViewController () 
+
+- (void)newTaskSaved;
+- (void)newTaskCanceled;
+- (void)addingContextDidSave:(NSNotification*)saveNotification;
+
+@property (nonatomic, retain) NSManagedObjectContext *addingContext;
+
 @end
 
 @implementation ListViewController
@@ -12,6 +18,7 @@
 @synthesize tasks;
 @synthesize taskViewController;
 @synthesize managedObjectContext;
+@synthesize addingContext;
 
 - (TaskViewController *)taskViewController
 {
@@ -25,10 +32,12 @@
 
 - (void)setTaskList:(TaskList *)list
 {
-  if (taskList) {
+  if (taskList)
+  {
     [taskList release];
   }
-  if (tasks) {
+  if (tasks)
+  {
     [tasks release];
     tasks = nil;
   }
@@ -121,32 +130,56 @@
 
 - (void)addNewTask:(id)sender
 {
-  EditViewController *controller = [[[EditViewController alloc] initWithNibName:@"EditTaskView" bundle:nil] autorelease];
+	// Create a new managed object context for the new book -- set its persistent store coordinator to the same as that from the fetched results controller's context.
+	self.addingContext = [[[NSManagedObjectContext alloc] init] autorelease];
+	[self.addingContext setPersistentStoreCoordinator:[self.managedObjectContext persistentStoreCoordinator]];
   
-  Task *task = (Task*)[NSEntityDescription insertNewObjectForEntityForName:@"Task" inManagedObjectContext:self.managedObjectContext];
-  task.taskList = self.taskList;
-  controller.task = task;
-  [task release];
+  Task *task = (Task*)[NSEntityDescription insertNewObjectForEntityForName:@"Task" inManagedObjectContext:self.addingContext];
+  task.taskList = (TaskList*)[self.addingContext objectWithID:[self.taskList objectID]];
   
-  UINavigationController *modalNavigationController = [EditViewController navigationControllerWithTask:controller.task
+  UINavigationController *modalNavigationController = [EditViewController navigationControllerWithTask:task
                                                                                          dismissTarget:self  
-                                                                                         dismissAction:@selector(newTaskDismissed)];
+                                                                                            saveAction:@selector(newTaskSaved)
+                                                                                          cancelAction:@selector(newTaskCanceled)];
   
   [self.navigationController presentModalViewController:modalNavigationController animated:YES];
 }
 
-- (void)newTaskDismissed
+- (void)newTaskSaved
 {
+  NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
+  [dnc addObserver:self selector:@selector(addingContextDidSave:) name:NSManagedObjectContextDidSaveNotification object:self.addingContext];
+  
+  NSError *error;
+  if (![self.addingContext save:&error]) {
+    // Update to handle the error appropriately.
+    NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+  }
+  [dnc removeObserver:self name:NSManagedObjectContextDidSaveNotification object:self.addingContext];
+  
+  self.addingContext = nil;
   tasks = nil;
   [tableView reloadData];
 }
 
-- (void)dealloc {
+- (void)addingContextDidSave:(NSNotification*)saveNotification
+{
+	[self.managedObjectContext mergeChangesFromContextDidSaveNotification:saveNotification];	
+}
+
+- (void)newTaskCanceled
+{
+  self.addingContext = nil;
+}
+
+- (void)dealloc
+{
   [tableView release];
   [taskList release];
   [tasks release];
   [taskViewController release];
   [managedObjectContext release];
+  [addingContext release];
   [super dealloc];
 }
 
