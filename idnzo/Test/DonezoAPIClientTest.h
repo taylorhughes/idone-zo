@@ -7,11 +7,9 @@
 //
 
 #import <SenTestingKit/SenTestingKit.h>
-#import "TaskList.h"
+#import "DonezoAPIClient.h"
 
-@class TaskList;
-
-@interface TaskFactoryTest : SenTestCase {
+@interface DonezoAPIClientTest : SenTestCase {
 
 }
 

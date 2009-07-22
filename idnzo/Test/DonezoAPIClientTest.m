@@ -6,22 +6,19 @@
 //  Copyright 2009 __MyCompanyName__. All rights reserved.
 //
 
-#import "TaskTest.h"
+#import "DonezoAPIClientTest.h"
 
-@implementation TaskFactoryTest
+@implementation DonezoAPIClientTest
 
 + (void) setUp {
-}
-
-+ (void) executeAll:(NSArray*)statements {
-
 }
 
 - (void) setUp {
 }
 
-- (void) testTaskListFindAll
+- (void) testLogin
 {
+  
   STAssertEquals(2, 2, @"There should be two task lists in the database.");
 }
 
