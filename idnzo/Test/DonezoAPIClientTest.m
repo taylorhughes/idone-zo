@@ -10,19 +10,25 @@
 
 @implementation DonezoAPIClientTest
 
-+ (void) setUp {
++ (void) setUp
+{
 }
 
-- (void) setUp {
+- (void) setUp
+{
 }
 
 - (void) testLogin
 {
-  
-  STAssertEquals(2, 2, @"There should be two task lists in the database.");
+  GoogleAppEngineAuthenticator *auth = [[GoogleAppEngineAuthenticator alloc] initForGAEAppAtUrl:[NSURL URLWithString:@"http://www.done-zo.com/"]
+                                                                                   withUsername:@"whorastic@hotmail.com"
+                                                                                    andPassword:@"somepassword"];
+  BOOL result = [auth login];
+  STAssertEquals(YES, result, @"Login should not fail.");
 }
 
-- (void) tearDown {
+- (void) tearDown
+{
 }
 
 @end

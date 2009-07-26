@@ -55,6 +55,7 @@
 		34E13CF21017DED8005A582E /* GoogleAppEngineAuthenticator.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E13CF01017DED8005A582E /* GoogleAppEngineAuthenticator.m */; };
 		34E13CF31017DED8005A582E /* DonezoAPIClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E13CEE1017DED8005A582E /* DonezoAPIClient.m */; };
 		34E13CF41017DED8005A582E /* GoogleAppEngineAuthenticator.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E13CF01017DED8005A582E /* GoogleAppEngineAuthenticator.m */; };
+		34E13D0B101904DF005A582E /* EditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34770B590FAFED7000AD8397 /* EditViewController.m */; };
 		34FAAB29101141B700B74477 /* Tasks.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 34FAAB28101141B700B74477 /* Tasks.xcdatamodel */; };
 		34FAAB2A101141B700B74477 /* Tasks.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 34FAAB28101141B700B74477 /* Tasks.xcdatamodel */; };
 		34FAABE81011487800B74477 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34FAABE71011487800B74477 /* Foundation.framework */; };
@@ -415,6 +416,7 @@
 			files = (
 				34770B2A0FAFE45B00AD8397 /* ListViewController.m in Sources */,
 				34770B2B0FAFE45B00AD8397 /* MainViewController.m in Sources */,
+				34E13D0B101904DF005A582E /* EditViewController.m in Sources */,
 				34770B350FAFE4C200AD8397 /* DonezoAPIClientTest.m in Sources */,
 				341E1E240FB138F000D5B454 /* TaskViewController.m in Sources */,
 				34205CB10FB2641800A9F048 /* TextFieldController.m in Sources */,
