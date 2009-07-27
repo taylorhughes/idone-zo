@@ -12,8 +12,9 @@
 @property (nonatomic, copy) NSString *username;
 @property (nonatomic, copy) NSString *password;
 
+- (BOOL)isProductionURL;
 - (NSString*)getAuthToken;
-- (BOOL)getAuthCookieFromToken:(NSString*)authToken;
+- (BOOL)getAuthCookieWithToken:(NSString*)authToken;
 
 + (NSString*)urlEncode:(NSString*)string;
 
@@ -42,12 +43,16 @@
 
 - (BOOL)login
 {
-  NSString *token = [self getAuthToken];
-  if (token != nil)
+  NSString *token = nil;
+  if ([self isProductionURL])
   {
-    return [self getAuthCookieFromToken:token];
+    token = [self getAuthToken];
+    if (token == nil)
+    {
+      return NO;
+    }
   }
-  return NO;
+  return [self getAuthCookieWithToken:token];
 }
 
 - (NSString *)getAuthToken
@@ -64,17 +69,24 @@
   
   NSLog(@"Here's the post body: %@", postBody);
   
-  NSMutableURLRequest *authRequest = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:AUTH_URL]];
+  NSURL *authURL = [NSURL URLWithString:AUTH_URL];
+  NSMutableURLRequest *authRequest = [[NSMutableURLRequest alloc] initWithURL:authURL];
   [authRequest setHTTPMethod:@"POST"];
   [authRequest setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-type"];
   [authRequest setHTTPBody:[postBody dataUsingEncoding:NSASCIIStringEncoding]];
   
   NSHTTPURLResponse *authResponse;
-  NSError *authError;
+  NSError *authError = nil;
   NSData *authData = [NSURLConnection sendSynchronousRequest:authRequest returningResponse:&authResponse error:&authError];      
 
+  if (authError != nil)
+  {
+    NSLog(@"Oh no, an error for request to %@: %@", [authURL description], [authError description]);
+    return nil;
+  }
+  
   NSString *authResponseBody = [[NSString alloc] initWithData:authData encoding:NSASCIIStringEncoding];
-
+  
   // Loop through response body which is key=value pairs, separated by \n.
   // The code below is not optimal and certainly error prone. 
   NSArray *lines = [authResponseBody componentsSeparatedByString:@"\n"];
@@ -98,12 +110,24 @@
   return [token objectForKey:@"Auth"];
 }
 
-- (BOOL)getAuthCookieFromToken:(NSString*)authToken
+- (BOOL)getAuthCookieWithToken:(NSString*)authToken
 {
-  authToken = [GoogleAppEngineAuthenticator urlEncode:authToken];
+  NSString *authArgs = [NSString stringWithFormat:@"?continue=%@", [GoogleAppEngineAuthenticator urlEncode:[self.url absoluteString]]];
   
-  NSString *authArgs = [NSString stringWithFormat:@"_ah/login?continue=%@&auth=%@", [self.url absoluteString], authToken];
-  NSString *authURL = [[self.url absoluteString] stringByAppendingPathComponent:authArgs];
+  if (authToken != nil)
+  {
+    NSLog(@"Appending auth token %@ ...", authToken);
+    authToken = [GoogleAppEngineAuthenticator urlEncode:authToken];
+    authArgs = [authArgs stringByAppendingString:[NSString stringWithFormat:@"&auth=%@", authToken]];
+  }
+  else
+  {
+    NSString *encodedUser = [GoogleAppEngineAuthenticator urlEncode:self.username];
+    authArgs = [authArgs stringByAppendingString:[NSString stringWithFormat:@"&email=%@", encodedUser]];
+  }
+  
+  NSString *authURL = [[self.url absoluteString] stringByAppendingPathComponent:@"_ah/login"];
+  authURL = [authURL stringByAppendingString:authArgs];
   
   NSLog(@"Here's the path: %@", authURL);
   
@@ -126,6 +150,12 @@
   [cookieRequest release];
   
   return YES;
+}
+
+- (BOOL) isProductionURL
+{
+  int port = [[self.url port] intValue];
+  return port == 0 || port == 80;
 }
 
 + (NSString *)urlEncode:(NSString *)string
