@@ -20,6 +20,10 @@
 - (NSArray*)getLists;
 - (NSArray*)getTasksForListWithKey:(NSString*)key;
 
+// - (NSString*)createTask:(NSDictionary*)dictionary;
+// - (BOOL)updateTask:(NSString*)taskId withDictionary:(NSDictionary*)dictionary;
+// - (BOOL)deleteTask:(NSString*)taskId;
+
 - (NSArray*)getArchivedTasksFromDate:(NSDate*)start toDate:(NSDate*)finish;
 
 @end

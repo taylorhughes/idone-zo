@@ -13,8 +13,8 @@
 @property (nonatomic, copy) NSString *password;
 
 - (BOOL)isProductionURL;
-- (NSString*)getAuthToken;
-- (BOOL)getAuthCookieWithToken:(NSString*)authToken;
+- (NSString*)getAuthToken:(NSError**)error;
+- (BOOL)getAuthCookieWithToken:(NSString*)authToken error:(NSError**)error;
 
 + (NSString*)urlEncode:(NSString*)string;
 
@@ -41,21 +41,21 @@
   return self;
 }
 
-- (BOOL)login
+- (BOOL)login:(NSError**)error
 {
   if ([self isProductionURL])
   {
-    NSString *token = [self getAuthToken];
-    self.hasLoggedIn = (token != nil) && [self getAuthCookieWithToken:token];
+    NSString *token = [self getAuthToken:error];
+    self.hasLoggedIn = (token != nil) && [self getAuthCookieWithToken:token error:error];
   }
   else
   {
-    self.hasLoggedIn = [self getAuthCookieWithToken:nil];
+    self.hasLoggedIn = [self getAuthCookieWithToken:nil error:error];
   }
   return self.hasLoggedIn;
 }
 
-- (NSString *)getAuthToken
+- (NSString *)getAuthToken:(NSError**)error
 {
   NSString *myUsername = [GoogleAppEngineAuthenticator urlEncode:self.username];
   NSString *myPassword = [GoogleAppEngineAuthenticator urlEncode:self.password];
@@ -81,7 +81,8 @@
 
   if (authError != nil)
   {
-    NSLog(@"Oh no, an error for request to %@: %@", [authURL description], [authError description]);
+    //NSLog(@"Oh no, an error for request to %@: %@", [authURL description], [authError description]);
+    *error = authError;
     return nil;
   }
   
@@ -101,16 +102,23 @@
   }
 
   // If google returned an error in the body [google returns Error=Bad Authentication in the body. which is weird, not sure if they use status codes]
-  if ([token objectForKey:@"Error"])
+  NSObject *responseError = [token objectForKey:@"Error"];
+  if (responseError != nil)
   {
-    NSLog(@"Got an error from Google authentication: %@", [token objectForKey:@"Error"]);
+    NSLog(@"Got an error from Google authentication: %@", responseError);
+    
+    NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
+    NSString *errorString = [NSString stringWithFormat:@"Failed to login to Google Accounts with error: %@", responseError];
+    [errorDetail setValue:errorString forKey:NSLocalizedDescriptionKey];
+    *error = [NSError errorWithDomain:@"DonezoAPI" code:100 userInfo:errorDetail];
+    
     return nil;
   }
   
   return [token objectForKey:@"Auth"];
 }
 
-- (BOOL)getAuthCookieWithToken:(NSString*)authToken
+- (BOOL)getAuthCookieWithToken:(NSString*)authToken error:(NSError**)error
 {
   NSString *authArgs = [NSString stringWithFormat:@"?continue=%@", [GoogleAppEngineAuthenticator urlEncode:[self.url absoluteString]]];
   
@@ -143,6 +151,7 @@
   if (cookieError != nil)
   {
     NSLog(@"Encountered an error somehow fetching the auth cookie! %@", cookieError);
+    *error = cookieError;
     return NO;
   }
   

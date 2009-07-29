@@ -22,6 +22,6 @@
 @property (nonatomic, assign) BOOL hasLoggedIn;
 
 - (id)initForGAEAppAtUrl:(NSURL*)gaeAppURL withUsername:myUsername andPassword:(NSString*)myPassword;
-- (BOOL)login;
+- (BOOL)login:(NSError**)error;
 
 @end
