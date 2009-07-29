@@ -131,7 +131,7 @@
   else
   {
     NSString *encodedUser = [GoogleAppEngineAuthenticator urlEncode:self.username];
-    authArgs = [authArgs stringByAppendingString:[NSString stringWithFormat:@"&email=%@", encodedUser]];
+    authArgs = [authArgs stringByAppendingString:[NSString stringWithFormat:@"&action=Login&email=%@", encodedUser]];
   }
   
   NSString *authURL = [[self.url absoluteString] stringByAppendingPathComponent:@"_ah/login"];

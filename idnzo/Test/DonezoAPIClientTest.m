@@ -36,7 +36,29 @@
   {
     NSLog(@"Error! %@", [error description]);
   }
+  /*
   STAssertTrue(result, @"Login should not fail.");
+   */
+}
+
+- (void) testTaskLists
+{
+  DonezoAPIClient *client = [[DonezoAPIClient alloc] initWithUsername:@"test@example.com" andPassword:@""];
+  
+  NSError *error = nil;
+  NSArray *array = [client getLists:&error];
+  
+  if (error != nil)
+  {
+    NSLog(@"Error! %@", [error description]);
+  }
+  
+  STAssertEquals((NSUInteger)1, [array count], @"Count of task lists is wrong.");
+  
+  DonezoTaskList *list = (DonezoTaskList *)[array objectAtIndex:0];
+  STAssertEqualObjects(@"Tasks", list.name, @"Task list should be 'Tasks'");
+  STAssertEqualObjects(@"tasks", list.key, @"Task list key should be 'tasks'");
+  STAssertEqualObjects([NSNumber numberWithInt:4], list.tasksCount, @"Tasks count should be 4.");
 }
 
 - (void) tearDown

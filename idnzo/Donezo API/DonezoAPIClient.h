@@ -6,8 +6,10 @@
 //  Copyright 2009 __MyCompanyName__. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import "GoogleAppEngineAuthenticator.h"
+#import "JSON.h"
+#import "DonezoTask.h"
+#import "DonezoTaskList.h"
 
 @interface DonezoAPIClient : NSObject {
   GoogleAppEngineAuthenticator *gaeAuth;
@@ -17,13 +19,13 @@
 
 - (id)initWithUsername:(NSString*)username andPassword:(NSString*)password;
 
-- (NSArray*)getLists;
-- (NSArray*)getTasksForListWithKey:(NSString*)key;
+- (NSArray*)getLists:(NSError**)error;
+- (NSArray*)getTasksForListWithKey:(NSString*)key error:(NSError**)error;
 
 // - (NSString*)createTask:(NSDictionary*)dictionary;
 // - (BOOL)updateTask:(NSString*)taskId withDictionary:(NSDictionary*)dictionary;
 // - (BOOL)deleteTask:(NSString*)taskId;
 
-- (NSArray*)getArchivedTasksFromDate:(NSDate*)start toDate:(NSDate*)finish;
+- (NSArray*)getArchivedTasksFromDate:(NSDate*)start toDate:(NSDate*)finish error:(NSError**)error;
 
 @end
