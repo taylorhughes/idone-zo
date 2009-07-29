@@ -27,7 +27,7 @@
 @synthesize url;
 @synthesize username, password;
 @synthesize appDescription;
-@synthesize cookieData;
+@synthesize hasLoggedIn;
 
 - (id)initForGAEAppAtUrl:(NSURL*)gaeAppURL withUsername:myUsername andPassword:(NSString*)myPassword
 { 
@@ -43,16 +43,16 @@
 
 - (BOOL)login
 {
-  NSString *token = nil;
   if ([self isProductionURL])
   {
-    token = [self getAuthToken];
-    if (token == nil)
-    {
-      return NO;
-    }
+    NSString *token = [self getAuthToken];
+    self.hasLoggedIn = (token != nil) && [self getAuthCookieWithToken:token];
   }
-  return [self getAuthCookieWithToken:token];
+  else
+  {
+    self.hasLoggedIn = [self getAuthCookieWithToken:nil];
+  }
+  return self.hasLoggedIn;
 }
 
 - (NSString *)getAuthToken
@@ -67,7 +67,7 @@
     postBody = [postBody stringByAppendingString:[NSString stringWithFormat:@"&source=%@", myAppDescription]];
   }
   
-  NSLog(@"Here's the post body: %@", postBody);
+  //NSLog(@"Here's the post body: %@", postBody);
   
   NSURL *authURL = [NSURL URLWithString:AUTH_URL];
   NSMutableURLRequest *authRequest = [[NSMutableURLRequest alloc] initWithURL:authURL];
@@ -116,7 +116,7 @@
   
   if (authToken != nil)
   {
-    NSLog(@"Appending auth token %@ ...", authToken);
+    //NSLog(@"Appending auth token %@ ...", authToken);
     authToken = [GoogleAppEngineAuthenticator urlEncode:authToken];
     authArgs = [authArgs stringByAppendingString:[NSString stringWithFormat:@"&auth=%@", authToken]];
   }
@@ -129,7 +129,7 @@
   NSString *authURL = [[self.url absoluteString] stringByAppendingPathComponent:@"_ah/login"];
   authURL = [authURL stringByAppendingString:authArgs];
   
-  NSLog(@"Here's the path: %@", authURL);
+  //NSLog(@"Here's the path: %@", authURL);
   
   NSHTTPURLResponse *cookieResponse;
   NSError *cookieError;
@@ -137,15 +137,14 @@
   
   [cookieRequest setHTTPMethod:@"GET"];
   
-  self.cookieData = [NSURLConnection sendSynchronousRequest:cookieRequest returningResponse:&cookieResponse error:&cookieError];
+  //NSData *cookieData = 
+  [NSURLConnection sendSynchronousRequest:cookieRequest returningResponse:&cookieResponse error:&cookieError];
   
   if (cookieError != nil)
   {
     NSLog(@"Encountered an error somehow fetching the auth cookie! %@", cookieError);
     return NO;
   }
-  
-  NSLog(@"Cookie data looks like this: %@", self.cookieData);
   
   [cookieRequest release];
   
@@ -155,7 +154,13 @@
 - (BOOL) isProductionURL
 {
   int port = [[self.url port] intValue];
-  return port == 0 || port == 80;
+  switch(port)
+  {
+    case 80:
+    case 0:
+      return YES;
+  }
+  return NO;
 }
 
 + (NSString *)urlEncode:(NSString *)string
@@ -171,7 +176,6 @@
   [password release];
   
   [appDescription release];
-  [cookieData release];
   
   [super dealloc];
 }

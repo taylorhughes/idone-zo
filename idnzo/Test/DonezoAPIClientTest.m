@@ -20,17 +20,20 @@
 
 - (void) testLogin
 {
-  GoogleAppEngineAuthenticator *auth = [[GoogleAppEngineAuthenticator alloc] initForGAEAppAtUrl:[NSURL URLWithString:@"http://localhost:8080/"]
+  GoogleAppEngineAuthenticator *auth = [[GoogleAppEngineAuthenticator alloc] initForGAEAppAtUrl:[NSURL URLWithString:@"http://localhost:8081/"]
                                                                                    withUsername:@"some@user.com"
                                                                                     andPassword:@""];
   BOOL result = [auth login];
-  STAssertEquals(YES, result, @"Local login should not fail.");
+  STAssertTrue(result, @"Local login should not fail.");
   
+  /*  
   auth = [[GoogleAppEngineAuthenticator alloc] initForGAEAppAtUrl:[NSURL URLWithString:@"http://www.done-zo.com/"]
-                                                                          withUsername:@"whorastic@hotmail.com"
-                                                                           andPassword:@"babel1234"];
+                                                     withUsername:@"whorastic@hotmail.com"
+                                                      andPassword:@"babel1234"];
+  
   result = [auth login];
-  STAssertEquals(YES, result, @"Login should not fail.");
+  STAssertTrue(result, @"Login should not fail.");
+  */
 }
 
 - (void) tearDown

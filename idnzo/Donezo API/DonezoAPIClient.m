@@ -9,7 +9,7 @@
 #import "DonezoAPIClient.h"
 
 @interface DonezoAPIClient (Private)
-- (BOOL)login;
+- (void) login;
 @end
 
 @implementation DonezoAPIClient
@@ -27,23 +27,30 @@
   return self;
 }
 
-- (BOOL)login
+- (void) login
 {
-  return NO;
+  if (self.gaeAuth.hasLoggedIn)
+  {
+    return;
+  }
+  [self.gaeAuth login];
 }
 
 - (NSArray*)getLists
 {
+  [self login];
   return nil;
 }
 
 - (NSArray*)getTasksForListWithKey:(NSString*)key
 {
+  [self login];
   return nil;
 }
 
 - (NSArray*)getArchivedTasksFromDate:(NSDate*)start toDate:(NSDate*)finish
 {
+  [self login];
   return nil;
 }
 
