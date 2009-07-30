@@ -6,8 +6,7 @@
 //  Copyright 2009 __MyCompanyName__. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-
+#import "NSString+Donezo.h"
 
 @interface GoogleAppEngineAuthenticator : NSObject {
   NSURL *url;

@@ -10,11 +10,13 @@
 
 @interface DonezoAPIClient (Private)
 - (BOOL) login;
++ (NSObject*)getObjectFromURL:(NSURL*)url withKey:(NSString*)key error:(NSError**)error;
 @end
 
 //#define BASE_URL @"http://www.done-zo.com/"
 #define BASE_URL @"http://localhost:8081/"
 #define API_PATH @"/api/0.1/"
+#define API_URL [[NSString stringWithString:BASE_URL] stringByAppendingPathComponent:API_PATH]
 
 @implementation DonezoAPIClient
 
@@ -40,14 +42,10 @@
   return [self.gaeAuth login:error];
 }
 
-- (NSArray*)getLists:(NSError**)error
++ (NSObject*)getObjectFromPath:(NSString*)path withKey:(NSString*)key error:(NSError**)error
 {
-  if (![self login:error]) { return nil; }
-  
-  NSString *apiURL = [[NSString stringWithString:BASE_URL] stringByAppendingPathComponent:API_PATH];
-  NSURL *listsURL = [NSURL URLWithString:[[NSString stringWithString:apiURL] stringByAppendingPathComponent:@"/l/"]];
-  
-  NSMutableURLRequest *req = [[NSMutableURLRequest alloc] initWithURL:listsURL];
+  NSURL *url = [NSURL URLWithString:[API_URL stringByAppendingPathComponent:path]];
+  NSMutableURLRequest *req = [[NSMutableURLRequest alloc] initWithURL:url];
   //[req setHTTPMethod:@"POST"];
   //[req setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-type"];
   //[req setHTTPBody:[postBody dataUsingEncoding:NSASCIIStringEncoding]];
@@ -57,20 +55,37 @@
   NSData *responseData = [NSURLConnection sendSynchronousRequest:req returningResponse:&response error:&responseError];      
   NSString *responseString = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
   
+  if (responseError)
+  {
+    *error = responseError;
+    return nil;
+  }
+  
   SBJsonParser *parser = [[[SBJsonParser alloc] init] autorelease];
   NSDictionary *dict = (NSDictionary*) [parser objectWithString:responseString];
   
   NSString *taskError = [dict valueForKey:@"error"];
   if (taskError != nil)
   {
-    NSLog(@"Task error: %@", taskError);
+    NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
+    NSString *errorString = [NSString stringWithFormat:@"Got an error from Done-zo: %@", taskError];
+    [errorDetail setValue:errorString forKey:NSLocalizedDescriptionKey];
+    *error = [NSError errorWithDomain:@"DonezoAPI" code:100 userInfo:errorDetail];
+    
     return nil;
   }
   
-  NSMutableArray *array = [[[NSMutableArray alloc] init] autorelease];
+  return [dict objectForKey:key];
+}
+
+- (NSArray*)getLists:(NSError**)error
+{
+  if (![self login:error]) { return nil; }
   
-  NSLog(@"Here's the response: %@", dict);
-  for (NSDictionary *taskListDict in [dict valueForKey:@"task_lists"])
+  NSArray *taskLists = (NSArray*) [DonezoAPIClient getObjectFromPath:@"/l/" withKey:@"task_lists" error:error];
+  
+  NSMutableArray *array = [[[NSMutableArray alloc] init] autorelease];
+  for (NSDictionary *taskListDict in taskLists)
   {
     NSLog(@"Here's a task list: %@", taskListDict);
     [array addObject:[DonezoTaskList taskListFromDictionary:taskListDict]];
@@ -82,7 +97,17 @@
 - (NSArray*)getTasksForListWithKey:(NSString*)key error:(NSError**)error
 {
   if (![self login:error]) { return nil; }
-  return nil;
+
+  NSString *path = [NSString stringWithFormat:@"/t/?task_list=%@", [key urlencoded]];
+  NSArray *tasks = (NSArray*) [DonezoAPIClient getObjectFromPath:path withKey:@"tasks" error:error];
+  
+  NSMutableArray *array = [[[NSMutableArray alloc] init] autorelease];
+  for (NSDictionary *tasksDict in tasks)
+  {
+    [array addObject:[DonezoTask taskFromDictionary:tasksDict]];
+  }
+  
+  return array;
 }
 
 - (NSArray*)getArchivedTasksFromDate:(NSDate*)start toDate:(NSDate*)finish error:(NSError**)error

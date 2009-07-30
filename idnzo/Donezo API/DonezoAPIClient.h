@@ -10,6 +10,7 @@
 #import "JSON.h"
 #import "DonezoTask.h"
 #import "DonezoTaskList.h"
+#import "NSString+Donezo.h"
 
 @interface DonezoAPIClient : NSObject {
   GoogleAppEngineAuthenticator *gaeAuth;

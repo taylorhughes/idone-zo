@@ -16,8 +16,6 @@
 - (NSString*)getAuthToken:(NSError**)error;
 - (BOOL)getAuthCookieWithToken:(NSString*)authToken error:(NSError**)error;
 
-+ (NSString*)urlEncode:(NSString*)string;
-
 @end
 
 #define AUTH_URL @"https://www.google.com/accounts/ClientLogin"
@@ -57,14 +55,11 @@
 
 - (NSString *)getAuthToken:(NSError**)error
 {
-  NSString *myUsername = [GoogleAppEngineAuthenticator urlEncode:self.username];
-  NSString *myPassword = [GoogleAppEngineAuthenticator urlEncode:self.password];
-  NSString *postBody = [NSString stringWithFormat:@"accountType=%@&Email=%@&Passwd=%@&service=ah", @"GOOGLE", myUsername, myPassword];
+  NSString *postBody = [NSString stringWithFormat:@"accountType=%@&Email=%@&Passwd=%@&service=ah", @"GOOGLE", [self.username urlencoded], [self.password urlencoded]];
   
   if (self.appDescription != nil)
   {
-    NSString *myAppDescription = [GoogleAppEngineAuthenticator urlEncode:self.appDescription];
-    postBody = [postBody stringByAppendingString:[NSString stringWithFormat:@"&source=%@", myAppDescription]];
+    postBody = [postBody stringByAppendingString:[NSString stringWithFormat:@"&source=%@", [self.appDescription urlencoded]]];
   }
   
   //NSLog(@"Here's the post body: %@", postBody);
@@ -120,18 +115,16 @@
 
 - (BOOL)getAuthCookieWithToken:(NSString*)authToken error:(NSError**)error
 {
-  NSString *authArgs = [NSString stringWithFormat:@"?continue=%@", [GoogleAppEngineAuthenticator urlEncode:[self.url absoluteString]]];
+  NSString *authArgs = [NSString stringWithFormat:@"?continue=%@", [[self.url absoluteString] urlencoded]];
   
   if (authToken != nil)
   {
     //NSLog(@"Appending auth token %@ ...", authToken);
-    authToken = [GoogleAppEngineAuthenticator urlEncode:authToken];
-    authArgs = [authArgs stringByAppendingString:[NSString stringWithFormat:@"&auth=%@", authToken]];
+    authArgs = [authArgs stringByAppendingString:[NSString stringWithFormat:@"&auth=%@", [authToken urlencoded]]];
   }
   else
   {
-    NSString *encodedUser = [GoogleAppEngineAuthenticator urlEncode:self.username];
-    authArgs = [authArgs stringByAppendingString:[NSString stringWithFormat:@"&action=Login&email=%@", encodedUser]];
+    authArgs = [authArgs stringByAppendingString:[NSString stringWithFormat:@"&action=Login&email=%@", [self.username urlencoded]]];
   }
   
   NSString *authURL = [[self.url absoluteString] stringByAppendingPathComponent:@"_ah/login"];
@@ -170,12 +163,6 @@
       return YES;
   }
   return NO;
-}
-
-+ (NSString *)urlEncode:(NSString *)string
-{
-  NSString *result = (NSString *) CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)string, NULL, CFSTR(":/?#[]@!$&’()*+,;="), kCFStringEncodingUTF8);
-  return [result autorelease];
 }
 
 - (void) dealloc

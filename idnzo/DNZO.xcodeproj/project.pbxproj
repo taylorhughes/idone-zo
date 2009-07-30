@@ -56,6 +56,8 @@
 		34E13CF31017DED8005A582E /* DonezoAPIClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E13CEE1017DED8005A582E /* DonezoAPIClient.m */; };
 		34E13CF41017DED8005A582E /* GoogleAppEngineAuthenticator.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E13CF01017DED8005A582E /* GoogleAppEngineAuthenticator.m */; };
 		34E13D0B101904DF005A582E /* EditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34770B590FAFED7000AD8397 /* EditViewController.m */; };
+		34E13DD210225B33005A582E /* NSString+Donezo.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E13DD110225B33005A582E /* NSString+Donezo.m */; };
+		34E13DD310225B33005A582E /* NSString+Donezo.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E13DD110225B33005A582E /* NSString+Donezo.m */; };
 		34F60D1A101FE6DB00577EFA /* NSObject+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F60D0F101FE6DB00577EFA /* NSObject+SBJSON.m */; };
 		34F60D1B101FE6DB00577EFA /* NSString+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F60D11101FE6DB00577EFA /* NSString+SBJSON.m */; };
 		34F60D1C101FE6DB00577EFA /* SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F60D13101FE6DB00577EFA /* SBJSON.m */; };
@@ -134,6 +136,8 @@
 		34E13CEE1017DED8005A582E /* DonezoAPIClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DonezoAPIClient.m; path = "Donezo API/DonezoAPIClient.m"; sourceTree = "<group>"; };
 		34E13CEF1017DED8005A582E /* GoogleAppEngineAuthenticator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GoogleAppEngineAuthenticator.h; path = "Donezo API/GoogleAppEngineAuthenticator.h"; sourceTree = "<group>"; };
 		34E13CF01017DED8005A582E /* GoogleAppEngineAuthenticator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GoogleAppEngineAuthenticator.m; path = "Donezo API/GoogleAppEngineAuthenticator.m"; sourceTree = "<group>"; };
+		34E13DD010225B33005A582E /* NSString+Donezo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Donezo.h"; sourceTree = "<group>"; };
+		34E13DD110225B33005A582E /* NSString+Donezo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Donezo.m"; sourceTree = "<group>"; };
 		34F60D0D101FE6DB00577EFA /* JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSON.h; sourceTree = "<group>"; };
 		34F60D0E101FE6DB00577EFA /* NSObject+SBJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+SBJSON.h"; sourceTree = "<group>"; };
 		34F60D0F101FE6DB00577EFA /* NSObject+SBJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+SBJSON.m"; sourceTree = "<group>"; };
@@ -316,6 +320,8 @@
 				34F60D29101FEF5700577EFA /* DonezoTask.m */,
 				34F60D2C101FEF5F00577EFA /* DonezoTaskList.h */,
 				34F60D2D101FEF5F00577EFA /* DonezoTaskList.m */,
+				34E13DD010225B33005A582E /* NSString+Donezo.h */,
+				34E13DD110225B33005A582E /* NSString+Donezo.m */,
 			);
 			name = "Donezo API";
 			sourceTree = "<group>";
@@ -473,6 +479,7 @@
 				34F60D25101FE6DB00577EFA /* SBJsonWriter.m in Sources */,
 				34F60D2A101FEF5700577EFA /* DonezoTask.m in Sources */,
 				34F60D2E101FEF5F00577EFA /* DonezoTaskList.m in Sources */,
+				34E13DD310225B33005A582E /* NSString+Donezo.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -505,6 +512,7 @@
 				34F60D1F101FE6DB00577EFA /* SBJsonWriter.m in Sources */,
 				34F60D2B101FEF5700577EFA /* DonezoTask.m in Sources */,
 				34F60D2F101FEF5F00577EFA /* DonezoTaskList.m in Sources */,
+				34E13DD210225B33005A582E /* NSString+Donezo.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

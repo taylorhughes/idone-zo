@@ -8,6 +8,9 @@
 
 #import "DonezoAPIClientTest.h"
 
+#define TEST_USER @"test@example.com"
+#define TEST_PASSWORD @""
+
 @implementation DonezoAPIClientTest
 
 + (void) setUp
@@ -41,9 +44,33 @@
    */
 }
 
+- (void) testTasks
+{
+  DonezoAPIClient *client = [[DonezoAPIClient alloc] initWithUsername:TEST_USER andPassword:TEST_PASSWORD];
+
+  NSError *error = nil;
+  NSArray *array = [client getTasksForListWithKey:@"tasks" error:&error];
+  
+  if (error != nil)
+  {
+    NSLog(@"Error! %@", [error description]);
+  }
+  
+  STAssertEquals((NSUInteger)4, [array count], @"Count of tasks is incorrect.");
+  
+  array = [client getTasksForListWithKey:@"not-a-list" error:&error];
+  
+  if (error != nil)
+  {
+    NSLog(@"Error! %@", [error description]);
+  }
+  
+  STAssertEquals((NSUInteger)0, [array count], @"Count of tasks is incorrect.");
+}
+
 - (void) testTaskLists
 {
-  DonezoAPIClient *client = [[DonezoAPIClient alloc] initWithUsername:@"test@example.com" andPassword:@""];
+  DonezoAPIClient *client = [[DonezoAPIClient alloc] initWithUsername:TEST_USER andPassword:TEST_PASSWORD];
   
   NSError *error = nil;
   NSArray *array = [client getLists:&error];
@@ -53,7 +80,7 @@
     NSLog(@"Error! %@", [error description]);
   }
   
-  STAssertEquals((NSUInteger)1, [array count], @"Count of task lists is wrong.");
+  STAssertEquals((NSUInteger)1, [array count], @"Count of task lists is incorrect.");
   
   DonezoTaskList *list = (DonezoTaskList *)[array objectAtIndex:0];
   STAssertEqualObjects(@"Tasks", list.name, @"Task list should be 'Tasks'");
