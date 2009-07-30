@@ -172,10 +172,10 @@
       if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:@"NormalCell"] autorelease];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.font = [UIFont systemFontOfSize:FONT_SIZE];
+        cell.textLabel.font = [UIFont systemFontOfSize:FONT_SIZE];
       }
       
-      cell.text = [self.options objectAtIndex:[indexPath row]];
+      cell.textLabel.text = [self.options objectAtIndex:[indexPath row]];
       if (cell.selected)
       {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
@@ -195,7 +195,7 @@
   if ([indexPath section] == 1)
   {    
     UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
-    self.selected = cell.text;
+    self.selected = cell.textLabel.text;
 
     [self save:self];
     return indexPath;
