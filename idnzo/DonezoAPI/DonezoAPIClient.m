@@ -87,7 +87,7 @@
   NSMutableArray *array = [[[NSMutableArray alloc] init] autorelease];
   for (NSDictionary *taskListDict in taskLists)
   {
-    NSLog(@"Here's a task list: %@", taskListDict);
+    //NSLog(@"Here's a task list: %@", taskListDict);
     [array addObject:[DonezoTaskList taskListFromDictionary:taskListDict]];
   }
   
@@ -97,7 +97,7 @@
 - (NSArray*)getTasksForListWithKey:(NSString*)key error:(NSError**)error
 {
   if (![self login:error]) { return nil; }
-
+  
   NSString *path = [NSString stringWithFormat:@"/t/?task_list=%@", [key urlencoded]];
   NSArray *tasks = (NSArray*) [DonezoAPIClient getObjectFromPath:path withKey:@"tasks" error:error];
   
@@ -110,10 +110,60 @@
   return array;
 }
 
-- (NSArray*)getArchivedTasksFromDate:(NSDate*)start toDate:(NSDate*)finish error:(NSError**)error
+
+- (void) saveTask:(DonezoTask*)task error:(NSError**)error
 {
-  if (![self login:error]) { return nil; }
-  return nil;
+  if (![self login:error]) { return; }
+  
+  //  NSString *path;
+  if (task.id != nil)
+  {
+  }
+  else
+  {
+    //path = [NSString stringWithFormat:@"/t/?task_list=%@", [key urlencoded]];
+  }
+  
 }
+
+- (void) deleteTask:(DonezoTask*)task error:(NSError**)error
+{
+  if (![self login:error]) { return; }
+  
+  
+}
+
+//                           2009-08-03 22:34:23.216692
+#define DONEZO_DATE_FORMAT @"yyyy-MM-dd HH:mm:SSSSSSSSS"
+
++ (NSDate*) dateFromDonezoDateString:(NSString*)stringDate
+{
+  if (stringDate == nil || [stringDate isKindOfClass:[NSNull class]])
+  {
+    return nil;
+  }
+  
+  NSDateFormatter *formatter = [[[NSDateFormatter alloc] init] autorelease];
+  [formatter setDateFormat:DONEZO_DATE_FORMAT];
+  return [formatter dateFromString:stringDate];
+}
+
++ (NSString*) donezoDateStringFromDate:(NSDate*)date
+{
+  if (date == nil || [date isKindOfClass:[NSNull class]])
+  {
+    return nil;
+  }
+  
+  NSDateFormatter *formatter = [[[NSDateFormatter alloc] init] autorelease];
+  [formatter setDateFormat:DONEZO_DATE_FORMAT];
+  return [formatter stringFromDate:date];  
+}
+
+//- (NSArray*)getArchivedTasksFromDate:(NSDate*)start toDate:(NSDate*)finish error:(NSError**)error
+//{
+//  if (![self login:error]) { return nil; }
+//  return nil;
+//}
 
 @end

@@ -25,4 +25,9 @@
   return taskList;
 }
 
+- (NSDictionary*) toDictionary
+{
+  return nil;
+}
+
 @end

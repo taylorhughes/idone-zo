@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		1D3623260D0F684500981E51 /* DNZOAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* DNZOAppDelegate.m */; };
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
+		3412FD561027961B00A0439E /* NSDictionary+Donezo.m in Sources */ = {isa = PBXBuildFile; fileRef = 3412FD551027961B00A0439E /* NSDictionary+Donezo.m */; };
+		3412FDD210279C1D00A0439E /* NSDictionary+Donezo.m in Sources */ = {isa = PBXBuildFile; fileRef = 3412FD551027961B00A0439E /* NSDictionary+Donezo.m */; };
 		3416EC260FC22C3D00D8BD53 /* TaskCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3416EC230FC22C3D00D8BD53 /* TaskCell.m */; };
 		3416EC270FC22C3D00D8BD53 /* TaskCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3416EC250FC22C3D00D8BD53 /* TaskCellView.m */; };
 		3416EC280FC22C3D00D8BD53 /* TaskCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3416EC230FC22C3D00D8BD53 /* TaskCell.m */; };
@@ -90,6 +92,8 @@
 		1D3623240D0F684500981E51 /* DNZOAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DNZOAppDelegate.h; path = Classes/DNZOAppDelegate.h; sourceTree = "<group>"; };
 		1D3623250D0F684500981E51 /* DNZOAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DNZOAppDelegate.m; path = Classes/DNZOAppDelegate.m; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		3412FD541027961B00A0439E /* NSDictionary+Donezo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSDictionary+Donezo.h"; path = "DonezoAPI/NSDictionary+Donezo.h"; sourceTree = "<group>"; };
+		3412FD551027961B00A0439E /* NSDictionary+Donezo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSDictionary+Donezo.m"; path = "DonezoAPI/NSDictionary+Donezo.m"; sourceTree = "<group>"; };
 		3416EC220FC22C3D00D8BD53 /* TaskCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskCell.h; sourceTree = "<group>"; };
 		3416EC230FC22C3D00D8BD53 /* TaskCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaskCell.m; sourceTree = "<group>"; };
 		3416EC240FC22C3D00D8BD53 /* TaskCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskCellView.h; sourceTree = "<group>"; };
@@ -312,8 +316,6 @@
 		34E13BFB1017CA92005A582E /* Donezo API */ = {
 			isa = PBXGroup;
 			children = (
-				34E13DF210225E75005A582E /* NSString+Donezo.h */,
-				34E13DF310225E75005A582E /* NSString+Donezo.m */,
 				34E13DE210225E54005A582E /* DonezoAPIClient.h */,
 				34E13DE310225E54005A582E /* DonezoAPIClient.m */,
 				34E13DE410225E54005A582E /* DonezoTask.h */,
@@ -322,6 +324,10 @@
 				34E13DE710225E54005A582E /* DonezoTaskList.m */,
 				34E13DE810225E54005A582E /* GoogleAppEngineAuthenticator.h */,
 				34E13DE910225E54005A582E /* GoogleAppEngineAuthenticator.m */,
+				34E13DF210225E75005A582E /* NSString+Donezo.h */,
+				34E13DF310225E75005A582E /* NSString+Donezo.m */,
+				3412FD541027961B00A0439E /* NSDictionary+Donezo.h */,
+				3412FD551027961B00A0439E /* NSDictionary+Donezo.m */,
 			);
 			name = "Donezo API";
 			sourceTree = "<group>";
@@ -480,6 +486,7 @@
 				34E13DF010225E54005A582E /* DonezoTaskList.m in Sources */,
 				34E13DF110225E54005A582E /* GoogleAppEngineAuthenticator.m in Sources */,
 				34E13DF510225E75005A582E /* NSString+Donezo.m in Sources */,
+				3412FD561027961B00A0439E /* NSDictionary+Donezo.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -487,6 +494,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3412FDD210279C1D00A0439E /* NSDictionary+Donezo.m in Sources */,
 				34770B2A0FAFE45B00AD8397 /* ListViewController.m in Sources */,
 				34770B2B0FAFE45B00AD8397 /* MainViewController.m in Sources */,
 				34E13D0B101904DF005A582E /* EditViewController.m in Sources */,

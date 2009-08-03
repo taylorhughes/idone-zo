@@ -10,10 +10,6 @@
 
 #import "TextViewCell.h"
 
-@interface TextViewCell()
-- (UITextView*)createTextView;
-@end
-
 @implementation TextViewCell
 
 @synthesize view;

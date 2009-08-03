@@ -8,7 +8,6 @@
 
 #import "NSString+Donezo.h"
 
-
 @implementation NSString (Donezo)
 
 - (NSString*)urlencoded

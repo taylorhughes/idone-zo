@@ -24,9 +24,22 @@
   task.body = [dict valueForKey:@"body"];
   task.project = [dict valueForKey:@"project"];
   task.contexts = [dict valueForKey:@"contexts"];
-  //task.dueDate = [dict valueForKey:@"body"];
-  
+  task.dueDate = [DonezoAPIClient dateFromDonezoDateString:[dict valueForKey:@"due_date"]];
+    
   return task;
+}
+
+- (NSDictionary*) toDictionary
+{
+  NSString *contextsString = [self.contexts componentsJoinedByString:@","];
+  NSString *dateString = [DonezoAPIClient donezoDateStringFromDate:self.dueDate];
+  return [NSDictionary dictionaryWithObjectsAndKeys:
+          self.id, @"id",
+          self.body, @"body",
+          self.project, @"project",
+          contextsString, @"contexts",
+          dateString, @"due_date",
+          nil];
 }
 
 @end

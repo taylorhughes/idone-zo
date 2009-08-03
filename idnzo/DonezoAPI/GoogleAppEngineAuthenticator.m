@@ -55,11 +55,16 @@
 
 - (NSString *)getAuthToken:(NSError**)error
 {
-  NSString *postBody = [NSString stringWithFormat:@"accountType=%@&Email=%@&Passwd=%@&service=ah", @"GOOGLE", [self.username urlencoded], [self.password urlencoded]];
+  NSMutableDictionary *postBody = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                   @"GOOGLE", @"accountType",
+                                   self.username, @"Email",
+                                   self.password, @"Passwd",
+                                   @"ah", @"service",
+                                   nil];
   
   if (self.appDescription != nil)
   {
-    postBody = [postBody stringByAppendingString:[NSString stringWithFormat:@"&source=%@", [self.appDescription urlencoded]]];
+    [postBody setValue:self.appDescription forKey:@"source"];
   }
   
   //NSLog(@"Here's the post body: %@", postBody);
@@ -68,7 +73,7 @@
   NSMutableURLRequest *authRequest = [[NSMutableURLRequest alloc] initWithURL:authURL];
   [authRequest setHTTPMethod:@"POST"];
   [authRequest setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-type"];
-  [authRequest setHTTPBody:[postBody dataUsingEncoding:NSASCIIStringEncoding]];
+  [authRequest setHTTPBody:[[postBody toFormEncodedString] dataUsingEncoding:NSUTF8StringEncoding]];
   
   NSHTTPURLResponse *authResponse;
   NSError *authError = nil;
@@ -115,20 +120,24 @@
 
 - (BOOL)getAuthCookieWithToken:(NSString*)authToken error:(NSError**)error
 {
-  NSString *authArgs = [NSString stringWithFormat:@"?continue=%@", [[self.url absoluteString] urlencoded]];
+  NSMutableDictionary *authArgs = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                   [self.url absoluteString], @"continue",
+                                   nil];
+  
   
   if (authToken != nil)
   {
     //NSLog(@"Appending auth token %@ ...", authToken);
-    authArgs = [authArgs stringByAppendingString:[NSString stringWithFormat:@"&auth=%@", [authToken urlencoded]]];
+    [authArgs setValue:authToken forKey:@"auth"];
   }
   else
   {
-    authArgs = [authArgs stringByAppendingString:[NSString stringWithFormat:@"&action=Login&email=%@", [self.username urlencoded]]];
+    [authArgs setValue:@"Login" forKey:@"action"];
+    [authArgs setValue:self.username forKey:@"email"];
   }
   
   NSString *authURL = [[self.url absoluteString] stringByAppendingPathComponent:@"_ah/login"];
-  authURL = [authURL stringByAppendingString:authArgs];
+  authURL = [authURL stringByAppendingFormat:@"?%@", [authArgs toFormEncodedString]];
   
   //NSLog(@"Here's the path: %@", authURL);
   

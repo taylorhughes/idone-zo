@@ -33,6 +33,7 @@
   auth = [[GoogleAppEngineAuthenticator alloc] initForGAEAppAtUrl:[NSURL URLWithString:@"http://www.done-zo.com/"]
                                                      withUsername:@"whorastic@hotmail.com"
                                                       andPassword:@"babel1234"];
+  auth.appDescription = @"iDone-zo";
   
   result = [auth login:&error];
   if (error != nil)

@@ -7,6 +7,7 @@
 //
 
 #import "NSString+Donezo.h"
+#import "NSDictionary+Donezo.h"
 
 @interface GoogleAppEngineAuthenticator : NSObject {
   NSURL *url;

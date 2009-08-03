@@ -6,6 +6,8 @@
 //  Copyright 2009 Nemean Networks. All rights reserved.
 //
 
+#import "DonezoAPIClient.h"
+
 @interface DonezoTask : NSObject {
   NSNumber *id;
   NSString *body;
@@ -21,5 +23,6 @@
 @property (nonatomic, copy) NSDate   *dueDate;
 
 + (DonezoTask*) taskFromDictionary:(NSDictionary*)dict;
+- (NSDictionary*) toDictionary;
 
 @end
