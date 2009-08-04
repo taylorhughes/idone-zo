@@ -25,6 +25,14 @@
   return taskList;
 }
 
+- (void) dealloc
+{
+  [key release];
+  [name release];
+  [tasksCount release];
+  [super dealloc];
+}
+
 - (NSDictionary*) toDictionary
 {
   return nil;

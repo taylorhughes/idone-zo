@@ -69,7 +69,7 @@
   STAssertEquals((NSUInteger)0, [array count], @"Count of tasks is incorrect.");
 }
 
-- (void) testSaveTask
+- (void) testInsertTask
 {
   // INSERT
   DonezoTask *newTask = [[[DonezoTask init] alloc] autorelease];
@@ -112,6 +112,38 @@
   }
   STAssertNotNil(newNewTask, @"Should have been able to find a matching new task in the getTasksForListWithKey method!");
   STAssertEqualObjects(newTask.body, newNewTask.body, @"New task's body was not saved properly.");
+  STAssertNotNil(newNewTask.contexts, @"New contexts should not be null");
+  STAssertEqualObjects(newTask.contexts, newNewTask.contexts, @"New task's contexts list was not saved properly.");
+  STAssertNotNil(newNewTask.project, @"New project should not be null.");
+  STAssertEqualObjects(newTask.project, newNewTask.project, @"New task's project was not saved properly.");
+  STAssertNotNil(newNewTask.dueDate, @"New due date should not be null");
+  STAssertEqualObjects(newTask.dueDate, newNewTask.dueDate, @"New task's due date was not saved properly.");
+}
+
+- (void) testUpdateTask
+{
+  DonezoAPIClient *client = [[DonezoAPIClient alloc] initWithUsername:TEST_USER andPassword:TEST_PASSWORD];
+  NSError *error = nil;
+  NSArray *array = [client getLists:&error];
+  STAssertEquals((NSUInteger)1, [array count], @"getLists is not functioning properly");
+  DonezoTaskList *list = [array objectAtIndex:0];
+  
+  array = [client getTasksForListWithKey:list.key error:&error];
+  STAssertTrue([array count] > 0, @"getTasksForList is not functioning properly");
+  NSString *appendage = @"!!!Appendage!!!";
+  for (DonezoTask *task in array)
+  {
+    task.body = [task.body stringByAppendingString:appendage];
+    [client saveTask:&task taskList:list error:&error];
+  }
+  
+  NSArray *newArray = [client getTasksForListWithKey:list.key error:&error];
+  for (int i = 0; i < [newArray count]; i++)
+  {
+    DonezoTask *taskA = (DonezoTask*)[array objectAtIndex:i];
+    DonezoTask *taskB = (DonezoTask*)[newArray objectAtIndex:i];
+    STAssertEqualObjects(taskA.body, taskB.body, @"Task bodies should be the same!");
+  }
 }
 
 - (void) testTaskLists

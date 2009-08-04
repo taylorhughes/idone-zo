@@ -35,6 +35,12 @@
   return self;
 }
 
+- (void) dealloc
+{
+  [gaeAuth release];
+  [super dealloc];
+}
+
 - (BOOL) login:(NSError**)error
 {
   if (self.gaeAuth.hasLoggedIn)
@@ -143,7 +149,7 @@
   if ((*task).key != nil)
   {
     // existing task; modify
-    path = [NSString stringWithFormat:@"/t/%d/", (*task).key];
+    path = [NSString stringWithFormat:@"/t/%@/", (*task).key];
     method = @"PUT";
   }
   else
@@ -157,7 +163,7 @@
   //NSLog(@"Dict looks like %@", dict);
   NSString *body = [dict toFormEncodedString];
   
-  //NSLog(@"Body looks like %@", body);
+  NSLog(@"Body looks like %@", body);
   dict = (NSDictionary*)[DonezoAPIClient getObjectFromPath:path withKey:@"task" usingMethod:method andBody:body error:error];
   
   if (*error)
@@ -174,8 +180,9 @@
   
 }
 
-//                           2009-08-03 22:34:23.216692
-#define DONEZO_DATE_FORMAT @"yyyy-MM-dd HH:mm:SSSSSSSSS"
+//                                  2009-08-03 22:34:23.216692
+#define DONEZO_DATE_INPUT_FORMAT  @"yyyy-MM-dd HH:mm:SSSSSSSSS"
+#define DONEZO_DATE_OUTPUT_FORMAT @"MM dd yyyy"
 
 + (NSDate*) dateFromDonezoDateString:(NSString*)stringDate
 {
@@ -185,7 +192,7 @@
   }
   
   NSDateFormatter *formatter = [[[NSDateFormatter alloc] init] autorelease];
-  [formatter setDateFormat:DONEZO_DATE_FORMAT];
+  [formatter setDateFormat:DONEZO_DATE_INPUT_FORMAT];
   return [formatter dateFromString:stringDate];
 }
 
@@ -197,7 +204,7 @@
   }
   
   NSDateFormatter *formatter = [[[NSDateFormatter alloc] init] autorelease];
-  [formatter setDateFormat:DONEZO_DATE_FORMAT];
+  [formatter setDateFormat:DONEZO_DATE_OUTPUT_FORMAT];
   return [formatter stringFromDate:date];  
 }
 

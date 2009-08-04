@@ -22,9 +22,6 @@
   if (self)
   {
     self.body = @"";
-    self.project = @"";
-    self.contexts = [NSArray array];
-    self.dueDate = (NSDate*)[NSNull null];
   }
   return self;
 }
@@ -43,13 +40,12 @@
 {
   NSString *contextsString = [self.contexts componentsJoinedByString:@","];
   NSString *dateString = [DonezoAPIClient donezoDateStringFromDate:self.dueDate];
-  NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-          self.body, @"body",
-          self.project, @"project",
-          contextsString, @"contexts",
-          dateString, @"due_date",
-          nil];
-  
+  NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+  // do it this way instead of mass assignment because some might be nil
+  [dict setValue:self.body forKey:@"body"];
+  [dict setValue:self.project forKey:@"project"];
+  [dict setValue:contextsString forKey:@"contexts"];
+  [dict setValue:dateString forKey:@"due_date"];  
   if (self.key != nil)
   {
     [dict setValue:self.key forKey:@"id"];
