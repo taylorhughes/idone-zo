@@ -16,7 +16,12 @@
   
   for (NSObject *key in self)
   {
-    NSString *value = [[self objectForKey:key] description];
+    NSObject *object = [self objectForKey:key];
+    NSString *value = @"";
+    if (object && ![object isKindOfClass:[NSNull class]])
+    {
+      value = [object description];
+    }
     [array addObject:[NSString stringWithFormat:@"%@=%@", [[key description] urlencoded], [value urlencoded]]];
   }
   

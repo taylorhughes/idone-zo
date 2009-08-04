@@ -88,7 +88,10 @@
   STAssertTrue([array count] > 0, @"getTasksForList is not functioning properly");
   for (DonezoTask *task in array)
   {
-    STAssertTrue(![task.body isEqualToString:newTask.body], @"No existing string should have the same body as this new one.");
+    if (task.body && ![task.body isMemberOfClass:[NSNull class]])
+    {
+      STAssertTrue(![task.body isEqualToString:newTask.body], @"No existing string should have the same body as this new one.");
+    }
   }
   
   STAssertNil(newTask.key, @"New task's ID should be nil!");
@@ -130,11 +133,14 @@
   
   array = [client getTasksForListWithKey:list.key error:&error];
   STAssertTrue([array count] > 0, @"getTasksForList is not functioning properly");
-  NSString *appendage = @"!!!Appendage!!!";
+  NSString *appendage = @" !!!";
   for (DonezoTask *task in array)
   {
-    task.body = [task.body stringByAppendingString:appendage];
-    [client saveTask:&task taskList:list error:&error];
+    if (task.body && ![task.body isMemberOfClass:[NSNull class]])
+    {
+      task.body = [task.body stringByAppendingString:appendage];
+      [client saveTask:&task taskList:list error:&error];
+    }
   }
   
   NSArray *newArray = [client getTasksForListWithKey:list.key error:&error];
