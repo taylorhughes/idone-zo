@@ -10,7 +10,9 @@
 
 @interface DonezoAPIClient (Private)
 - (BOOL) login;
-+ (NSObject*)getObjectFromURL:(NSURL*)url withKey:(NSString*)key error:(NSError**)error;
++ (NSObject*)getObjectFromPath:(NSString*)path withKey:(NSString*)key error:(NSError**)error;
++ (NSObject*)getObjectFromPath:(NSString*)path withKey:(NSString*)key usingMethod:(NSString*)method andBody:(NSString*)body error:(NSError**)error;
++ (NSString*)responseFromRequestToPath:(NSString*)path withMethod:(NSString*)method andBody:(NSString*)body error:(NSError**)error;
 @end
 
 //#define BASE_URL @"http://www.done-zo.com/"
@@ -42,22 +44,43 @@
   return [self.gaeAuth login:error];
 }
 
-+ (NSObject*)getObjectFromPath:(NSString*)path withKey:(NSString*)key error:(NSError**)error
+
++ (NSString*)responseFromRequestToPath:(NSString*)path withMethod:(NSString*)method andBody:(NSString*)body error:(NSError**)error
 {
   NSURL *url = [NSURL URLWithString:[API_URL stringByAppendingPathComponent:path]];
   NSMutableURLRequest *req = [[NSMutableURLRequest alloc] initWithURL:url];
-  //[req setHTTPMethod:@"POST"];
-  //[req setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-type"];
-  //[req setHTTPBody:[postBody dataUsingEncoding:NSASCIIStringEncoding]];
+  
+  if (method != nil)
+  {
+    [req setHTTPMethod:method];
+  }
+  if (body != nil)
+  {
+    [req setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-type"];
+    [req setHTTPBody:[body dataUsingEncoding:NSASCIIStringEncoding]];    
+  }
   
   NSHTTPURLResponse *response;
-  NSError *responseError = nil;
-  NSData *responseData = [NSURLConnection sendSynchronousRequest:req returningResponse:&response error:&responseError];      
-  NSString *responseString = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
+  NSData *responseData = [NSURLConnection sendSynchronousRequest:req returningResponse:&response error:error];      
+  NSString *responseString = [[[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding] autorelease];
   
-  if (responseError)
+  //NSLog(@"Here's the response: %@", responseString);
+  
+  return responseString;
+}
+
++ (NSObject*)getObjectFromPath:(NSString*)path withKey:(NSString*)key error:(NSError**)error
+{
+  return [DonezoAPIClient getObjectFromPath:path withKey:key usingMethod:nil andBody:nil error:error];
+}
+  
++ (NSObject*)getObjectFromPath:(NSString*)path withKey:(NSString*)key usingMethod:(NSString*)method andBody:(NSString*)body error:(NSError**)error
+{
+  NSString *responseString = [DonezoAPIClient responseFromRequestToPath:path withMethod:method andBody:body error:error];
+  
+  if (*error)
   {
-    *error = responseError;
+    NSLog(@"Ruh roh! Error! %@", *error);
     return nil;
   }
   
@@ -111,22 +134,40 @@
 }
 
 
-- (void) saveTask:(DonezoTask*)task error:(NSError**)error
+- (void) saveTask:(DonezoTask**)task taskList:(DonezoTaskList*)list error:(NSError**)error
 {
   if (![self login:error]) { return; }
   
-  //  NSString *path;
-  if (task.id != nil)
+  NSString *path;
+  NSString *method;
+  if ((*task).key != nil)
   {
+    // existing task; modify
+    path = [NSString stringWithFormat:@"/t/%d/", (*task).key];
+    method = @"PUT";
   }
   else
   {
-    //path = [NSString stringWithFormat:@"/t/?task_list=%@", [key urlencoded]];
+    // new task; insert
+    path = [NSString stringWithFormat:@"/t/?task_list=%@", [list.key urlencoded]];
+    method = @"POST";
   }
   
+  NSDictionary *dict = [*task toDictionary];
+  //NSLog(@"Dict looks like %@", dict);
+  NSString *body = [dict toFormEncodedString];
+  
+  //NSLog(@"Body looks like %@", body);
+  dict = (NSDictionary*)[DonezoAPIClient getObjectFromPath:path withKey:@"task" usingMethod:method andBody:body error:error];
+  
+  if (*error)
+  {
+    return;
+  }
+  *task = [DonezoTask taskFromDictionary:dict];
 }
 
-- (void) deleteTask:(DonezoTask*)task error:(NSError**)error
+- (void) deleteTask:(DonezoTask**)task error:(NSError**)error
 {
   if (![self login:error]) { return; }
   

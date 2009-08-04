@@ -25,8 +25,8 @@
 - (NSArray*) getLists:(NSError**)error;
 - (NSArray*) getTasksForListWithKey:(NSString*)key error:(NSError**)error;
 
-- (void) saveTask:(DonezoTask*)task error:(NSError**)error;
-- (void) deleteTask:(DonezoTask*)task error:(NSError**)error;
+- (void) saveTask:(DonezoTask**)task taskList:(DonezoTaskList*)list error:(NSError**)error;
+- (void) deleteTask:(DonezoTask**)task error:(NSError**)error;
 
 //- (NSArray*)getArchivedTasksFromDate:(NSDate*)start toDate:(NSDate*)finish error:(NSError**)error;
 

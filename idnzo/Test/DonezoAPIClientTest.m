@@ -57,7 +57,7 @@
     NSLog(@"Error! %@", [error description]);
   }
   
-  STAssertEquals((NSUInteger)4, [array count], @"Count of tasks is incorrect.");
+  STAssertTrue([array count] >= 4, @"Count of tasks is incorrect.");
   
   array = [client getTasksForListWithKey:@"not-a-list" error:&error];
   
@@ -67,6 +67,51 @@
   }
   
   STAssertEquals((NSUInteger)0, [array count], @"Count of tasks is incorrect.");
+}
+
+- (void) testSaveTask
+{
+  // INSERT
+  DonezoTask *newTask = [[[DonezoTask init] alloc] autorelease];
+  newTask.body = [NSString stringWithFormat:@"My new task!! %@", [NSDate date]];
+  newTask.project = @"Some project";
+  newTask.contexts = [NSArray arrayWithObject:@"home"];
+  newTask.dueDate = [NSDate date];
+  
+  DonezoAPIClient *client = [[DonezoAPIClient alloc] initWithUsername:TEST_USER andPassword:TEST_PASSWORD];
+  NSError *error = nil;
+  NSArray *array = [client getLists:&error];
+  STAssertEquals((NSUInteger)1, [array count], @"getLists is not functioning properly");
+  DonezoTaskList *list = [array objectAtIndex:0];
+  
+  array = [client getTasksForListWithKey:list.key error:&error];
+  STAssertTrue([array count] > 0, @"getTasksForList is not functioning properly");
+  for (DonezoTask *task in array)
+  {
+    STAssertTrue(![task.body isEqualToString:newTask.body], @"No existing string should have the same body as this new one.");
+  }
+  
+  STAssertNil(newTask.key, @"New task's ID should be nil!");
+  [client saveTask:&newTask taskList:list error:&error];
+  if (error != nil)
+  {
+    NSLog(@"Error! %@", [error description]);
+  }
+  STAssertNotNil(newTask, @"New task should not be nil!");
+  STAssertNotNil(newTask.key, @"New task's ID should not be nil after saving!");
+  
+  NSArray *newArray = [client getTasksForListWithKey:list.key error:&error];
+  STAssertEquals([array count] + 1, [newArray count], @"There should be one more task in the new array of tasks");
+  DonezoTask *newNewTask = nil;
+  for (DonezoTask *task in newArray)
+  {
+    if ([task.key isEqualToNumber:newTask.key])
+    {
+      newNewTask = task;
+    }
+  }
+  STAssertNotNil(newNewTask, @"Should have been able to find a matching new task in the getTasksForListWithKey method!");
+  STAssertEqualObjects(newTask.body, newNewTask.body, @"New task's body was not saved properly.");
 }
 
 - (void) testTaskLists
@@ -86,7 +131,7 @@
   DonezoTaskList *list = (DonezoTaskList *)[array objectAtIndex:0];
   STAssertEqualObjects(@"Tasks", list.name, @"Task list should be 'Tasks'");
   STAssertEqualObjects(@"tasks", list.key, @"Task list key should be 'tasks'");
-  STAssertEqualObjects([NSNumber numberWithInt:4], list.tasksCount, @"Tasks count should be 4.");
+  STAssertTrue([list.tasksCount intValue] >= 4, @"Tasks count should be at least 4.");
 }
 
 - (void) tearDown

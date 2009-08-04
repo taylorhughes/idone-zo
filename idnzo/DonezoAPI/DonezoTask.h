@@ -9,14 +9,14 @@
 #import "DonezoAPIClient.h"
 
 @interface DonezoTask : NSObject {
-  NSNumber *id;
+  NSNumber *key;
   NSString *body;
   NSString *project;
   NSArray  *contexts;
   NSDate   *dueDate;
 }
 
-@property (nonatomic, copy) NSNumber *id;
+@property (nonatomic, copy) NSNumber *key;
 @property (nonatomic, copy) NSString *body;
 @property (nonatomic, copy) NSString *project;
 @property (nonatomic, copy) NSArray  *contexts;
