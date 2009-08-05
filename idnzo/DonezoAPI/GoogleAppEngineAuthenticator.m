@@ -6,7 +6,8 @@
 //  Copyright 2009 __MyCompanyName__. All rights reserved.
 //
 
-#import "GoogleAppEngineAuthenticator.h"
+#include "GoogleAppEngineAuthenticator.h"
+
 @interface GoogleAppEngineAuthenticator ()
 
 @property (nonatomic, copy) NSString *username;
@@ -18,7 +19,7 @@
 
 @end
 
-#define AUTH_URL @"https://www.google.com/accounts/ClientLogin"
+#define AUTH_URL @"https://google.com/accounts/ClientLogin"
 
 @implementation GoogleAppEngineAuthenticator
 
@@ -74,6 +75,11 @@
   [authRequest setHTTPMethod:@"POST"];
   [authRequest setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-type"];
   [authRequest setHTTPBody:[[postBody toFormEncodedString] dataUsingEncoding:NSUTF8StringEncoding]];
+
+#if TARGET_IPHONE_SIMULATOR
+  // There is apparently no other way to do this.
+  [NSURLRequest setAllowsAnyHTTPSCertificate:YES forHost:[authURL host]];
+#endif
   
   NSHTTPURLResponse *authResponse;
   NSError *authError = nil;
@@ -81,7 +87,7 @@
 
   if (authError != nil)
   {
-    //NSLog(@"Oh no, an error for request to %@: %@", [authURL description], [authError description]);
+    NSLog(@"Oh no, an error for request: %@; %@", [authError description], [authError userInfo]);
     *error = authError;
     return nil;
   }
@@ -124,7 +130,6 @@
                                    [self.url absoluteString], @"continue",
                                    nil];
   
-  
   if (authToken != nil)
   {
     //NSLog(@"Appending auth token %@ ...", authToken);
@@ -141,14 +146,14 @@
   
   //NSLog(@"Here's the path: %@", authURL);
   
-  NSHTTPURLResponse *cookieResponse;
+  //NSHTTPURLResponse *cookieResponse;
   NSError *cookieError;
   NSMutableURLRequest *cookieRequest = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:authURL]];
   
   [cookieRequest setHTTPMethod:@"GET"];
   
   //NSData *cookieData = 
-  [NSURLConnection sendSynchronousRequest:cookieRequest returningResponse:&cookieResponse error:&cookieError];
+  [NSURLConnection sendSynchronousRequest:cookieRequest returningResponse:nil error:&cookieError];
   
   if (cookieError != nil)
   {

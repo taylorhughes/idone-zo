@@ -8,8 +8,12 @@
 
 #import "DonezoAPIClientTest.h"
 
-#define TEST_USER @"test@example.com"
+#define TEST_URL      @"http://localhost:8081/"
+#define TEST_USER     @"test@example.com"
 #define TEST_PASSWORD @""
+//#define TEST_URL      @"http://www.done-zo.com/"
+//#define TEST_USER     @"whorastic@hotmail.com"
+//#define TEST_PASSWORD @"testaccountpassword"
 
 @implementation DonezoAPIClientTest
 
@@ -21,9 +25,13 @@
 {
 }
 
+- (void) tearDown
+{
+}
+
 - (void) testLogin
 {
-  GoogleAppEngineAuthenticator *auth = [[GoogleAppEngineAuthenticator alloc] initForGAEAppAtUrl:[NSURL URLWithString:@"http://localhost:8081/"]
+  GoogleAppEngineAuthenticator *auth = [[GoogleAppEngineAuthenticator alloc] initForGAEAppAtUrl:[NSURL URLWithString:TEST_URL]
                                                                                    withUsername:@"some@user.com"
                                                                                     andPassword:@""];
   NSError *error = nil;
@@ -32,7 +40,7 @@
   
   auth = [[GoogleAppEngineAuthenticator alloc] initForGAEAppAtUrl:[NSURL URLWithString:@"http://www.done-zo.com/"]
                                                      withUsername:@"whorastic@hotmail.com"
-                                                      andPassword:@"babel1234"];
+                                                      andPassword:@"testaccountpassword"];
   auth.appDescription = @"iDone-zo";
   
   result = [auth login:&error];
@@ -40,14 +48,19 @@
   {
     NSLog(@"Error! %@", [error description]);
   }
-  /*
+  
   STAssertTrue(result, @"Login should not fail.");
-   */
+}
+
+- (DonezoAPIClient*)getClient
+{
+  // this is a secret api call.
+  return [[DonezoAPIClient alloc] initWithUsername:TEST_USER andPassword:TEST_PASSWORD toBaseUrl:TEST_URL];
 }
 
 - (void) testTasks
 {
-  DonezoAPIClient *client = [[DonezoAPIClient alloc] initWithUsername:TEST_USER andPassword:TEST_PASSWORD];
+  DonezoAPIClient *client = [self getClient];
 
   NSError *error = nil;
   NSArray *array = [client getTasksForListWithKey:@"tasks" error:&error];
@@ -71,14 +84,13 @@
 
 - (void) testInsertTask
 {
-  // INSERT
   DonezoTask *newTask = [[[DonezoTask init] alloc] autorelease];
   newTask.body = [NSString stringWithFormat:@"My new task!! %@", [NSDate date]];
   newTask.project = @"Some project";
   newTask.contexts = [NSArray arrayWithObject:@"home"];
   newTask.dueDate = [NSDate date];
   
-  DonezoAPIClient *client = [[DonezoAPIClient alloc] initWithUsername:TEST_USER andPassword:TEST_PASSWORD];
+  DonezoAPIClient *client = [self getClient];
   NSError *error = nil;
   NSArray *array = [client getLists:&error];
   STAssertEquals((NSUInteger)1, [array count], @"getLists is not functioning properly");
@@ -125,7 +137,7 @@
 
 - (void) testUpdateTask
 {
-  DonezoAPIClient *client = [[DonezoAPIClient alloc] initWithUsername:TEST_USER andPassword:TEST_PASSWORD];
+  DonezoAPIClient *client = [self getClient];
   NSError *error = nil;
   NSArray *array = [client getLists:&error];
   STAssertEquals((NSUInteger)1, [array count], @"getLists is not functioning properly");
@@ -154,7 +166,7 @@
 
 - (void) testTaskLists
 {
-  DonezoAPIClient *client = [[DonezoAPIClient alloc] initWithUsername:TEST_USER andPassword:TEST_PASSWORD];
+  DonezoAPIClient *client = [self getClient];
   
   NSError *error = nil;
   NSArray *array = [client getLists:&error];
@@ -170,10 +182,6 @@
   STAssertEqualObjects(@"Tasks", list.name, @"Task list should be 'Tasks'");
   STAssertEqualObjects(@"tasks", list.key, @"Task list key should be 'tasks'");
   STAssertTrue([list.tasksCount intValue] >= 4, @"Tasks count should be at least 4.");
-}
-
-- (void) tearDown
-{
 }
 
 @end

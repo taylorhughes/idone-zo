@@ -8,36 +8,49 @@
 
 #import "DonezoAPIClient.h"
 
-@interface DonezoAPIClient (Private)
-- (BOOL) login;
-+ (NSObject*)getObjectFromPath:(NSString*)path withKey:(NSString*)key error:(NSError**)error;
-+ (NSObject*)getObjectFromPath:(NSString*)path withKey:(NSString*)key usingMethod:(NSString*)method andBody:(NSString*)body error:(NSError**)error;
-+ (NSString*)responseFromRequestToPath:(NSString*)path withMethod:(NSString*)method andBody:(NSString*)body error:(NSError**)error;
+@interface DonezoAPIClient ()
+@property (nonatomic, copy) NSString *baseUrl;
+@property (nonatomic, readonly) NSString *apiUrl;
+
+- (BOOL)login:(NSError**)error;
+- (NSObject*)getObjectFromPath:(NSString*)path withKey:(NSString*)key error:(NSError**)error;
+- (NSObject*)getObjectFromPath:(NSString*)path withKey:(NSString*)key usingMethod:(NSString*)method andBody:(NSString*)body error:(NSError**)error;
+- (NSString*)responseFromRequestToPath:(NSString*)path withMethod:(NSString*)method andBody:(NSString*)body error:(NSError**)error;
+
 @end
 
-//#define BASE_URL @"http://www.done-zo.com/"
-#define BASE_URL @"http://localhost:8081/"
+#define DEFAULT_BASE_URL @"http://www.done-zo.com/"
 #define API_PATH @"/api/0.1/"
-#define API_URL [[NSString stringWithString:BASE_URL] stringByAppendingPathComponent:API_PATH]
 
 @implementation DonezoAPIClient
 
 @synthesize gaeAuth;
+@synthesize baseUrl;
 
-- (id)initWithUsername:(NSString*)username andPassword:(NSString*)password
+- (id)initWithUsername:(NSString*)username andPassword:(NSString*)password toBaseUrl:(NSString*)baseURL
 {
   self = [super init];
   if (self != nil)
   {
-    NSURL *baseURL = [NSURL URLWithString:BASE_URL];
-    self.gaeAuth = [[GoogleAppEngineAuthenticator alloc] initForGAEAppAtUrl:baseURL withUsername:username andPassword:password];
+    if (baseURL == nil)
+    {
+      baseURL = DEFAULT_BASE_URL;
+    }
+    self.baseUrl = baseURL;
+    self.gaeAuth = [[GoogleAppEngineAuthenticator alloc] initForGAEAppAtUrl:[NSURL URLWithString:baseURL] withUsername:username andPassword:password];
   }
   return self;
+}
+
+- (id)initWithUsername:(NSString*)username andPassword:(NSString*)password
+{
+  return [self initWithUsername:username andPassword:password toBaseUrl:nil];
 }
 
 - (void) dealloc
 {
   [gaeAuth release];
+  [baseUrl release];
   [super dealloc];
 }
 
@@ -50,10 +63,14 @@
   return [self.gaeAuth login:error];
 }
 
-
-+ (NSString*)responseFromRequestToPath:(NSString*)path withMethod:(NSString*)method andBody:(NSString*)body error:(NSError**)error
+- (NSString*)apiUrl
 {
-  NSURL *url = [NSURL URLWithString:[API_URL stringByAppendingPathComponent:path]];
+  return [[NSString stringWithString:self.baseUrl] stringByAppendingPathComponent:API_PATH];
+}
+
+- (NSString*)responseFromRequestToPath:(NSString*)path withMethod:(NSString*)method andBody:(NSString*)body error:(NSError**)error
+{
+  NSURL *url = [NSURL URLWithString:[self.apiUrl stringByAppendingPathComponent:path]];
   NSMutableURLRequest *req = [[NSMutableURLRequest alloc] initWithURL:url];
   
   if (method != nil)
@@ -75,14 +92,14 @@
   return responseString;
 }
 
-+ (NSObject*)getObjectFromPath:(NSString*)path withKey:(NSString*)key error:(NSError**)error
+- (NSObject*)getObjectFromPath:(NSString*)path withKey:(NSString*)key error:(NSError**)error
 {
-  return [DonezoAPIClient getObjectFromPath:path withKey:key usingMethod:nil andBody:nil error:error];
+  return [self getObjectFromPath:path withKey:key usingMethod:nil andBody:nil error:error];
 }
   
-+ (NSObject*)getObjectFromPath:(NSString*)path withKey:(NSString*)key usingMethod:(NSString*)method andBody:(NSString*)body error:(NSError**)error
+- (NSObject*)getObjectFromPath:(NSString*)path withKey:(NSString*)key usingMethod:(NSString*)method andBody:(NSString*)body error:(NSError**)error
 {
-  NSString *responseString = [DonezoAPIClient responseFromRequestToPath:path withMethod:method andBody:body error:error];
+  NSString *responseString = [self responseFromRequestToPath:path withMethod:method andBody:body error:error];
   
   if (*error)
   {
@@ -111,7 +128,7 @@
 {
   if (![self login:error]) { return nil; }
   
-  NSArray *taskLists = (NSArray*) [DonezoAPIClient getObjectFromPath:@"/l/" withKey:@"task_lists" error:error];
+  NSArray *taskLists = (NSArray*) [self getObjectFromPath:@"/l/" withKey:@"task_lists" error:error];
   
   NSMutableArray *array = [[[NSMutableArray alloc] init] autorelease];
   for (NSDictionary *taskListDict in taskLists)
@@ -128,7 +145,7 @@
   if (![self login:error]) { return nil; }
   
   NSString *path = [NSString stringWithFormat:@"/t/?task_list=%@", [key urlencoded]];
-  NSArray *tasks = (NSArray*) [DonezoAPIClient getObjectFromPath:path withKey:@"tasks" error:error];
+  NSArray *tasks = (NSArray*) [self getObjectFromPath:path withKey:@"tasks" error:error];
   
   NSMutableArray *array = [[[NSMutableArray alloc] init] autorelease];
   for (NSDictionary *tasksDict in tasks)
@@ -163,8 +180,8 @@
   //NSLog(@"Dict looks like %@", dict);
   NSString *body = [dict toFormEncodedString];
   
-  NSLog(@"Body looks like %@", body);
-  dict = (NSDictionary*)[DonezoAPIClient getObjectFromPath:path withKey:@"task" usingMethod:method andBody:body error:error];
+  //NSLog(@"Body looks like %@", body);
+  dict = (NSDictionary*)[self getObjectFromPath:path withKey:@"task" usingMethod:method andBody:body error:error];
   
   if (*error)
   {

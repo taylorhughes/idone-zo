@@ -16,11 +16,13 @@
 
 @interface DonezoAPIClient : NSObject {
   GoogleAppEngineAuthenticator *gaeAuth;
+  NSString *baseUrl;
 }
 
 @property (nonatomic, retain) GoogleAppEngineAuthenticator *gaeAuth;
 
 - (id) initWithUsername:(NSString*)username andPassword:(NSString*)password;
+- (id) initWithUsername:(NSString*)username andPassword:(NSString*)password toBaseUrl:(NSString*)baseURL;
 
 - (NSArray*) getLists:(NSError**)error;
 - (NSArray*) getTasksForListWithKey:(NSString*)key error:(NSError**)error;
