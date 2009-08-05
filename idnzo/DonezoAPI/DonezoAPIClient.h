@@ -30,6 +30,9 @@
 - (void) saveTask:(DonezoTask**)task taskList:(DonezoTaskList*)list error:(NSError**)error;
 - (void) deleteTask:(DonezoTask**)task error:(NSError**)error;
 
+- (void) saveList:(DonezoTaskList**)list error:(NSError**)error;
+- (void) deleteList:(DonezoTaskList**)list error:(NSError**)error;
+
 //- (NSArray*)getArchivedTasksFromDate:(NSDate*)start toDate:(NSDate*)finish error:(NSError**)error;
 
 + (NSDate*) dateFromDonezoDateString:(NSString*)stringDate;

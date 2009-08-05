@@ -140,6 +140,51 @@
   return array;
 }
 
+
+- (void) saveList:(DonezoTaskList**)list error:(NSError**)error
+{
+  if (![self login:error]) { return; }
+  
+  NSString *path = @"/l/";
+  NSString *method = @"POST";
+  if ((*list).key != nil)
+  {
+    // existing list; modify
+    path = [path stringByAppendingFormat:@"%@/", (*list).key];
+    method = @"PUT";
+  }
+  
+  NSDictionary *dict = [*list toDictionary];
+  //NSLog(@"Dict looks like %@", dict);
+  NSString *body = [dict toFormEncodedString];
+  
+  //NSLog(@"Body looks like %@", body);
+  dict = (NSDictionary*)[self getObjectFromPath:path withKey:@"task_list" usingMethod:method andBody:body error:error];
+  
+  if (*error)
+  {
+    return;
+  }
+  *list = [DonezoTaskList taskListFromDictionary:dict];
+}
+
+- (void) deleteList:(DonezoTaskList**)list error:(NSError**)error
+{
+  if (![self login:error]) { return; }
+  
+  NSString *path = [NSString stringWithFormat:@"/l/%@/", (*list).key];  
+  NSString *result = [self responseFromRequestToPath:path withMethod:@"DELETE" andBody:nil error:error];
+  
+  NSLog(@"Result from DELETE: %@", result);
+  
+  if (*error)
+  {
+    return;
+  }
+  (*list).key = nil;
+}
+
+
 - (NSArray*)getTasksForListWithKey:(NSString*)key error:(NSError**)error
 {
   if (![self login:error]) { return nil; }
@@ -194,7 +239,16 @@
 {
   if (![self login:error]) { return; }
   
+  NSString *path = [NSString stringWithFormat:@"/t/%@/", (*task).key];  
+  NSString *result = [self responseFromRequestToPath:path withMethod:@"DELETE" andBody:nil error:error];
   
+  NSLog(@"Result from DELETE: %@", result);
+  
+  if (*error)
+  {
+    return;
+  }
+  (*task).key = nil;
 }
 
 //                                  2009-08-03 22:34:23.216692

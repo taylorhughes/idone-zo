@@ -54,7 +54,6 @@
 
 - (DonezoAPIClient*)getClient
 {
-  // this is a secret api call.
   return [[DonezoAPIClient alloc] initWithUsername:TEST_USER andPassword:TEST_PASSWORD toBaseUrl:TEST_URL];
 }
 
@@ -79,7 +78,7 @@
     NSLog(@"Error! %@", [error description]);
   }
   
-  STAssertEquals((NSUInteger)0, [array count], @"Count of tasks is incorrect.");
+  STAssertEquals((NSUInteger)0, [array count], @"Count of tasks for missing list should be 0.");
 }
 
 - (void) testInsertTask

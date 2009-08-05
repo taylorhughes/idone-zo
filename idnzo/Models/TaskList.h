@@ -14,13 +14,14 @@
 {
 }
 
-@property (nonatomic, retain) NSString * name;
-@property (nonatomic, retain) NSSet* tasks;
+@property (nonatomic, retain) NSString *name;
+@property (nonatomic, retain) NSString *key;
+@property (nonatomic, retain) NSSet *tasks;
 
 @end
 
-
 @interface TaskList (CoreDataGeneratedAccessors)
+
 - (void)addTasksObject:(Task *)value;
 - (void)removeTasksObject:(Task *)value;
 - (void)addTasks:(NSSet *)value;

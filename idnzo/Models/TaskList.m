@@ -13,6 +13,7 @@
 @implementation TaskList 
 
 @dynamic name;
+@dynamic key;
 @dynamic tasks;
 
 @end
