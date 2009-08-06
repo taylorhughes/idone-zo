@@ -13,6 +13,7 @@
 
 @implementation Task 
 
+@dynamic key;
 @dynamic body;
 @dynamic dueDate;
 @dynamic complete;
@@ -35,12 +36,17 @@
   {
     return nil;
   }
-  NSMutableArray *contextNames = [[NSMutableArray alloc] init];
+  return [@"@" stringByAppendingString:[[self contextNames] componentsJoinedByString:@" @"]];
+}
+
+- (NSArray*)contextNames
+{
+  NSMutableArray *contextNames = [NSMutableArray arrayWithCapacity:[self.contexts count]];
   for (Context *context in self.contexts)
   {
     [contextNames addObject:context.name];
   }
-  return [@"@" stringByAppendingString:[contextNames componentsJoinedByString:@" @"]];
+  return contextNames;
 }
 
 - (BOOL)isComplete

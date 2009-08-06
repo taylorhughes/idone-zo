@@ -10,6 +10,8 @@
 
 #import "Task.h"
 #import "TaskList.h"
+#import "Context.h"
+#import "Project.h"
 
 @interface DonezoSyncMaster : NSObject {
   DonezoAPIClient *client;

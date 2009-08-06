@@ -184,16 +184,108 @@
     {
       return nil;
     }
-    list.key = list.key;
+    listToAdd.key = list.key;
   }
   
-  // final collection of TaskList* objects -- todo: replace this with 
+  // final collection of TaskList* objects -- todo: replace this with a premade collection or something
   return [self getLocalTaskLists:error]; 
 }
 
 - (void) syncList:(TaskList*)taskList error:(NSError**)error
 {
+  NSArray *localTasks = [self getLocalTasksForTaskList:taskList error:error];
+  if (*error != nil) { return; }
   
+  NSMutableArray *savedLocalTasks = [NSMutableArray arrayWithCapacity:[localTasks count]];
+  NSMutableArray *newLocalTasks = [NSMutableArray arrayWithCapacity:[localTasks count]];
+  
+  // Separate the existing local lists into ones that 
+  // we have synced before and ones we have not.
+  for (Task *localTask in localTasks)
+  {
+    if (localTask.key != nil)
+    {
+      [savedLocalTasks addObject:localTask];
+    }
+    else
+    {
+      [newLocalTasks addObject:localTask];
+    }
+  }
+  
+  NSLog(@"Saved local tasks: %@", [savedLocalTasks description]);
+  NSLog(@"New local tasks: %@", [newLocalTasks description]);
+  
+  NSMutableArray *newRemoteTasks = [NSMutableArray arrayWithArray:[self.client getTasksForListWithKey:taskList.key error:error]];
+  if (*error != nil) { return; }
+  
+  NSMutableArray *localTasksToDelete = [NSMutableArray arrayWithCapacity:[savedLocalTasks count]];
+  
+  //
+  // For the lists we have saved before, try to find the matching remote list.
+  // ** If it's not there, it's been deleted. **
+  //
+  for (Task *localTask in savedLocalTasks)
+  {
+    DonezoTask *existingRemoteTask = nil;
+    for (DonezoTask *remoteTask in newRemoteTasks)
+    {
+      if ([localTask.key isEqual:remoteTask.key])
+      {
+        existingRemoteTask = remoteTask;
+        break;
+      }
+    }
+    
+    if (existingRemoteTask)
+    {
+      [newRemoteTasks removeObject:existingRemoteTask];
+    }
+    else
+    {
+      // this list is no longer present remotely. delete it here.
+      [localTasksToDelete addObject:localTask];
+    }
+  }
+  
+  //
+  // Now, add and remove existing lists as detailed by the various collections.
+  //
+  for (Task *taskToDelete in localTasksToDelete)
+  {
+    NSLog(@"Deleting local task: %@", taskToDelete.key);
+    [self.context deleteObject:taskToDelete];
+  }
+  for (DonezoTask *taskToAddLocally in newRemoteTasks)
+  {
+    NSLog(@"Adding remote task locally: %@", taskToAddLocally.key);
+    Task *newTask = (Task*)[NSEntityDescription insertNewObjectForEntityForName:@"Task" inManagedObjectContext:self.context];
+    newTask.key = taskToAddLocally.key;
+    newTask.body = taskToAddLocally.body;
+    newTask.taskList = taskList;
+//    newTask.project = [Project findProjectWithName:taskToAddLocally.project inContext:self.context];
+//    newTask.contexts = 
+  }
+  for (Task *taskToAdd in newLocalTasks)
+  {
+    NSLog(@"Adding local task remotely: %@", taskToAdd.key);
+    
+    DonezoTask *task = [[[DonezoTask alloc] init] autorelease];
+    task.body = taskToAdd.body;
+    task.project = taskToAdd.project.name;
+    task.contexts = [taskToAdd contextNames];
+    
+    DonezoTaskList *remoteList = [[[DonezoTaskList alloc] init] autorelease];
+    remoteList.key = taskList.key;
+    remoteList.name = taskList.name;
+    
+    [client saveTask:&task taskList:remoteList error:error];
+    if (*error)
+    {
+      return;
+    }
+    taskToAdd.key = task.key;
+  }
 }
 
 - (NSArray*) getLocalTasksForTaskList:(TaskList*)taskList error:(NSError**)error

@@ -16,6 +16,7 @@
 {
 }
 
+@property (nonatomic, retain) NSNumber *key;
 @property (nonatomic, retain) NSString *body;
 @property (nonatomic, retain) NSDate *dueDate;
 @property (nonatomic, retain) NSNumber *complete;
@@ -28,6 +29,8 @@
 @property (readonly, nonatomic, copy) NSString *contextsString;
 @property (nonatomic, assign) BOOL isComplete;
 
+- (NSArray *)contextNames;
+
 @end
 
 
@@ -36,6 +39,5 @@
 - (void)removeContextsObject:(NSManagedObject *)value;
 - (void)addContexts:(NSSet *)value;
 - (void)removeContexts:(NSSet *)value;
-
 @end
 
