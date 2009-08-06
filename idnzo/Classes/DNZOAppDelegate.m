@@ -10,6 +10,7 @@
 
 @interface DNZOAppDelegate (Private)
 - (void)createInitialObjects;
+- (void)sync;
 @end
 
 @implementation DNZOAppDelegate
@@ -29,8 +30,21 @@ BOOL firstRun;
   return self;
 }
 
+- (void) sync
+{  
+  DonezoAPIClient *client = [[DonezoAPIClient alloc] initWithUsername:@"some@user.com" andPassword:@"" toBaseUrl:@"http://localhost:8081/"];
+  DonezoSyncMaster *syncMaster = [[DonezoSyncMaster alloc] initWithDonezoClient:client andContext:self.managedObjectContext];
+  
+  NSError *error = nil;
+  [syncMaster performSync:&error];
+  if (error != nil)
+  {
+    NSLog(@"Error! %@", [error description]);
+  }
+  NSLog(@"Finished sync.");
+}
 
-- (void)applicationDidFinishLaunching:(UIApplication *)application
+- (void) applicationDidFinishLaunching:(UIApplication *)application
 {  
   self.mainController.managedObjectContext = [self managedObjectContext];
   
@@ -38,6 +52,9 @@ BOOL firstRun;
   {
     [self createInitialObjects];
   }
+  
+  NSLog(@"Syncing...");
+  [self sync];
   
   // Add the current view in the navigationController to the main window.
   [window addSubview:navigationController.view];
@@ -48,7 +65,7 @@ BOOL firstRun;
  Performs the save action for the application, which is to send the save:
  message to the application's managed object context.
  */
-- (IBAction)saveAction:(id)sender
+- (IBAction) saveAction:(id)sender
 {
   NSError *error;
   if (![[self managedObjectContext] save:&error])
@@ -64,16 +81,14 @@ BOOL firstRun;
  */
 - (NSManagedObjectContext *) managedObjectContext
 {
-  if (managedObjectContext != nil)
-  {
-    return managedObjectContext;
-  }
-	
-  NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
-  if (coordinator != nil)
-  {
-    managedObjectContext = [[NSManagedObjectContext alloc] init];
-    [managedObjectContext setPersistentStoreCoordinator:coordinator];
+  if (managedObjectContext == nil)
+  {	
+    NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
+    if (coordinator != nil)
+    {
+      managedObjectContext = [[NSManagedObjectContext alloc] init];
+      [managedObjectContext setPersistentStoreCoordinator:coordinator];
+    }
   }
   return managedObjectContext;
 }

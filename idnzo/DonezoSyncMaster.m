@@ -38,13 +38,15 @@
 
 - (void) performSync:(NSError**)error
 {
+  NSLog(@"Syncing lists..");
   NSArray *lists = [self syncLists:error];
-  if (error != nil) return;
+  if (*error != nil) return;
   
   for (TaskList *list in lists)
   {
+    NSLog(@"Syncing tasks for list %@...", list.name);
     [self syncList:list error:error];
-    if (error != nil) { return; }
+    if (*error != nil) { return; }
   }
   
   [self.context save:error];
@@ -53,7 +55,7 @@
 - (NSArray*) syncLists:(NSError**)error
 {
   NSArray *localLists = [self getLocalTaskLists:error];
-  if (error != nil) { return nil; }
+  if (*error != nil) { return nil; }
     
   NSMutableArray *savedLocalLists = [NSMutableArray arrayWithCapacity:[localLists count]];
   NSMutableArray *newLocalLists = [NSMutableArray arrayWithCapacity:[localLists count]];
@@ -71,9 +73,12 @@
       [newLocalLists addObject:localList];
     }
   }
+  
+  NSLog(@"Saved local lists: %@", [savedLocalLists description]);
+  NSLog(@"New local lists: %@", [newLocalLists description]);
     
   NSMutableArray *newRemoteLists = [NSMutableArray arrayWithArray:[self.client getLists:error]];
-  if (error != nil) { return nil; }
+  if (*error != nil) { return nil; }
   
   NSMutableArray *localListsToDelete = [NSMutableArray arrayWithCapacity:[savedLocalLists count]];
   NSMutableArray *localListsToAddRemotely = [NSMutableArray arrayWithCapacity:[newLocalLists count]];
@@ -139,6 +144,7 @@
       // remove object from collection of new lists; we know about it already
       [newRemoteLists removeObject:existingRemoteList];
       localList.key = existingRemoteList.key;
+      NSLog(@"Reconciled remote list and local list %@!", existingRemoteList.name);
     }
     else
     {
@@ -151,6 +157,8 @@
   //
   for (TaskList *listToDelete in localListsToDelete)
   {
+    NSLog(@"Deleting local list: %@", listToDelete.name);
+    
     for (Task *taskToDelete in [listToDelete tasks])
     {
       [self.context deleteObject:taskToDelete];
@@ -159,13 +167,15 @@
   }
   for (DonezoTaskList *listToAddLocally in newRemoteLists)
   {
-    NSLog(@"Adding list %@!", listToAddLocally.name);
+    NSLog(@"Adding remote list locally: %@", listToAddLocally.name);
     TaskList *newList = (TaskList*)[NSEntityDescription insertNewObjectForEntityForName:@"TaskList" inManagedObjectContext:self.context];
     newList.name = listToAddLocally.name;
     newList.key = listToAddLocally.key;
   }
   for (TaskList *listToAdd in localListsToAddRemotely)
   {
+    NSLog(@"Adding local list remotely: %@", listToAdd.name);
+    
     DonezoTaskList *list = [[[DonezoTaskList alloc] init] autorelease];
     list.name = listToAdd.name;
     

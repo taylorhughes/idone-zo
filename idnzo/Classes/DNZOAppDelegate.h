@@ -8,6 +8,8 @@
 
 #import "MainViewController.h"
 #import "Context.h"
+#import "DonezoAPIClient.h"
+#import "DonezoSyncMaster.h"
 
 @class Project, Context, TaskList, Task;
 
