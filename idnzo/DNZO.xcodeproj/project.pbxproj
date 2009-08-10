@@ -47,6 +47,8 @@
 		348E18D10FA7DE7A00B75000 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 348E18D00FA7DE7A00B75000 /* SenTestingKit.framework */; };
 		3494869810152A3B00DF81F3 /* TaskList.m in Sources */ = {isa = PBXBuildFile; fileRef = 3494869710152A3B00DF81F3 /* TaskList.m */; };
 		3494869910152A3B00DF81F3 /* TaskList.m in Sources */ = {isa = PBXBuildFile; fileRef = 3494869710152A3B00DF81F3 /* TaskList.m */; };
+		34AF21F0102FC20B001FC4B7 /* MockDonezoAPIClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AF21ED102FC20B001FC4B7 /* MockDonezoAPIClient.m */; };
+		34AF21F1102FC20B001FC4B7 /* SyncTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AF21EF102FC20B001FC4B7 /* SyncTest.m */; };
 		34B7D83E0FC3860600A91E43 /* checked.png in Resources */ = {isa = PBXBuildFile; fileRef = 34B7D83C0FC3860600A91E43 /* checked.png */; };
 		34B7D83F0FC3860600A91E43 /* unchecked.png in Resources */ = {isa = PBXBuildFile; fileRef = 34B7D83D0FC3860600A91E43 /* unchecked.png */; };
 		34B7D8400FC3860600A91E43 /* checked.png in Resources */ = {isa = PBXBuildFile; fileRef = 34B7D83C0FC3860600A91E43 /* checked.png */; };
@@ -135,6 +137,10 @@
 		3490B9C20FA7DD60004195D9 /* DNZO.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DNZO.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3494869610152A3B00DF81F3 /* TaskList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskList.h; sourceTree = "<group>"; };
 		3494869710152A3B00DF81F3 /* TaskList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaskList.m; sourceTree = "<group>"; };
+		34AF21EC102FC20B001FC4B7 /* MockDonezoAPIClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MockDonezoAPIClient.h; path = Test/MockDonezoAPIClient.h; sourceTree = "<group>"; };
+		34AF21ED102FC20B001FC4B7 /* MockDonezoAPIClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MockDonezoAPIClient.m; path = Test/MockDonezoAPIClient.m; sourceTree = "<group>"; };
+		34AF21EE102FC20B001FC4B7 /* SyncTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SyncTest.h; path = Test/SyncTest.h; sourceTree = "<group>"; };
+		34AF21EF102FC20B001FC4B7 /* SyncTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SyncTest.m; path = Test/SyncTest.m; sourceTree = "<group>"; };
 		34B7D83C0FC3860600A91E43 /* checked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = checked.png; path = Resources/checked.png; sourceTree = "<group>"; };
 		34B7D83D0FC3860600A91E43 /* unchecked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = unchecked.png; path = Resources/unchecked.png; sourceTree = "<group>"; };
 		34C51AC20FB92A9D0024A5CD /* EditProjectPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditProjectPicker.h; sourceTree = "<group>"; };
@@ -313,6 +319,10 @@
 		348E18D50FA7DE8D00B75000 /* Test Cases */ = {
 			isa = PBXGroup;
 			children = (
+				34AF21EC102FC20B001FC4B7 /* MockDonezoAPIClient.h */,
+				34AF21ED102FC20B001FC4B7 /* MockDonezoAPIClient.m */,
+				34AF21EE102FC20B001FC4B7 /* SyncTest.h */,
+				34AF21EF102FC20B001FC4B7 /* SyncTest.m */,
 				34770B330FAFE4C200AD8397 /* DonezoAPIClientTest.h */,
 				34770B340FAFE4C200AD8397 /* DonezoAPIClientTest.m */,
 			);
@@ -529,6 +539,8 @@
 				34E13DED10225E54005A582E /* GoogleAppEngineAuthenticator.m in Sources */,
 				34E13DF410225E75005A582E /* NSString+Donezo.m in Sources */,
 				3412017110294BF200A0439E /* DonezoSyncMaster.m in Sources */,
+				34AF21F0102FC20B001FC4B7 /* MockDonezoAPIClient.m in Sources */,
+				34AF21F1102FC20B001FC4B7 /* SyncTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
