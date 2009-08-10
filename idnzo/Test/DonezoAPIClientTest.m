@@ -26,6 +26,7 @@
   BOOL result = [auth login:&error];
   STAssertTrue(result, @"Local login should not fail.");
   
+  /*
   auth = [[GoogleAppEngineAuthenticator alloc] initForGAEAppAtUrl:[NSURL URLWithString:@"http://www.done-zo.com/"]
                                                      withUsername:@"whorastic@hotmail.com"
                                                       andPassword:@"testaccountpassword"];
@@ -38,6 +39,7 @@
   }
   
   STAssertTrue(result, @"Login should not fail.");
+  */
 }
 
 - (DonezoAPIClient*)getClient
