@@ -10,6 +10,35 @@
 
 @implementation SyncTest
 
+@synthesize context;
+
+- (void) setUp
+{
+  NSManagedObjectModel *managedObjectModel = [[NSManagedObjectModel mergedModelFromBundles:nil] retain];    
+  
+  NSString *filename = [NSString stringWithFormat:@"donezo.%0.4f.sqlite", [NSDate timeIntervalSinceReferenceDate]];
+  NSString *path = [NSTemporaryDirectory() stringByAppendingPathComponent:filename];
+  NSURL *storeUrl = [NSURL fileURLWithPath:path];
+  NSLog(@"Store URL: %@", storeUrl);
+  
+  NSError *error;
+  NSPersistentStoreCoordinator *persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:managedObjectModel];
+  if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeUrl options:nil error:&error])
+  {
+    // Handle error
+    NSLog(@"FuuuucK: %@ %@", [error description], [error userInfo]);
+  }
+  
+  self.context = [[NSManagedObjectContext alloc] init];
+  [self.context setPersistentStoreCoordinator:persistentStoreCoordinator];
+  
+  [self.context save:&error];
+}
+
+- (void) tearDown
+{
+}
+
 // Makes sure we properly sync remote and local task lists.
 //
 - (void) testMergeTaskLists

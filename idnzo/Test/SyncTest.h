@@ -9,6 +9,9 @@
 #import <SenTestingKit/SenTestingKit.h>
 
 @interface SyncTest : SenTestCase {
+  NSManagedObjectContext *context;
 }
+
+@property (nonatomic, retain) NSManagedObjectContext *context;
 
 @end

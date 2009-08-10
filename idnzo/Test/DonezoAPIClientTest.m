@@ -17,18 +17,6 @@
 
 @implementation DonezoAPIClientTest
 
-+ (void) setUp
-{
-}
-
-- (void) setUp
-{
-}
-
-- (void) tearDown
-{
-}
-
 - (void) testLogin
 {
   GoogleAppEngineAuthenticator *auth = [[GoogleAppEngineAuthenticator alloc] initForGAEAppAtUrl:[NSURL URLWithString:TEST_URL]

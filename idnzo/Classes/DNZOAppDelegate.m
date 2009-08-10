@@ -122,6 +122,7 @@ BOOL firstRun;
 	
   NSString *path = [[self applicationDocumentsDirectory] stringByAppendingPathComponent:@"donezo.sqlite"];
   NSURL *storeUrl = [NSURL fileURLWithPath:path];
+  NSLog(@"Store url: %@", storeUrl);
 	firstRun = ![[NSFileManager defaultManager] fileExistsAtPath:path];
   
 	NSError *error;

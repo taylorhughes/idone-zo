@@ -11,6 +11,7 @@
 @implementation DonezoTask
 
 @synthesize key;
+@synthesize taskListKey;
 @synthesize body;
 @synthesize project;
 @synthesize contexts;
@@ -29,6 +30,7 @@
 - (void) dealloc
 {
   [key release];
+  [taskListKey release];
   [body release];
   [project release];
   [contexts release];
@@ -58,6 +60,7 @@
   DonezoTask *task = [[[DonezoTask alloc] init] autorelease];
   
   task.key = [dict valueForKey:@"id"];
+  task.taskListKey = [dict valueForKey:@"task_list"];
   task.body = [dict valueForKey:@"body"];
   task.project = [dict valueForKey:@"project"];
   task.contexts = [dict valueForKey:@"contexts"];

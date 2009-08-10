@@ -10,6 +10,7 @@
 
 @interface DonezoTask : NSObject {
   NSNumber *key;
+  NSString *taskListKey;
   NSString *body;
   NSString *project;
   NSArray  *contexts;
@@ -17,6 +18,7 @@
 }
 
 @property (nonatomic, copy) NSNumber *key;
+@property (nonatomic, copy) NSString *taskListKey;
 @property (nonatomic, copy) NSString *body;
 @property (nonatomic, copy) NSString *project;
 @property (nonatomic, copy) NSArray  *contexts;
