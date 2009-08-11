@@ -134,7 +134,7 @@
 		348E18C70FA7DE1E00B75000 /* Test-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Test-Info.plist"; sourceTree = "<group>"; };
 		348E18D00FA7DE7A00B75000 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		3490B9A60FA7DB15004195D9 /* DNZO_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNZO_Prefix.pch; sourceTree = "<group>"; };
-		3490B9C20FA7DD60004195D9 /* DNZO.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DNZO.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3490B9C20FA7DD60004195D9 /* Done-zo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Done-zo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3494869610152A3B00DF81F3 /* TaskList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskList.h; sourceTree = "<group>"; };
 		3494869710152A3B00DF81F3 /* TaskList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaskList.m; sourceTree = "<group>"; };
 		34AF21EC102FC20B001FC4B7 /* MockDonezoAPIClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MockDonezoAPIClient.h; path = Test/MockDonezoAPIClient.h; sourceTree = "<group>"; };
@@ -227,7 +227,7 @@
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				3490B9C20FA7DD60004195D9 /* DNZO.app */,
+				3490B9C20FA7DD60004195D9 /* Done-zo.app */,
 				348E18C60FA7DE1E00B75000 /* Test.octest */,
 			);
 			name = Products;
@@ -371,9 +371,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		1D6058900D05DD3D006BFB54 /* DNZO */ = {
+		1D6058900D05DD3D006BFB54 /* Done-zo */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "DNZO" */;
+			buildConfigurationList = 1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "Done-zo" */;
 			buildPhases = (
 				1D60588D0D05DD3D006BFB54 /* Resources */,
 				1D60588E0D05DD3D006BFB54 /* Sources */,
@@ -383,9 +383,9 @@
 			);
 			dependencies = (
 			);
-			name = DNZO;
+			name = "Done-zo";
 			productName = DNZO;
-			productReference = 3490B9C20FA7DD60004195D9 /* DNZO.app */;
+			productReference = 3490B9C20FA7DD60004195D9 /* Done-zo.app */;
 			productType = "com.apple.product-type.application";
 		};
 		348E18C50FA7DE1E00B75000 /* Test */ = {
@@ -418,7 +418,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				1D6058900D05DD3D006BFB54 /* DNZO */,
+				1D6058900D05DD3D006BFB54 /* Done-zo */,
 				348E18C50FA7DE1E00B75000 /* Test */,
 			);
 		};
@@ -557,7 +557,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = DNZO_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
-				PRODUCT_NAME = DNZO;
+				PRODUCT_NAME = "Done-zo";
 			};
 			name = Debug;
 		};
@@ -569,7 +569,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = DNZO_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
-				PRODUCT_NAME = DNZO;
+				PRODUCT_NAME = "Done-zo";
 			};
 			name = Release;
 		};
@@ -659,7 +659,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "DNZO" */ = {
+		1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "Done-zo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1D6058940D05DD3E006BFB54 /* Debug */,
