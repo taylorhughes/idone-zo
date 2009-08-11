@@ -7,6 +7,7 @@
 //
 
 #import "DonezoAPIClient.h"
+#import "JSON.h"
 
 @interface MockDonezoAPIClient : DonezoAPIClient {
   NSMutableArray *taskLists;

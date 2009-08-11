@@ -80,6 +80,8 @@
   NSMutableArray *newRemoteLists = [NSMutableArray arrayWithArray:[self.client getLists:error]];
   if (*error != nil) { return nil; }
   
+  NSLog(@"New remote lists: %@", [newRemoteLists description]);
+  
   NSMutableArray *localListsToDelete = [NSMutableArray arrayWithCapacity:[savedLocalLists count]];
   NSMutableArray *localListsToAddRemotely = [NSMutableArray arrayWithCapacity:[newLocalLists count]];
   

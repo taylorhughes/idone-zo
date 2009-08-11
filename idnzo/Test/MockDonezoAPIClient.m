@@ -26,6 +26,9 @@
   SBJsonParser *parser = [[[SBJsonParser alloc] init] autorelease];
   NSDictionary *dict = (NSDictionary*) [parser objectWithString:jsonData];
   
+  NSLog(@">> STRING:      %@", jsonData);
+  NSLog(@">> PARSED DICT: %@", dict);
+  
   self.taskLists = [NSMutableArray array];
   self.tasks = [NSMutableDictionary dictionary];
   

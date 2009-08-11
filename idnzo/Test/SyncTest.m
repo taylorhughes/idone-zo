@@ -15,6 +15,25 @@
 @synthesize client;
 @synthesize syncMaster;
 
+- (TaskList *) localListWithKey:(NSString*)key
+{
+  NSFetchRequest *request = [[NSFetchRequest alloc] init];
+  request.entity = [NSEntityDescription entityForName:@"TaskList" inManagedObjectContext:self.context];;
+  request.predicate = [NSPredicate predicateWithFormat:@"key == %@", key];
+  
+  NSError *error = nil;  
+  NSArray *result = [self.context executeFetchRequest:request error:&error];
+  return [result objectAtIndex:0];  
+}
+
+- (NSArray *) localLists
+{
+  NSFetchRequest *request = [[NSFetchRequest alloc] init];
+  request.entity = [NSEntityDescription entityForName:@"TaskList" inManagedObjectContext:self.context];
+  NSError *error = nil;  
+  return [self.context executeFetchRequest:request error:&error];
+}
+
 - (void) setUp
 {
   NSManagedObjectModel *managedObjectModel = [[NSManagedObjectModel mergedModelFromBundles:[NSBundle allBundles]] retain];
@@ -59,9 +78,9 @@
 - (void) testMergeTaskLists
 {
   [self.client loadTasksAndTaskLists:@"{ \
-    task_lists: [ \
-     { key: 'tasks', name: 'Tasks' }, \
-     { key: 'groceries', name: 'Groceries' } \
+    \"task_lists\": [ \
+     { \"key\": \"tasks\", \"name\": \"Tasks\" }, \
+     { \"key\": \"groceries\", \"name\": \"Groceries\" } \
     ] \
   }"];
   
@@ -76,7 +95,14 @@
   
   NSArray *lists = [client getLists:&error];
   STAssertTrue(error == nil, @"Encountered an error! %@", [error description]);
-  STAssertEquals([lists count], (NSUInteger)3, @"Wrong count for task lists after sync!");
+  STAssertEquals([lists count], (NSUInteger)3, @"Wrong count for remote task lists after sync!");
+  
+  lists = [self localLists];
+  STAssertEquals([lists count], (NSUInteger)3, @"Wrong count for local task lists after sync!");
+  
+  TaskList *localTasks = [self localListWithKey:@"tasks"];
+  STAssertNotNil(localTasks, @"Local tasks should not be nil!");
+  STAssertEqualObjects(localTasks.name, @"Tasks", @"Local list should be called Tasks");
 }
 
 // Makes sure we properly handle the case when we have new
@@ -100,5 +126,6 @@
 - (void) testUpdatedTasksWithConflict
 {
 }
+
 
 @end
