@@ -20,7 +20,7 @@
   [super dealloc];
 }
 
-- (void) setTasksAndTaskLists:(NSString*)jsonData
+- (void) loadTasksAndTaskLists:(NSString*)jsonData
 {
   // parse json into dictionary
   SBJsonParser *parser = [[[SBJsonParser alloc] init] autorelease];

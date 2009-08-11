@@ -11,17 +11,20 @@
 @implementation SyncTest
 
 @synthesize context;
+@synthesize tempPath;
+@synthesize client;
+@synthesize syncMaster;
 
 - (void) setUp
 {
-  NSManagedObjectModel *managedObjectModel = [[NSManagedObjectModel mergedModelFromBundles:nil] retain];    
+  NSManagedObjectModel *managedObjectModel = [[NSManagedObjectModel mergedModelFromBundles:[NSBundle allBundles]] retain];
   
   NSString *filename = [NSString stringWithFormat:@"donezo.%0.4f.sqlite", [NSDate timeIntervalSinceReferenceDate]];
-  NSString *path = [NSTemporaryDirectory() stringByAppendingPathComponent:filename];
-  NSURL *storeUrl = [NSURL fileURLWithPath:path];
-  NSLog(@"Store URL: %@", storeUrl);
+  self.tempPath = [NSTemporaryDirectory() stringByAppendingPathComponent:filename];
+  NSURL *storeUrl = [NSURL fileURLWithPath:self.tempPath];
+  //NSLog(@"Store URL: %@", storeUrl);
   
-  NSError *error;
+  NSError *error = nil;
   NSPersistentStoreCoordinator *persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:managedObjectModel];
   if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeUrl options:nil error:&error])
   {
@@ -31,27 +34,49 @@
   
   self.context = [[NSManagedObjectContext alloc] init];
   [self.context setPersistentStoreCoordinator:persistentStoreCoordinator];
-  
   [self.context save:&error];
+  NSAssert(error == nil, @"Error saving persistent store!");
+  
+  self.client = [[MockDonezoAPIClient alloc] init];
+  
+  self.syncMaster = [[DonezoSyncMaster alloc] initWithDonezoClient:self.client andContext:self.context];
 }
 
 - (void) tearDown
 {
+  NSError *error = nil;
+  [[NSFileManager defaultManager] removeItemAtPath:self.tempPath error:&error];
+  NSAssert(error == nil, @"Error unlinking file!");
 }
 
 // Makes sure we properly sync remote and local task lists.
 //
-- (void) testMergeTaskLists
-{
-}
-
-// Tests the case where we have a remote list called "Tasks"
+// Also tests the case where we have a remote list called "Tasks"
 // and a local list called "Tasks", and when we sync the first
 // time the local app uses the name to reconcile the remote and
 // local lists.
 //
-- (void) testReconcileTaskLists
+- (void) testMergeTaskLists
 {
+  [self.client loadTasksAndTaskLists:@"{ \
+    task_lists: [ \
+     { key: 'tasks', name: 'Tasks' }, \
+     { key: 'groceries', name: 'Groceries' } \
+    ] \
+  }"];
+  
+  TaskList *list = (TaskList*)[NSEntityDescription insertNewObjectForEntityForName:@"TaskList" inManagedObjectContext:self.context];
+  list.name = @"Another List";
+  list = (TaskList*)[NSEntityDescription insertNewObjectForEntityForName:@"TaskList" inManagedObjectContext:self.context];
+  list.name = @"Tasks";
+  
+  NSError *error = nil;
+  
+  [self.syncMaster performSync:&error];
+  
+  NSArray *lists = [client getLists:&error];
+  STAssertTrue(error == nil, @"Encountered an error! %@", [error description]);
+  STAssertEquals([lists count], (NSUInteger)3, @"Wrong count for task lists after sync!");
 }
 
 // Makes sure we properly handle the case when we have new

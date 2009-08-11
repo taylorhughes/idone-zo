@@ -7,11 +7,19 @@
 //
 
 #import <SenTestingKit/SenTestingKit.h>
+#import "MockDonezoAPIClient.h"
+#import "DonezoSyncMaster.h"
 
 @interface SyncTest : SenTestCase {
   NSManagedObjectContext *context;
+  NSString *tempPath;
+  MockDonezoAPIClient *client;
+  DonezoSyncMaster *syncMaster;
 }
 
 @property (nonatomic, retain) NSManagedObjectContext *context;
+@property (nonatomic, copy) NSString *tempPath;
+@property (nonatomic, retain) MockDonezoAPIClient *client;
+@property (nonatomic, retain) DonezoSyncMaster *syncMaster;
 
 @end

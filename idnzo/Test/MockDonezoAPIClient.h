@@ -16,6 +16,6 @@
 @property (retain, nonatomic) NSMutableArray *taskLists;
 @property (retain, nonatomic) NSMutableDictionary *tasks;
 
-- (void) setTasksAndTaskLists:(NSString*)jsonData;
+- (void) loadTasksAndTaskLists:(NSString*)jsonData;
 
 @end
