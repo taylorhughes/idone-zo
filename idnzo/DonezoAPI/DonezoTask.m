@@ -63,8 +63,12 @@
   task.taskListKey = [dict valueForKey:@"task_list"];
   task.body = [dict valueForKey:@"body"];
   task.project = [dict valueForKey:@"project"];
+  if ([task.project isMemberOfClass:[NSNull class]])
+  {
+    task.project = nil;
+  }
   task.contexts = [dict valueForKey:@"contexts"];
-  if (!task.contexts)
+  if (!task.contexts || [task.contexts isMemberOfClass:[NSNull class]])
   {
     task.contexts = [NSArray array];
   }

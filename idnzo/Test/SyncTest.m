@@ -118,6 +118,8 @@
     
     STAssertEqualObjects(match.body, task.body, @"Bodies differ for task '%@' (%@)", task.body, task.key);
     STAssertEqualObjects(match.project, task.project.name, @"Projects differ for task '%@' (%@)", match.body, task.key);
+    NSLog(@"Local tasks are: %@", [task contextNames]);
+    NSLog(@"Remote tasks are: %@", match.contexts);
     STAssertEqualObjects(match.contexts, [task contextNames], @"Contexts differ for task '%@' (%@)", match.body, task.key);
   }
 }
@@ -193,7 +195,7 @@
    \"tasks\": [ \
      { \"id\": 1, \"body\": \"A remote task in Tasks.\", \"task_list\": \"tasks\", \"project\": \"Some project\" }, \
      { \"id\": 2, \"body\": \"A remote task in Groceries.\", \"task_list\": \"groceries\", \"contexts\": [\"home\", \"work\"] }, \
-     { \"id\": 3, \"body\": \"A second remote task in Groceries.\", \"task_list\": \"groceries\" } \
+     { \"id\": 3, \"body\": \"A second remote task in Groceries.\", \"task_list\": \"groceries\", \"project\": null, \"contexts\": null } \
    ] \
    }"];
   
