@@ -68,6 +68,59 @@
   NSAssert(error == nil, @"Error unlinking file!");
 }
 
+- (void) assertListsSynced:(int)numLists
+{
+  NSError *error = nil;
+  NSArray *remoteLists = [client getLists:&error];
+  NSArray *localLists = [self localLists];
+  
+  STAssertTrue(error == nil, @"Encountered an error! %@", [error description]);
+  STAssertEquals([remoteLists count], [localLists count], @"Lists counts differ remotely and locally.");
+  STAssertEquals([remoteLists count], (NSUInteger)numLists, @"Lists count is incorrect, should be %d", numLists);
+  
+  for (DonezoTaskList *remoteList in remoteLists)
+  {
+    TaskList *match = nil;
+    for (TaskList *localList in localLists)
+    {
+      if ([localList.key isEqualToString:remoteList.key])
+      {
+        match = localList;
+        break;
+      }
+    }
+    STAssertNotNil(match, @"Could not find a matching local list for list %@ (key: %@)", remoteList.name, remoteList.key);
+  }
+}
+
+- (void) assertTasksSynced:(int)numTasks forListWithKey:(NSString*)key
+{
+  NSError *error = nil;
+  NSArray *remoteTasks = [client getTasksForListWithKey:key error:&error];
+  STAssertNil(error, @"There has been an error fetching remote tasks! %@", [error description]);
+  NSArray *localTasks = [[[self localListWithKey:key] tasks] allObjects];
+  
+  STAssertEquals([localTasks count], [remoteTasks count], @"Local and remote task counts for list %@ differ!", key);
+  STAssertEquals([localTasks count], (NSUInteger)numTasks, @"Local and remote count should be %d for list %@!", numTasks, key);
+  
+  for (Task *task in localTasks)
+  {
+    DonezoTask *match = nil;
+    for (DonezoTask *remoteTask in remoteTasks)
+    {
+      if ([remoteTask.key isEqual:task.key])
+      {
+        match = remoteTask;
+        break;
+      }
+    }
+    STAssertNotNil(match, @"Could not find a matching task with key %@ (body: %@)!", task.key, task.body);
+    STAssertEqualObjects(match.body, task.body, @"Bodies differ for task %@ (%@)", task.body, task.key);
+    STAssertEqualObjects(match.project, task.project.name, @"Projects differ for task %@ (%@)", match.body, task.key);
+    STAssertEqualObjects(match.contexts, [task contextNames], @"Contexts differ for task %@ (%@)", match.body, task.key);
+  }
+}
+
 // Makes sure we properly sync remote and local task lists.
 //
 // Also tests the case where we have a remote list called "Tasks"
@@ -90,33 +143,69 @@
   list.name = @"Tasks";
   
   NSError *error = nil;
-  
   [self.syncMaster performSync:&error];
-  
-  NSArray *lists = [client getLists:&error];
-  STAssertTrue(error == nil, @"Encountered an error! %@", [error description]);
-  STAssertEquals([lists count], (NSUInteger)3, @"Wrong count for remote task lists after sync!");
-  
-  lists = [self localLists];
-  STAssertEquals([lists count], (NSUInteger)3, @"Wrong count for local task lists after sync!");
   
   TaskList *localTasks = [self localListWithKey:@"tasks"];
   STAssertNotNil(localTasks, @"Local tasks should not be nil!");
+  STAssertNotNil(localTasks.key, @"Local tasks should now have a key assigned.");
   STAssertEqualObjects(localTasks.name, @"Tasks", @"Local list should be called Tasks");
+  
+  [self assertListsSynced:3];
 }
 
 // Makes sure we properly handle the case when we have new
 // tasks both locally and remotely.
 //
-- (void) testNewTasksRemoteAndLocal
-{
-}
-
-// Tests to make sure we sync existing tasks to get remote
+// Then, test to make sure we sync existing tasks to get remote
 // changes and that local changes are saved remotely.
 //
-- (void) testUpdatedTasks
+- (void) testNewTasksRemoteAndLocal
 {
+  [self.client loadTasksAndTaskLists:@"{ \
+   \"task_lists\": [ \
+     { \"key\": \"tasks\", \"name\": \"Tasks\" }, \
+     { \"key\": \"groceries\", \"name\": \"Groceries\" } \
+   ], \
+   \"tasks\": [ \
+     { \"id\": 1, \"body\": \"A remote task in Tasks.\", \"task_list\": \"tasks\" }, \
+     { \"id\": 2, \"body\": \"A remote task in Groceries.\", \"task_list\": \"groceries\" }, \
+     { \"id\": 3, \"body\": \"A second remote task in Groceries.\", \"task_list\": \"groceries\" } \
+   ] \
+   }"];
+  
+  TaskList *anotherList = (TaskList*)[NSEntityDescription insertNewObjectForEntityForName:@"TaskList" inManagedObjectContext:self.context];
+  anotherList.name = @"Another List";
+  
+  TaskList *tasksList = (TaskList*)[NSEntityDescription insertNewObjectForEntityForName:@"TaskList" inManagedObjectContext:self.context];
+  tasksList.name = @"Tasks";
+  tasksList.key = @"tasks";
+  
+  Task *task = (Task*)[NSEntityDescription insertNewObjectForEntityForName:@"Task" inManagedObjectContext:self.context];
+  task.taskList = tasksList;
+  task.body = @"A local task in the Tasks list";
+  
+  task = (Task*)[NSEntityDescription insertNewObjectForEntityForName:@"Task" inManagedObjectContext:self.context];
+  task.taskList = tasksList;
+  task.body = @"A local task in the Tasks list that has been deleted remotely!";
+  task.key = [NSNumber numberWithInt:4];
+  
+  task = (Task*)[NSEntityDescription insertNewObjectForEntityForName:@"Task" inManagedObjectContext:self.context];
+  task.taskList = anotherList;
+  task.body = @"A task in the Another List list.";
+  
+  task = (Task*)[NSEntityDescription insertNewObjectForEntityForName:@"Task" inManagedObjectContext:self.context];
+  task.taskList = anotherList;
+  task.body = @"A second task in the Another List list.";
+  
+  NSError *error = nil;
+  [self.syncMaster performSync:&error];
+ 
+  [self assertListsSynced:3];
+  [self assertTasksSynced:2 forListWithKey:@"groceries"];
+  [self assertTasksSynced:2 forListWithKey:@"tasks"];
+  // key in this case is just lowercase taskList.name since it's mock donezo api client
+  [self assertTasksSynced:2 forListWithKey:@"another list"];
+
 }
 
 // Tests to make sure we properly handle the case where

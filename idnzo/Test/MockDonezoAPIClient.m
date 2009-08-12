@@ -122,10 +122,11 @@
 
 - (void) saveList:(DonezoTaskList**)list error:(NSError**)error
 {
-  if (!(*list).key)
+  if (!((*list).key))
   {
-    (*list).key = [(*list).key lowercaseString];
+    (*list).key = [(*list).name lowercaseString];
     [self.taskLists addObject:(*list)];    
+    [self.tasks setValue:[NSMutableArray array] forKey:(*list).key];
   }
 }
 

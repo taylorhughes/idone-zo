@@ -265,6 +265,7 @@
     newTask.key = taskToAddLocally.key;
     newTask.body = taskToAddLocally.body;
     newTask.taskList = taskList;
+    NSLog(@"Added new task (%@) with key (%@)", newTask.body, newTask.key);
 //    newTask.project = [Project findProjectWithName:taskToAddLocally.project inContext:self.context];
 //    newTask.contexts = 
   }

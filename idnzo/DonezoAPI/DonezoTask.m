@@ -64,6 +64,10 @@
   task.body = [dict valueForKey:@"body"];
   task.project = [dict valueForKey:@"project"];
   task.contexts = [dict valueForKey:@"contexts"];
+  if (!task.contexts)
+  {
+    task.contexts = [NSArray array];
+  }
   task.dueDate = [DonezoAPIClient dateFromDonezoDateString:[dict valueForKey:@"due_date"]];
   
   return task;
