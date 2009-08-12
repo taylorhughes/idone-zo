@@ -305,17 +305,7 @@
   NSString *newProject = [[(EditProjectPicker*)sender selected] 
                            stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
   
-  Project *existingProject = [Project findProjectWithName:newProject inContext:[self.task managedObjectContext]];
-  
-  if (existingProject)
-  {
-    self.task.project = existingProject;
-  }
-  else
-  {
-    self.task.project = (Project*)[NSEntityDescription insertNewObjectForEntityForName:@"Project" inManagedObjectContext:[self.task managedObjectContext]];
-    self.task.project.name = newProject;
-  }
+  self.task.project = [Project findOrCreateProjectWithName:newProject inContext:[self.task managedObjectContext]];
   
   [self.tableView reloadData];
 }

@@ -140,6 +140,18 @@
   return array;
 }
 
+- (DonezoTaskList*) getListWithKey:(NSString*)key error:(NSError**)error
+{
+  NSArray *lists = [self getLists:error];
+  for (DonezoTaskList *list in lists)
+  {
+    if ([list.key isEqualToString:key])
+    {
+      return list;
+    }
+  }
+  return nil;
+}
 
 - (void) saveList:(DonezoTaskList**)list error:(NSError**)error
 {

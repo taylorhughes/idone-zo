@@ -61,4 +61,15 @@
   return nil;
 }
 
++ (Project*) findOrCreateProjectWithName:(NSString*)name inContext:(NSManagedObjectContext*)context
+{
+  Project* match = [Project findProjectWithName:name inContext:context];
+  if (match == nil)
+  {
+    match = (Project*)[NSEntityDescription insertNewObjectForEntityForName:@"Project" inManagedObjectContext:context];
+    match.name = name;
+  }
+  return match;
+}
+
 @end

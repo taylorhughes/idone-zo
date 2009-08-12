@@ -115,9 +115,10 @@
       }
     }
     STAssertNotNil(match, @"Could not find a matching task with key %@ (body: %@)!", task.key, task.body);
-    STAssertEqualObjects(match.body, task.body, @"Bodies differ for task %@ (%@)", task.body, task.key);
-    STAssertEqualObjects(match.project, task.project.name, @"Projects differ for task %@ (%@)", match.body, task.key);
-    STAssertEqualObjects(match.contexts, [task contextNames], @"Contexts differ for task %@ (%@)", match.body, task.key);
+    
+    STAssertEqualObjects(match.body, task.body, @"Bodies differ for task '%@' (%@)", task.body, task.key);
+    STAssertEqualObjects(match.project, task.project.name, @"Projects differ for task '%@' (%@)", match.body, task.key);
+    STAssertEqualObjects(match.contexts, [task contextNames], @"Contexts differ for task '%@' (%@)", match.body, task.key);
   }
 }
 
@@ -151,6 +152,29 @@
   STAssertEqualObjects(localTasks.name, @"Tasks", @"Local list should be called Tasks");
   
   [self assertListsSynced:3];
+  
+  list = (TaskList*)[NSEntityDescription insertNewObjectForEntityForName:@"TaskList" inManagedObjectContext:self.context];
+  list.name = @"Yet another List";
+  
+  [self.syncMaster performSync:&error];
+  [self assertListsSynced:4];
+  
+  DonezoTaskList *remoteList = [client getListWithKey:@"groceries" error:&error];
+  [client deleteList:&remoteList error:&error];
+  STAssertNil(error, @"Encountered an error! %@", [error description]);
+  
+  [self.syncMaster performSync:&error];
+  [self assertListsSynced:3];
+  
+  /*
+  // This should be modified to use list.deleted = true or similar
+  list = [self localListWithKey:@"tasks"];
+  [self.context deleteObject:list];
+  STAssertNil(error, @"Encountered an error! %@", [error description]);
+  
+  [self.syncMaster performSync:&error];
+  [self assertListsSynced:2];
+  */
 }
 
 // Makes sure we properly handle the case when we have new
@@ -167,8 +191,8 @@
      { \"key\": \"groceries\", \"name\": \"Groceries\" } \
    ], \
    \"tasks\": [ \
-     { \"id\": 1, \"body\": \"A remote task in Tasks.\", \"task_list\": \"tasks\" }, \
-     { \"id\": 2, \"body\": \"A remote task in Groceries.\", \"task_list\": \"groceries\" }, \
+     { \"id\": 1, \"body\": \"A remote task in Tasks.\", \"task_list\": \"tasks\", \"project\": \"Some project\" }, \
+     { \"id\": 2, \"body\": \"A remote task in Groceries.\", \"task_list\": \"groceries\", \"contexts\": [\"home\", \"work\"] }, \
      { \"id\": 3, \"body\": \"A second remote task in Groceries.\", \"task_list\": \"groceries\" } \
    ] \
    }"];
@@ -183,6 +207,7 @@
   Task *task = (Task*)[NSEntityDescription insertNewObjectForEntityForName:@"Task" inManagedObjectContext:self.context];
   task.taskList = tasksList;
   task.body = @"A local task in the Tasks list";
+  task.contexts = [NSSet setWithArray:[Context findOrCreateContextsWithNames:[NSArray arrayWithObject:@"school"] inContext:self.context]];
   
   task = (Task*)[NSEntityDescription insertNewObjectForEntityForName:@"Task" inManagedObjectContext:self.context];
   task.taskList = tasksList;
@@ -192,7 +217,8 @@
   task = (Task*)[NSEntityDescription insertNewObjectForEntityForName:@"Task" inManagedObjectContext:self.context];
   task.taskList = anotherList;
   task.body = @"A task in the Another List list.";
-  
+  task.contexts = [NSSet setWithArray:[Context findOrCreateContextsWithNames:[NSArray arrayWithObject:@"school"] inContext:self.context]];
+
   task = (Task*)[NSEntityDescription insertNewObjectForEntityForName:@"Task" inManagedObjectContext:self.context];
   task.taskList = anotherList;
   task.body = @"A second task in the Another List list.";
