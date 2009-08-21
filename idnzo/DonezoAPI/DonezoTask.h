@@ -15,6 +15,7 @@
   NSString *project;
   NSArray  *contexts;
   NSDate   *dueDate;
+  NSDate   *updatedAt;
 }
 
 @property (nonatomic, copy) NSNumber *key;
@@ -23,6 +24,7 @@
 @property (nonatomic, copy) NSString *project;
 @property (nonatomic, copy) NSArray  *contexts;
 @property (nonatomic, copy) NSDate   *dueDate;
+@property (nonatomic, copy) NSDate   *updatedAt;
 
 + (DonezoTask*) taskFromDictionary:(NSDictionary*)dict;
 - (NSDictionary*) toDictionary;

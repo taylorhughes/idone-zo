@@ -16,6 +16,7 @@
 @synthesize project;
 @synthesize contexts;
 @synthesize dueDate;
+@synthesize updatedAt;
 
 - (id) init
 {
@@ -35,6 +36,7 @@
   [project release];
   [contexts release];
   [dueDate release];
+  [updatedAt release];
   [super dealloc];
 }
 
@@ -43,11 +45,13 @@
   NSString *contextsString = [self.contexts componentsJoinedByString:@","];
   NSString *dateString = [DonezoAPIClient donezoDateStringFromDate:self.dueDate];
   NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+  
   // do it this way instead of mass assignment because some might be nil
   [dict setValue:self.body forKey:@"body"];
   [dict setValue:self.project forKey:@"project"];
   [dict setValue:contextsString forKey:@"contexts"];
   [dict setValue:dateString forKey:@"due_date"];  
+  
   if (self.key != nil)
   {
     [dict setValue:self.key forKey:@"id"];
@@ -63,6 +67,7 @@
   task.taskListKey = [dict valueForKey:@"task_list"];
   task.body = [dict valueForKey:@"body"];
   task.project = [dict valueForKey:@"project"];
+  
   if ([task.project isMemberOfClass:[NSNull class]])
   {
     task.project = nil;
@@ -73,6 +78,7 @@
     task.contexts = [NSArray array];
   }
   task.dueDate = [DonezoAPIClient dateFromDonezoDateString:[dict valueForKey:@"due_date"]];
+  task.updatedAt = [DonezoAPIClient dateFromDonezoDateString:[dict valueForKey:@"updated_at"]];
   
   return task;
 }

@@ -19,6 +19,7 @@
 @property (nonatomic, retain) NSNumber *key;
 @property (nonatomic, retain) NSString *body;
 @property (nonatomic, retain) NSDate *dueDate;
+@property (nonatomic, retain) NSDate *updatedAt;
 @property (nonatomic, retain) NSNumber *complete;
 @property (nonatomic, retain) NSNumber *archived;
 @property (nonatomic, retain) TaskList *taskList;

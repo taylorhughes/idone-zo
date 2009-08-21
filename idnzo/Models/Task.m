@@ -16,11 +16,21 @@
 @dynamic key;
 @dynamic body;
 @dynamic dueDate;
+@dynamic updatedAt;
 @dynamic complete;
 @dynamic archived;
 @dynamic taskList;
 @dynamic contexts;
 @dynamic project;
+
+- (void) willSave
+{
+  NSDate *now = [NSDate date];
+  if (!self.updatedAt || [self.updatedAt timeIntervalSinceDate:now] > 1000)
+  {
+    self.updatedAt = now;
+  }
+}
 
 - (NSString *)dueString
 {

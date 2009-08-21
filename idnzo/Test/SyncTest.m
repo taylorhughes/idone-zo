@@ -263,10 +263,36 @@
   NSArray *tasks = [self.client getTasksForListWithKey:@"tasks" error:&error];
   DonezoTask *t = [tasks objectAtIndex:0];
   
-  t.body = [t.body stringByAppendingString:@" (this has been changed!)"];
+  NSString *newBody = [t.body stringByAppendingString:@" (this has been changed!)"];
+  t.body = newBody;
   [self.client saveTask:&t taskList:nil error:&error];
   
+  sleep(1);
+  
   [self.syncMaster performSync:&error];
+  
+  [self assertListsSynced:1];
+  // This will compare the tasks to make sure they are equal.
+  [self assertTasksSynced:1 forListWithKey:@"tasks"];
+    
+  TaskList *localTaskList = [self localListWithKey:@"tasks"];
+  NSArray *localTasks = [[localTaskList tasks] allObjects];
+  Task *task = [localTasks objectAtIndex:0];
+  
+  STAssertEqualObjects(newBody, task.body, @"New body should be equal to the modified version we saved earlier.");
+  
+  newBody = [task.body stringByAppendingString:@" ... altered!"];
+  task.body = newBody;
+  [self.context save:&error];
+  
+  sleep(1);
+  
+  [self.syncMaster performSync:&error];
+
+  localTaskList = [self localListWithKey:@"tasks"];
+  localTasks = [[localTaskList tasks] allObjects];
+  task = [localTasks objectAtIndex:0];
+  STAssertEqualObjects(newBody, task.body, @"New body should be equal to the modified version we saved earlier.");
   
   [self assertListsSynced:1];
   // This will compare the tasks to make sure they are equal.

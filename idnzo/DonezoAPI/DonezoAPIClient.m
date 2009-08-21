@@ -184,7 +184,7 @@
   if (![self login:error]) { return; }
   
   NSString *path = [NSString stringWithFormat:@"/l/%@/", (*list).key];  
-  NSString *result = [self responseFromRequestToPath:path withMethod:@"DELETE" andBody:nil error:error];
+  [self responseFromRequestToPath:path withMethod:@"DELETE" andBody:nil error:error];
   
   //NSLog(@"Result from DELETE: %@", result);
   
@@ -274,6 +274,8 @@
   }
   
   NSDateFormatter *formatter = [[[NSDateFormatter alloc] init] autorelease];
+	NSTimeZone *timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
+	[formatter setTimeZone:timeZone];
   [formatter setDateFormat:DONEZO_DATE_INPUT_FORMAT];
   return [formatter dateFromString:stringDate];
 }
