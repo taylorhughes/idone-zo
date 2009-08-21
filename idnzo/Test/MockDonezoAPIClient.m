@@ -22,6 +22,8 @@
   // parse json into dictionary
   SBJsonParser *parser = [[[SBJsonParser alloc] init] autorelease];
   NSDictionary *dict = (NSDictionary*) [parser objectWithString:jsonData];
+  NSAssert(dict, @"Dictionary was not parsed properly! Is your JSON strictly valid?");
+  
   NSMutableDictionary *dictLists = [NSMutableDictionary dictionary];
   
   // extract "task_lists" and add them to self.taskLists

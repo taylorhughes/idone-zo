@@ -243,6 +243,36 @@
   [self assertTasksSynced:2 forListWithKey:@"another-list"];
 }
 
+- (void) testUpdatedTask
+{
+  NSError *error = nil;
+  [self.client loadTasksAndTaskLists:@"{ \
+   \"task_lists\": [ \
+   { \"name\": \"Tasks\" } \
+   ], \
+   \"tasks\": [ \
+   { \"body\": \"A remote task in Tasks.\", \"task_list\": \"tasks\", \"project\": \"Some project\" } \
+   ] \
+   }" error:&error];
+  
+  [self.syncMaster performSync:&error];
+  
+  [self assertListsSynced:1];
+  [self assertTasksSynced:1 forListWithKey:@"tasks"];
+  
+  NSArray *tasks = [self.client getTasksForListWithKey:@"tasks" error:&error];
+  DonezoTask *t = [tasks objectAtIndex:0];
+  
+  t.body = [t.body stringByAppendingString:@" (this has been changed!)"];
+  [self.client saveTask:&t taskList:nil error:&error];
+  
+  [self.syncMaster performSync:&error];
+  
+  [self assertListsSynced:1];
+  // This will compare the tasks to make sure they are equal.
+  [self assertTasksSynced:1 forListWithKey:@"tasks"];
+}
+
 // Tests to make sure we properly handle the case where
 // a task was updated remotely and locally, so we choose the
 // latest one.
