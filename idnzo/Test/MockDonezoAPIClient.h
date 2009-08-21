@@ -10,13 +10,9 @@
 #import "JSON.h"
 
 @interface MockDonezoAPIClient : DonezoAPIClient {
-  NSMutableArray *taskLists;
-  NSMutableDictionary *tasks;
 }
 
-@property (retain, nonatomic) NSMutableArray *taskLists;
-@property (retain, nonatomic) NSMutableDictionary *tasks;
-
-- (void) loadTasksAndTaskLists:(NSString*)jsonData;
+- (void) loadTasksAndTaskLists:(NSString*)jsonData error:(NSError**)error;
+- (void) resetAccount:(NSError**)error;
 
 @end

@@ -15,6 +15,10 @@
 @synthesize client;
 @synthesize syncMaster;
 
+#define TEST_URL      @"http://localhost:8081/"
+#define TEST_USER     @"synctest@user.com"
+#define TEST_PASSWORD @""
+
 - (TaskList *) localListWithKey:(NSString*)key
 {
   NSFetchRequest *request = [[NSFetchRequest alloc] init];
@@ -56,7 +60,7 @@
   [self.context save:&error];
   NSAssert(error == nil, @"Error saving persistent store!");
   
-  self.client = [[MockDonezoAPIClient alloc] init];
+  self.client = [[MockDonezoAPIClient alloc] initWithUsername:TEST_USER andPassword:TEST_PASSWORD toBaseUrl:TEST_URL];
   
   self.syncMaster = [[DonezoSyncMaster alloc] initWithDonezoClient:self.client andContext:self.context];
 }
@@ -97,6 +101,7 @@
 {
   NSError *error = nil;
   NSArray *remoteTasks = [client getTasksForListWithKey:key error:&error];
+
   STAssertNil(error, @"There has been an error fetching remote tasks! %@", [error description]);
   NSArray *localTasks = [[[self localListWithKey:key] tasks] allObjects];
   
@@ -118,9 +123,13 @@
     
     STAssertEqualObjects(match.body, task.body, @"Bodies differ for task '%@' (%@)", task.body, task.key);
     STAssertEqualObjects(match.project, task.project.name, @"Projects differ for task '%@' (%@)", match.body, task.key);
-    NSLog(@"Local tasks are: %@", [task contextNames]);
-    NSLog(@"Remote tasks are: %@", match.contexts);
-    STAssertEqualObjects(match.contexts, [task contextNames], @"Contexts differ for task '%@' (%@)", match.body, task.key);
+    //NSLog(@"Local tasks are: %@", [task contextNames]);
+    //NSLog(@"Remote tasks are: %@", match.contexts);
+    for (NSString *aContext in match.contexts)
+    {
+      int index = [[task contextNames] indexOfObject:aContext];
+      STAssertTrue(index > -1, @"Contexts differ for task '%@' (%@)", match.body, task.key);
+    }
   }
 }
 
@@ -133,19 +142,19 @@
 //
 - (void) testMergeTaskLists
 {
+  NSError *error = nil;
   [self.client loadTasksAndTaskLists:@"{ \
     \"task_lists\": [ \
-     { \"key\": \"tasks\", \"name\": \"Tasks\" }, \
-     { \"key\": \"groceries\", \"name\": \"Groceries\" } \
+     { \"name\": \"Tasks\" }, \
+     { \"name\": \"Groceries\" } \
     ] \
-  }"];
+  }" error:&error];
   
   TaskList *list = (TaskList*)[NSEntityDescription insertNewObjectForEntityForName:@"TaskList" inManagedObjectContext:self.context];
   list.name = @"Another List";
   list = (TaskList*)[NSEntityDescription insertNewObjectForEntityForName:@"TaskList" inManagedObjectContext:self.context];
   list.name = @"Tasks";
   
-  NSError *error = nil;
   [self.syncMaster performSync:&error];
   
   TaskList *localTasks = [self localListWithKey:@"tasks"];
@@ -187,17 +196,18 @@
 //
 - (void) testNewTasksRemoteAndLocal
 {
+  NSError *error = nil;
   [self.client loadTasksAndTaskLists:@"{ \
    \"task_lists\": [ \
-     { \"key\": \"tasks\", \"name\": \"Tasks\" }, \
-     { \"key\": \"groceries\", \"name\": \"Groceries\" } \
+     { \"name\": \"Tasks\" }, \
+     { \"name\": \"Groceries\" } \
    ], \
    \"tasks\": [ \
-     { \"id\": 1, \"body\": \"A remote task in Tasks.\", \"task_list\": \"tasks\", \"project\": \"Some project\" }, \
-     { \"id\": 2, \"body\": \"A remote task in Groceries.\", \"task_list\": \"groceries\", \"contexts\": [\"home\", \"work\"] }, \
-     { \"id\": 3, \"body\": \"A second remote task in Groceries.\", \"task_list\": \"groceries\", \"project\": null, \"contexts\": null } \
+     { \"body\": \"A remote task in Tasks.\", \"task_list\": \"tasks\", \"project\": \"Some project\" }, \
+     { \"body\": \"A remote task in Groceries.\", \"task_list\": \"groceries\", \"contexts\": [\"home\", \"work\"] }, \
+     { \"body\": \"A second remote task in Groceries.\", \"task_list\": \"groceries\", \"project\": null, \"contexts\": null } \
    ] \
-   }"];
+  }" error:&error];
   
   TaskList *anotherList = (TaskList*)[NSEntityDescription insertNewObjectForEntityForName:@"TaskList" inManagedObjectContext:self.context];
   anotherList.name = @"Another List";
@@ -225,15 +235,12 @@
   task.taskList = anotherList;
   task.body = @"A second task in the Another List list.";
   
-  NSError *error = nil;
   [self.syncMaster performSync:&error];
  
   [self assertListsSynced:3];
   [self assertTasksSynced:2 forListWithKey:@"groceries"];
   [self assertTasksSynced:2 forListWithKey:@"tasks"];
-  // key in this case is just lowercase taskList.name since it's mock donezo api client
-  [self assertTasksSynced:2 forListWithKey:@"another list"];
-
+  [self assertTasksSynced:2 forListWithKey:@"another-list"];
 }
 
 // Tests to make sure we properly handle the case where

@@ -37,7 +37,10 @@
       baseURL = DEFAULT_BASE_URL;
     }
     self.baseUrl = baseURL;
-    self.gaeAuth = [[GoogleAppEngineAuthenticator alloc] initForGAEAppAtUrl:[NSURL URLWithString:baseURL] withUsername:username andPassword:password];
+    self.gaeAuth = [[GoogleAppEngineAuthenticator alloc] initForGAEAppAtUrl:[NSURL URLWithString:baseURL]
+                                                                     toPath:API_PATH
+                                                               withUsername:username
+                                                                andPassword:password];
   }
   return self;
 }
@@ -69,10 +72,10 @@
 }
 
 - (NSString*)responseFromRequestToPath:(NSString*)path withMethod:(NSString*)method andBody:(NSString*)body error:(NSError**)error
-{
+{  
   NSURL *url = [NSURL URLWithString:[self.apiUrl stringByAppendingPathComponent:path]];
   NSMutableURLRequest *req = [[NSMutableURLRequest alloc] initWithURL:url];
-  
+    
   if (method != nil)
   {
     [req setHTTPMethod:method];
@@ -86,9 +89,7 @@
   NSHTTPURLResponse *response;
   NSData *responseData = [NSURLConnection sendSynchronousRequest:req returningResponse:&response error:error];      
   NSString *responseString = [[[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding] autorelease];
-  
-  //NSLog(@"Here's the response: %@", responseString);
-  
+    
   return responseString;
 }
 
@@ -157,21 +158,19 @@
 {
   if (![self login:error]) { return; }
   
-  NSString *path = @"/l/";
-  NSString *method = @"POST";
   if ((*list).key != nil)
   {
-    // existing list; modify
-    path = [path stringByAppendingFormat:@"%@/", (*list).key];
-    method = @"PUT";
+    // lists are immutable
+    NSMutableDictionary *errorDetail = [NSDictionary dictionaryWithObject:@"Done-zo task lists are immutable." forKey:NSLocalizedDescriptionKey];
+    *error = [NSError errorWithDomain:@"DonezoAPI" code:100 userInfo:errorDetail];
+    
+    return;
   }
-  
-  NSDictionary *dict = [*list toDictionary];
-  //NSLog(@"Dict looks like %@", dict);
-  NSString *body = [dict toFormEncodedString];
+
+  NSString *body = [[NSDictionary dictionaryWithObject:(*list).name forKey:@"task_list_name"] toFormEncodedString];
   
   //NSLog(@"Body looks like %@", body);
-  dict = (NSDictionary*)[self getObjectFromPath:path withKey:@"task_list" usingMethod:method andBody:body error:error];
+  NSDictionary *dict = (NSDictionary*)[self getObjectFromPath:@"/l/" withKey:@"task_list" usingMethod:@"POST" andBody:body error:error];
   
   if (*error)
   {
@@ -187,7 +186,7 @@
   NSString *path = [NSString stringWithFormat:@"/l/%@/", (*list).key];  
   NSString *result = [self responseFromRequestToPath:path withMethod:@"DELETE" andBody:nil error:error];
   
-  NSLog(@"Result from DELETE: %@", result);
+  //NSLog(@"Result from DELETE: %@", result);
   
   if (*error)
   {

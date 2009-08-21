@@ -33,9 +33,4 @@
   [super dealloc];
 }
 
-- (NSDictionary*) toDictionary
-{
-  return nil;
-}
-
 @end

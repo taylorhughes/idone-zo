@@ -8,6 +8,10 @@
 
 #include "GoogleAppEngineAuthenticator.h"
 
+@interface NSURLRequest (Private)
++ setAllowsAnyHTTPSCertificate:(BOOL)yesOrNo forHost:(NSString*)host;
+@end
+
 @interface GoogleAppEngineAuthenticator ()
 
 @property (nonatomic, copy) NSString *username;
@@ -25,19 +29,27 @@
 
 @synthesize url;
 @synthesize username, password;
+@synthesize continueToPath;
+
 @synthesize appDescription;
 @synthesize hasLoggedIn;
 
-- (id)initForGAEAppAtUrl:(NSURL*)gaeAppURL withUsername:myUsername andPassword:(NSString*)myPassword
-{ 
+- (id)initForGAEAppAtUrl:(NSURL*)gaeAppURL toPath:(NSString*)path withUsername:(NSString*)myUsername andPassword:(NSString*)myPassword
+{
   self = [super init];
   if (self != nil)
   {
     self.url = gaeAppURL;
     self.username = myUsername;
     self.password = myPassword;
+    self.continueToPath = path;
   }
   return self;
+}
+
+- (id)initForGAEAppAtUrl:(NSURL*)gaeAppURL withUsername:myUsername andPassword:(NSString*)myPassword
+{
+  return [self initForGAEAppAtUrl:gaeAppURL toPath:@"/" withUsername:myUsername andPassword:myPassword];
 }
 
 - (BOOL)login:(NSError**)error
@@ -126,9 +138,8 @@
 
 - (BOOL)getAuthCookieWithToken:(NSString*)authToken error:(NSError**)error
 {
-  NSMutableDictionary *authArgs = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                                   [self.url absoluteString], @"continue",
-                                   nil];
+  NSString *continueUrl = [[self.url absoluteString] stringByAppendingPathComponent:self.continueToPath];
+  NSMutableDictionary *authArgs = [NSMutableDictionary dictionaryWithObject:continueUrl forKey:@"continue"];
   
   if (authToken != nil)
   {

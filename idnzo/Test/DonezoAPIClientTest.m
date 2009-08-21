@@ -17,7 +17,7 @@
 
 @implementation DonezoAPIClientTest
 
-- (void) testLogin
+- (void) login
 {
   GoogleAppEngineAuthenticator *auth = [[GoogleAppEngineAuthenticator alloc] initForGAEAppAtUrl:[NSURL URLWithString:TEST_URL]
                                                                                    withUsername:@"some@user.com"
@@ -44,6 +44,7 @@
 
 - (DonezoAPIClient*)getClient
 {
+  [self login];
   return [[DonezoAPIClient alloc] initWithUsername:TEST_USER andPassword:TEST_PASSWORD toBaseUrl:TEST_URL];
 }
 

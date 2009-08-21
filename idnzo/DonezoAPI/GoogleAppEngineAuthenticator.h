@@ -14,14 +14,18 @@
   NSString *username;
   NSString *password;
   NSString *appDescription;
+  NSString *continueToPath;
   BOOL hasLoggedIn;
 }
 
 @property (nonatomic, retain) NSURL *url;
 @property (nonatomic, copy) NSString *appDescription;
 @property (nonatomic, assign) BOOL hasLoggedIn;
+@property (nonatomic, copy) NSString *continueToPath;
 
-- (id)initForGAEAppAtUrl:(NSURL*)gaeAppURL withUsername:myUsername andPassword:(NSString*)myPassword;
+- (id)initForGAEAppAtUrl:(NSURL*)gaeAppURL withUsername:(NSString*)myUsername andPassword:(NSString*)myPassword;
+- (id)initForGAEAppAtUrl:(NSURL*)gaeAppURL toPath:(NSString*)path withUsername:(NSString*)myUsername andPassword:(NSString*)myPassword;
+
 - (BOOL)login:(NSError**)error;
 
 @end
