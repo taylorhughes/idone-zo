@@ -25,10 +25,10 @@
 
 - (void) willSave
 {
-  NSDate *now = [NSDate date];
-  if (!self.updatedAt || [self.updatedAt timeIntervalSinceDate:now] > 1000)
+  if (!self.updatedAt || [self.updatedAt timeIntervalSinceNow] < -0.01)
   {
-    self.updatedAt = now;
+    self.updatedAt = [NSDate date];
+    //NSLog(@"Set updatedAt to %@", self.updatedAt);
   }
 }
 
@@ -37,7 +37,9 @@
   NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
   [dateFormatter setDateStyle:NSDateFormatterShortStyle];
   [dateFormatter setTimeStyle:NSDateFormatterNoStyle];
-  return [dateFormatter stringFromDate:self.dueDate];
+  NSString *dueStr = [dateFormatter stringFromDate:self.dueDate];
+  NSLog(@">>>>>>>>>> Due string: %@", dueStr);
+  return dueStr;
 }
 
 - (NSString *)contextsString

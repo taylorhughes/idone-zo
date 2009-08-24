@@ -283,12 +283,13 @@
     DonezoTask *remoteTask = [remoteLocalTasks objectAtIndex:0];
     Task *localTask = [remoteLocalTasks objectAtIndex:1];
     
-    if (remoteTask.updatedAt > localTask.updatedAt)
+    NSTimeInterval remoteUpdatedInterval = [remoteTask.updatedAt timeIntervalSinceDate:localTask.updatedAt];
+    if (remoteUpdatedInterval > 0)
     {
       NSLog(@"Remote task (%@ - %@) is newer than local task (%@ - %@)...", remoteTask.body, remoteTask.updatedAt, localTask.body, localTask.updatedAt);
       [self copyRemoteTask:remoteTask toLocalTask:localTask];
     }
-    else if (localTask.updatedAt > remoteTask.updatedAt)
+    else if (remoteUpdatedInterval < 0)
     {
       NSLog(@"Local task (%@ - %@) is newer than remote task (%@ - %@)...", localTask.body, localTask.updatedAt, remoteTask.body, remoteTask.updatedAt);
       [self copyLocalTask:localTask toRemoteTask:remoteTask];

@@ -266,9 +266,7 @@
   NSString *newBody = [t.body stringByAppendingString:@" (this has been changed!)"];
   t.body = newBody;
   [self.client saveTask:&t taskList:nil error:&error];
-  
-  sleep(1);
-  
+    
   [self.syncMaster performSync:&error];
   
   [self assertListsSynced:1];
@@ -281,22 +279,41 @@
   
   STAssertEqualObjects(newBody, task.body, @"New body should be equal to the modified version we saved earlier.");
   
-  newBody = [task.body stringByAppendingString:@" ... altered!"];
-  task.body = newBody;
-  [self.context save:&error];
-  
-  sleep(1);
-  
-  [self.syncMaster performSync:&error];
+  for (int i; i < 3; i++)
+  {
+    NSLog(@"Making a local change (run %d)", i);
+    
+    newBody = [task.body stringByAppendingString:@" ... altered!"];
+    task.body = newBody;
+    NSDate *oldUpdatedAt = [task.updatedAt copy];
+    [self.context save:&error];
+    
+    localTaskList = [self localListWithKey:@"tasks"];
+    localTasks = [[localTaskList tasks] allObjects];
+    task = [localTasks objectAtIndex:0];
+    
+    NSTimeInterval interval = [task.updatedAt timeIntervalSinceDate:oldUpdatedAt];
+    STAssertTrue(interval > 0, @"New updated at should be larger than old updated at, but was: %0.4f", interval);
+    
+    [self.syncMaster performSync:&error];
+    
+    localTaskList = [self localListWithKey:@"tasks"];
+    localTasks = [[localTaskList tasks] allObjects];
+    task = [localTasks objectAtIndex:0];
+    STAssertEqualObjects(newBody, task.body, @"New body should be equal to the modified version we saved earlier.");
+    
+    [self assertListsSynced:1];
+    // This will compare the tasks to make sure they are equal.
+    [self assertTasksSynced:1 forListWithKey:@"tasks"];    
+  }
+}
 
-  localTaskList = [self localListWithKey:@"tasks"];
-  localTasks = [[localTaskList tasks] allObjects];
-  task = [localTasks objectAtIndex:0];
-  STAssertEqualObjects(newBody, task.body, @"New body should be equal to the modified version we saved earlier.");
-  
-  [self assertListsSynced:1];
-  // This will compare the tasks to make sure they are equal.
-  [self assertTasksSynced:1 forListWithKey:@"tasks"];
+// If we sync a task and add it locally, it will change the updatedAt time
+// to now and may cause it to then update the remote task, even if we didn't
+// make any changes. This should not happen.
+//
+- (void) testEnsureRemoteUpdatedTaskSyncdLocallyIsNotSavedAgainRemotely
+{
 }
 
 // Tests to make sure we properly handle the case where

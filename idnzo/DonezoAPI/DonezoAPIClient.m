@@ -262,9 +262,11 @@
   (*task).key = nil;
 }
 
-//                                  2009-08-03 22:34:23.216692
-#define DONEZO_DATE_INPUT_FORMAT  @"yyyy-MM-dd HH:mm:SSSSSSSSS"
-#define DONEZO_DATE_OUTPUT_FORMAT @"MM dd yyyy"
+//                      for dates:      2009-08-03 00:00:00 
+#define DONEZO_DATE_INPUT_FORMAT      @"yyyy-MM-dd HH:mm:ss"
+//                      for datetimes:  2009-08-03 22:34:23.216692
+#define DONEZO_DATETIME_INPUT_FORMAT  @"yyyy-MM-dd HH:mm:ss.SSSSSS"
+#define DONEZO_DATE_OUTPUT_FORMAT     @"MM dd yyyy"
 
 + (NSDate*) dateFromDonezoDateString:(NSString*)stringDate
 {
@@ -276,7 +278,15 @@
   NSDateFormatter *formatter = [[[NSDateFormatter alloc] init] autorelease];
 	NSTimeZone *timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
 	[formatter setTimeZone:timeZone];
-  [formatter setDateFormat:DONEZO_DATE_INPUT_FORMAT];
+  if ([stringDate rangeOfString:@"."].location == NSNotFound)
+  {
+    // no precision
+    [formatter setDateFormat:DONEZO_DATE_INPUT_FORMAT];
+  }
+  else
+  {
+    [formatter setDateFormat:DONEZO_DATETIME_INPUT_FORMAT];
+  }
   return [formatter dateFromString:stringDate];
 }
 
