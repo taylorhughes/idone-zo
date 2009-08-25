@@ -156,7 +156,7 @@
   list.name = @"Another List";
   list = (TaskList*)[NSEntityDescription insertNewObjectForEntityForName:@"TaskList" inManagedObjectContext:self.context];
   list.name = @"Tasks";
-  
+   
   [self.syncMaster performSync:&error];
   
   TaskList *localTasks = [self localListWithKey:@"tasks"];
