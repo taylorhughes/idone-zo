@@ -99,6 +99,7 @@
 {
   UITextView *textView = (UITextView*)[[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]] viewWithTag:TEXTVIEW_TAG];
   self.task.body = textView.text;
+  [self.task hasBeenUpdated];
   [self dismiss:YES];
 }
 - (void)cancel:(id)sender

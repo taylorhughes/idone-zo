@@ -32,7 +32,7 @@ BOOL firstRun;
 
 - (void) sync
 {  
-  DonezoAPIClient *client = [[DonezoAPIClient alloc] initWithUsername:@"some@user.com" andPassword:@"" toBaseUrl:@"http://localhost:8081/"];
+  DonezoAPIClient *client = [[DonezoAPIClient alloc] initWithUsername:@"test@example.com" andPassword:@"" toBaseUrl:@"http://localhost:8081/"];
   DonezoSyncMaster *syncMaster = [[DonezoSyncMaster alloc] initWithDonezoClient:client andContext:self.managedObjectContext];
   
   NSError *error = nil;

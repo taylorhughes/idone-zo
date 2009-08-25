@@ -152,6 +152,11 @@
     }
   }
   
+  NSLog(@"=== Syncing lists ===");
+  NSLog(@"New local lists:        %d", [localListsToAddRemotely count]);
+  NSLog(@"Local lists to delete:  %d", [localListsToDelete count]);
+  NSLog(@"New remote lists:       %d", [newRemoteLists count]);
+  
   //
   // Now, add and remove existing lists as detailed by the various collections.
   //

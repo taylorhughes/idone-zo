@@ -59,7 +59,7 @@
 - (IBAction) complete:(id)sender
 {
   self.task.isComplete = !self.task.isComplete;
-//  [self.task save];
+  [self.task hasBeenUpdated];
   [self refresh];
 }
 
