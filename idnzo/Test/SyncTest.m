@@ -134,6 +134,8 @@
     NSString *a = [NSString stringWithFormat:@"%0.8f", [match.updatedAt timeIntervalSinceReferenceDate]];
     NSString *b = [NSString stringWithFormat:@"%0.8f", [task.updatedAt timeIntervalSinceReferenceDate]];
     STAssertEqualObjects(a, b, @"Updated at timestamps differ for task '%@' (%@)", task.body, task.key);
+    
+    STAssertEquals(match.isComplete, task.isComplete, @"Is complete is not correct for task '%@' (%@)", task.body, task.key);
   }
 }
 
@@ -207,7 +209,7 @@
      { \"name\": \"Groceries\" } \
    ], \
    \"tasks\": [ \
-     { \"body\": \"A remote task in Tasks.\", \"task_list\": \"tasks\", \"project\": \"Some project\" }, \
+     { \"body\": \"A remote task in Tasks.\", \"task_list\": \"tasks\", \"project\": \"Some project\", \"complete\": true }, \
      { \"body\": \"A remote task in Groceries.\", \"task_list\": \"groceries\", \"contexts\": [\"home\", \"work\"] }, \
      { \"body\": \"A second remote task in Groceries.\", \"task_list\": \"groceries\", \"project\": null, \"contexts\": null } \
    ] \
@@ -222,6 +224,7 @@
   
   Task *task = (Task*)[NSEntityDescription insertNewObjectForEntityForName:@"Task" inManagedObjectContext:self.context];
   task.taskList = tasksList;
+  task.isComplete = YES;
   task.body = @"A local task in the Tasks list";
   task.contexts = [NSSet setWithArray:[Context findOrCreateContextsWithNames:[NSArray arrayWithObject:@"school"] inContext:self.context]];
   
@@ -237,6 +240,7 @@
 
   task = (Task*)[NSEntityDescription insertNewObjectForEntityForName:@"Task" inManagedObjectContext:self.context];
   task.taskList = anotherList;
+  task.isComplete = YES;
   task.body = @"A second task in the Another List list.";
   
   [self.syncMaster performSync:&error];

@@ -17,6 +17,7 @@
 @synthesize contexts;
 @synthesize dueDate;
 @synthesize updatedAt;
+@synthesize isComplete;
 
 - (id) init
 {
@@ -46,7 +47,15 @@
   NSString *dateString = [DonezoAPIClient donezoDateStringFromDate:self.dueDate];
   NSMutableDictionary *dict = [NSMutableDictionary dictionary];
   
-  // do it this way instead of mass assignment because some might be nil
+  // assign these individually as any of them might be nil
+  if (self.isComplete)
+  {
+    [dict setValue:@"true" forKey:@"complete"];
+  }
+  else
+  {
+    [dict setValue:@"false" forKey:@"complete"];
+  }
   [dict setValue:self.body forKey:@"body"];
   [dict setValue:self.project forKey:@"project"];
   [dict setValue:contextsString forKey:@"contexts"];
@@ -63,6 +72,7 @@
 {
   DonezoTask *task = [[[DonezoTask alloc] init] autorelease];
   
+  task.isComplete = (BOOL)[(NSNumber*)[dict valueForKey:@"complete"] intValue];
   task.key = [dict valueForKey:@"id"];
   task.taskListKey = [dict valueForKey:@"task_list"];
   task.body = [dict valueForKey:@"body"];

@@ -277,7 +277,6 @@
       return;
     }
     localTask.key = remoteTask.key;
-    NSLog(@"[Task %@] Setting updatedAt to %@", localTask.key, [NSString stringWithFormat:@"%0.8f", [remoteTask.updatedAt timeIntervalSinceReferenceDate]]);
     [localTask hasBeenUpdated:remoteTask.updatedAt];
   }
   for (NSArray *remoteLocalTasks in tasksToSync)
@@ -303,6 +302,7 @@
 
 - (void) copyRemoteTask:(DonezoTask*)remoteTask toLocalTask:(Task*)localTask
 {
+  localTask.isComplete = remoteTask.isComplete;
   localTask.key = remoteTask.key;
   localTask.body = remoteTask.body;
   localTask.dueDate = remoteTask.dueDate;
@@ -314,6 +314,7 @@
 
 - (void) copyLocalTask:(Task*)localTask toRemoteTask:(DonezoTask*)remoteTask
 {
+  remoteTask.isComplete = localTask.isComplete;
   remoteTask.body     = localTask.body;
   remoteTask.project  = localTask.project.name;
   remoteTask.contexts = [localTask contextNames];
