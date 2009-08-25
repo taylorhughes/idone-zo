@@ -122,6 +122,7 @@
     STAssertNotNil(match, @"Could not find a matching task with key %@ (body: %@)!", task.key, task.body);
     
     STAssertEqualObjects(match.body, task.body, @"Bodies differ for task '%@' (%@)", task.body, task.key);
+    NSLog(@"Task project is %@ and %@", match.project, task.project.name);
     STAssertEqualObjects(match.project, task.project.name, @"Projects differ for task '%@' (%@)", match.body, task.key);
     //NSLog(@"Local tasks are: %@", [task contextNames]);
     //NSLog(@"Remote tasks are: %@", match.contexts);
@@ -130,6 +131,7 @@
       int index = [[task contextNames] indexOfObject:aContext];
       STAssertTrue(index > -1, @"Contexts differ for task '%@' (%@)", match.body, task.key);
     }
+    //STAssertEqualObjects(match.updatedAt, task.updatedAt, @"Updated at timestamps differ for task '%@' (%@)", task.body, task.key);
   }
 }
 
@@ -306,14 +308,6 @@
     // This will compare the tasks to make sure they are equal.
     [self assertTasksSynced:1 forListWithKey:@"tasks"];    
   }
-}
-
-// If we sync a task and add it locally, it will change the updatedAt time
-// to now and may cause it to then update the remote task, even if we didn't
-// make any changes. This should not happen.
-//
-- (void) testEnsureRemoteUpdatedTaskSyncdLocallyIsNotSavedAgainRemotely
-{
 }
 
 // Tests to make sure we properly handle the case where

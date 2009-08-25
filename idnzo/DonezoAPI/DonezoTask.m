@@ -50,7 +50,7 @@
   [dict setValue:self.body forKey:@"body"];
   [dict setValue:self.project forKey:@"project"];
   [dict setValue:contextsString forKey:@"contexts"];
-  [dict setValue:dateString forKey:@"due_date"];  
+  [dict setValue:dateString forKey:@"due_date"];
   
   if (self.key != nil)
   {

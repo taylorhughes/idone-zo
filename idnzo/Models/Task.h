@@ -14,23 +14,28 @@
 
 @interface Task :  NSManagedObject  
 {
+  BOOL updatedSetManually;
 }
 
 @property (nonatomic, retain) NSNumber *key;
 @property (nonatomic, retain) NSString *body;
+
 @property (nonatomic, retain) NSDate *dueDate;
 @property (nonatomic, retain) NSDate *updatedAt;
+
 @property (nonatomic, retain) NSNumber *complete;
 @property (nonatomic, retain) NSNumber *archived;
 @property (nonatomic, retain) TaskList *taskList;
 @property (nonatomic, retain) NSSet *contexts;
 @property (nonatomic, retain) Project *project;
 
+@property (nonatomic, assign) BOOL updatedSetManually;
 @property (readonly, nonatomic, copy) NSString *dueString;
 @property (readonly, nonatomic, copy) NSString *contextsString;
 @property (nonatomic, assign) BOOL isComplete;
 
 - (NSArray *)contextNames;
+- (void) setUpdatedAtManually:(NSDate*)newUpdatedAt;
 
 @end
 

@@ -294,6 +294,7 @@
       NSLog(@"Local task (%@ - %@) is newer than remote task (%@ - %@)...", localTask.body, localTask.updatedAt, remoteTask.body, remoteTask.updatedAt);
       [self copyLocalTask:localTask toRemoteTask:remoteTask];
       [self.client saveTask:&remoteTask taskList:nil error:error];
+      [localTask setUpdatedAtManually:remoteTask.updatedAt];
     }
   }
 }
@@ -303,7 +304,7 @@
   localTask.key = remoteTask.key;
   localTask.body = remoteTask.body;
   localTask.dueDate = remoteTask.dueDate;
-  localTask.updatedAt = remoteTask.updatedAt;
+  [localTask setUpdatedAtManually:remoteTask.updatedAt];
   
   localTask.project = [Project findOrCreateProjectWithName:remoteTask.project inContext:self.context];
   localTask.contexts = [NSSet setWithArray:[Context findOrCreateContextsWithNames:remoteTask.contexts inContext:self.context]];
