@@ -8,9 +8,12 @@
 
 #import <SenTestingKit/SenTestingKit.h>
 #import "DonezoAPIClient.h"
+#import "MockDonezoAPIClient.h"
 
 @interface DonezoAPIClientTest : SenTestCase {
-
+  DonezoAPIClient *client;
 }
+
+@property (nonatomic, retain) DonezoAPIClient *client;
 
 @end

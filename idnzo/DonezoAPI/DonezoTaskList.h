@@ -17,6 +17,5 @@
 @property (nonatomic, copy) NSNumber *tasksCount;
 
 + (DonezoTaskList*) taskListFromDictionary:(NSDictionary*)dict;
-- (NSDictionary*) toDictionary;
 
 @end

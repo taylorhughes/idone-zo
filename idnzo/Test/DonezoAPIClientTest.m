@@ -9,7 +9,7 @@
 #import "DonezoAPIClientTest.h"
 
 #define TEST_URL      @"http://localhost:8081/"
-#define TEST_USER     @"test@example.com"
+#define TEST_USER     @"testuser@example.com"
 #define TEST_PASSWORD @""
 //#define TEST_URL      @"http://www.done-zo.com/"
 //#define TEST_USER     @"whorastic@hotmail.com"
@@ -17,7 +17,29 @@
 
 @implementation DonezoAPIClientTest
 
-- (void) login
+@synthesize client;
+
+- (void) setUp
+{
+  NSError *error = nil;
+  
+  self.client = [[MockDonezoAPIClient alloc] initWithUsername:TEST_USER andPassword:TEST_PASSWORD toBaseUrl:TEST_URL];
+  [(MockDonezoAPIClient*)self.client resetAccount:&error];
+  
+  NSAssert(!error, @"Could not reset account, etc.");
+  
+  [(MockDonezoAPIClient*)self.client loadTasksAndTaskLists:@"{ \
+   \"task_lists\": [ \
+   { \"name\": \"Tasks\" } \
+   ], \
+   \"tasks\": [ \
+   { \"body\": \"A remote task in Tasks.\", \"task_list\": \"tasks\", \"project\": \"Some project\" }, \
+   { \"body\": \"A second remote task in Tasks!\", \"task_list\": \"tasks\", \"contexts\": [\"home\", \"work\"] } \
+   ] \
+   }" error:&error];
+}
+
+- (void) testLogin
 {
   GoogleAppEngineAuthenticator *auth = [[GoogleAppEngineAuthenticator alloc] initForGAEAppAtUrl:[NSURL URLWithString:TEST_URL]
                                                                                    withUsername:@"some@user.com"
@@ -42,27 +64,18 @@
   */
 }
 
-- (DonezoAPIClient*)getClient
-{
-  [self login];
-  return [[DonezoAPIClient alloc] initWithUsername:TEST_USER andPassword:TEST_PASSWORD toBaseUrl:TEST_URL];
-}
-
 - (void) testTasks
 {
-  DonezoAPIClient *client = [self getClient];
-
   NSError *error = nil;
-  NSArray *array = [client getTasksForListWithKey:@"tasks" error:&error];
+  NSArray *array = [self.client getTasksForListWithKey:@"tasks" error:&error];
   
   if (error != nil)
   {
     NSLog(@"Error! %@", [error description]);
   }
   
-  STAssertTrue([array count] >= 4, @"Count of tasks is incorrect.");
-  
-  array = [client getTasksForListWithKey:@"not-a-list" error:&error];
+  STAssertEquals((NSUInteger)2, [array count], @"Tasks count should be 2.");  
+  array = [self.client getTasksForListWithKey:@"not-a-list" error:&error];
   
   if (error != nil)
   {
@@ -80,13 +93,12 @@
   newTask.contexts = [NSArray arrayWithObject:@"home"];
   newTask.dueDate = [NSDate date];
   
-  DonezoAPIClient *client = [self getClient];
   NSError *error = nil;
-  NSArray *array = [client getLists:&error];
+  NSArray *array = [self.client getLists:&error];
   STAssertEquals((NSUInteger)1, [array count], @"getLists is not functioning properly");
   DonezoTaskList *list = [array objectAtIndex:0];
   
-  array = [client getTasksForListWithKey:list.key error:&error];
+  array = [self.client getTasksForListWithKey:list.key error:&error];
   STAssertTrue([array count] > 0, @"getTasksForList is not functioning properly");
   for (DonezoTask *task in array)
   {
@@ -97,7 +109,7 @@
   }
   
   STAssertNil(newTask.key, @"New task's ID should be nil!");
-  [client saveTask:&newTask taskList:list error:&error];
+  [self.client saveTask:&newTask taskList:list error:&error];
   if (error != nil)
   {
     NSLog(@"Error! %@", [error description]);
@@ -105,7 +117,7 @@
   STAssertNotNil(newTask, @"New task should not be nil!");
   STAssertNotNil(newTask.key, @"New task's ID should not be nil after saving!");
   
-  NSArray *newArray = [client getTasksForListWithKey:list.key error:&error];
+  NSArray *newArray = [self.client getTasksForListWithKey:list.key error:&error];
   STAssertEquals([array count] + 1, [newArray count], @"There should be one more task in the new array of tasks");
   DonezoTask *newNewTask = nil;
   for (DonezoTask *task in newArray)
@@ -127,13 +139,12 @@
 
 - (void) testUpdateTask
 {
-  DonezoAPIClient *client = [self getClient];
   NSError *error = nil;
-  NSArray *array = [client getLists:&error];
+  NSArray *array = [self.client getLists:&error];
   STAssertEquals((NSUInteger)1, [array count], @"getLists is not functioning properly");
   DonezoTaskList *list = [array objectAtIndex:0];
   
-  array = [client getTasksForListWithKey:list.key error:&error];
+  array = [self.client getTasksForListWithKey:list.key error:&error];
   STAssertTrue([array count] > 0, @"getTasksForList is not functioning properly");
   NSString *appendage = @" !!!";
   for (DonezoTask *task in array)
@@ -141,11 +152,11 @@
     if (task.body && ![task.body isMemberOfClass:[NSNull class]])
     {
       task.body = [task.body stringByAppendingString:appendage];
-      [client saveTask:&task taskList:list error:&error];
+      [self.client saveTask:&task taskList:list error:&error];
     }
   }
   
-  NSArray *newArray = [client getTasksForListWithKey:list.key error:&error];
+  NSArray *newArray = [self.client getTasksForListWithKey:list.key error:&error];
   for (int i = 0; i < [newArray count]; i++)
   {
     DonezoTask *taskA = (DonezoTask*)[array objectAtIndex:i];
@@ -156,10 +167,9 @@
 
 - (void) testTaskLists
 {
-  DonezoAPIClient *client = [self getClient];
   
   NSError *error = nil;
-  NSArray *array = [client getLists:&error];
+  NSArray *array = [self.client getLists:&error];
   
   if (error != nil)
   {
@@ -171,7 +181,7 @@
   DonezoTaskList *list = (DonezoTaskList *)[array objectAtIndex:0];
   STAssertEqualObjects(@"Tasks", list.name, @"Task list should be 'Tasks'");
   STAssertEqualObjects(@"tasks", list.key, @"Task list key should be 'tasks'");
-  STAssertTrue([list.tasksCount intValue] >= 4, @"Tasks count should be at least 4.");
+  STAssertEquals(2, [list.tasksCount intValue], @"Tasks count should be 2.");
 }
 
 @end
