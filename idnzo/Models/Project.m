@@ -63,6 +63,11 @@
 
 + (Project*) findOrCreateProjectWithName:(NSString*)name inContext:(NSManagedObjectContext*)context
 {
+  if (name == nil || [[name stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] isEqualToString:@""])
+  {
+    return nil;
+  }
+  
   Project* match = [Project findProjectWithName:name inContext:context];
   if (match == nil)
   {
