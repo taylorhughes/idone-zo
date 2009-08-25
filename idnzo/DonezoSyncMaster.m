@@ -248,35 +248,37 @@
   //
   // Now, add and remove existing lists as detailed by the various collections.
   //
-  for (Task *taskToDelete in localTasksToDelete)
+  for (Task *localTask in localTasksToDelete)
   {
     //NSLog(@"Deleting local task: %@", taskToDelete.key);
-    [self.context deleteObject:taskToDelete];
+    [self.context deleteObject:localTask];
   }
-  for (DonezoTask *taskToAddLocally in newRemoteTasks)
+  for (DonezoTask *remoteTask in newRemoteTasks)
   {
     //NSLog(@"Adding remote task locally: %@", taskToAddLocally.key);
-    Task *newTask = (Task*)[NSEntityDescription insertNewObjectForEntityForName:@"Task" inManagedObjectContext:self.context];
-    newTask.taskList = taskList;
-    [self copyRemoteTask:taskToAddLocally toLocalTask:newTask];    
+    Task *localTask = (Task*)[NSEntityDescription insertNewObjectForEntityForName:@"Task" inManagedObjectContext:self.context];
+    localTask.taskList = taskList;
+    [self copyRemoteTask:remoteTask toLocalTask:localTask];
   }
-  for (Task *taskToAdd in newLocalTasks)
+  for (Task *localTask in newLocalTasks)
   {
     //NSLog(@"Adding local task remotely: %@", taskToAdd.key);
-    DonezoTask *task = [[[DonezoTask alloc] init] autorelease];
+    DonezoTask *remoteTask = [[[DonezoTask alloc] init] autorelease];
 
-    [self copyLocalTask:taskToAdd toRemoteTask:task];
+    [self copyLocalTask:localTask toRemoteTask:remoteTask];
     
     DonezoTaskList *remoteList = [[[DonezoTaskList alloc] init] autorelease];
     remoteList.key = taskList.key;
     remoteList.name = taskList.name;
     
-    [client saveTask:&task taskList:remoteList error:error];
+    [client saveTask:&remoteTask taskList:remoteList error:error];
     if (*error)
     {
       return;
     }
-    taskToAdd.key = task.key;
+    localTask.key = remoteTask.key;
+    NSLog(@"[Task %@] Setting updatedAt to %@", localTask.key, [NSString stringWithFormat:@"%0.8f", [remoteTask.updatedAt timeIntervalSinceReferenceDate]]);
+    [localTask hasBeenUpdated:remoteTask.updatedAt];
   }
   for (NSArray *remoteLocalTasks in tasksToSync)
   {
@@ -294,7 +296,7 @@
       NSLog(@"Local task (%@ - %@) is newer than remote task (%@ - %@)...", localTask.body, localTask.updatedAt, remoteTask.body, remoteTask.updatedAt);
       [self copyLocalTask:localTask toRemoteTask:remoteTask];
       [self.client saveTask:&remoteTask taskList:nil error:error];
-      [localTask setUpdatedAtManually:remoteTask.updatedAt];
+      [localTask hasBeenUpdated:remoteTask.updatedAt];
     }
   }
 }
@@ -304,7 +306,7 @@
   localTask.key = remoteTask.key;
   localTask.body = remoteTask.body;
   localTask.dueDate = remoteTask.dueDate;
-  [localTask setUpdatedAtManually:remoteTask.updatedAt];
+  [localTask hasBeenUpdated:remoteTask.updatedAt];
   
   localTask.project = [Project findOrCreateProjectWithName:remoteTask.project inContext:self.context];
   localTask.contexts = [NSSet setWithArray:[Context findOrCreateContextsWithNames:remoteTask.contexts inContext:self.context]];
@@ -316,7 +318,6 @@
   remoteTask.project  = localTask.project.name;
   remoteTask.contexts = [localTask contextNames];
   remoteTask.dueDate = localTask.dueDate;
-  remoteTask.updatedAt = localTask.updatedAt;
 }
 
 - (NSArray*) getLocalTasksForTaskList:(TaskList*)taskList error:(NSError**)error

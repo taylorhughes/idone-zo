@@ -122,7 +122,7 @@
     STAssertNotNil(match, @"Could not find a matching task with key %@ (body: %@)!", task.key, task.body);
     
     STAssertEqualObjects(match.body, task.body, @"Bodies differ for task '%@' (%@)", task.body, task.key);
-    NSLog(@"Task project is %@ and %@", match.project, task.project.name);
+    //NSLog(@"Task project is %@ and %@", match.project, task.project.name);
     STAssertEqualObjects(match.project, task.project.name, @"Projects differ for task '%@' (%@)", match.body, task.key);
     //NSLog(@"Local tasks are: %@", [task contextNames]);
     //NSLog(@"Remote tasks are: %@", match.contexts);
@@ -131,7 +131,9 @@
       int index = [[task contextNames] indexOfObject:aContext];
       STAssertTrue(index > -1, @"Contexts differ for task '%@' (%@)", match.body, task.key);
     }
-    //STAssertEqualObjects(match.updatedAt, task.updatedAt, @"Updated at timestamps differ for task '%@' (%@)", task.body, task.key);
+    NSString *a = [NSString stringWithFormat:@"%0.8f", [match.updatedAt timeIntervalSinceReferenceDate]];
+    NSString *b = [NSString stringWithFormat:@"%0.8f", [task.updatedAt timeIntervalSinceReferenceDate]];
+    STAssertEqualObjects(a, b, @"Updated at timestamps differ for task '%@' (%@)", task.body, task.key);
   }
 }
 
@@ -226,7 +228,7 @@
   task = (Task*)[NSEntityDescription insertNewObjectForEntityForName:@"Task" inManagedObjectContext:self.context];
   task.taskList = tasksList;
   task.body = @"A local task in the Tasks list that has been deleted remotely!";
-  task.key = [NSNumber numberWithInt:4];
+  task.key = [NSNumber numberWithInt:400000];
   
   task = (Task*)[NSEntityDescription insertNewObjectForEntityForName:@"Task" inManagedObjectContext:self.context];
   task.taskList = anotherList;

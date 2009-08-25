@@ -23,8 +23,6 @@
 @dynamic contexts;
 @dynamic project;
 
-@synthesize updatedSetManually;
-
 - (void) dealloc
 {
   [super dealloc];
@@ -32,18 +30,19 @@
 
 - (void) willSave
 {
-  if ((!self.updatedAt || [self.updatedAt timeIntervalSinceNow] < -0.01) && !self.updatedSetManually)
+  if (!self.updatedAt)
   {
-    self.updatedAt = [NSDate date];
-    NSLog(@"Set updatedAt to %@", self.updatedAt);
+    [self hasBeenUpdated];
   }
-  self.updatedSetManually = NO;
 }
 
-- (void) setUpdatedAtManually:(NSDate*)newUpdatedAt
+- (void) hasBeenUpdated
+{
+  [self hasBeenUpdated:[NSDate date]];
+}
+- (void) hasBeenUpdated:(NSDate*)newUpdatedAt
 {
   self.updatedAt = newUpdatedAt;
-  self.updatedSetManually = YES;
 }
 
 - (NSString *)dueString
@@ -52,7 +51,6 @@
   [dateFormatter setDateStyle:NSDateFormatterShortStyle];
   [dateFormatter setTimeStyle:NSDateFormatterNoStyle];
   NSString *dueStr = [dateFormatter stringFromDate:self.dueDate];
-  NSLog(@">>>>>>>>>> Due string: %@", dueStr);
   return dueStr;
 }
 
