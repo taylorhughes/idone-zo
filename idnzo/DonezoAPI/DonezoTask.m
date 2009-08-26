@@ -18,6 +18,7 @@
 @synthesize dueDate;
 @synthesize updatedAt;
 @synthesize isComplete;
+@synthesize sortDate;
 
 - (id) init
 {
@@ -38,11 +39,13 @@
   [contexts release];
   [dueDate release];
   [updatedAt release];
+  [sortDate release];
   [super dealloc];
 }
 
 - (NSDictionary*) toDictionary
 {
+  NSString *sortString = [DonezoAPIClient donezoDetailedDateStringFromDate:self.sortDate];
   NSString *contextsString = [self.contexts componentsJoinedByString:@","];
   NSString *dateString = [DonezoAPIClient donezoDateStringFromDate:self.dueDate];
   NSMutableDictionary *dict = [NSMutableDictionary dictionary];
@@ -60,6 +63,7 @@
   [dict setValue:self.project forKey:@"project"];
   [dict setValue:contextsString forKey:@"contexts"];
   [dict setValue:dateString forKey:@"due_date"];
+  [dict setValue:sortString forKey:@"sort_date"];
   
   if (self.key != nil)
   {
@@ -87,8 +91,9 @@
   {
     task.contexts = [NSArray array];
   }
-  task.dueDate = [DonezoAPIClient dateFromDonezoDateString:[dict valueForKey:@"due_date"]];
+  task.dueDate =   [DonezoAPIClient dateFromDonezoDateString:[dict valueForKey:@"due_date"]];
   task.updatedAt = [DonezoAPIClient dateFromDonezoDateString:[dict valueForKey:@"updated_at"]];
+  task.sortDate =  [DonezoAPIClient dateFromDonezoDateString:[dict valueForKey:@"sort_date"]];
   
   return task;
 }

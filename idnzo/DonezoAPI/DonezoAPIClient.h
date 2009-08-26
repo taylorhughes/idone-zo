@@ -38,5 +38,6 @@
 
 + (NSDate*) dateFromDonezoDateString:(NSString*)stringDate;
 + (NSString*) donezoDateStringFromDate:(NSDate*)date;
++ (NSString*) donezoDetailedDateStringFromDate:(NSDate*)date;
 
 @end

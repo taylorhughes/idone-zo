@@ -21,6 +21,7 @@
 
 @property (nonatomic, retain) NSDate *dueDate;
 @property (nonatomic, retain) NSDate *updatedAt;
+@property (nonatomic, retain) NSDate *sortDate;
 
 @property (nonatomic, retain) NSNumber *complete;
 @property (nonatomic, retain) NSNumber *archived;

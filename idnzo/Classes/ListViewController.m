@@ -29,7 +29,13 @@
   return taskViewController;
 }
 
-- (void)setTaskList:(TaskList *)list
+- (void) reloadData
+{
+  tasks = nil;
+  [self.tableView reloadData];
+}
+
+- (void) setTaskList:(TaskList *)list
 {
   if (taskList)
   {
@@ -48,7 +54,21 @@
 {
   if (!tasks)
   {
-    tasks = [[[taskList tasks] allObjects] retain];
+    DNZOAppDelegate *appDelegate = (DNZOAppDelegate *)[[UIApplication sharedApplication] delegate];
+    NSDictionary *substitutions = [NSDictionary
+                                   dictionaryWithObject:taskList.name
+                                   forKey:@"taskListName"];
+    
+    NSFetchRequest *fetchRequest = [appDelegate.managedObjectModel
+                                    fetchRequestFromTemplateWithName:@"tasksForList"
+                                               substitutionVariables:substitutions];
+    NSError *error = nil;
+    tasks = [[[taskList tasks] allObjects] retain]; //[appDelegate.managedObjectContext executeFetchRequest:fetchRequest error:&error];
+    if (error)
+    {
+      NSLog(@"Error fetching tasks! %@ %@", [error description], [error userInfo]);
+      tasks = [NSArray array];
+    }
   }
   return tasks;
 }
@@ -131,7 +151,7 @@
 {
   DNZOAppDelegate *appDelegate = (DNZOAppDelegate *)[[UIApplication sharedApplication] delegate];
   [appDelegate sync];
-  [self.tableView reloadData];
+  [self reloadData];
 }
 
 - (void)addNewTask:(id)sender
@@ -166,8 +186,7 @@
   [dnc removeObserver:self name:NSManagedObjectContextDidSaveNotification object:self.addingContext];
   
   self.addingContext = nil;
-  tasks = nil;
-  [tableView reloadData];
+  [self reloadData];
 }
 
 - (void)addingContextDidSave:(NSNotification*)saveNotification

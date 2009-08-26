@@ -13,15 +13,16 @@
 
 @implementation Task 
 
-@dynamic key;
-@dynamic body;
-@dynamic dueDate;
-@dynamic updatedAt;
-@dynamic complete;
 @dynamic archived;
-@dynamic taskList;
+@dynamic body;
+@dynamic complete;
 @dynamic contexts;
+@dynamic dueDate;
+@dynamic key;
 @dynamic project;
+@dynamic sortDate;
+@dynamic taskList;
+@dynamic updatedAt;
 
 - (void) dealloc
 {
@@ -33,6 +34,10 @@
   if (!self.updatedAt)
   {
     [self hasBeenUpdated];
+  }
+  if (!self.sortDate)
+  {
+    self.sortDate = [NSDate date];
   }
 }
 

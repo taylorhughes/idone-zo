@@ -16,6 +16,7 @@
   NSArray  *contexts;
   NSDate   *dueDate;
   NSDate   *updatedAt;
+  NSDate   *sortDate;
   BOOL      isComplete;
 }
 
@@ -26,6 +27,7 @@
 @property (nonatomic, copy) NSArray  *contexts;
 @property (nonatomic, copy) NSDate   *dueDate;
 @property (nonatomic, copy) NSDate   *updatedAt;
+@property (nonatomic, copy) NSDate   *sortDate;
 @property (nonatomic, assign) BOOL    isComplete;
 
 + (DonezoTask*) taskFromDictionary:(NSDictionary*)dict;
