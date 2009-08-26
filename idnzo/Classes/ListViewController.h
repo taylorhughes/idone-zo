@@ -1,4 +1,5 @@
 
+#import "DNZOAppDelegate.h"
 #import "TaskList.h"
 #import "Task.h"
 #import "TaskViewController.h"
@@ -13,7 +14,7 @@
   TaskList *taskList;
   NSArray *tasks;
   TaskViewController *taskViewController;
-  NSManagedObjectContext *managedObjectContext;
+
   NSManagedObjectContext *addingContext;
 }
 
@@ -21,8 +22,8 @@
 @property (retain, nonatomic) TaskList *taskList;
 @property (retain, readonly, nonatomic) NSArray *tasks;
 @property (retain, nonatomic) TaskViewController *taskViewController;
-@property (retain, nonatomic) NSManagedObjectContext *managedObjectContext;
 
 - (IBAction) archiveTasks:(id)sender;
+- (IBAction) sync:(id)sender;
 
 @end

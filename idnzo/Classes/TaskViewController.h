@@ -8,6 +8,7 @@
 
 #import "Task.h"
 #import "EditViewController.h"
+#import "DNZOAppDelegate.h"
 
 @class Task, EditViewController;
 
@@ -16,6 +17,8 @@
   IBOutlet UIButton *completeButton;
   IBOutlet UILabel *body;
   Task *task;
+  
+  NSManagedObjectContext *editingContext;
 }
 
 @property (nonatomic, retain) IBOutlet UIButton *deleteButton;

@@ -11,13 +11,11 @@
 
 @synthesize taskLists;
 @synthesize listViewController;
-@synthesize managedObjectContext;
 
 - (void) dealloc
 {
   [taskLists release];
   [listViewController release];
-  [managedObjectContext release];
   [super dealloc];
 }
 
@@ -27,7 +25,6 @@
   if (listViewController == nil)
   {
     listViewController = [[ListViewController alloc] initWithNibName:@"ListView" bundle:nil];
-    listViewController.managedObjectContext = self.managedObjectContext;
   }
   return listViewController;
 }
@@ -36,8 +33,10 @@
 {
   if (taskLists == nil)
   {
+    DNZOAppDelegate *appDelegate = (DNZOAppDelegate *)[[UIApplication sharedApplication] delegate];
+    
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"TaskList" inManagedObjectContext:self.managedObjectContext];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"TaskList" inManagedObjectContext:appDelegate.managedObjectContext];
     request.entity = entity;
     
     NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
@@ -47,11 +46,11 @@
     
     NSError *error;
     
-    self.taskLists = [managedObjectContext executeFetchRequest:request error:&error];
+    self.taskLists = [appDelegate.managedObjectContext executeFetchRequest:request error:&error];
     if (self.taskLists == nil)
     {
       // handle error
-      NSLog(@"No task lists!");
+      NSLog(@"No task lists, shit!");
     }
   }
   return taskLists;

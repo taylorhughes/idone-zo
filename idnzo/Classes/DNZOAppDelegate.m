@@ -10,7 +10,6 @@
 
 @interface DNZOAppDelegate (Private)
 - (void)createInitialObjects;
-- (void)sync;
 @end
 
 @implementation DNZOAppDelegate
@@ -46,8 +45,6 @@ BOOL firstRun;
 
 - (void) applicationDidFinishLaunching:(UIApplication *)application
 {  
-  self.mainController.managedObjectContext = [self managedObjectContext];
-  
   if (firstRun)
   {
     [self createInitialObjects];

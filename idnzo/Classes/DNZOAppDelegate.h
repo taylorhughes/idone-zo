@@ -11,7 +11,7 @@
 #import "DonezoAPIClient.h"
 #import "DonezoSyncMaster.h"
 
-@class Project, Context, TaskList, Task;
+@class Project, Context, TaskList, Task, MainViewController;
 
 @interface DNZOAppDelegate : NSObject <UIApplicationDelegate> {
   UIWindow *window;
@@ -33,6 +33,8 @@
 @property (nonatomic, retain, readonly) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
 @property (nonatomic, readonly) NSString *applicationDocumentsDirectory;
+
+- (void)sync;
 
 @end
 

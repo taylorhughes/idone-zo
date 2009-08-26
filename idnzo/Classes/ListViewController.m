@@ -17,7 +17,6 @@
 @synthesize taskList;
 @synthesize tasks;
 @synthesize taskViewController;
-@synthesize managedObjectContext;
 @synthesize addingContext;
 
 - (TaskViewController *)taskViewController
@@ -110,7 +109,7 @@
   {
     cell.taskCellView.wasCompleted = NO;
     clickedTask.isComplete = !clickedTask.isComplete;
-    //[clickedTask save];
+    [clickedTask hasBeenUpdated];
     [self.tableView reloadData];
   }
   else
@@ -128,11 +127,20 @@
 {
 }
 
+- (IBAction)sync:(id)sender
+{
+  DNZOAppDelegate *appDelegate = (DNZOAppDelegate *)[[UIApplication sharedApplication] delegate];
+  [appDelegate sync];
+  [self.tableView reloadData];
+}
+
 - (void)addNewTask:(id)sender
 {
+  DNZOAppDelegate *appDelegate = (DNZOAppDelegate *)[[UIApplication sharedApplication] delegate];
+
 	// Create a new managed object context for the new book -- set its persistent store coordinator to the same as that from the fetched results controller's context.
 	self.addingContext = [[[NSManagedObjectContext alloc] init] autorelease];
-	[self.addingContext setPersistentStoreCoordinator:[self.managedObjectContext persistentStoreCoordinator]];
+	[self.addingContext setPersistentStoreCoordinator:[appDelegate.managedObjectContext persistentStoreCoordinator]];
   
   Task *task = (Task*)[NSEntityDescription insertNewObjectForEntityForName:@"Task" inManagedObjectContext:self.addingContext];
   task.taskList = (TaskList*)[self.addingContext objectWithID:[self.taskList objectID]];
@@ -164,7 +172,8 @@
 
 - (void)addingContextDidSave:(NSNotification*)saveNotification
 {
-	[self.managedObjectContext mergeChangesFromContextDidSaveNotification:saveNotification];	
+  DNZOAppDelegate *appDelegate = (DNZOAppDelegate *)[[UIApplication sharedApplication] delegate];
+	[appDelegate.managedObjectContext mergeChangesFromContextDidSaveNotification:saveNotification];	
 }
 
 - (void)newTaskCanceled
@@ -178,7 +187,6 @@
   [taskList release];
   [tasks release];
   [taskViewController release];
-  [managedObjectContext release];
   [addingContext release];
   [super dealloc];
 }
