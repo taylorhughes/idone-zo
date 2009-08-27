@@ -307,23 +307,26 @@
 
 - (void) copyRemoteTask:(DonezoTask*)remoteTask toLocalTask:(Task*)localTask
 {
+  localTask.sortDate   = remoteTask.sortDate;
   localTask.isComplete = remoteTask.isComplete;
-  localTask.key = remoteTask.key;
-  localTask.body = remoteTask.body;
-  localTask.dueDate = remoteTask.dueDate;
-  [localTask hasBeenUpdated:remoteTask.updatedAt];
+  localTask.key        = remoteTask.key;
+  localTask.body       = remoteTask.body;
+  localTask.dueDate    = remoteTask.dueDate;
   
-  localTask.project = [Project findOrCreateProjectWithName:remoteTask.project inContext:self.context];
-  localTask.contexts = [NSSet setWithArray:[Context findOrCreateContextsWithNames:remoteTask.contexts inContext:self.context]];
+  localTask.project    = [Project findOrCreateProjectWithName:remoteTask.project inContext:self.context];
+  localTask.contexts   = [NSSet setWithArray:[Context findOrCreateContextsWithNames:remoteTask.contexts inContext:self.context]];
+  
+  [localTask hasBeenUpdated:remoteTask.updatedAt];
 }
 
 - (void) copyLocalTask:(Task*)localTask toRemoteTask:(DonezoTask*)remoteTask
 {
   remoteTask.isComplete = localTask.isComplete;
-  remoteTask.body     = localTask.body;
-  remoteTask.project  = localTask.project.name;
-  remoteTask.contexts = [localTask contextNames];
-  remoteTask.dueDate = localTask.dueDate;
+  remoteTask.body       = localTask.body;
+  remoteTask.project    = localTask.project.name;
+  remoteTask.contexts   = [localTask contextNames];
+  remoteTask.dueDate    = localTask.dueDate;
+  remoteTask.sortDate   = localTask.sortDate;
 }
 
 - (NSArray*) getLocalTasksForTaskList:(TaskList*)taskList error:(NSError**)error
