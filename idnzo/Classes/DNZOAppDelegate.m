@@ -14,8 +14,6 @@
 
 @implementation DNZOAppDelegate
 
-BOOL firstRun;
-
 @synthesize window, navigationController, mainController;
 
 - (id) init
@@ -23,8 +21,7 @@ BOOL firstRun;
   self = [super init];
   if (self != nil)
   {
-    // Re-set by persistent store coordinator
-    firstRun = NO;
+    // initialize
   }
   return self;
 }
@@ -44,9 +41,11 @@ BOOL firstRun;
 }
 
 - (void) applicationDidFinishLaunching:(UIApplication *)application
-{  
-  if (firstRun)
+{ 
+  NSLog(@"SQLite store: %@", self.storePath);
+  if (![[NSFileManager defaultManager] fileExistsAtPath:self.storePath])
   {
+    NSLog(@"Store does not exist. Adding initial objects...");
     [self createInitialObjects];
   }
   
@@ -97,60 +96,54 @@ BOOL firstRun;
  */
 - (NSManagedObjectModel *)managedObjectModel
 {
-  if (managedObjectModel != nil)
+  if (managedObjectModel == nil)
   {
-    return managedObjectModel;
+    managedObjectModel = [[NSManagedObjectModel mergedModelFromBundles:nil] retain];
   }
-  managedObjectModel = [[NSManagedObjectModel mergedModelFromBundles:nil] retain];    
   return managedObjectModel;
 }
 
 
 /**
- Returns the persistent store coordinator for the application.
- If the coordinator doesn't already exist, it is created and the application's store added to it.
+ * Returns the persistent store coordinator for the application.
+ * If the coordinator doesn't already exist, it is created and the application's store added to it.
  */
 - (NSPersistentStoreCoordinator *)persistentStoreCoordinator
 {
-	if (persistentStoreCoordinator != nil)
-  {
-    return persistentStoreCoordinator;
+	if (persistentStoreCoordinator == nil)
+  {    
+    NSError *error;
+    NSURL *storeUrl = [NSURL fileURLWithPath:self.storePath];
+    persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
+    if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeUrl options:nil error:&error])
+    {
+      NSLog(@"Could not initialize persistentStoreCoordinator: %@ %@", [error description], [error userInfo]);
+    }
   }
-	
-  NSString *path = [[self applicationDocumentsDirectory] stringByAppendingPathComponent:@"donezo.sqlite"];
-  NSURL *storeUrl = [NSURL fileURLWithPath:path];
-  NSLog(@"Store url: %@", storeUrl);
-	firstRun = ![[NSFileManager defaultManager] fileExistsAtPath:path];
-  
-	NSError *error;
-  persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
-  if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeUrl options:nil error:&error])
-  {
-    // Handle error
-  }
-	
+    
   return persistentStoreCoordinator;
 }
 
 /**
- Returns the path to the application's documents directory.
+ * Returns the path to the application's SQLite datastore.
  */
-- (NSString *)applicationDocumentsDirectory
+- (NSString *)storePath
 {
   NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
   NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
-  return basePath;
+  
+  return [basePath stringByAppendingPathComponent:@"donezo.sqlite"];
 }
 
 - (void)createInitialObjects
 {   
-  NSLog(@"Adding TaskList...");
+  NSLog(@"> Adding TaskList...");
   
   TaskList *list = (TaskList*)[NSEntityDescription insertNewObjectForEntityForName:@"TaskList" inManagedObjectContext:self.managedObjectContext];
   
   list.name = @"Tasks";
   
-  NSLog(@"Adding task...");
+  NSLog(@"> Adding task...");
   
   Project *project = (Project*)[NSEntityDescription insertNewObjectForEntityForName:@"Project" inManagedObjectContext:self.managedObjectContext];
   project.name = @"Done-zo";
@@ -167,8 +160,16 @@ BOOL firstRun;
   task.project = project;
   task.dueDate = [NSDate date];
   
-  NSError *error;
+  NSError *error = nil;
   [self.managedObjectContext save:&error];
+  if (error != nil)
+  {
+    NSLog(@"Could not save new list and tasks due to an error! %@ %@", [error description], [error userInfo]);
+  }
+  else
+  {
+    NSLog(@"Added new default objects.");
+  }
 }
 
 // Save all changes to the database, then close it.
@@ -188,6 +189,9 @@ BOOL firstRun;
 
 - (void)dealloc
 {
+  [managedObjectContext release];
+  [managedObjectModel release];
+  [persistentStoreCoordinator release];
   [navigationController release];
   [window release];
   [super dealloc];

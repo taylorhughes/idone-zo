@@ -21,7 +21,7 @@
   
   NSManagedObjectModel *managedObjectModel;
   NSManagedObjectContext *managedObjectContext;	    
-  NSPersistentStoreCoordinator *persistentStoreCoordinator;  
+  NSPersistentStoreCoordinator *persistentStoreCoordinator;
 }
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;
@@ -32,7 +32,7 @@
 @property (nonatomic, retain, readonly) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, retain, readonly) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
-@property (nonatomic, readonly) NSString *applicationDocumentsDirectory;
+@property (nonatomic, readonly) NSString *storePath;
 
 - (void)sync;
 

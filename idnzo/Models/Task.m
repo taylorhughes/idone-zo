@@ -16,6 +16,7 @@
 @dynamic archived;
 @dynamic body;
 @dynamic complete;
+@dynamic deleted;
 @dynamic contexts;
 @dynamic dueDate;
 @dynamic key;
@@ -29,16 +30,12 @@
   [super dealloc];
 }
 
-- (void) willSave
+- (void) awakeFromInsert
 {
-  if (!self.updatedAt)
-  {
-    [self hasBeenUpdated];
-  }
-  if (!self.sortDate)
-  {
-    self.sortDate = [NSDate date];
-  }
+  [super awakeFromInsert];
+  // Always set these to be now in case
+  [self hasBeenUpdated];
+  self.sortDate =  [NSDate date];
 }
 
 - (void) hasBeenUpdated
@@ -85,6 +82,24 @@
 - (void)setIsComplete:(BOOL)isComplete
 {
   self.complete = [NSNumber numberWithInt:isComplete];
+}
+
+- (BOOL)isArchived
+{
+  return [self.archived intValue];
+}
+- (void)setIsArchived:(BOOL)isArchived
+{
+  self.archived = [NSNumber numberWithInt:isArchived];
+}
+
+- (BOOL)isDeleted
+{
+  return [self.deleted intValue];
+}
+- (void)setIsDeleted:(BOOL)isDeleted
+{
+  self.deleted = [NSNumber numberWithInt:isDeleted];
 }
 
 @end

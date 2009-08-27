@@ -56,18 +56,26 @@
   {
     DNZOAppDelegate *appDelegate = (DNZOAppDelegate *)[[UIApplication sharedApplication] delegate];
     NSDictionary *substitutions = [NSDictionary
-                                   dictionaryWithObject:taskList.name
-                                   forKey:@"taskListName"];
+                                   dictionaryWithObject:taskList
+                                   forKey:@"taskList"];
     
     NSFetchRequest *fetchRequest = [appDelegate.managedObjectModel
                                     fetchRequestFromTemplateWithName:@"tasksForList"
                                                substitutionVariables:substitutions];
+    NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"sortDate" ascending:YES];
+    fetchRequest.sortDescriptors = [NSArray arrayWithObjects:sort, nil];
+    [sort release];
+    
     NSError *error = nil;
-    tasks = [[[taskList tasks] allObjects] retain]; //[appDelegate.managedObjectContext executeFetchRequest:fetchRequest error:&error];
-    if (error)
+    tasks = [[appDelegate.managedObjectContext executeFetchRequest:fetchRequest error:&error] retain];
+    if (error != nil)
     {
       NSLog(@"Error fetching tasks! %@ %@", [error description], [error userInfo]);
       tasks = [NSArray array];
+    }
+    else
+    {
+      NSLog(@"Fetch request was successful; got %d task(s).", [tasks count]);
     }
   }
   return tasks;

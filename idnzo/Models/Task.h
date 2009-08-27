@@ -25,13 +25,17 @@
 
 @property (nonatomic, retain) NSNumber *complete;
 @property (nonatomic, retain) NSNumber *archived;
+@property (nonatomic, retain) NSNumber *deleted;
 @property (nonatomic, retain) TaskList *taskList;
 @property (nonatomic, retain) NSSet *contexts;
 @property (nonatomic, retain) Project *project;
 
 @property (readonly, nonatomic, copy) NSString *dueString;
 @property (readonly, nonatomic, copy) NSString *contextsString;
+
 @property (nonatomic, assign) BOOL isComplete;
+@property (nonatomic, assign) BOOL isArchived;
+@property (nonatomic, assign) BOOL isDeleted;
 
 - (NSArray *)contextNames;
 - (void) hasBeenUpdated:(NSDate*)newUpdatedAt;
