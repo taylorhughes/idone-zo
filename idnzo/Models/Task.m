@@ -25,6 +25,20 @@
 @dynamic taskList;
 @dynamic updatedAt;
 
+NSDateFormatter *dueDateFormatter;
+
++ (NSDateFormatter*) dueDateFormatter
+{
+  if (!dueDateFormatter)
+  {
+    dueDateFormatter = [[[NSDateFormatter alloc] init] retain];
+    [dueDateFormatter setDateStyle:NSDateFormatterShortStyle];
+    [dueDateFormatter setTimeStyle:NSDateFormatterNoStyle];
+    [dueDateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+  }
+  return dueDateFormatter;
+}
+
 - (void) dealloc
 {
   [super dealloc];
@@ -49,10 +63,7 @@
 
 - (NSString *)dueString
 {
-  NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
-  [dateFormatter setDateStyle:NSDateFormatterShortStyle];
-  [dateFormatter setTimeStyle:NSDateFormatterNoStyle];
-  NSString *dueStr = [dateFormatter stringFromDate:self.dueDate];
+  NSString *dueStr = [[Task dueDateFormatter] stringFromDate:self.dueDate];
   return dueStr;
 }
 
