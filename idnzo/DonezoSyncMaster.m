@@ -307,11 +307,11 @@
 
 - (void) copyRemoteTask:(DonezoTask*)remoteTask toLocalTask:(Task*)localTask
 {
-  localTask.sortDate   = remoteTask.sortDate;
   localTask.isComplete = remoteTask.isComplete;
   localTask.key        = remoteTask.key;
   localTask.body       = remoteTask.body;
   localTask.dueDate    = remoteTask.dueDate;
+  localTask.sortDate   = remoteTask.sortDate;
   
   localTask.project    = [Project findOrCreateProjectWithName:remoteTask.project inContext:self.context];
   localTask.contexts   = [NSSet setWithArray:[Context findOrCreateContextsWithNames:remoteTask.contexts inContext:self.context]];

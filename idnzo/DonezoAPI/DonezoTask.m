@@ -48,6 +48,7 @@
   NSString *sortString = [DonezoAPIClient donezoDetailedDateStringFromDate:self.sortDate];
   NSString *contextsString = [self.contexts componentsJoinedByString:@","];
   NSString *dateString = [DonezoAPIClient donezoDateStringFromDate:self.dueDate];
+  
   NSMutableDictionary *dict = [NSMutableDictionary dictionary];
   
   // assign these individually as any of them might be nil
@@ -93,7 +94,10 @@
   }
   task.dueDate =   [DonezoAPIClient dateFromDonezoDateString:[dict valueForKey:@"due_date"]];
   task.updatedAt = [DonezoAPIClient dateFromDonezoDateString:[dict valueForKey:@"updated_at"]];
-  task.sortDate =  [DonezoAPIClient dateFromDonezoDateString:[dict valueForKey:@"sort_date"]];
+  NSString *sortDateStr = [dict valueForKey:@"sort_date"];
+  //NSLog(@"Input sort date string: %@",sortDateStr);
+  task.sortDate =  [DonezoAPIClient dateFromDonezoDateString:sortDateStr];
+  //NSLog(@"Output sort date: %0.6f", [task.sortDate timeIntervalSinceReferenceDate]);
   
   return task;
 }

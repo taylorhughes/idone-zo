@@ -135,6 +135,10 @@
     NSString *b = [NSString stringWithFormat:@"%0.8f", [task.updatedAt timeIntervalSinceReferenceDate]];
     STAssertEqualObjects(a, b, @"Updated at timestamps differ for task '%@' (%@)", task.body, task.key);
     
+    a = [NSString stringWithFormat:@"%0.8f", [match.sortDate timeIntervalSinceReferenceDate]];
+    b = [NSString stringWithFormat:@"%0.8f", [task.sortDate timeIntervalSinceReferenceDate]];
+    STAssertEqualObjects(a, b, @"Sort date timestamps differ for task '%@' (%@)", task.body, task.key);
+    
     STAssertEquals(match.isComplete, task.isComplete, @"Is complete is not correct for task '%@' (%@)", task.body, task.key);
   }
 }
@@ -293,6 +297,7 @@
     
     newBody = [task.body stringByAppendingString:@" ... altered!"];
     task.body = newBody;
+    task.sortDate = [NSDate date];
     NSDate *oldUpdatedAt = [task.updatedAt copy];
     [self.context save:&error];
     

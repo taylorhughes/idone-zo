@@ -233,7 +233,6 @@
   }
   
   NSDictionary *dict = [*task toDictionary];
-  //NSLog(@"Dict looks like %@", dict);
   NSString *body = [dict toFormEncodedString];
   
   //NSLog(@"Body looks like %@", body);
@@ -251,9 +250,10 @@
   if (![self login:error]) { return; }
   
   NSString *path = [NSString stringWithFormat:@"/t/%@/", (*task).key];  
-  NSString *result = [self responseFromRequestToPath:path withMethod:@"DELETE" andBody:nil error:error];
+  //NSString *result = 
+  [self responseFromRequestToPath:path withMethod:@"DELETE" andBody:nil error:error];
   
-  NSLog(@"Result from DELETE: %@", result);
+  //NSLog(@"Result from DELETE: %@", result);
   
   if (*error)
   {
@@ -264,11 +264,9 @@
 
 //                      for dates:        2009-08-03 00:00:00 
 #define DONEZO_DATE_INPUT_FORMAT        @"yyyy-MM-dd HH:mm:ss"
-//                      for datetimes:    2009-08-03 22:34:23.216692
-#define DONEZO_DATETIME_INPUT_FORMAT    @"yyyy-MM-dd HH:mm:ss.SSSSSS"
 
 #define DONEZO_DATE_OUTPUT_FORMAT       @"MM dd yyyy"
-#define DONEZO_DATETIME_OUTPUT_FORMAT   @"yyyy-MM-dd HH:mm:ss.SSSSSS"
+#define DONEZO_DATETIME_OUTPUT_FORMAT   @"yyyy-MM-dd HH:mm:ss"
 
 + (NSDate*) dateFromDonezoDateString:(NSString*)stringDate
 {
@@ -276,20 +274,27 @@
   {
     return nil;
   }
-  
+
+  NSDate *date = nil;
   NSDateFormatter *formatter = [[[NSDateFormatter alloc] init] autorelease];
-	NSTimeZone *timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
-	[formatter setTimeZone:timeZone];
+  [formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+  [formatter setDateFormat:DONEZO_DATE_INPUT_FORMAT];
   if ([stringDate rangeOfString:@"."].location == NSNotFound)
   {
     // no precision
-    [formatter setDateFormat:DONEZO_DATE_INPUT_FORMAT];
+    date = [formatter dateFromString:stringDate];
   }
   else
   {
-    [formatter setDateFormat:DONEZO_DATETIME_INPUT_FORMAT];
+    // NSDateFormatter ***ROUNDS TO MILLISECONDS***; manually add milliseconds instead
+    NSArray *datePieces = [stringDate componentsSeparatedByString:@"."];
+    stringDate = [datePieces objectAtIndex:0];
+    NSTimeInterval interval = [(NSString*)[datePieces objectAtIndex:1] intValue] / 1000000.0;
+    interval += [[formatter dateFromString:stringDate] timeIntervalSinceReferenceDate];
+    
+    date = [[[NSDate alloc] initWithTimeIntervalSinceReferenceDate:interval] autorelease];
   }
-  return [formatter dateFromString:stringDate];
+  return date;
 }
 
 + (NSString*) donezoDetailedDateStringFromDate:(NSDate*)date
@@ -299,9 +304,17 @@
     return nil;
   }
   
+  // NSDateFormatter ***ROUNDS TO MILLISECONDS IN OUTPUT***; manually add milliseconds instead
+  NSTimeInterval interval = [date timeIntervalSinceReferenceDate];
+  NSString *microseconds = [[[NSString stringWithFormat:@"%0.6f", interval] componentsSeparatedByString:@"."] objectAtIndex:1];
+  
   NSDateFormatter *formatter = [[[NSDateFormatter alloc] init] autorelease];
+  [formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
   [formatter setDateFormat:DONEZO_DATETIME_OUTPUT_FORMAT];
-  return [formatter stringFromDate:date];  
+  
+  NSString *dateString = [NSString stringWithFormat:@"%@.%@", [formatter stringFromDate:date], microseconds];
+  
+  return dateString;
 }
 
 + (NSString*) donezoDateStringFromDate:(NSDate*)date
@@ -312,6 +325,7 @@
   }
   
   NSDateFormatter *formatter = [[[NSDateFormatter alloc] init] autorelease];
+  [formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
   [formatter setDateFormat:DONEZO_DATE_OUTPUT_FORMAT];
   return [formatter stringFromDate:date];  
 }

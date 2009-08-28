@@ -39,6 +39,19 @@
    }" error:&error];
 }
 
+- (void) testDateFormatters
+{
+  NSDate *now = [NSDate date];
+  
+  NSString *dateString = [DonezoAPIClient donezoDetailedDateStringFromDate:now];
+  NSDate *mangledNow = [DonezoAPIClient dateFromDonezoDateString:dateString];
+  
+  NSString *a = [NSString stringWithFormat:@"%0.6f", [now timeIntervalSinceReferenceDate]];
+  NSString *b = [NSString stringWithFormat:@"%0.6f", [mangledNow timeIntervalSinceReferenceDate]];
+  
+  STAssertEqualObjects(a, b, @"Date is not toString'd and then unparsed properly.");
+}
+
 - (void) testLogin
 {
   GoogleAppEngineAuthenticator *auth = [[GoogleAppEngineAuthenticator alloc] initForGAEAppAtUrl:[NSURL URLWithString:TEST_URL]
@@ -87,11 +100,13 @@
 
 - (void) testInsertTask
 {
-  DonezoTask *newTask = [[[DonezoTask init] alloc] autorelease];
-  newTask.body = [NSString stringWithFormat:@"My new task!! %@", [NSDate date]];
-  newTask.project = @"Some project";
-  newTask.contexts = [NSArray arrayWithObject:@"home"];
-  newTask.dueDate = [NSDate date];
+  DonezoTask *originalTask = [[[DonezoTask init] alloc] autorelease];
+  originalTask.body = [NSString stringWithFormat:@"My new task!! %@", [NSDate date]];
+  originalTask.project = @"Some project";
+  originalTask.contexts = [NSArray arrayWithObject:@"home"];
+  originalTask.dueDate = [NSDate date];
+  originalTask.sortDate = [NSDate date];
+  DonezoTask *newTask = originalTask;
   
   NSError *error = nil;
   NSArray *array = [self.client getLists:&error];
@@ -128,13 +143,18 @@
     }
   }
   STAssertNotNil(newNewTask, @"Should have been able to find a matching new task in the getTasksForListWithKey method!");
-  STAssertEqualObjects(newTask.body, newNewTask.body, @"New task's body was not saved properly.");
+  STAssertEqualObjects(originalTask.body, newNewTask.body, @"New task's body was not saved properly.");
   STAssertNotNil(newNewTask.contexts, @"New contexts should not be null");
-  STAssertEqualObjects(newTask.contexts, newNewTask.contexts, @"New task's contexts list was not saved properly.");
+  STAssertEqualObjects(originalTask.contexts, newNewTask.contexts, @"New task's contexts list was not saved properly.");
   STAssertNotNil(newNewTask.project, @"New project should not be null.");
-  STAssertEqualObjects(newTask.project, newNewTask.project, @"New task's project was not saved properly.");
+  STAssertEqualObjects(originalTask.project, newNewTask.project, @"New task's project was not saved properly.");
   STAssertNotNil(newNewTask.dueDate, @"New due date should not be null");
-  STAssertEqualObjects(newTask.dueDate, newNewTask.dueDate, @"New task's due date was not saved properly.");
+  STAssertEqualObjects([DonezoAPIClient donezoDateStringFromDate:originalTask.dueDate], [DonezoAPIClient donezoDateStringFromDate:newNewTask.dueDate], @"New task's due date was not saved properly.");
+  STAssertNotNil(newNewTask.sortDate, @"New sort date should not be null");
+  NSString *a = [NSString stringWithFormat:@"%0.6f", [originalTask.sortDate timeIntervalSinceReferenceDate]];
+  NSString *b = [NSString stringWithFormat:@"%0.6f", [newNewTask.sortDate timeIntervalSinceReferenceDate]];
+  STAssertEqualObjects(a, b, @"New task's sort date was not saved properly.");
+  NSLog(@"A and B: %@ / %@", a, b);
 }
 
 - (void) testUpdateTask

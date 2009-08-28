@@ -11,6 +11,7 @@
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		3412017010294BF200A0439E /* DonezoSyncMaster.m in Sources */ = {isa = PBXBuildFile; fileRef = 3412016F10294BF200A0439E /* DonezoSyncMaster.m */; };
 		3412017110294BF200A0439E /* DonezoSyncMaster.m in Sources */ = {isa = PBXBuildFile; fileRef = 3412016F10294BF200A0439E /* DonezoSyncMaster.m */; };
+		3412361D10486632009451EF /* SyncTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AF21EF102FC20B001FC4B7 /* SyncTest.m */; };
 		3412FD561027961B00A0439E /* NSDictionary+Donezo.m in Sources */ = {isa = PBXBuildFile; fileRef = 3412FD551027961B00A0439E /* NSDictionary+Donezo.m */; };
 		3412FDD210279C1D00A0439E /* NSDictionary+Donezo.m in Sources */ = {isa = PBXBuildFile; fileRef = 3412FD551027961B00A0439E /* NSDictionary+Donezo.m */; };
 		3416EC260FC22C3D00D8BD53 /* TaskCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3416EC230FC22C3D00D8BD53 /* TaskCell.m */; };
@@ -48,7 +49,6 @@
 		3494869810152A3B00DF81F3 /* TaskList.m in Sources */ = {isa = PBXBuildFile; fileRef = 3494869710152A3B00DF81F3 /* TaskList.m */; };
 		3494869910152A3B00DF81F3 /* TaskList.m in Sources */ = {isa = PBXBuildFile; fileRef = 3494869710152A3B00DF81F3 /* TaskList.m */; };
 		34AF21F0102FC20B001FC4B7 /* MockDonezoAPIClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AF21ED102FC20B001FC4B7 /* MockDonezoAPIClient.m */; };
-		34AF21F1102FC20B001FC4B7 /* SyncTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AF21EF102FC20B001FC4B7 /* SyncTest.m */; };
 		34B7D83E0FC3860600A91E43 /* checked.png in Resources */ = {isa = PBXBuildFile; fileRef = 34B7D83C0FC3860600A91E43 /* checked.png */; };
 		34B7D83F0FC3860600A91E43 /* unchecked.png in Resources */ = {isa = PBXBuildFile; fileRef = 34B7D83D0FC3860600A91E43 /* unchecked.png */; };
 		34B7D8400FC3860600A91E43 /* checked.png in Resources */ = {isa = PBXBuildFile; fileRef = 34B7D83C0FC3860600A91E43 /* checked.png */; };
@@ -540,7 +540,7 @@
 				34E13DF410225E75005A582E /* NSString+Donezo.m in Sources */,
 				3412017110294BF200A0439E /* DonezoSyncMaster.m in Sources */,
 				34AF21F0102FC20B001FC4B7 /* MockDonezoAPIClient.m in Sources */,
-				34AF21F1102FC20B001FC4B7 /* SyncTest.m in Sources */,
+				3412361D10486632009451EF /* SyncTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
