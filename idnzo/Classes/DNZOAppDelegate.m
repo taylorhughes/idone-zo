@@ -15,6 +15,8 @@
 @implementation DNZOAppDelegate
 
 @synthesize window, navigationController, mainController;
+@synthesize syncMaster;
+@synthesize donezoAPIClient;
 
 - (id) init
 {
@@ -28,11 +30,8 @@
 
 - (void) sync
 {  
-  DonezoAPIClient *client = [[DonezoAPIClient alloc] initWithUsername:@"test@example.com" andPassword:@"" toBaseUrl:@"http://localhost:8081/"];
-  DonezoSyncMaster *syncMaster = [[DonezoSyncMaster alloc] initWithDonezoClient:client andContext:self.managedObjectContext];
-  
   NSError *error = nil;
-  [syncMaster performSync:&error];
+  [self.syncMaster performSync:&error];
   if (error != nil)
   {
     NSLog(@"Error! %@", [error description]);
@@ -48,6 +47,17 @@
     NSLog(@"Store does not exist. Adding initial objects...");
     [self createInitialObjects];
   }
+  
+  NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+  
+  NSString *donezoUsername = [defaults stringForKey:@"username"];
+  NSString *donezoPassword = [defaults stringForKey:@"password"];
+  NSString *donezoURL = [defaults stringForKey:@"donezoURL"];
+  
+  NSLog(@"Got user %@ for URL %@", donezoUsername, donezoURL);
+  
+  self.donezoAPIClient = [[DonezoAPIClient alloc] initWithUsername:donezoUsername andPassword:donezoPassword toBaseUrl:donezoURL];
+  self.syncMaster = [[DonezoSyncMaster alloc] initWithDonezoClient:self.donezoAPIClient andContext:self.managedObjectContext];
   
   NSLog(@"Syncing...");
   [self sync];
@@ -189,6 +199,8 @@
 
 - (void)dealloc
 {
+  [donezoAPIClient release];
+  [syncMaster release];
   [managedObjectContext release];
   [managedObjectModel release];
   [persistentStoreCoordinator release];

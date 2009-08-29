@@ -76,7 +76,7 @@
     else
     {
       NSLog(@"Fetch request was successful; got %d task(s).", [tasks count]);
-      NSLog(@"Order is: %@", [tasks valueForKey:@"sortDate"]);
+      //NSLog(@"Order is: %@", [tasks valueForKey:@"sortDate"]);
     }
   }
   return tasks;

@@ -22,6 +22,9 @@
   NSManagedObjectModel *managedObjectModel;
   NSManagedObjectContext *managedObjectContext;	    
   NSPersistentStoreCoordinator *persistentStoreCoordinator;
+  
+  DonezoAPIClient *donezoAPIClient;
+  DonezoSyncMaster *syncMaster;
 }
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;
@@ -33,6 +36,9 @@
 @property (nonatomic, retain, readonly) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
 @property (nonatomic, readonly) NSString *storePath;
+
+@property (nonatomic, retain) DonezoAPIClient *donezoAPIClient;
+@property (nonatomic, retain) DonezoSyncMaster *syncMaster;
 
 - (void)sync;
 

@@ -2,8 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>StringsTable</key>
-	<string>Root</string>
+	<key>Title</key>
+	<string>Done-zo</string>
 	<key>PreferenceSpecifiers</key>
 	<array>
 		<dict>
@@ -59,6 +59,16 @@
 			<string>None</string>
 			<key>AutocorrectionType</key>
 			<string>No</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSTextFieldSpecifier</string>
+			<key>Title</key>
+			<string>Done-zo URL</string>
+			<key>Key</key>
+			<string>donezoURL</string>
+			<key>DefaultValue</key>
+			<string>http://localhost:8081/</string>
 		</dict>
 	</array>
 </dict>
