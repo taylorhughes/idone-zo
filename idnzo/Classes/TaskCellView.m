@@ -95,7 +95,7 @@ static UIImage *checked;
   
   if ([array count] == 0)
   {
-    [array addObject:@"(none)"];
+    //[array addObject:@"(none)"];
   }
   return array;
 }

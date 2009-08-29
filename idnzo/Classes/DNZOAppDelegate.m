@@ -41,14 +41,28 @@
 
 - (void) applicationDidFinishLaunching:(UIApplication *)application
 { 
+  // settings holder
+  NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+  
   NSLog(@"SQLite store: %@", self.storePath);
-  if (![[NSFileManager defaultManager] fileExistsAtPath:self.storePath])
+  BOOL resetOnLaunch = [defaults boolForKey:@"resetOnLaunch"];
+  BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:self.storePath];
+  if (resetOnLaunch && fileExists)
+  {
+    NSError *error = nil;
+    [[NSFileManager defaultManager] removeItemAtPath:self.storePath error:&error];
+    if (error)
+    {
+      NSLog(@"Could not delete the SQLite store! %@ (%@)", [error description], [error userInfo]);
+    }
+    [defaults setBool:NO forKey:@"resetOnLaunch"];
+    fileExists = (error != nil);
+  }
+  if (!fileExists)
   {
     NSLog(@"Store does not exist. Adding initial objects...");
     [self createInitialObjects];
   }
-  
-  NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
   
   NSString *donezoUsername = [defaults stringForKey:@"username"];
   NSString *donezoPassword = [defaults stringForKey:@"password"];
