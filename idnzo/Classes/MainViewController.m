@@ -5,6 +5,11 @@
 
 @property (nonatomic, retain) ListViewController *listViewController;
 
+- (void) loadListViewForList:(TaskList*)list;
+- (void) loadListViewForList:(TaskList*)list animated:(BOOL)animated;
+- (void) recordViewedList:(NSObject*)object;
+- (void) loadLastViewedList:(NSObject*)object;
+
 @end
 
 @implementation MainViewController
@@ -12,11 +17,66 @@
 @synthesize taskLists;
 @synthesize listViewController;
 
+- (void)awakeFromNib
+{
+  NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+  NSString *listName = [defaults objectForKey:@"lastListViewed"];
+  NSLog(@"Last viewed list was %@", listName);
+  if (listName != nil)
+  {
+    [self loadLastViewedList:listName];
+  }
+}
+
 - (void) dealloc
 {
   [taskLists release];
   [listViewController release];
   [super dealloc];
+}
+
+- (void) loadLastViewedList:(NSObject*)object
+{
+  DNZOAppDelegate *appDelegate = (DNZOAppDelegate *)[[UIApplication sharedApplication] delegate];
+  
+  NSFetchRequest *request = [[NSFetchRequest alloc] init];
+  request.entity = [NSEntityDescription entityForName:@"TaskList" inManagedObjectContext:appDelegate.managedObjectContext];
+  [request setPredicate:[NSPredicate predicateWithFormat:@"name = %@", object]];
+  
+  NSError *error = nil;
+  NSArray *results = [appDelegate.managedObjectContext executeFetchRequest:request error:&error];
+  if (error == nil && [results count] > 0)
+  {
+    [self loadListViewForList:[results objectAtIndex:0] animated:NO];
+  }
+  else
+  {
+    NSLog(@"Couldn't load list view for list with name %@!", object);
+  }
+}
+
+- (void) recordViewedList:(NSObject*)object
+{
+  NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+  [defaults setObject:object forKey:@"lastListViewed"];
+}
+
+- (void) loadListViewForList:(TaskList*)list animated:(BOOL)animated
+{
+  self.listViewController.taskList = list;
+  
+  [self recordViewedList:[list name]];
+  
+  [self.navigationController pushViewController:self.listViewController animated:animated];
+}
+- (void) loadListViewForList:(TaskList*)list
+{
+  [self loadListViewForList:list animated:YES];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+  [self recordViewedList:nil];
 }
 
 - (ListViewController *)listViewController
@@ -93,12 +153,9 @@
 
 - (NSIndexPath *)tableView:(UITableView *)tv willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-  ListViewController *controller = self.listViewController;
-
   TaskList *clickedList = [self.taskLists objectAtIndex:indexPath.row];
-  controller.taskList = clickedList;
-  
-  [self.navigationController pushViewController:controller animated:YES];
+
+  [self loadListViewForList:clickedList];
   
   return nil;
 }
