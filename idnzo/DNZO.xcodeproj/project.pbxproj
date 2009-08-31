@@ -11,7 +11,6 @@
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		3412017010294BF200A0439E /* DonezoSyncMaster.m in Sources */ = {isa = PBXBuildFile; fileRef = 3412016F10294BF200A0439E /* DonezoSyncMaster.m */; };
 		3412017110294BF200A0439E /* DonezoSyncMaster.m in Sources */ = {isa = PBXBuildFile; fileRef = 3412016F10294BF200A0439E /* DonezoSyncMaster.m */; };
-		3412361D10486632009451EF /* SyncTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AF21EF102FC20B001FC4B7 /* SyncTest.m */; };
 		3412FD561027961B00A0439E /* NSDictionary+Donezo.m in Sources */ = {isa = PBXBuildFile; fileRef = 3412FD551027961B00A0439E /* NSDictionary+Donezo.m */; };
 		3412FDD210279C1D00A0439E /* NSDictionary+Donezo.m in Sources */ = {isa = PBXBuildFile; fileRef = 3412FD551027961B00A0439E /* NSDictionary+Donezo.m */; };
 		3416EC260FC22C3D00D8BD53 /* TaskCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3416EC230FC22C3D00D8BD53 /* TaskCell.m */; };
@@ -32,6 +31,8 @@
 		341E1F020FB14F2900D5B454 /* TaskView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 341E1EFE0FB14F2900D5B454 /* TaskView.xib */; };
 		34205CB10FB2641800A9F048 /* TextFieldController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34205CB00FB2641800A9F048 /* TextFieldController.m */; };
 		34205CB20FB2641800A9F048 /* TextFieldController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34205CB00FB2641800A9F048 /* TextFieldController.m */; };
+		3427D2B0104B04D70079B68C /* SyncTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AF21EF102FC20B001FC4B7 /* SyncTest.m */; };
+		3427D2B1104B04DD0079B68C /* DonezoAPIClientTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 34770B340FAFE4C200AD8397 /* DonezoAPIClientTest.m */; };
 		3452D4A31049CC26005C717C /* Entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3452D4A21049CC26005C717C /* Entitlements.plist */; };
 		345A19120FBA6F29000BBC22 /* TextViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 345A19110FBA6F29000BBC22 /* TextViewCell.m */; };
 		345A19130FBA6F29000BBC22 /* TextViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 345A19110FBA6F29000BBC22 /* TextViewCell.m */; };
@@ -41,7 +42,6 @@
 		34770B2D0FAFE45B00AD8397 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34770B290FAFE45B00AD8397 /* MainViewController.m */; };
 		34770B310FAFE4A300AD8397 /* ListView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34770B2F0FAFE4A300AD8397 /* ListView.xib */; };
 		34770B320FAFE4A300AD8397 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34770B300FAFE4A300AD8397 /* MainWindow.xib */; };
-		34770B350FAFE4C200AD8397 /* DonezoAPIClientTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 34770B340FAFE4C200AD8397 /* DonezoAPIClientTest.m */; };
 		34770B440FAFE67B00AD8397 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 34770B430FAFE67B00AD8397 /* icon.png */; };
 		34770B5A0FAFED7000AD8397 /* EditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34770B590FAFED7000AD8397 /* EditViewController.m */; };
 		3481B41A10165823003A2FC7 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3481B41910165823003A2FC7 /* Settings.bundle */; };
@@ -519,7 +519,6 @@
 				34770B2A0FAFE45B00AD8397 /* ListViewController.m in Sources */,
 				34770B2B0FAFE45B00AD8397 /* MainViewController.m in Sources */,
 				34E13D0B101904DF005A582E /* EditViewController.m in Sources */,
-				34770B350FAFE4C200AD8397 /* DonezoAPIClientTest.m in Sources */,
 				341E1E240FB138F000D5B454 /* TaskViewController.m in Sources */,
 				34205CB10FB2641800A9F048 /* TextFieldController.m in Sources */,
 				34C51AC40FB92A9D0024A5CD /* EditProjectPicker.m in Sources */,
@@ -544,7 +543,8 @@
 				34E13DF410225E75005A582E /* NSString+Donezo.m in Sources */,
 				3412017110294BF200A0439E /* DonezoSyncMaster.m in Sources */,
 				34AF21F0102FC20B001FC4B7 /* MockDonezoAPIClient.m in Sources */,
-				3412361D10486632009451EF /* SyncTest.m in Sources */,
+				3427D2B0104B04D70079B68C /* SyncTest.m in Sources */,
+				3427D2B1104B04DD0079B68C /* DonezoAPIClientTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

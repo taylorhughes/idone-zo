@@ -26,4 +26,6 @@
 - (IBAction) archiveTasks:(id)sender;
 - (IBAction) sync:(id)sender;
 
+- (void) reloadData;
+
 @end

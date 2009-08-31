@@ -160,4 +160,17 @@
   return nil;
 }
 
+- (void) reloadData
+{
+  self.taskLists = nil;
+  [self.tableView reloadData];
+  
+  if ([self.listViewController.taskList isDeleted])
+  {
+    NSLog(@"Shit! Task list is deleted.");
+  }
+  
+  [self.listViewController reloadData];
+}
+
 @end

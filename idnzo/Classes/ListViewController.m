@@ -160,7 +160,6 @@
 {
   DNZOAppDelegate *appDelegate = (DNZOAppDelegate *)[[UIApplication sharedApplication] delegate];
   [appDelegate sync];
-  [self reloadData];
 }
 
 - (void)addNewTask:(id)sender

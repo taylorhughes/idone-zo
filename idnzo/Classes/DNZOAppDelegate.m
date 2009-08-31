@@ -15,6 +15,9 @@
 @implementation DNZOAppDelegate
 
 @synthesize window, navigationController, mainController;
+
+@synthesize operationQueue;
+
 @synthesize syncMaster;
 @synthesize donezoAPIClient;
 
@@ -23,21 +26,63 @@
   self = [super init];
   if (self != nil)
   {
-    // initialize
+    self.operationQueue = [[[NSOperationQueue alloc] init] autorelease];
   }
   return self;
 }
 
 - (void) sync
-{  
+{ 
+  NSInvocationOperation *syncOperation = [[NSInvocationOperation alloc]
+                                          initWithTarget:self
+                                          selector:@selector(syncOperation)
+                                          object:nil];
+  [self.operationQueue addOperation:syncOperation];
+  [syncOperation release];
+}
+
+// Operates in a separate thread
+- (void) syncOperation
+{
   NSError *error = nil;
   [self.syncMaster performSync:&error];
+  [self performSelectorOnMainThread:@selector(finishSync:) withObject:error waitUntilDone:YES];
+}
+
+// Operates on the main thread
+- (void) finishSync:(id)arg
+{
+  NSError *error = (NSError*)arg;
   if (error != nil)
   {
-    NSLog(@"Error! %@", [error description]);
+    NSLog(@"Error syncing! %@ %@", [error description], [error userInfo]);
+    return;
   }
-  NSLog(@"Finished sync.");
+  
+  NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
+  [dnc addObserver:self
+          selector:@selector(syncingContextDidSave:) 
+              name:NSManagedObjectContextDidSaveNotification
+            object:self.syncManagedObjectContext];
+  
+  if (![self.syncManagedObjectContext save:&error])
+  {
+    NSLog(@"Error saving synced context! %@ %@", [error description], [error userInfo]);
+  }
+  else
+  {
+    NSLog(@"Sync completed successfully!");
+  }
+  [dnc removeObserver:self name:NSManagedObjectContextDidSaveNotification object:self.syncManagedObjectContext];
+  
+  [self.mainController reloadData];
 }
+
+- (void)syncingContextDidSave:(NSNotification*)saveNotification
+{
+	[self.managedObjectContext mergeChangesFromContextDidSaveNotification:saveNotification];	
+}
+
 
 - (void) applicationDidFinishLaunching:(UIApplication *)application
 { 
@@ -71,7 +116,7 @@
   NSLog(@"Got user %@ for URL %@", donezoUsername, donezoURL);
   
   self.donezoAPIClient = [[DonezoAPIClient alloc] initWithUsername:donezoUsername andPassword:donezoPassword toBaseUrl:donezoURL];
-  self.syncMaster = [[DonezoSyncMaster alloc] initWithDonezoClient:self.donezoAPIClient andContext:self.managedObjectContext];
+  self.syncMaster = [[DonezoSyncMaster alloc] initWithDonezoClient:self.donezoAPIClient andContext:self.syncManagedObjectContext];
   
   NSLog(@"Syncing...");
   [self sync];
@@ -95,6 +140,7 @@
     exit(-1);  // Fail
   }
 }
+
 /**
  Returns the managed object context for the application.
  If the context doesn't already exist, it is created and bound to the persistent store coordinator for the application.
@@ -111,6 +157,19 @@
     }
   }
   return managedObjectContext;
+}
+- (NSManagedObjectContext *) syncManagedObjectContext
+{
+  if (syncManagedObjectContext == nil)
+  {	
+    NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
+    if (coordinator != nil)
+    {
+      syncManagedObjectContext = [[NSManagedObjectContext alloc] init];
+      [syncManagedObjectContext setPersistentStoreCoordinator:coordinator];
+    }
+  }
+  return syncManagedObjectContext;
 }
 
 
@@ -213,6 +272,7 @@
 
 - (void)dealloc
 {
+  [operationQueue release];
   [donezoAPIClient release];
   [syncMaster release];
   [managedObjectContext release];

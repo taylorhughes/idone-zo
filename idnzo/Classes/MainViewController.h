@@ -11,4 +11,6 @@
 
 @property (retain, nonatomic) NSArray *taskLists;
 
+- (void) reloadData;
+
 @end

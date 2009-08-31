@@ -51,8 +51,6 @@
     [self syncList:list error:error];
     if (*error != nil) { return; }
   }
-  
-  [self.context save:error];
 }
 
 - (NSArray*) syncLists:(NSError**)error

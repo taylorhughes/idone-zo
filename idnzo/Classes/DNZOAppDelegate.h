@@ -20,11 +20,14 @@
   MainViewController *mainController;
   
   NSManagedObjectModel *managedObjectModel;
-  NSManagedObjectContext *managedObjectContext;	    
+  NSManagedObjectContext *managedObjectContext;
+  NSManagedObjectContext *syncManagedObjectContext;
   NSPersistentStoreCoordinator *persistentStoreCoordinator;
   
   DonezoAPIClient *donezoAPIClient;
   DonezoSyncMaster *syncMaster;
+  
+  NSOperationQueue *operationQueue;
 }
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;
@@ -33,12 +36,15 @@
 
 @property (nonatomic, retain, readonly) NSManagedObjectModel *managedObjectModel;
 @property (nonatomic, retain, readonly) NSManagedObjectContext *managedObjectContext;
+@property (nonatomic, retain, readonly) NSManagedObjectContext *syncManagedObjectContext;
 @property (nonatomic, retain, readonly) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
 @property (nonatomic, readonly) NSString *storePath;
 
 @property (nonatomic, retain) DonezoAPIClient *donezoAPIClient;
 @property (nonatomic, retain) DonezoSyncMaster *syncMaster;
+
+@property (nonatomic, retain) NSOperationQueue *operationQueue;
 
 - (void)sync;
 

@@ -187,7 +187,6 @@
 
 - (void) testTaskLists
 {
-  
   NSError *error = nil;
   NSArray *array = [self.client getLists:&error];
   
