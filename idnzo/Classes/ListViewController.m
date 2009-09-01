@@ -139,6 +139,14 @@
     cell.taskCellView.wasCompleted = NO;
     clickedTask.isComplete = !clickedTask.isComplete;
     [clickedTask hasBeenUpdated];
+    
+    DNZOAppDelegate *appDelegate = (DNZOAppDelegate *)[[UIApplication sharedApplication] delegate];
+    NSError *error = nil;
+    if (![appDelegate.managedObjectContext save:&error])
+    {
+      NSLog(@"Error saving clicked task: %@ %@", [error description], [error userInfo]);
+    }
+    
     [self.tableView reloadData];
   }
   else

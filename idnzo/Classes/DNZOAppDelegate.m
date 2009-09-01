@@ -27,12 +27,43 @@
   if (self != nil)
   {
     self.operationQueue = [[[NSOperationQueue alloc] init] autorelease];
+    
+    // settings holder
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    
+    NSLog(@"SQLite store: %@", self.storePath);
+    BOOL resetOnLaunch = [defaults boolForKey:@"resetOnLaunch"];
+    BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:self.storePath];
+    if (resetOnLaunch && fileExists)
+    {
+      NSError *error = nil;
+      [[NSFileManager defaultManager] removeItemAtPath:self.storePath error:&error];
+      if (error)
+      {
+        NSLog(@"Could not delete the SQLite store! %@ (%@)", [error description], [error userInfo]);
+      }
+      else
+      {
+        fileExists = NO;
+      }
+      
+      [defaults setBool:NO forKey:@"resetOnLaunch"];
+    }
+    if (!fileExists)
+    {
+      NSLog(@"Store does not exist. Adding initial objects...");
+      [self createInitialObjects];
+    }    
   }
   return self;
 }
 
 - (void) sync
 { 
+  // Make a copy of the context that is up to date for now
+  self.syncMaster.context = [[[NSManagedObjectContext alloc] init] autorelease];
+  [self.syncMaster.context setPersistentStoreCoordinator:self.persistentStoreCoordinator];
+  
   NSInvocationOperation *syncOperation = [[NSInvocationOperation alloc]
                                           initWithTarget:self
                                           selector:@selector(syncOperation)
@@ -63,9 +94,9 @@
   [dnc addObserver:self
           selector:@selector(syncingContextDidSave:) 
               name:NSManagedObjectContextDidSaveNotification
-            object:self.syncManagedObjectContext];
+            object:self.syncMaster.context];
   
-  if (![self.syncManagedObjectContext save:&error])
+  if (![self.syncMaster.context save:&error])
   {
     NSLog(@"Error saving synced context! %@ %@", [error description], [error userInfo]);
   }
@@ -73,7 +104,7 @@
   {
     NSLog(@"Sync completed successfully!");
   }
-  [dnc removeObserver:self name:NSManagedObjectContextDidSaveNotification object:self.syncManagedObjectContext];
+  [dnc removeObserver:self name:NSManagedObjectContextDidSaveNotification object:self.syncMaster.context];
   
   [self.mainController reloadData];
 }
@@ -83,31 +114,10 @@
 	[self.managedObjectContext mergeChangesFromContextDidSaveNotification:saveNotification];	
 }
 
-
 - (void) applicationDidFinishLaunching:(UIApplication *)application
 { 
   // settings holder
   NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-  
-  NSLog(@"SQLite store: %@", self.storePath);
-  BOOL resetOnLaunch = [defaults boolForKey:@"resetOnLaunch"];
-  BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:self.storePath];
-  if (resetOnLaunch && fileExists)
-  {
-    NSError *error = nil;
-    [[NSFileManager defaultManager] removeItemAtPath:self.storePath error:&error];
-    if (error)
-    {
-      NSLog(@"Could not delete the SQLite store! %@ (%@)", [error description], [error userInfo]);
-    }
-    [defaults setBool:NO forKey:@"resetOnLaunch"];
-    fileExists = (error != nil);
-  }
-  if (!fileExists)
-  {
-    NSLog(@"Store does not exist. Adding initial objects...");
-    [self createInitialObjects];
-  }
   
   NSString *donezoUsername = [defaults stringForKey:@"username"];
   NSString *donezoPassword = [defaults stringForKey:@"password"];
@@ -116,7 +126,7 @@
   NSLog(@"Got user %@ for URL %@", donezoUsername, donezoURL);
   
   self.donezoAPIClient = [[DonezoAPIClient alloc] initWithUsername:donezoUsername andPassword:donezoPassword toBaseUrl:donezoURL];
-  self.syncMaster = [[DonezoSyncMaster alloc] initWithDonezoClient:self.donezoAPIClient andContext:self.syncManagedObjectContext];
+  self.syncMaster = [[DonezoSyncMaster alloc] initWithDonezoClient:self.donezoAPIClient andContext:nil];
   
   NSLog(@"Syncing...");
   [self sync];
@@ -133,7 +143,7 @@
 - (IBAction) saveAction:(id)sender
 {
   NSError *error;
-  if (![[self managedObjectContext] save:&error])
+  if (![self.managedObjectContext save:&error])
   {
     // Handle error
     NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
@@ -149,6 +159,7 @@
 {
   if (managedObjectContext == nil)
   {	
+    NSLog(@"Creating managed object context..");
     NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
     if (coordinator != nil)
     {
@@ -158,20 +169,6 @@
   }
   return managedObjectContext;
 }
-- (NSManagedObjectContext *) syncManagedObjectContext
-{
-  if (syncManagedObjectContext == nil)
-  {	
-    NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
-    if (coordinator != nil)
-    {
-      syncManagedObjectContext = [[NSManagedObjectContext alloc] init];
-      [syncManagedObjectContext setPersistentStoreCoordinator:coordinator];
-    }
-  }
-  return syncManagedObjectContext;
-}
-
 
 /**
  Returns the managed object model for the application.

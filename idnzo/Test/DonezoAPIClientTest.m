@@ -26,7 +26,11 @@
   self.client = [[MockDonezoAPIClient alloc] initWithUsername:TEST_USER andPassword:TEST_PASSWORD toBaseUrl:TEST_URL];
   [(MockDonezoAPIClient*)self.client resetAccount:&error];
   
-  NSAssert(!error, @"Could not reset account, etc.");
+  if (error)
+  {
+    NSLog(@"Could not reset account! %@ %@", [error description], [error userInfo]);    
+  }
+
   
   [(MockDonezoAPIClient*)self.client loadTasksAndTaskLists:@"{ \
    \"task_lists\": [ \

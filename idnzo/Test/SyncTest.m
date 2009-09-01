@@ -51,7 +51,6 @@
   NSPersistentStoreCoordinator *persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:managedObjectModel];
   if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeUrl options:nil error:&error])
   {
-    // Handle error
     NSLog(@"FuuuucK: %@ %@", [error description], [error userInfo]);
   }
   
