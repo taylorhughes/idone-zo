@@ -345,7 +345,9 @@
   NSEntityDescription *entity = [NSEntityDescription entityForName:@"TaskList" inManagedObjectContext:self.context];
   request.entity = entity;
   
-  return [self.context executeFetchRequest:request error:error];
+  NSArray *retarr = [self.context executeFetchRequest:request error:error];
+  [request release];
+  return retarr;
 }
 
 @end

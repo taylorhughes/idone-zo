@@ -195,8 +195,8 @@
 	
 	UITableViewCell *cell = [[[UITableViewCell alloc] initWithFrame:rect reuseIdentifier:identifier] autorelease];
 	
-	UILabel *label;
-	
+  UILabel *label = nil;
+  
 	rect = CGRectMake(PADDING, PADDING, LEFT_COLUMN_WIDTH, DETAIL_ROW_HEIGHT - PADDING * 2);
 	label = [[UILabel alloc] initWithFrame:rect];
 	label.tag = TITLE_TAG;
@@ -237,6 +237,7 @@
       break;
       
     case 1:
+    default:
       cell = [self.tableView dequeueReusableCellWithIdentifier:@"DetailCell"];
       if (cell == nil) {
         cell = [self detailCellWithReuseIdentifier:@"DetailCell"];

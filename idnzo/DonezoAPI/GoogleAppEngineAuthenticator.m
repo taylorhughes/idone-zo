@@ -97,6 +97,8 @@
   NSError *authError = nil;
   NSData *authData = [NSURLConnection sendSynchronousRequest:authRequest returningResponse:&authResponse error:&authError];      
 
+  [authRequest release];
+  
   if (authError != nil)
   {
     NSLog(@"Oh no, an error for request: %@; %@", [authError description], [authError userInfo]);
@@ -105,10 +107,11 @@
   }
   
   NSString *authResponseBody = [[NSString alloc] initWithData:authData encoding:NSASCIIStringEncoding];
-  
   // Loop through response body which is key=value pairs, separated by \n.
   // The code below is not optimal and certainly error prone. 
   NSArray *lines = [authResponseBody componentsSeparatedByString:@"\n"];
+  [authResponseBody release];
+  
   NSMutableDictionary *token = [NSMutableDictionary dictionary];
   for (NSString *line in lines)
   {

@@ -37,7 +37,7 @@
 {
   DNZOAppDelegate *appDelegate = (DNZOAppDelegate *)[[UIApplication sharedApplication] delegate];
   
-  NSFetchRequest *request = [[NSFetchRequest alloc] init];
+  NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
   request.entity = [NSEntityDescription entityForName:@"TaskList" inManagedObjectContext:appDelegate.managedObjectContext];
   [request setPredicate:[NSPredicate predicateWithFormat:@"name = %@", object]];
   
@@ -93,7 +93,7 @@
   {
     DNZOAppDelegate *appDelegate = (DNZOAppDelegate *)[[UIApplication sharedApplication] delegate];
     
-    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"TaskList" inManagedObjectContext:appDelegate.managedObjectContext];
     request.entity = entity;
     

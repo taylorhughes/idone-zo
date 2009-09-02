@@ -27,15 +27,15 @@
   request.sortDescriptors = sorters;
   [sort release];
   
-  NSError *error;
-  
+  NSError *error = nil;
   NSArray *projects = [context executeFetchRequest:request error:&error];
   if (projects == nil)
   {
     // handle error
     NSLog(@"No projects! What?!");
   }
-  
+
+  [request release];
   return projects;
 }
 

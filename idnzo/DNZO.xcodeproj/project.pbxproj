@@ -34,6 +34,7 @@
 		3452D4A31049CC26005C717C /* Entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3452D4A21049CC26005C717C /* Entitlements.plist */; };
 		345A19120FBA6F29000BBC22 /* TextViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 345A19110FBA6F29000BBC22 /* TextViewCell.m */; };
 		345A19130FBA6F29000BBC22 /* TextViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 345A19110FBA6F29000BBC22 /* TextViewCell.m */; };
+		34762C35104EF27700498704 /* DNZOAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* DNZOAppDelegate.m */; };
 		34770B2A0FAFE45B00AD8397 /* ListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34770B270FAFE45B00AD8397 /* ListViewController.m */; };
 		34770B2B0FAFE45B00AD8397 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34770B290FAFE45B00AD8397 /* MainViewController.m */; };
 		34770B2C0FAFE45B00AD8397 /* ListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34770B270FAFE45B00AD8397 /* ListViewController.m */; };
@@ -459,7 +460,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+			shellScript = "\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -533,6 +534,7 @@
 				3412017110294BF200A0439E /* DonezoSyncMaster.m in Sources */,
 				34AF21F0102FC20B001FC4B7 /* MockDonezoAPIClient.m in Sources */,
 				34A282D8104DA3EB00F26A01 /* DonezoAPIClientTest.m in Sources */,
+				34762C35104EF27700498704 /* DNZOAppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

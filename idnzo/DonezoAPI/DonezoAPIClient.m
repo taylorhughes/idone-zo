@@ -89,7 +89,9 @@
   NSHTTPURLResponse *response;
   NSData *responseData = [NSURLConnection sendSynchronousRequest:req returningResponse:&response error:error];      
   NSString *responseString = [[[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding] autorelease];
-    
+  
+  [req release];
+  
   return responseString;
 }
 
