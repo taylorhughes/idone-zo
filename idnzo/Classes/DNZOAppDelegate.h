@@ -13,6 +13,8 @@
 
 @class Project, Context, TaskList, Task, MainViewController;
 
+extern NSString * const DonezoSyncStatusChangedNotification;
+
 @interface DNZOAppDelegate : NSObject <UIApplicationDelegate> {
   UIWindow *window;
   
@@ -28,6 +30,7 @@
   DonezoSyncMaster *syncMaster;
   
   NSOperationQueue *operationQueue;
+  BOOL isSyncing;
 }
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;
@@ -46,6 +49,7 @@
 @property (nonatomic, retain) NSOperationQueue *operationQueue;
 
 - (void)sync;
+- (BOOL)isSyncing;
 
 @end
 

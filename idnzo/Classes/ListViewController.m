@@ -6,6 +6,7 @@
 - (void)newTaskSaved;
 - (void)newTaskCanceled;
 - (void)addingContextDidSave:(NSNotification*)saveNotification;
+- (void)updateSyncDisplay:(NSNotification*)syncChangedNotification;
 
 @property (nonatomic, retain) NSManagedObjectContext *addingContext;
 
@@ -18,6 +19,17 @@
 @synthesize tasks;
 @synthesize taskViewController;
 @synthesize addingContext;
+@synthesize syncButton;
+
+- (id) init
+{
+  self = [super init];
+  if (self != nil)
+  {
+
+  }
+  return self;
+}
 
 - (TaskViewController *)taskViewController
 {
@@ -89,6 +101,14 @@
   UIBarButtonItem *add = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
                                                    target:self action:@selector(addNewTask:)] autorelease];
   self.navigationItem.rightBarButtonItem = add;
+  
+  DNZOAppDelegate *appDelegate = (DNZOAppDelegate *)[[UIApplication sharedApplication] delegate];
+  NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
+  [dnc addObserver:self
+          selector:@selector(updateSyncDisplay:) 
+              name:DonezoSyncStatusChangedNotification
+            object:appDelegate];
+  [self updateSyncDisplay:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -163,6 +183,13 @@
 - (IBAction)archiveTasks:(id)sender
 {
 }
+
+- (void)updateSyncDisplay:(NSNotification*)syncChangedNotification
+{
+  DNZOAppDelegate *appDelegate = (DNZOAppDelegate *)[[UIApplication sharedApplication] delegate];
+  self.syncButton.enabled = ![appDelegate isSyncing];
+}
+
 
 - (IBAction)sync:(id)sender
 {

@@ -39,6 +39,13 @@
   return self;
 }
 
+- (void) dealloc
+{
+  [client release];
+  [context release];
+  [super dealloc];
+}
+
 - (void) performSync:(NSError**)error
 {
   NSLog(@"Syncing lists..");

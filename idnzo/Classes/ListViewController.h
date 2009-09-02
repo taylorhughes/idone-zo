@@ -15,6 +15,8 @@
   NSArray *tasks;
   TaskViewController *taskViewController;
 
+  UIBarButtonItem *syncButton;
+  
   NSManagedObjectContext *addingContext;
 }
 
@@ -22,6 +24,7 @@
 @property (retain, nonatomic) TaskList *taskList;
 @property (retain, readonly, nonatomic) NSArray *tasks;
 @property (retain, nonatomic) TaskViewController *taskViewController;
+@property (retain, nonatomic) IBOutlet UIBarButtonItem *syncButton;
 
 - (IBAction) archiveTasks:(id)sender;
 - (IBAction) sync:(id)sender;

@@ -3,8 +3,6 @@
 
 @interface MainViewController ()
 
-@property (nonatomic, retain) ListViewController *listViewController;
-
 - (void) loadListViewForList:(TaskList*)list;
 - (void) loadListViewForList:(TaskList*)list animated:(BOOL)animated;
 - (void) recordViewedList:(NSObject*)object;

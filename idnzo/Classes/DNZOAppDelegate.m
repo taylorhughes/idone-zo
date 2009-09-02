@@ -8,6 +8,8 @@
 
 #import "DNZOAppDelegate.h"
 
+NSString * const DonezoSyncStatusChangedNotification = @"DonezoSyncStatusChangedNotification";
+
 @interface DNZOAppDelegate (Private)
 - (void)createInitialObjects;
 @end
@@ -26,6 +28,8 @@
   self = [super init];
   if (self != nil)
   {
+    isSyncing = NO;
+    
     self.operationQueue = [[[NSOperationQueue alloc] init] autorelease];
     
     // settings holder
@@ -53,13 +57,22 @@
     {
       NSLog(@"Store does not exist. Adding initial objects...");
       [self createInitialObjects];
-    }    
+    }
   }
   return self;
 }
 
+- (BOOL) isSyncing
+{
+  return isSyncing;
+}
+
 - (void) sync
 { 
+  isSyncing = YES;
+  NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
+  [dnc postNotificationName:DonezoSyncStatusChangedNotification object:self];
+  
   // Make a copy of the context that is up to date for now
   self.syncMaster.context = [[[NSManagedObjectContext alloc] init] autorelease];
   [self.syncMaster.context setPersistentStoreCoordinator:self.persistentStoreCoordinator];
@@ -106,6 +119,9 @@
   }
   [dnc removeObserver:self name:NSManagedObjectContextDidSaveNotification object:self.syncMaster.context];
   
+  // This sucks
+  isSyncing = NO;
+  [dnc postNotificationName:DonezoSyncStatusChangedNotification object:self];
   [self.mainController reloadData];
 }
 
