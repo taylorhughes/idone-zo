@@ -20,10 +20,10 @@ static UIImage *checked;
 @synthesize task, wasCompleted;
 
 #define PADDING 10.0
-#define IMAGE_WIDTH 15.0
+#define IMAGE_WIDTH 20.0
 #define IMAGE_HEIGHT 20.0
-#define IMAGE_TOP 11.0
-#define IMAGE_LEFT 10.0
+#define IMAGE_TOP 8.0
+#define IMAGE_LEFT 7.0
 #define MAIN_FONT_SIZE 20.0
 #define SECONDARY_FONT_SIZE 14.0
 #define TOUCH_BUFFER 10.0
