@@ -19,11 +19,12 @@ static UIImage *checked;
 
 @synthesize task, wasCompleted;
 
-#define PADDING 10.0
-#define IMAGE_WIDTH 20.0
+#define PADDING 2.0
+#define PADDING_BETWEEN_DETAILS PADDING * 3
+#define IMAGE_WIDTH 26.0
 #define IMAGE_HEIGHT 20.0
-#define IMAGE_TOP 8.0
-#define IMAGE_LEFT 7.0
+#define IMAGE_TOP 0.0
+#define IMAGE_LEFT 0.0
 #define MAIN_FONT_SIZE 20.0
 #define SECONDARY_FONT_SIZE 14.0
 #define TOUCH_BUFFER 10.0
@@ -39,7 +40,7 @@ static UIImage *checked;
 
 + (NSInteger) height
 {
-  return PADDING + MAIN_FONT_SIZE + PADDING + SECONDARY_FONT_SIZE + PADDING;
+  return PADDING + MAIN_FONT_SIZE + PADDING + SECONDARY_FONT_SIZE + PADDING * 4;
 }
 
 - (id)initWithFrame:(CGRect)frame
@@ -112,15 +113,7 @@ static UIImage *checked;
 	UIColor *secondaryTextColor = [UIColor darkGrayColor];
 	UIFont *secondaryFont = [UIFont systemFontOfSize:SECONDARY_FONT_SIZE];
   
-  UIImage *image;
-  if (task.isComplete)
-  {
-    image = checked;
-  }
-  else
-  {
-    image = unchecked;
-  }
+  UIImage *image = task.isComplete ? checked : unchecked;
   [image drawInRect:CGRectMake(IMAGE_LEFT, IMAGE_TOP, image.size.width, image.size.height)];
   
   if (task.isComplete)
@@ -180,10 +173,9 @@ static UIImage *checked;
           lineBreakMode:UILineBreakModeTailTruncation
      baselineAdjustment:UIBaselineAdjustmentAlignBaselines];
     
-    left += size.width + PADDING;
+    left += size.width + PADDING_BETWEEN_DETAILS;
   }
 }
-
 
 - (void)dealloc
 {
