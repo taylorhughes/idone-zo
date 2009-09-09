@@ -24,6 +24,7 @@
 @end
 
 #define AUTH_URL @"https://google.com/accounts/ClientLogin"
+#define USER_AGENT_STRING @"Done-zo Client 0.1"
 
 @implementation GoogleAppEngineAuthenticator
 
@@ -84,6 +85,7 @@
   
   NSURL *authURL = [NSURL URLWithString:AUTH_URL];
   NSMutableURLRequest *authRequest = [[NSMutableURLRequest alloc] initWithURL:authURL];
+  [authRequest setValue:USER_AGENT_STRING forHTTPHeaderField:@"User-Agent"];
   [authRequest setHTTPMethod:@"POST"];
   [authRequest setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-type"];
   [authRequest setHTTPBody:[[postBody toFormEncodedString] dataUsingEncoding:NSUTF8StringEncoding]];
@@ -165,6 +167,7 @@
   NSMutableURLRequest *cookieRequest = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:authURL]];
   
   [cookieRequest setHTTPMethod:@"GET"];
+  [cookieRequest setValue:USER_AGENT_STRING forHTTPHeaderField:@"User-Agent"];
   
   //NSData *cookieData = 
   [NSURLConnection sendSynchronousRequest:cookieRequest returningResponse:nil error:&cookieError];
