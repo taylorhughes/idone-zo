@@ -7,26 +7,21 @@
 //
 
 #import "Task.h"
-#import "EditViewController.h"
 #import "DNZOAppDelegate.h"
+#import "EditProjectPicker.h"
 
-@class Task, EditViewController;
+@class Task;
 
-@interface TaskViewController : UIViewController {
-  IBOutlet UIButton *deleteButton;
-  IBOutlet UIButton *completeButton;
-  IBOutlet UILabel *body;
+@interface TaskViewController : UITableViewController {
+ @private
   Task *task;
-  
+  Task *uneditedTask;
   NSManagedObjectContext *editingContext;
+  BOOL isEditing;
 }
 
-@property (nonatomic, retain) IBOutlet UIButton *deleteButton;
-@property (nonatomic, retain) IBOutlet UIButton *completeButton;
-@property (nonatomic, retain) IBOutlet UILabel *body;
-@property (nonatomic, retain) Task *task;
+- (void) loadTask:(Task*)newTask editing:(BOOL)editing;
 
-- (void) refresh;
-- (IBAction) complete:(id)sender;
+@property (nonatomic, readonly) BOOL isEditing;
 
 @end

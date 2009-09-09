@@ -172,7 +172,7 @@
   else
   {
     TaskViewController *controller = self.taskViewController;
-    controller.task = clickedTask;
+    [controller loadTask:clickedTask editing:NO];
     
     [self.navigationController pushViewController:controller animated:YES];    
   }
@@ -207,13 +207,15 @@
   
   Task *task = (Task*)[NSEntityDescription insertNewObjectForEntityForName:@"Task" inManagedObjectContext:self.addingContext];
   task.taskList = (TaskList*)[self.addingContext objectWithID:[self.taskList objectID]];
-  
+ 
+  /*
   UINavigationController *modalNavigationController = [EditViewController navigationControllerWithTask:task
                                                                                          dismissTarget:self  
                                                                                             saveAction:@selector(newTaskSaved)
                                                                                           cancelAction:@selector(newTaskCanceled)];
   
   [self.navigationController presentModalViewController:modalNavigationController animated:YES];
+  */
 }
 
 - (void)newTaskSaved
