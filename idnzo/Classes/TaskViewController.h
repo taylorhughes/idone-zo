@@ -18,6 +18,8 @@
   Task *uneditedTask;
   NSManagedObjectContext *editingContext;
   BOOL isEditing;
+  UILabel *topLabel;
+  UIImageView *topCheckmark;
 }
 
 - (void) loadTask:(Task*)newTask editing:(BOOL)editing;

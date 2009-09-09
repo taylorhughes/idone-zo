@@ -8,6 +8,9 @@
 
 #import "TaskViewController.h"
 
+static UIImage *checked;
+static UIImage *unchecked;
+
 @interface TaskViewController ()
 
 @property (nonatomic, retain) NSManagedObjectContext *editingContext;
@@ -22,6 +25,15 @@
 @end
 
 @implementation TaskViewController
+
++ (void) initialize
+{
+  if (self == [TaskViewController class])
+  {
+    checked = [[UIImage imageNamed:@"checked.png"] retain];
+    unchecked = [[UIImage imageNamed:@"unchecked.png"] retain];
+  }
+}
 
 @synthesize task, uneditedTask;
 @synthesize editingContext;
@@ -81,6 +93,43 @@
     
     self.navigationItem.leftBarButtonItem = nil;
   }
+  
+  // Work out the title cell
+  if (!topLabel)
+  {
+    topLabel = [[[UILabel alloc] init] retain];
+    topLabel.lineBreakMode = UILineBreakModeWordWrap;
+    topLabel.numberOfLines = 0;
+    topLabel.backgroundColor = [UIColor clearColor];
+    topLabel.font = [UIFont boldSystemFontOfSize:20.0];
+    
+    topCheckmark = [[[UIImageView alloc] init] retain];
+    topCheckmark.frame = CGRectMake(5.0f, 10.0f, 30.0f, 30.0f);
+    topCheckmark.contentMode = UIViewContentModeCenter;
+    
+    self.tableView.tableHeaderView = [[[UIView alloc] init] autorelease];
+    self.tableView.tableHeaderView.backgroundColor = [UIColor clearColor];
+    [self.tableView.tableHeaderView addSubview:topLabel];
+    [self.tableView.tableHeaderView addSubview:topCheckmark];
+  }
+  
+  topCheckmark.image = self.task.isComplete ? checked : unchecked;
+  
+  //bodyCell.accessoryType = self.isEditing ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
+  
+  // Resize body cell according to how tall the text is
+  CGFloat leftPadding = 10.0f;
+  CGFloat checkWidth = topCheckmark.frame.size.width + leftPadding;
+  CGRect viewRect = [self.view bounds];
+  CGSize size = [self.task.body sizeWithFont:topLabel.font
+                           constrainedToSize:CGSizeMake(viewRect.size.width - checkWidth - leftPadding, 200.0f)
+                               lineBreakMode:UILineBreakModeWordWrap];
+  
+  CGFloat topPadding = 12.0f;
+  topLabel.frame = CGRectMake(checkWidth, topPadding, viewRect.size.width - checkWidth, size.height);
+  topLabel.text = self.task.body;
+  self.tableView.tableHeaderView.frame = CGRectMake(0.0f, 0.0f, viewRect.size.width, topPadding + size.height);
+  self.tableView.tableHeaderView = self.tableView.tableHeaderView;
   
   [self.tableView reloadData];
 }
@@ -159,75 +208,45 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tv
 {
-  return 2;
+  return 1;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-  switch(section)
-  {
-    case 1: return @"Details";
-  }
+  //return @"Details";
   return nil;
 }
 
 - (NSInteger)tableView:(UITableView *)tv numberOfRowsInSection:(NSInteger)section
 {
-  switch (section)
-  {
-    case 0:
-      return 1;
-    case 1:
-      return 3;
-  }
-  return 0;
+  return 3;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tv cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	UITableViewCell *cell;
+
+  cell = [self.tableView dequeueReusableCellWithIdentifier:@"DetailCell"];
+  if (cell == nil)
+  {
+    cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"DetailCell"] autorelease];
+  }
   
-  switch ([indexPath section])
+  cell.accessoryType = self.isEditing ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
+  
+  switch ([indexPath row])
   {
     case 0:
-      cell = [self.tableView dequeueReusableCellWithIdentifier:@"BodyCell"];
-      if (cell == nil)
-      {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"BodyCell"] autorelease];
-        cell.textLabel.lineBreakMode = UILineBreakModeWordWrap;
-        cell.textLabel.numberOfLines = 0;  
-      }
-      
-      cell.accessoryType = self.isEditing ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
-      cell.textLabel.text = self.task.body;
-      
+      cell.textLabel.text = @"project";
+      cell.detailTextLabel.text = self.task.project.name;
       break;
-      
     case 1:
-    default:
-      cell = [self.tableView dequeueReusableCellWithIdentifier:@"DetailCell"];
-      if (cell == nil)
-      {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"DetailCell"] autorelease];
-      }
-      
-      cell.accessoryType = self.isEditing ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
-      
-      switch ([indexPath row])
-      {
-        case 0:
-          cell.textLabel.text = @"project";
-          cell.detailTextLabel.text = self.task.project.name;
-          break;
-        case 1:
-          cell.textLabel.text = @"contexts";
-          cell.detailTextLabel.text = self.task.contextsString;
-          break;
-        case 2:
-          cell.textLabel.text = @"due date";
-          cell.detailTextLabel.text = self.task.dueString;
-          break;
-      }
+      cell.textLabel.text = @"contexts";
+      cell.detailTextLabel.text = self.task.contextsString;
+      break;
+    case 2:
+      cell.textLabel.text = @"due date";
+      cell.detailTextLabel.text = self.task.dueString;
       break;
   }
   
@@ -242,28 +261,21 @@
   }
   
   UIViewController *controller = nil;
-  switch ([indexPath section])
+  switch ([indexPath row])
   {
-    case 0:
+    case 0: //project
+      controller = [[[EditProjectPicker alloc] init] autorelease];
+      ((EditProjectPicker*)controller).options = [Project projectNames:[self.task managedObjectContext]];
+      ((EditProjectPicker*)controller).selected = self.task.project.name;
+      ((EditProjectPicker*)controller).target = self;
+      ((EditProjectPicker*)controller).saveAction = @selector(saveProject:);
       break;
-      
     case 1:
-      switch ([indexPath row])
-      {
-        case 0: //project
-          controller = [[[EditProjectPicker alloc] init] autorelease];
-          ((EditProjectPicker*)controller).options = [Project projectNames:[self.task managedObjectContext]];
-          ((EditProjectPicker*)controller).selected = self.task.project.name;
-          ((EditProjectPicker*)controller).target = self;
-          ((EditProjectPicker*)controller).saveAction = @selector(saveProject:);
-          break;
-        case 1:
-          break;
-        case 2:
-          break;
-      }
+      break;
+    case 2:
       break;
   }
+
   if (controller)
   {
     [self.navigationController pushViewController:controller animated:YES];
@@ -285,6 +297,8 @@
 
 - (void)dealloc
 {
+  [topLabel release];
+  [topCheckmark release];
   [task release];
   [uneditedTask release];
   [editingContext release];
