@@ -7,8 +7,10 @@
 //
 
 #import "Task.h"
+#import "TaskList.h"
 #import "DNZOAppDelegate.h"
 #import "EditProjectPicker.h"
+#import "TextFieldController.h"
 
 @class Task;
 
@@ -18,11 +20,14 @@
   Task *uneditedTask;
   NSManagedObjectContext *editingContext;
   BOOL isEditing;
+  
   UILabel *topLabel;
   UIImageView *topCheckmark;
+  UIButton *topButton;
 }
 
 - (void) loadTask:(Task*)newTask editing:(BOOL)editing;
+- (void) loadEditingWithNewTaskForList:(TaskList*)list;
 
 @property (nonatomic, readonly) BOOL isEditing;
 

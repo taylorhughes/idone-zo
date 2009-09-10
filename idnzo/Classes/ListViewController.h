@@ -16,8 +16,6 @@
   TaskViewController *taskViewController;
 
   UIBarButtonItem *syncButton;
-  
-  NSManagedObjectContext *addingContext;
 }
 
 @property (nonatomic, retain) UITableView *tableView;

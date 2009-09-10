@@ -39,6 +39,63 @@ static UIImage *unchecked;
 @synthesize editingContext;
 @synthesize isEditing;
 
+- (id) init
+{
+  self = [super init];
+  if (self != nil)
+  {
+
+  }
+  return self;
+}
+
+- (void) viewDidLoad
+{
+  [super viewDidLoad];  
+  if (topLabel == nil)
+  {
+    topLabel = [[[UILabel alloc] init] retain];
+    topLabel.lineBreakMode = UILineBreakModeWordWrap;
+    topLabel.numberOfLines = 0;
+    topLabel.backgroundColor = [UIColor clearColor];
+    topLabel.font = [UIFont boldSystemFontOfSize:20.0];
+    
+    topButton = [[UIButton buttonWithType:UIButtonTypeRoundedRect] retain];
+    topButton.titleLabel.lineBreakMode = UILineBreakModeTailTruncation;
+    topButton.titleLabel.numberOfLines = 1;
+    topButton.titleLabel.font = topLabel.font;
+    topButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+    topButton.contentEdgeInsets = UIEdgeInsetsMake(0,10.0f,0,10.0f);
+    [topButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    
+    [topButton addTarget:self action:@selector(editNameClicked:) forControlEvents:UIControlEventTouchUpInside];
+    
+    topCheckmark = [[[UIImageView alloc] init] retain];
+    topCheckmark.frame = CGRectMake(5.0f, 10.0f, 30.0f, 30.0f);
+    topCheckmark.contentMode = UIViewContentModeCenter;
+    
+    self.tableView.tableHeaderView = [[[UIView alloc] init] autorelease];
+    self.tableView.tableHeaderView.backgroundColor = [UIColor clearColor];
+    
+    [self.tableView.tableHeaderView addSubview:topLabel];
+    [self.tableView.tableHeaderView addSubview:topButton];
+    [self.tableView.tableHeaderView addSubview:topCheckmark];
+  }
+}
+
+- (void) viewWillAppear:(BOOL)animated
+{
+  [super viewWillAppear:animated];
+  // This is important because by now self.view has the proper bounds
+  [self refresh];
+}
+
+- (void) loadEditingWithNewTaskForList:(TaskList*)list
+{
+  [self loadTask:nil editing:YES];
+  self.task.taskList = (TaskList*)[self.editingContext objectWithID:[list objectID]];
+}
+
 - (void) loadTask:(Task*)newTask editing:(BOOL)editing
 {
   self.task = newTask;
@@ -54,16 +111,6 @@ static UIImage *unchecked;
     // begin edit
     [self edit:self];
   }
-  else
-  {
-    [self refresh];
-  }
-}
-
-- (void)viewDidLoad
-{
-  [super viewDidLoad];
-  [self refresh];
 }
 
 - (void) refresh
@@ -94,25 +141,6 @@ static UIImage *unchecked;
     self.navigationItem.leftBarButtonItem = nil;
   }
   
-  // Work out the title cell
-  if (!topLabel)
-  {
-    topLabel = [[[UILabel alloc] init] retain];
-    topLabel.lineBreakMode = UILineBreakModeWordWrap;
-    topLabel.numberOfLines = 0;
-    topLabel.backgroundColor = [UIColor clearColor];
-    topLabel.font = [UIFont boldSystemFontOfSize:20.0];
-    
-    topCheckmark = [[[UIImageView alloc] init] retain];
-    topCheckmark.frame = CGRectMake(5.0f, 10.0f, 30.0f, 30.0f);
-    topCheckmark.contentMode = UIViewContentModeCenter;
-    
-    self.tableView.tableHeaderView = [[[UIView alloc] init] autorelease];
-    self.tableView.tableHeaderView.backgroundColor = [UIColor clearColor];
-    [self.tableView.tableHeaderView addSubview:topLabel];
-    [self.tableView.tableHeaderView addSubview:topCheckmark];
-  }
-  
   topCheckmark.image = self.task.isComplete ? checked : unchecked;
   
   //bodyCell.accessoryType = self.isEditing ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
@@ -120,22 +148,44 @@ static UIImage *unchecked;
   // Resize body cell according to how tall the text is
   CGFloat leftPadding = 10.0f;
   CGFloat checkWidth = topCheckmark.frame.size.width + leftPadding;
-  CGRect viewRect = [self.view bounds];
+  CGRect viewRect = [self.view frame];
   CGSize size = [self.task.body sizeWithFont:topLabel.font
                            constrainedToSize:CGSizeMake(viewRect.size.width - checkWidth - leftPadding, 200.0f)
                                lineBreakMode:UILineBreakModeWordWrap];
   
   CGFloat topPadding = 12.0f;
-  topLabel.frame = CGRectMake(checkWidth, topPadding, viewRect.size.width - checkWidth, size.height);
+  CGFloat height = size.height < 40.0f ? 40.0f : size.height;
+  CGFloat totalWidth = viewRect.size.width;
+  
+  topLabel.hidden = self.isEditing;
+  topButton.hidden = !self.isEditing;
+
   topLabel.text = self.task.body;
-  self.tableView.tableHeaderView.frame = CGRectMake(0.0f, 0.0f, viewRect.size.width, topPadding + size.height);
+  topLabel.frame = CGRectMake(checkWidth, topPadding, totalWidth - checkWidth - leftPadding, height);
+  
+  [topButton setTitle:self.task.body forState:UIControlStateNormal];
+  topButton.frame = topLabel.frame; //CGRectMake(checkWidth, topPadding, viewRect.size.width - checkWidth, size.height + leftPadding * 2);
+    
+  self.tableView.tableHeaderView.frame = CGRectMake(0.0f, 0.0f, totalWidth, topPadding + height);
   self.tableView.tableHeaderView = self.tableView.tableHeaderView;
   
   [self.tableView reloadData];
 }
 
-- (void)viewWillAppear:(BOOL)animated
+- (void)editNameClicked:(id)sender
 {
+  TextFieldController *controller = [[TextFieldController alloc] init];
+  controller.textView.font = [UIFont systemFontOfSize:17.0f];
+  controller.text = self.task.body;
+  controller.target = self; 
+  controller.saveAction = @selector(editNameSaved:);
+  [self.navigationController pushViewController:controller animated:YES];
+}
+
+- (void)editNameSaved:(id)sender
+{
+  self.task.body = [(TextFieldController*)sender text];
+  [self refresh];
 }
 
 - (void)edit:(id)sender
@@ -149,7 +199,14 @@ static UIImage *unchecked;
 	self.editingContext = [[[NSManagedObjectContext alloc] init] autorelease];
 	[self.editingContext setPersistentStoreCoordinator:[appDelegate.managedObjectContext persistentStoreCoordinator]];
   
-  self.task = (Task*)[self.editingContext objectWithID:[self.task objectID]];
+  if (self.task != nil)
+  {
+    self.task = (Task*)[self.editingContext objectWithID:[self.task objectID]];
+  }
+  else
+  {
+    self.task = (Task*)[NSEntityDescription insertNewObjectForEntityForName:@"Task" inManagedObjectContext:self.editingContext];
+  }
   
   /*
   // load editing view into modal view
@@ -188,19 +245,33 @@ static UIImage *unchecked;
   // Reload task with new updated task
   DNZOAppDelegate *appDelegate = (DNZOAppDelegate *)[[UIApplication sharedApplication] delegate];
   self.task = (Task*)[appDelegate.managedObjectContext objectWithID:[self.task objectID]];
-  self.uneditedTask = self.task;
-  
-  isEditing = NO;
-  [self refresh];
+    
+  if (self.uneditedTask != nil)
+  {
+    self.uneditedTask = self.task;
+    isEditing = NO;
+    [self refresh];
+  }
+  else
+  {    
+    [self.navigationController.parentViewController dismissModalViewControllerAnimated:YES];
+  }
 }
 
 - (void) cancel:(id)sender
 {
-  self.task = self.uneditedTask;
-  self.editingContext = nil;
-  
-  isEditing = NO;
-  [self refresh];
+  if (self.uneditedTask != nil)
+  {
+    self.task = self.uneditedTask;
+    self.editingContext = nil;
+    
+    isEditing = NO;
+    [self refresh];
+  }
+  else 
+  {
+    [self.navigationController.parentViewController dismissModalViewControllerAnimated:YES];
+  }
 }
 
 
@@ -299,6 +370,7 @@ static UIImage *unchecked;
 {
   [topLabel release];
   [topCheckmark release];
+  [topButton release];
   [task release];
   [uneditedTask release];
   [editingContext release];
