@@ -14,9 +14,9 @@
 
 @synthesize view;
 
-- (id)initWithFrame:(CGRect)aRect reuseIdentifier:(NSString *)identifier
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
-	self = [super initWithFrame:aRect reuseIdentifier:identifier];
+	self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
 	if (self)
 	{
 		// turn off selection use

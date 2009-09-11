@@ -24,9 +24,9 @@
   taskCellView.task = task;
 }
 
-- (id)initWithFrame:(CGRect)frame reuseIdentifier:(NSString *)reuseIdentifier
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
-	if (self = [super initWithFrame:frame reuseIdentifier:reuseIdentifier])
+	if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])
   {
     CGRect frame = CGRectMake(0.0, 0.0, self.contentView.bounds.size.width, self.contentView.bounds.size.height);
     taskCellView = [[TaskCellView alloc] initWithFrame:frame];
