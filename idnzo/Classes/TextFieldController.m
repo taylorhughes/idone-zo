@@ -25,7 +25,7 @@
     self.textView = [[[UITextView alloc] init] autorelease];
     self.view = self.textView;
     
-    UIBarButtonItem *save   = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
+    UIBarButtonItem *save   = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave
                                                                              target:self
                                                                              action:@selector(save:)] autorelease];
     

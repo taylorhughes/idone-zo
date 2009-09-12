@@ -118,27 +118,23 @@ static UIImage *unchecked;
   if (self.isEditing)
   {
     // Change the buttons
-    UIBarButtonItem *save = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave
+    UIBarButtonItem *done = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
                                                                           target:self
                                                                           action:@selector(save:)];
-    self.navigationItem.rightBarButtonItem = save;
-    [save release];
+    [self.navigationItem setRightBarButtonItem:done animated:YES];
+    [done release];
     
-    UIBarButtonItem *cancel = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
-                                                                            target:self
-                                                                            action:@selector(cancel:)];
-    self.navigationItem.leftBarButtonItem = cancel;
-    [cancel release];    
+    [self.navigationItem setHidesBackButton:YES animated:YES];
   }
   else
   {
     UIBarButtonItem *edit = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit
                                                                           target:self
                                                                           action:@selector(edit:)];
-    self.navigationItem.rightBarButtonItem = edit;
+    [self.navigationItem setRightBarButtonItem:edit animated:YES];
     [edit release];
     
-    self.navigationItem.leftBarButtonItem = nil;
+    [self.navigationItem setHidesBackButton:NO animated:YES];
   }
   
   topCheckmark.image = self.task.isComplete ? checked : unchecked;

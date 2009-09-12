@@ -29,7 +29,7 @@
 
 - (void)viewDidLoad
 {
-  UIBarButtonItem *save   = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
+  UIBarButtonItem *save   = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave
                                                                            target:self
                                                                            action:@selector(save:)] autorelease];
   
@@ -191,9 +191,6 @@
   {    
     UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
     self.selected = cell.textLabel.text;
-
-    [self save:self];
-    return indexPath;
   }
   
   return nil;
