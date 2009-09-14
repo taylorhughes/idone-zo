@@ -284,9 +284,23 @@ static UIImage *unchecked;
   return nil;
 }
 
-- (NSInteger)tableView:(UITableView *)tv numberOfRowsInSection:(NSInteger)section
+- (BOOL)hasProject
 {
-  return 3;
+  return self.isEditing || self.task.project != nil;
+}
+- (BOOL)hasContexts
+{
+  return self.isEditing || (self.task.contexts != nil && [self.task.contexts count] > 0);
+}
+- (BOOL)hasDueDate
+{
+  return self.isEditing || self.task.dueDate != nil;
+}
+
+- (NSInteger)tableView:(UITableView *)tv numberOfRowsInSection:(NSInteger)section
+{ 
+  // Only one section
+  return [self hasProject] + [self hasContexts] + [self hasDueDate];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tv cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -301,20 +315,22 @@ static UIImage *unchecked;
   
   cell.accessoryType = self.isEditing ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
   
-  switch ([indexPath row])
+  NSUInteger row = [indexPath row];
+  
+  if ([self hasProject] && row == 0)
   {
-    case 0:
-      cell.textLabel.text = @"project";
-      cell.detailTextLabel.text = self.task.project.name;
-      break;
-    case 1:
-      cell.textLabel.text = @"contexts";
-      cell.detailTextLabel.text = self.task.contextsString;
-      break;
-    case 2:
-      cell.textLabel.text = @"due date";
-      cell.detailTextLabel.text = self.task.dueString;
-      break;
+    cell.textLabel.text = @"project";
+    cell.detailTextLabel.text = self.task.project.name;    
+  }
+  if ([self hasContexts] && row == [self hasProject])
+  {
+    cell.textLabel.text = @"contexts";
+    cell.detailTextLabel.text = self.task.contextsString;      
+  }
+  if ([self hasDueDate] && row == [self hasProject] + [self hasContexts])
+  {
+    cell.textLabel.text = @"due date";
+    cell.detailTextLabel.text = self.task.dueString;
   }
   
   return cell;

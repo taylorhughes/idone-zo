@@ -162,7 +162,6 @@ NSString * const DonezoSyncStatusChangedNotification = @"DonezoSyncStatusChanged
   self.donezoAPIClient = [[DonezoAPIClient alloc] initWithUsername:donezoUsername andPassword:donezoPassword toBaseUrl:donezoURL];
   self.syncMaster = [[DonezoSyncMaster alloc] initWithDonezoClient:self.donezoAPIClient andContext:nil];
   
-  NSLog(@"Syncing...");
   [self sync];
   
   // Add the current view in the navigationController to the main window.
@@ -179,7 +178,6 @@ NSString * const DonezoSyncStatusChangedNotification = @"DonezoSyncStatusChanged
   NSError *error;
   if (![self.managedObjectContext save:&error])
   {
-    // Handle error
     NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
     exit(-1);  // Fail
   }
@@ -289,9 +287,9 @@ NSString * const DonezoSyncStatusChangedNotification = @"DonezoSyncStatusChanged
 // Save all changes to the database, then close it.
 - (void)applicationWillTerminate:(UIApplication *)application
 {
-  NSError *error;
   if (managedObjectContext != nil)
   {
+    NSError *error;
     if ([managedObjectContext hasChanges] && ![managedObjectContext save:&error])
     {
 			// Handle error
@@ -306,9 +304,11 @@ NSString * const DonezoSyncStatusChangedNotification = @"DonezoSyncStatusChanged
   [operationQueue release];
   [donezoAPIClient release];
   [syncMaster release];
+  
   [managedObjectContext release];
   [managedObjectModel release];
   [persistentStoreCoordinator release];
+  
   [navigationController release];
   [window release];
   [super dealloc];
