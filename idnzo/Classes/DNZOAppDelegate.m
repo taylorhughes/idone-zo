@@ -96,33 +96,41 @@ NSString * const DonezoSyncStatusChangedNotification = @"DonezoSyncStatusChanged
 // Operates on the main thread
 - (void) finishSync:(id)arg
 {
+  NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
   NSError *error = (NSError*)arg;
   if (error != nil)
   {
     NSLog(@"Error syncing! %@ %@", [error description], [error userInfo]);
-    return;
-  }
-  
-  NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
-  [dnc addObserver:self
-          selector:@selector(syncingContextDidSave:) 
-              name:NSManagedObjectContextDidSaveNotification
-            object:self.syncMaster.context];
-  
-  if (![self.syncMaster.context save:&error])
-  {
-    NSLog(@"Error saving synced context! %@ %@", [error description], [error userInfo]);
+    UIAlertView *errorAlert = [[UIAlertView alloc]
+                                    initWithTitle:@"Done-zo sync error"
+                                          message:[error localizedDescription]
+                                         delegate:nil
+                                cancelButtonTitle:@"OK"
+                                otherButtonTitles:nil];
+    [errorAlert show];
+    [errorAlert release];
   }
   else
   {
-    NSLog(@"Sync completed successfully!");
+    [dnc addObserver:self
+            selector:@selector(syncingContextDidSave:) 
+                name:NSManagedObjectContextDidSaveNotification
+              object:self.syncMaster.context];
+    
+    if (![self.syncMaster.context save:&error])
+    {
+      NSLog(@"Error saving synced context! %@ %@", [error description], [error userInfo]);
+    }
+    else
+    {
+      NSLog(@"Sync completed successfully!");
+    }
+    [dnc removeObserver:self name:NSManagedObjectContextDidSaveNotification object:self.syncMaster.context];
+    [self.mainController reloadData];
   }
-  [dnc removeObserver:self name:NSManagedObjectContextDidSaveNotification object:self.syncMaster.context];
   
-  // This sucks
   isSyncing = NO;
   [dnc postNotificationName:DonezoSyncStatusChangedNotification object:self];
-  [self.mainController reloadData];
 }
 
 - (void)syncingContextDidSave:(NSNotification*)saveNotification
