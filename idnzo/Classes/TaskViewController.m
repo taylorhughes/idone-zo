@@ -8,6 +8,8 @@
 
 #import "TaskViewController.h"
 
+#define FADE_ANIMATION_DURATION 0.5
+
 static UIImage *checked;
 static UIImage *unchecked;
 
@@ -15,11 +17,12 @@ static UIImage *unchecked;
 
 @property (nonatomic, retain) NSManagedObjectContext *editingContext;
 @property (nonatomic, retain) Task *task;
-@property (nonatomic, retain) Task *uneditedTask;
 
 - (void) edit:(id)sender;
-- (void) save:(id)sender;
 - (void) cancel:(id)sender;
+- (void) done:(id)sender;
+
+- (void) save;
 - (void) refresh;
 
 @end
@@ -35,7 +38,7 @@ static UIImage *unchecked;
   }
 }
 
-@synthesize task, uneditedTask;
+@synthesize task;
 @synthesize editingContext;
 @synthesize isEditing;
 
@@ -44,7 +47,7 @@ static UIImage *unchecked;
   self = [super init];
   if (self != nil)
   {
-
+    isNewTask = NO;
   }
   return self;
 }
@@ -52,34 +55,11 @@ static UIImage *unchecked;
 - (void) viewDidLoad
 {
   [super viewDidLoad];  
-  if (topLabel == nil)
+  if (self.tableView.tableHeaderView == nil)
   {
-    topLabel = [[[UILabel alloc] init] retain];
-    topLabel.lineBreakMode = UILineBreakModeWordWrap;
-    topLabel.numberOfLines = 0;
-    topLabel.backgroundColor = [UIColor clearColor];
-    topLabel.font = [UIFont boldSystemFontOfSize:20.0];
-    
-    topButton = [[UIButton buttonWithType:UIButtonTypeRoundedRect] retain];
-    topButton.titleLabel.lineBreakMode = UILineBreakModeTailTruncation;
-    topButton.titleLabel.numberOfLines = 1;
-    topButton.titleLabel.font = topLabel.font;
-    topButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-    topButton.contentEdgeInsets = UIEdgeInsetsMake(0,10.0f,0,10.0f);
-    [topButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    
     [topButton addTarget:self action:@selector(editNameClicked:) forControlEvents:UIControlEventTouchUpInside];
-    
-    topCheckmark = [[[UIImageView alloc] init] retain];
-    topCheckmark.frame = CGRectMake(5.0f, 10.0f, 30.0f, 30.0f);
-    topCheckmark.contentMode = UIViewContentModeCenter;
-    
-    self.tableView.tableHeaderView = [[[UIView alloc] init] autorelease];
-    self.tableView.tableHeaderView.backgroundColor = [UIColor clearColor];
-    
-    [self.tableView.tableHeaderView addSubview:topLabel];
-    [self.tableView.tableHeaderView addSubview:topButton];
-    [self.tableView.tableHeaderView addSubview:topCheckmark];
+    [topCheckmark addTarget:self action:@selector(checkmarkClicked:) forControlEvents:UIControlEventTouchUpInside];
+    self.tableView.tableHeaderView = topView;
   }
 }
 
@@ -90,16 +70,21 @@ static UIImage *unchecked;
   [self refresh];
 }
 
+- (BOOL) isNewTask
+{
+  return isNewTask;
+}
+
 - (void) loadEditingWithNewTaskForList:(TaskList*)list
 {
   [self loadTask:nil editing:YES];
+  isNewTask = YES;
   self.task.taskList = (TaskList*)[self.editingContext objectWithID:[list objectID]];
 }
 
 - (void) loadTask:(Task*)newTask editing:(BOOL)editing
 {
   self.task = newTask;
-  self.uneditedTask = newTask;
   
   if (isEditing && !editing)
   {
@@ -120,10 +105,18 @@ static UIImage *unchecked;
     // Change the buttons
     UIBarButtonItem *done = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
                                                                           target:self
-                                                                          action:@selector(save:)];
+                                                                          action:@selector(done:)];
     [self.navigationItem setRightBarButtonItem:done animated:YES];
     [done release];
-    
+
+    if ([self isNewTask])
+    {
+      UIBarButtonItem *cancel = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
+                                                                              target:self
+                                                                              action:@selector(cancel:)];
+      [self.navigationItem setLeftBarButtonItem:cancel animated:YES];
+      [cancel release];
+    }
     [self.navigationItem setHidesBackButton:YES animated:YES];
   }
   else
@@ -137,32 +130,53 @@ static UIImage *unchecked;
     [self.navigationItem setHidesBackButton:NO animated:YES];
   }
   
-  topCheckmark.image = self.task.isComplete ? checked : unchecked;
+  [topCheckmark setImage:(self.task.isComplete ? checked : unchecked) forState:UIControlStateNormal];
   
   //bodyCell.accessoryType = self.isEditing ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
+    
+  if ((self.isEditing && topLabel.alpha > 0) || (!self.isEditing && topLabel.alpha == 0))
+  {
+    if (self.isEditing)
+    {
+      topLabel.alpha = 0.0;
+      topCheckmark.alpha = 0.0;
+      topButton.alpha = 1.0;
+    }
+    else
+    {
+      topLabel.alpha = 1.0;
+      topCheckmark.alpha = 1.0;
+      topButton.alpha = 0.0;
+    }
+  }
   
+  CGFloat width = topLabel.frame.size.width;
   // Resize body cell according to how tall the text is
-  CGFloat leftPadding = 10.0f;
-  CGFloat checkWidth = topCheckmark.frame.size.width + leftPadding;
-  CGRect viewRect = [self.view frame];
-  CGSize size = [self.task.body sizeWithFont:topLabel.font
-                           constrainedToSize:CGSizeMake(viewRect.size.width - checkWidth - leftPadding, 200.0f)
-                               lineBreakMode:UILineBreakModeWordWrap];
+  CGSize newSize = [self.task.body sizeWithFont:topLabel.font
+                              constrainedToSize:CGSizeMake(width, 300.0f)
+                                  lineBreakMode:UILineBreakModeWordWrap];
   
-  CGFloat topPadding = 12.0f;
-  CGFloat height = size.height < 40.0f ? 40.0f : size.height;
-  CGFloat totalWidth = viewRect.size.width;
-  
-  topLabel.hidden = self.isEditing;
-  topButton.hidden = !self.isEditing;
+  CGFloat newHeight = newSize.height >= topLabel.font.pointSize ? newSize.height : topLabel.font.pointSize;
+  CGFloat heightDiff = newHeight - topLabel.frame.size.height;
 
   topLabel.text = self.task.body;
-  topLabel.frame = CGRectMake(checkWidth, topPadding, totalWidth - checkWidth - leftPadding, height);
-  
   [topButton setTitle:self.task.body forState:UIControlStateNormal];
-  topButton.frame = topLabel.frame; //CGRectMake(checkWidth, topPadding, viewRect.size.width - checkWidth, size.height + leftPadding * 2);
-    
-  self.tableView.tableHeaderView.frame = CGRectMake(0.0f, 0.0f, totalWidth, topPadding + height);
+  
+  // NOTE: We don't reset the heights here, we just add the *difference* in the height.
+  topLabel.frame = CGRectMake(topLabel.frame.origin.x,
+                              topLabel.frame.origin.y,
+                              topLabel.frame.size.width,
+                              topLabel.frame.size.height + heightDiff);
+  topButton.frame = CGRectMake(topButton.frame.origin.x,
+                               topButton.frame.origin.y,
+                               topButton.frame.size.width,
+                               topButton.frame.size.height + heightDiff);
+  self.tableView.tableHeaderView.frame = CGRectMake(self.tableView.tableHeaderView.frame.origin.x,
+                                                    self.tableView.tableHeaderView.frame.origin.y,
+                                                    self.tableView.tableHeaderView.frame.size.width,
+                                                    self.tableView.tableHeaderView.frame.size.height + heightDiff);
+  
+  // Forces the size to be reloaded in the tableview
   self.tableView.tableHeaderView = self.tableView.tableHeaderView;
   
   [self.tableView reloadData];
@@ -181,13 +195,40 @@ static UIImage *unchecked;
 - (void)editNameSaved:(id)sender
 {
   self.task.body = [(TextFieldController*)sender text];
-  [self refresh];
+  if (![self isNewTask])
+  {
+    [self save];
+  }
+}
+
+- (void) saveProject:(id)sender
+{
+  NSString *newProject = [[(EditProjectPicker*)sender selected] 
+                          stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+  
+  self.task.project = [Project findOrCreateProjectWithName:newProject inContext:[self.task managedObjectContext]];
+  if (![self isNewTask])
+  {
+    [self save];
+  }
+}
+
+- (void)checkmarkClicked:(id)sender
+{
+  NSLog(@"Checkmark has been clicked.");
 }
 
 - (void)edit:(id)sender
 {
   isEditing = YES;
+  
+  [UIView beginAnimations:@"Fade in edit mode" context:nil];
+  [UIView setAnimationDuration:FADE_ANIMATION_DURATION];
+  [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+  
   [self refresh];
+  
+  [UIView commitAnimations];
   
   DNZOAppDelegate *appDelegate = (DNZOAppDelegate *)[[UIApplication sharedApplication] delegate];
   
@@ -221,7 +262,7 @@ static UIImage *unchecked;
 	[appDelegate.managedObjectContext mergeChangesFromContextDidSaveNotification:saveNotification];	
 }
 
-- (void) save:(id)sender
+- (void) save
 {
   [self.task hasBeenUpdated];
   
@@ -235,39 +276,36 @@ static UIImage *unchecked;
     NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
   }
   [dnc removeObserver:self name:NSManagedObjectContextDidSaveNotification object:self.editingContext];
-  
-  self.editingContext = nil;
-  
-  // Reload task with new updated task
-  DNZOAppDelegate *appDelegate = (DNZOAppDelegate *)[[UIApplication sharedApplication] delegate];
-  self.task = (Task*)[appDelegate.managedObjectContext objectWithID:[self.task objectID]];
-    
-  if (self.uneditedTask != nil)
+  [self refresh];
+}
+
+- (void) done:(id)sender
+{ 
+  if (![self isNewTask])
   {
-    self.uneditedTask = self.task;
+    // Reload task with new updated task
+    DNZOAppDelegate *appDelegate = (DNZOAppDelegate *)[[UIApplication sharedApplication] delegate];
+    self.task = (Task*)[appDelegate.managedObjectContext objectWithID:[self.task objectID]];
+    
     isEditing = NO;
     [self refresh];
   }
   else
-  {    
+  {
+    [self save];
     [self.navigationController.parentViewController dismissModalViewControllerAnimated:YES];
+    
+    // Reload task with new updated task
+    DNZOAppDelegate *appDelegate = (DNZOAppDelegate *)[[UIApplication sharedApplication] delegate];
+    self.task = (Task*)[appDelegate.managedObjectContext objectWithID:[self.task objectID]];
   }
+  self.editingContext = nil;
 }
 
 - (void) cancel:(id)sender
 {
-  if (self.uneditedTask != nil)
-  {
-    self.task = self.uneditedTask;
-    self.editingContext = nil;
-    
-    isEditing = NO;
-    [self refresh];
-  }
-  else 
-  {
-    [self.navigationController.parentViewController dismissModalViewControllerAnimated:YES];
-  }
+  self.editingContext = nil;
+  [self.navigationController.parentViewController dismissModalViewControllerAnimated:YES];
 }
 
 
@@ -367,16 +405,6 @@ static UIImage *unchecked;
   return nil;
 }
 
-- (void) saveProject:(id)sender
-{
-  NSString *newProject = [[(EditProjectPicker*)sender selected] 
-                          stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-  
-  self.task.project = [Project findOrCreateProjectWithName:newProject inContext:[self.task managedObjectContext]];
-  
-  [self.tableView reloadData];
-}
-
 
 - (void)dealloc
 {
@@ -384,7 +412,6 @@ static UIImage *unchecked;
   [topCheckmark release];
   [topButton release];
   [task release];
-  [uneditedTask release];
   [editingContext release];
   
   [super dealloc];

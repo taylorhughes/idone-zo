@@ -17,13 +17,15 @@
 @interface TaskViewController : UITableViewController {
  @private
   Task *task;
-  Task *uneditedTask;
   NSManagedObjectContext *editingContext;
   BOOL isEditing;
   
-  UILabel *topLabel;
-  UIImageView *topCheckmark;
-  UIButton *topButton;
+  IBOutlet UIView *topView;
+  IBOutlet UILabel *topLabel;
+  IBOutlet UIButton *topCheckmark;
+  IBOutlet UIButton *topButton;
+  
+  BOOL isNewTask;
 }
 
 - (void) loadTask:(Task*)newTask editing:(BOOL)editing;
