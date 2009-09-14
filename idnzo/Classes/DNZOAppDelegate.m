@@ -73,6 +73,9 @@ NSString * const DonezoSyncStatusChangedNotification = @"DonezoSyncStatusChanged
   NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
   [dnc postNotificationName:DonezoSyncStatusChangedNotification object:self];
   
+  UIApplication* app = [UIApplication sharedApplication];
+  app.networkActivityIndicatorVisible = YES;
+  
   // Make a copy of the context that is up to date for now
   self.syncMaster.context = [[[NSManagedObjectContext alloc] init] autorelease];
   [self.syncMaster.context setPersistentStoreCoordinator:self.persistentStoreCoordinator];
@@ -85,9 +88,11 @@ NSString * const DonezoSyncStatusChangedNotification = @"DonezoSyncStatusChanged
   [syncOperation release];
 }
 
-// Operates in a separate thread
 - (void) syncOperation
 {
+  //
+  // WARNING: Operates in a separate thread, do not make non-threadsafe calls here!
+  //
   NSError *error = nil;
   [self.syncMaster performSync:&error];
   [self performSelectorOnMainThread:@selector(finishSync:) withObject:error waitUntilDone:YES];
@@ -96,8 +101,13 @@ NSString * const DonezoSyncStatusChangedNotification = @"DonezoSyncStatusChanged
 // Operates on the main thread
 - (void) finishSync:(id)arg
 {
-  NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
   NSError *error = (NSError*)arg;
+  
+  UIApplication* app = [UIApplication sharedApplication];
+  app.networkActivityIndicatorVisible = NO;
+  
+  NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
+  
   if (error != nil)
   {
     NSLog(@"Error syncing! %@ %@", [error description], [error userInfo]);
