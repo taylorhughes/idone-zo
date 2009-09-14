@@ -21,13 +21,18 @@ static UIImage *checked;
 
 #define PADDING 2.0
 #define PADDING_BETWEEN_DETAILS PADDING * 3
+
 #define IMAGE_WIDTH 26.0
 #define IMAGE_HEIGHT 20.0
 #define IMAGE_TOP 0.0
 #define IMAGE_LEFT 0.0
-#define MAIN_FONT_SIZE 20.0
-#define SECONDARY_FONT_SIZE 14.0
 #define TOUCH_BUFFER 10.0
+
+#define MAIN_FONT_OFFSET 2.0
+#define MAIN_FONT_SIZE 18.0
+#define SECONDARY_FONT_SIZE 14.0
+
+#define LINE_WEIGHT  1.0
 
 + (void) initialize
 {
@@ -94,10 +99,6 @@ static UIImage *checked;
     [array addObject:task.dueString];
   }
   
-  if ([array count] == 0)
-  {
-    //[array addObject:@"(none)"];
-  }
   return array;
 }
 
@@ -128,7 +129,7 @@ static UIImage *checked;
   CGFloat left  = IMAGE_LEFT + IMAGE_WIDTH + PADDING;
   
   CGFloat width = self.bounds.size.width - left - PADDING;
-  CGPoint point = CGPointMake(left, PADDING);
+  CGPoint point = CGPointMake(left, PADDING + MAIN_FONT_OFFSET);
   
   [self.task.body drawAtPoint:point 
                      forWidth:width
@@ -139,12 +140,12 @@ static UIImage *checked;
            baselineAdjustment:UIBaselineAdjustmentAlignBaselines];
   
   CGSize titleSize = [self.task.body sizeWithFont:mainFont constrainedToSize:CGSizeMake(width, MAIN_FONT_SIZE) lineBreakMode:UILineBreakModeTailTruncation];
-  CGFloat lineTop = PADDING + floor(MAIN_FONT_SIZE * 0.67);
+  CGFloat lineTop = PADDING + floor(MAIN_FONT_SIZE * 0.67 + MAIN_FONT_OFFSET);
 
   // DRAW STRIKETHROUGH
   if (task.isComplete)
   {
-    CGContextSetLineWidth(context, 2.0f);
+    CGContextSetLineWidth(context, LINE_WEIGHT);
     CGContextSetStrokeColorWithColor(context, [[UIColor darkGrayColor] CGColor]);
       
     CGContextMoveToPoint(context, left, lineTop);
@@ -158,9 +159,10 @@ static UIImage *checked;
   
   NSArray *details = [self getDetails];
   CGFloat detailWidth = (width - [details count] * PADDING) / [details count];
+  CGFloat detailTop = PADDING * 2 + MAIN_FONT_SIZE + MAIN_FONT_OFFSET;
   for (NSString *detail in details)
   {
-    point = CGPointMake(left, PADDING * 2 + MAIN_FONT_SIZE);
+    point = CGPointMake(left, detailTop);
     
     CGSize size = [detail sizeWithFont:secondaryFont constrainedToSize:CGSizeMake(detailWidth, SECONDARY_FONT_SIZE) lineBreakMode:UILineBreakModeTailTruncation];
     //CGFloat realWidth = size.width < detailWidth ? size.width : detailWidth;
