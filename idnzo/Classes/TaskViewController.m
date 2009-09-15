@@ -217,7 +217,17 @@ static UIImage *unchecked;
 
 - (void)checkmarkClicked:(id)sender
 {
-  NSLog(@"Checkmark has been clicked.");
+  self.task.isComplete = !self.task.isComplete;
+  [self.task hasBeenUpdated];
+  
+  DNZOAppDelegate *appDelegate = (DNZOAppDelegate *)[[UIApplication sharedApplication] delegate];
+  NSError *error = nil;
+  if (![appDelegate.managedObjectContext save:&error])
+  {
+    NSLog(@"Error saving task: %@ %@", [error description], [error userInfo]);
+  }
+  
+  [self refresh];
 }
 
 - (void)edit:(id)sender
