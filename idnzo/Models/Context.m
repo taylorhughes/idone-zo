@@ -21,6 +21,7 @@
   
   NSError *error = nil;  
   NSArray *result = [context executeFetchRequest:request error:&error];
+  [request release];
   if ([result count] > 0)
   {
     return [result objectAtIndex:0];

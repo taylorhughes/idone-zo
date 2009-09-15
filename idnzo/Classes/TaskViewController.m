@@ -58,6 +58,7 @@ static UIImage *unchecked;
   if (self.tableView.tableHeaderView == nil)
   {
     [topButton addTarget:self action:@selector(editNameClicked:) forControlEvents:UIControlEventTouchUpInside];
+    [topButton.titleLabel setLineBreakMode:UILineBreakModeWordWrap];
     [topCheckmark addTarget:self action:@selector(checkmarkClicked:) forControlEvents:UIControlEventTouchUpInside];
     self.tableView.tableHeaderView = topView;
   }
@@ -190,6 +191,7 @@ static UIImage *unchecked;
   controller.target = self; 
   controller.saveAction = @selector(editNameSaved:);
   [self.navigationController pushViewController:controller animated:YES];
+  [controller release];
 }
 
 - (void)editNameSaved:(id)sender

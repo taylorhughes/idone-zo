@@ -171,6 +171,7 @@
   
   //NSData *cookieData = 
   [NSURLConnection sendSynchronousRequest:cookieRequest returningResponse:nil error:&cookieError];
+  [cookieRequest release];
   
   if (cookieError != nil)
   {
@@ -178,8 +179,6 @@
     *error = cookieError;
     return NO;
   }
-  
-  [cookieRequest release];
   
   return YES;
 }
