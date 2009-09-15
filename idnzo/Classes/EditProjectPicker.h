@@ -7,16 +7,14 @@
 //
 
 #import "Project.h"
-#import "TextViewCell.h"
 
-@class Project, TextViewCell;
+@class Project;
 
 @interface EditProjectPicker : UITableViewController <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate> {
   NSArray *options;
   NSObject *target;
   UITextField *textField;
   SEL saveAction;
-  NSInteger selectedIndex;
 }
 
 - (NSString *)selected;

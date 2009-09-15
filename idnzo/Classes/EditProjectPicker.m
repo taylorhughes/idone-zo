@@ -11,10 +11,11 @@
 @interface EditProjectPicker()
 - (void) save:(id)sender;
 - (void) cancel:(id)sender;
-- (void) createtextField;
 @end
 
 #define FONT_SIZE 18.0
+#define TEXT_FIELD_VPADDING 11.0
+#define TEXT_FIELD_HPADDING 10.0
 
 @implementation EditProjectPicker
 
@@ -23,34 +24,51 @@
 - (id)init
 {
   self = [super init];
-  [self createtextField];
+  if (self != nil)
+  {
+    textField = [[[UITextField alloc] initWithFrame:CGRectZero] retain];
+    textField.delegate = self;
+    
+    textField.textColor = [UIColor blackColor];
+    textField.font = [UIFont boldSystemFontOfSize:FONT_SIZE];
+    
+    textField.returnKeyType = UIReturnKeyDone;
+    textField.keyboardType = UIKeyboardTypeDefault;
+    textField.autocorrectionType = UITextAutocorrectionTypeDefault;
+    
+    textField.contentMode = UIViewContentModeLeft;
+  }
   return self;
 }
 
 - (void)viewDidLoad
 {
-  UIBarButtonItem *save   = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave
+  UIBarButtonItem *save   = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave
                                                                            target:self
-                                                                           action:@selector(save:)] autorelease];
+                                                                           action:@selector(save:)];
   
-  UIBarButtonItem *cancel = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
+  UIBarButtonItem *cancel = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
                                                                            target:self
-                                                                           action:@selector(cancel:)] autorelease];
+                                                                           action:@selector(cancel:)];
   
   self.navigationItem.rightBarButtonItem = save;
   self.navigationItem.leftBarButtonItem = cancel;
   
-  self.tableView = [[[UITableView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame] style:UITableViewStyleGrouped] autorelease];
+  [save release];
+  [cancel release];
+  
+  self.tableView = [[UITableView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame] style:UITableViewStyleGrouped];
   self.tableView.delegate = self;
   self.tableView.dataSource = self;
   self.tableView.autoresizesSubviews = YES;
+  [self.tableView release];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 { 
   [super viewWillAppear:animated];
   
-  if (options && ![self.tableView indexPathForSelectedRow])
+  if (options)
   {
     for (NSInteger i = 0; i < self.options.count; i++)
     {
@@ -59,8 +77,6 @@
       {
         NSIndexPath *path = [NSIndexPath indexPathForRow:i inSection:1];
         [self.tableView selectRowAtIndexPath:path animated:NO scrollPosition:UITableViewScrollPositionTop];
-        UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:path];
-        cell.selected = YES;
         break;
       }
     }
@@ -70,27 +86,13 @@
   [self.tableView reloadData];
 }
 
-- (void)createtextField
-{
-  CGRect frame = CGRectMake(0.0, 0.0, 100.0, 100.0);
-  
-	textField = [[[UITextField alloc] initWithFrame:frame] retain];
-  textField.textColor = [UIColor blackColor];
-  textField.font = [UIFont boldSystemFontOfSize:FONT_SIZE];
-  textField.backgroundColor = [UIColor whiteColor];
-	textField.delegate = self;
-	textField.returnKeyType = UIReturnKeyDone;
-  textField.keyboardType = UIKeyboardTypeDefault;
-  textField.autocorrectionType = UITextAutocorrectionTypeNo;
-  textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-}
-
 - (NSString*)selected
 {
   return textField.text;
 }
 - (void)setSelected:(NSString *)newSelected
 {
+  NSLog(@"Setting text to %@", newSelected);
   textField.text = newSelected;
 }
 
@@ -109,28 +111,19 @@
   [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning]; // Releases the view if it doesn't have a superview
-    // Release anything that's not essential, such as cached data
-}
-
 #pragma mark Text view methods
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
-  NSIndexPath *path = [self.tableView indexPathForSelectedRow];
-  if (path)
-  {
-    [self.tableView deselectRowAtIndexPath:path animated:NO];
-    [self.tableView reloadData];
-  }
+  [self.tableView reloadData];
   return YES;
 }
 
 #pragma mark Table view methods
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 2;
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+  return 2;
 }
 
 
@@ -155,23 +148,30 @@
   switch ([indexPath section])
   {
     case 0:
-      cell = [tableView dequeueReusableCellWithIdentifier:@"TableViewCell"];
-      if (cell == nil) {
-        cell = [[[TextViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:@"TableViewCell"] autorelease];
+      cell = [tableView dequeueReusableCellWithIdentifier:@"TextViewCell"];
+      if (cell == nil)
+      {
+        cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:@"TextViewCell"] autorelease];
+        [cell.contentView addSubview:textField];
+        
+        CGRect frame = cell.contentView.frame;
+        textField.frame = CGRectMake(frame.origin.x + TEXT_FIELD_HPADDING, 
+                                     frame.origin.y + TEXT_FIELD_VPADDING,
+                                     frame.size.width - TEXT_FIELD_HPADDING * 4,
+                                     frame.size.height - TEXT_FIELD_VPADDING * 2);
       }
-      ((TextViewCell*)cell).view = textField;
       break;
       
     case 1:
       cell = [tableView dequeueReusableCellWithIdentifier:@"NormalCell"];
-      if (cell == nil) {
+      if (cell == nil)
+      {
         cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:@"NormalCell"] autorelease];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.textLabel.font = [UIFont systemFontOfSize:FONT_SIZE];
       }
       
       cell.textLabel.text = [self.options objectAtIndex:[indexPath row]];
-      if (cell.selected)
+      if ([cell.textLabel.text isEqualToString:self.selected])
       {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
       }
@@ -191,6 +191,8 @@
   {    
     UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
     self.selected = cell.textLabel.text;
+    
+    return indexPath;
   }
   
   return nil;

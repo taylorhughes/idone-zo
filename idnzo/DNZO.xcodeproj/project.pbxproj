@@ -30,8 +30,6 @@
 		34205CB10FB2641800A9F048 /* TextFieldController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34205CB00FB2641800A9F048 /* TextFieldController.m */; };
 		34205CB20FB2641800A9F048 /* TextFieldController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34205CB00FB2641800A9F048 /* TextFieldController.m */; };
 		3452D4A31049CC26005C717C /* Entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3452D4A21049CC26005C717C /* Entitlements.plist */; };
-		345A19120FBA6F29000BBC22 /* TextViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 345A19110FBA6F29000BBC22 /* TextViewCell.m */; };
-		345A19130FBA6F29000BBC22 /* TextViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 345A19110FBA6F29000BBC22 /* TextViewCell.m */; };
 		34762C35104EF27700498704 /* DNZOAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* DNZOAppDelegate.m */; };
 		34770B2A0FAFE45B00AD8397 /* ListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34770B270FAFE45B00AD8397 /* ListViewController.m */; };
 		34770B2B0FAFE45B00AD8397 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34770B290FAFE45B00AD8397 /* MainViewController.m */; };
@@ -110,8 +108,6 @@
 		34205CAF0FB2641800A9F048 /* TextFieldController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextFieldController.h; sourceTree = "<group>"; };
 		34205CB00FB2641800A9F048 /* TextFieldController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextFieldController.m; sourceTree = "<group>"; };
 		3452D4A21049CC26005C717C /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Entitlements.plist; sourceTree = "<group>"; };
-		345A19100FBA6F29000BBC22 /* TextViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextViewCell.h; sourceTree = "<group>"; };
-		345A19110FBA6F29000BBC22 /* TextViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextViewCell.m; sourceTree = "<group>"; };
 		34770B260FAFE45B00AD8397 /* ListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ListViewController.h; path = Classes/ListViewController.h; sourceTree = "<group>"; };
 		34770B270FAFE45B00AD8397 /* ListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ListViewController.m; path = Classes/ListViewController.m; sourceTree = "<group>"; };
 		34770B280FAFE45B00AD8397 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MainViewController.h; path = Classes/MainViewController.h; sourceTree = "<group>"; };
@@ -200,8 +196,6 @@
 				34205CB00FB2641800A9F048 /* TextFieldController.m */,
 				34C51AC20FB92A9D0024A5CD /* EditProjectPicker.h */,
 				34C51AC30FB92A9D0024A5CD /* EditProjectPicker.m */,
-				345A19100FBA6F29000BBC22 /* TextViewCell.h */,
-				345A19110FBA6F29000BBC22 /* TextViewCell.m */,
 				3416EC220FC22C3D00D8BD53 /* TaskCell.h */,
 				3416EC230FC22C3D00D8BD53 /* TaskCell.m */,
 				3416EC240FC22C3D00D8BD53 /* TaskCellView.h */,
@@ -464,7 +458,6 @@
 				341E1E230FB138F000D5B454 /* TaskViewController.m in Sources */,
 				34205CB20FB2641800A9F048 /* TextFieldController.m in Sources */,
 				34C51AC50FB92A9D0024A5CD /* EditProjectPicker.m in Sources */,
-				345A19130FBA6F29000BBC22 /* TextViewCell.m in Sources */,
 				3416EC280FC22C3D00D8BD53 /* TaskCell.m in Sources */,
 				3416EC290FC22C3D00D8BD53 /* TaskCellView.m in Sources */,
 				34FAAB29101141B700B74477 /* Tasks.xcdatamodel in Sources */,
@@ -498,7 +491,6 @@
 				341E1E240FB138F000D5B454 /* TaskViewController.m in Sources */,
 				34205CB10FB2641800A9F048 /* TextFieldController.m in Sources */,
 				34C51AC40FB92A9D0024A5CD /* EditProjectPicker.m in Sources */,
-				345A19120FBA6F29000BBC22 /* TextViewCell.m in Sources */,
 				3416EC260FC22C3D00D8BD53 /* TaskCell.m in Sources */,
 				3416EC270FC22C3D00D8BD53 /* TaskCellView.m in Sources */,
 				34FAAB2A101141B700B74477 /* Tasks.xcdatamodel in Sources */,
