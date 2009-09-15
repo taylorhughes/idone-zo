@@ -28,6 +28,7 @@
   {
     textField = [[[UITextField alloc] initWithFrame:CGRectZero] retain];
     textField.delegate = self;
+    textField.placeholder = @"New project";
     
     textField.textColor = [UIColor blackColor];
     textField.font = [UIFont boldSystemFontOfSize:FONT_SIZE];
