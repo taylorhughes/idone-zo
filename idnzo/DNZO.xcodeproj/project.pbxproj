@@ -30,6 +30,7 @@
 		34205CB10FB2641800A9F048 /* TextFieldController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34205CB00FB2641800A9F048 /* TextFieldController.m */; };
 		34205CB20FB2641800A9F048 /* TextFieldController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34205CB00FB2641800A9F048 /* TextFieldController.m */; };
 		3452D4A31049CC26005C717C /* Entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3452D4A21049CC26005C717C /* Entitlements.plist */; };
+		347401FA1066742200B764A1 /* SyncTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AF21EF102FC20B001FC4B7 /* SyncTest.m */; };
 		34762C35104EF27700498704 /* DNZOAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* DNZOAppDelegate.m */; };
 		34770B2A0FAFE45B00AD8397 /* ListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34770B270FAFE45B00AD8397 /* ListViewController.m */; };
 		34770B2B0FAFE45B00AD8397 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34770B290FAFE45B00AD8397 /* MainViewController.m */; };
@@ -513,6 +514,7 @@
 				34AF21F0102FC20B001FC4B7 /* MockDonezoAPIClient.m in Sources */,
 				34A282D8104DA3EB00F26A01 /* DonezoAPIClientTest.m in Sources */,
 				34762C35104EF27700498704 /* DNZOAppDelegate.m in Sources */,
+				347401FA1066742200B764A1 /* SyncTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
