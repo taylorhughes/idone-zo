@@ -279,7 +279,6 @@
   [self.client saveTask:&t taskList:nil error:&error];
     
   [self.syncMaster performSync:&error];
-  [self.context save:&error];
   
   [self assertListsSynced:1];
   // This will compare the tasks to make sure they are equal.
@@ -303,6 +302,7 @@
     
     NSTimeInterval interval = [task.updatedAt timeIntervalSinceDate:oldUpdatedAt];
     STAssertTrue(interval > 0, @"New updated at should be larger than old updated at, but was: %0.4f", interval);
+    oldUpdatedAt = [task.updatedAt copy];
     
     [self.syncMaster performSync:&error];
     STAssertNil(error, @"Error should be nil.");
@@ -310,6 +310,9 @@
     // reload task object
     task = (Task*)[self.context objectWithID:[task objectID]];
     STAssertEqualObjects(newBody, task.body, @"New body should be equal to the modified version we saved earlier.");
+    interval = [task.updatedAt timeIntervalSinceDate:oldUpdatedAt];
+    STAssertTrue(interval > 0, @"New updated at should be larger than old updated at, but was: %0.4f", interval);
+    
     
     [self assertListsSynced:1];
     // This will compare the tasks to make sure they are equal.
