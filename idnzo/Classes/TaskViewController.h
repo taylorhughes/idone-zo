@@ -20,7 +20,9 @@
   NSManagedObjectContext *editingContext;
   BOOL isEditing;
   
-  IBOutlet UIView *topView;
+  IBOutlet UIView *bodyView;
+  IBOutlet UIView *bodyEditView;
+  
   IBOutlet UILabel *topLabel;
   IBOutlet UIButton *topCheckmark;
   IBOutlet UIButton *topButton;

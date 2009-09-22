@@ -60,7 +60,10 @@ static UIImage *unchecked;
     [topButton addTarget:self action:@selector(editNameClicked:) forControlEvents:UIControlEventTouchUpInside];
     [topButton.titleLabel setLineBreakMode:UILineBreakModeWordWrap];
     [topCheckmark addTarget:self action:@selector(checkmarkClicked:) forControlEvents:UIControlEventTouchUpInside];
-    self.tableView.tableHeaderView = topView;
+    
+    self.tableView.tableHeaderView = [[[UIView alloc] init] autorelease];
+    [self.tableView.tableHeaderView addSubview:bodyView];
+    [self.tableView.tableHeaderView addSubview:bodyEditView];
   }
 }
 
@@ -135,19 +138,17 @@ static UIImage *unchecked;
   
   //bodyCell.accessoryType = self.isEditing ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
     
-  if ((self.isEditing && topLabel.alpha > 0) || (!self.isEditing && topLabel.alpha == 0))
+  if ((self.isEditing && bodyEditView.alpha == 0) || (!self.isEditing && bodyEditView.alpha == 1.0))
   {
     if (self.isEditing)
     {
-      topLabel.alpha = 0.0;
-      topCheckmark.alpha = 0.0;
-      topButton.alpha = 1.0;
+      bodyView.alpha = 0.0;
+      bodyEditView.alpha = 1.0;
     }
     else
     {
-      topLabel.alpha = 1.0;
-      topCheckmark.alpha = 1.0;
-      topButton.alpha = 0.0;
+      bodyView.alpha = 1.0;
+      bodyEditView.alpha = 0.0;
     }
   }
   
@@ -162,7 +163,7 @@ static UIImage *unchecked;
 
   topLabel.text = self.task.body;
   [topButton setTitle:self.task.body forState:UIControlStateNormal];
-  
+    
   // NOTE: We don't reset the heights here, we just add the *difference* in the height.
   topLabel.frame = CGRectMake(topLabel.frame.origin.x,
                               topLabel.frame.origin.y,
@@ -172,12 +173,18 @@ static UIImage *unchecked;
                                topButton.frame.origin.y,
                                topButton.frame.size.width,
                                topButton.frame.size.height + heightDiff);
-  self.tableView.tableHeaderView.frame = CGRectMake(self.tableView.tableHeaderView.frame.origin.x,
-                                                    self.tableView.tableHeaderView.frame.origin.y,
-                                                    self.tableView.tableHeaderView.frame.size.width,
-                                                    self.tableView.tableHeaderView.frame.size.height + heightDiff);
   
-  // Forces the size to be reloaded in the tableview
+  bodyView.frame = CGRectMake(bodyView.frame.origin.x,
+                              bodyView.frame.origin.y,
+                              bodyView.frame.size.width,
+                              bodyView.frame.size.height + heightDiff);
+  bodyEditView.frame = CGRectMake(bodyEditView.frame.origin.x,
+                                  bodyEditView.frame.origin.y,
+                                  bodyEditView.frame.size.width,
+                                  bodyEditView.frame.size.height + heightDiff);
+  
+  self.tableView.tableHeaderView.frame = !self.isEditing ? bodyView.frame : bodyEditView.frame;
+  // Forces the size to be reloaded
   self.tableView.tableHeaderView = self.tableView.tableHeaderView;
   
   [self.tableView reloadData];
@@ -420,6 +427,9 @@ static UIImage *unchecked;
 
 - (void)dealloc
 {
+  [bodyView release];
+  [bodyEditView release];
+  
   [topLabel release];
   [topCheckmark release];
   [topButton release];
