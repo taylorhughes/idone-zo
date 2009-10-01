@@ -78,7 +78,7 @@
   NSMutableArray *array = [[[NSMutableArray alloc] init] autorelease];
   for (Context *context in [self contexts:inContext])
   {
-    [array addObject:context.name];
+    [array addObject:[NSString stringWithFormat:@"@%@", context.name]];
   }
   return array;
 }

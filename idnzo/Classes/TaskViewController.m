@@ -221,6 +221,28 @@ static UIImage *unchecked;
     [self save];
   }
 }
+- (void) saveContexts:(id)sender
+{
+  NSString *contexts = [[(EditProjectPicker*)sender selected] lowercaseString];
+  NSMutableCharacterSet *set = [NSMutableCharacterSet lowercaseLetterCharacterSet];
+  [set addCharactersInString:@"-"];
+  [set invert];
+  
+  NSMutableArray *contextsArray = [NSMutableArray arrayWithArray:[contexts componentsSeparatedByCharactersInSet:set]];
+  for (int i = [contextsArray count] - 1; i >= 0; i--)
+  {
+    if ([[contextsArray objectAtIndex:i] isEqual:@""])
+    {
+      [contextsArray removeObjectAtIndex:i];
+    }
+  }
+  
+  self.task.contexts = [NSSet setWithArray:[Context findOrCreateContextsWithNames:contextsArray inContext:[self.task managedObjectContext]]];
+  if (![self isNewTask])
+  {
+    [self save];
+  }
+}
 
 - (void)checkmarkClicked:(id)sender
 {
@@ -263,16 +285,6 @@ static UIImage *unchecked;
   {
     self.task = (Task*)[NSEntityDescription insertNewObjectForEntityForName:@"Task" inManagedObjectContext:self.editingContext];
   }
-  
-  /*
-  // load editing view into modal view
-  UINavigationController *modalNavigationController = [EditViewController navigationControllerWithTask:editingTask
-                                                                                         dismissTarget:self  
-                                                                                            saveAction:@selector(editTaskSaved)
-                                                                                          cancelAction:@selector(editTaskCanceled)];
-  
-  [self.navigationController presentModalViewController:modalNavigationController animated:YES];
-  */
 }
 
 - (void)editingContextDidSave:(NSNotification*)saveNotification
@@ -400,18 +412,28 @@ static UIImage *unchecked;
     return nil;
   }
   
-  UIViewController *controller = nil;
+  EditProjectPicker *controller = nil;
   switch ([indexPath row])
   {
-    case 0: //project
+    case 0: 
+      // Project
       controller = [[[EditProjectPicker alloc] init] autorelease];
-      ((EditProjectPicker*)controller).options = [Project projectNames:[self.task managedObjectContext]];
-      ((EditProjectPicker*)controller).selected = self.task.project.name;
-      ((EditProjectPicker*)controller).target = self;
-      ((EditProjectPicker*)controller).saveAction = @selector(saveProject:);
+      controller.options = [Project projectNames:[self.task managedObjectContext]];
+      controller.selected = self.task.project.name;
+      controller.target = self;
+      controller.saveAction = @selector(saveProject:);
       break;
+      
     case 1:
+      // Contexts
+      controller = [[[EditProjectPicker alloc] init] autorelease];
+      controller.appendSelections = YES;
+      controller.options = [Context contextNames:[self.task managedObjectContext]];
+      controller.selected = [self.task contextsString];
+      controller.target = self;
+      controller.saveAction = @selector(saveContexts:);
       break;
+      
     case 2:
       break;
   }

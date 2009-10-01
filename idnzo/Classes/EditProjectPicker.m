@@ -20,12 +20,15 @@
 @implementation EditProjectPicker
 
 @synthesize options, target, saveAction;
+@synthesize appendSelections;
 
 - (id)init
 {
   self = [super init];
   if (self != nil)
   {
+    appendSelections = NO;
+    
     textField = [[[UITextField alloc] initWithFrame:CGRectZero] retain];
     textField.delegate = self;
     textField.placeholder = @"New project";
@@ -65,6 +68,21 @@
   [self.tableView release];
 }
 
+- (BOOL) selectedContains:(NSString*)option
+{
+  if (self.appendSelections)
+  {
+    option = [option stringByReplacingOccurrencesOfString:@"@" withString:@""];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES[cd] %@",
+                              [NSString stringWithFormat:@".*\\b%@\\b.*", option]];
+    return [predicate evaluateWithObject:self.selected];
+  }
+  else
+  {
+    return [self.selected isEqualToString:option];
+  }
+}
+
 - (void)viewWillAppear:(BOOL)animated
 { 
   [super viewWillAppear:animated];
@@ -74,10 +92,12 @@
     for (NSInteger i = 0; i < self.options.count; i++)
     {
       NSString *option = (NSString*)[self.options objectAtIndex:i];
-      if ([option isEqualToString:self.selected])
+      
+      if ([self selectedContains:option])
       {
         NSIndexPath *path = [NSIndexPath indexPathForRow:i inSection:1];
         [self.tableView selectRowAtIndexPath:path animated:NO scrollPosition:UITableViewScrollPositionTop];
+        // just scroll to the first one
         break;
       }
     }
@@ -172,7 +192,7 @@
       }
       
       cell.textLabel.text = [self.options objectAtIndex:[indexPath row]];
-      if ([cell.textLabel.text isEqualToString:self.selected])
+      if ([self selectedContains:cell.textLabel.text])
       {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
       }
@@ -191,7 +211,24 @@
   if ([indexPath section] == 1)
   {    
     UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
-    self.selected = cell.textLabel.text;
+    if (self.appendSelections)
+    {
+      if (![self selectedContains:cell.textLabel.text])
+      {
+        if (self.selected != nil && ![self.selected isEqual:@""])
+        {
+          self.selected = [self.selected stringByAppendingFormat:@" %@", cell.textLabel.text];
+        }
+        else
+        {
+          self.selected = cell.textLabel.text;
+        }
+      }
+    }
+    else
+    {
+      self.selected = cell.textLabel.text;
+    }
     
     return indexPath;
   }

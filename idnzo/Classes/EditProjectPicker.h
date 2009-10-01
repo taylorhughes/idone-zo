@@ -15,11 +15,13 @@
   NSObject *target;
   UITextField *textField;
   SEL saveAction;
+  BOOL appendSelections;
 }
 
 - (NSString *)selected;
 - (void)setSelected:(NSString*)newSelected;
 
+@property (nonatomic) BOOL appendSelections;
 @property (retain, nonatomic) NSArray  *options;
 @property (nonatomic, retain) NSObject *target;
 @property (nonatomic) SEL saveAction;
