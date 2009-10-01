@@ -225,7 +225,8 @@ static UIImage *unchecked;
 {
   NSString *contexts = [[(EditProjectPicker*)sender selected] lowercaseString];
   NSMutableCharacterSet *set = [NSMutableCharacterSet lowercaseLetterCharacterSet];
-  [set addCharactersInString:@"-"];
+  [set formUnionWithCharacterSet:[NSCharacterSet decimalDigitCharacterSet]];
+  [set addCharactersInString:@"-_"];
   [set invert];
   
   NSMutableArray *contextsArray = [NSMutableArray arrayWithArray:[contexts componentsSeparatedByCharactersInSet:set]];
