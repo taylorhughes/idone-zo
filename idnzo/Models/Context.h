@@ -19,6 +19,10 @@
 + (Context*) findOrCreateContextWithName:(NSString*)name inContext:(NSManagedObjectContext*)context;
 + (NSArray*) findOrCreateContextsWithNames:(NSArray*)names inContext:(NSManagedObjectContext*)context;
 
++ (NSArray*) contexts:(NSManagedObjectContext*)context;
++ (NSArray*) contextNames:(NSManagedObjectContext*)inContext;
+
+
 
 @end
 

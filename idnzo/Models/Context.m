@@ -50,4 +50,37 @@
   return contexts;
 }
 
++ (NSArray*)contexts:(NSManagedObjectContext*)context
+{
+  NSFetchRequest *request = [[NSFetchRequest alloc] init];
+  NSEntityDescription *entity = [NSEntityDescription entityForName:@"Context" inManagedObjectContext:context];
+  request.entity = entity;
+  
+  NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
+  NSArray *sorters = [NSArray arrayWithObjects:sort, nil];
+  request.sortDescriptors = sorters;
+  [sort release];
+  
+  NSError *error = nil;
+  NSArray *contexts = [context executeFetchRequest:request error:&error];
+  if (contexts == nil)
+  {
+    // handle error
+    NSLog(@"No contexts! What?!");
+  }
+  
+  [request release];
+  return contexts;
+}
+
++ (NSArray*)contextNames:(NSManagedObjectContext*)inContext
+{
+  NSMutableArray *array = [[[NSMutableArray alloc] init] autorelease];
+  for (Context *context in [self contexts:inContext])
+  {
+    [array addObject:context.name];
+  }
+  return array;
+}
+
 @end
