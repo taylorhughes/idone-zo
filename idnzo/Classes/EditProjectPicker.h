@@ -7,6 +7,7 @@
 //
 
 #import "Project.h"
+#import "GTMRegex.h"
 
 @class Project;
 

@@ -211,19 +211,29 @@
   if ([indexPath section] == 1)
   {    
     UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+    NSString *option = cell.textLabel.text;
     if (self.appendSelections)
     {
-      if (![self selectedContains:cell.textLabel.text])
+      if (![self selectedContains:option])
       {
         if (self.selected != nil && ![self.selected isEqual:@""])
         {
-          self.selected = [self.selected stringByAppendingFormat:@" %@", cell.textLabel.text];
+          self.selected = [self.selected stringByAppendingFormat:@" %@", option];
         }
         else
         {
           self.selected = cell.textLabel.text;
         }
       }
+      else
+      {
+        // \\b(\\s*)
+        NSString *pattern = [NSString stringWithFormat:@"(^|[[:space:]]+)@?%@($|[[:space:]]+)", [option stringByReplacingOccurrencesOfString:@"@" withString:@""]];
+        GTMRegex *regex = [GTMRegex regexWithPattern:pattern options:kGTMRegexOptionIgnoreCase];
+        self.selected = [regex stringByReplacingMatchesInString:self.selected withReplacement:@"\\1"];
+        self.selected = [self.selected stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+      }
+
     }
     else
     {
