@@ -47,6 +47,8 @@
 
 - (void)viewDidLoad
 {
+  [super viewDidLoad];
+  
   UIBarButtonItem *save   = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave
                                                                            target:self
                                                                            action:@selector(save:)];
@@ -255,6 +257,7 @@
 {
   [options release];
   [textField release];
+  [target release];
   [super dealloc];
 }
 

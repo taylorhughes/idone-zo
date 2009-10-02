@@ -13,8 +13,8 @@
 
 @interface EditProjectPicker : UITableViewController <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate> {
   NSArray *options;
-  NSObject *target;
   UITextField *textField;
+  NSObject *target;
   SEL saveAction;
   BOOL appendSelections;
 }

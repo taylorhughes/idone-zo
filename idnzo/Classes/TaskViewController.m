@@ -244,6 +244,14 @@ static UIImage *unchecked;
     [self save];
   }
 }
+- (void)saveDate:(id)sender
+{
+  self.task.dueDate = [(DatePickerViewController*)sender selectedDate];
+  if (![self isNewTask])
+  {
+    [self save];
+  }
+}
 
 - (void)checkmarkClicked:(id)sender
 {
@@ -413,31 +421,35 @@ static UIImage *unchecked;
     return nil;
   }
   
-  EditProjectPicker *controller = nil;
+  UIViewController *controller = nil;
   switch ([indexPath row])
   {
     case 0: 
       // Project
       controller = [[[EditProjectPicker alloc] init] autorelease];
-      controller.options = [Project projectNames:[self.task managedObjectContext]];
-      controller.selected = self.task.project.name;
-      controller.target = self;
-      controller.saveAction = @selector(saveProject:);
-      controller.textField.placeholder = @"New project";
+      ((EditProjectPicker*)controller).options = [Project projectNames:[self.task managedObjectContext]];
+      ((EditProjectPicker*)controller).selected = self.task.project.name;
+      ((EditProjectPicker*)controller).target = self;
+      ((EditProjectPicker*)controller).saveAction = @selector(saveProject:);
+      ((EditProjectPicker*)controller).textField.placeholder = @"New project";
       break;
       
     case 1:
       // Contexts
       controller = [[[EditProjectPicker alloc] init] autorelease];
-      controller.appendSelections = YES;
-      controller.options = [Context contextNames:[self.task managedObjectContext]];
-      controller.selected = [self.task contextsString];
-      controller.target = self;
-      controller.saveAction = @selector(saveContexts:);
-      controller.textField.placeholder = @"@context";
+      ((EditProjectPicker*)controller).appendSelections = YES;
+      ((EditProjectPicker*)controller).options = [Context contextNames:[self.task managedObjectContext]];
+      ((EditProjectPicker*)controller).selected = [self.task contextsString];
+      ((EditProjectPicker*)controller).target = self;
+      ((EditProjectPicker*)controller).saveAction = @selector(saveContexts:);
+      ((EditProjectPicker*)controller).textField.placeholder = @"@context";
       break;
       
     case 2:
+      controller = [[[DatePickerViewController alloc] initWithNibName:@"TaskDatePickerView" bundle:nil] autorelease];
+      ((DatePickerViewController*)controller).saveAction = @selector(saveDate:);
+      ((DatePickerViewController*)controller).target = self;
+      ((DatePickerViewController*)controller).selectedDate = self.task.dueDate;
       break;
   }
 

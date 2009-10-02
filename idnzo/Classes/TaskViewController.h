@@ -10,6 +10,7 @@
 #import "TaskList.h"
 #import "DNZOAppDelegate.h"
 #import "EditProjectPicker.h"
+#import "DatePickerViewController.h"
 #import "TextFieldController.h"
 
 @class Task;
