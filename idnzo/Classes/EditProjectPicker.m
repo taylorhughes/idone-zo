@@ -21,6 +21,7 @@
 
 @synthesize options, target, saveAction;
 @synthesize appendSelections;
+@synthesize textField;
 
 - (id)init
 {
@@ -31,7 +32,6 @@
     
     textField = [[[UITextField alloc] initWithFrame:CGRectZero] retain];
     textField.delegate = self;
-    textField.placeholder = @"New project";
     
     textField.textColor = [UIColor blackColor];
     textField.font = [UIFont boldSystemFontOfSize:FONT_SIZE];
@@ -227,8 +227,8 @@
       }
       else
       {
-        // \\b(\\s*)
-        NSString *pattern = [NSString stringWithFormat:@"(^|[[:space:]]+)@?%@($|[[:space:]]+)", [option stringByReplacingOccurrencesOfString:@"@" withString:@""]];
+        NSString *pattern = [NSString stringWithFormat:@"(^|[[:space:]]+)@?%@($|[[:space:]]+)",
+                              [option stringByReplacingOccurrencesOfString:@"@" withString:@""]];
         GTMRegex *regex = [GTMRegex regexWithPattern:pattern options:kGTMRegexOptionIgnoreCase];
         self.selected = [regex stringByReplacingMatchesInString:self.selected withReplacement:@"\\1"];
         self.selected = [self.selected stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];

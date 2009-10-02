@@ -22,9 +22,11 @@
 - (NSString *)selected;
 - (void)setSelected:(NSString*)newSelected;
 
-@property (nonatomic) BOOL appendSelections;
+
+@property (readonly, nonatomic) UITextField *textField;
 @property (retain, nonatomic) NSArray  *options;
-@property (nonatomic, retain) NSObject *target;
+@property (retain, nonatomic) NSObject *target;
+@property (nonatomic) BOOL appendSelections;
 @property (nonatomic) SEL saveAction;
 
 @end

@@ -423,6 +423,7 @@ static UIImage *unchecked;
       controller.selected = self.task.project.name;
       controller.target = self;
       controller.saveAction = @selector(saveProject:);
+      controller.textField.placeholder = @"New project";
       break;
       
     case 1:
@@ -433,6 +434,7 @@ static UIImage *unchecked;
       controller.selected = [self.task contextsString];
       controller.target = self;
       controller.saveAction = @selector(saveContexts:);
+      controller.textField.placeholder = @"@context";
       break;
       
     case 2:
