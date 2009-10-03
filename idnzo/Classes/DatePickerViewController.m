@@ -76,10 +76,7 @@
 }
 - (void)setSelectedDate:(NSDate*)date
 {
-  if (date != nil)
-  {
-    self.picker.date = date;
-  }
+  self.picker.date = date ? date : [NSDate date];
 }
 
 - (void)onClickSelectNoneButton:(id)sender
