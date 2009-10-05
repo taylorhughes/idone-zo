@@ -76,6 +76,7 @@
 }
 - (void)setSelectedDate:(NSDate*)date
 {
+  self.view;
   self.picker.date = date ? date : [NSDate date];
 }
 
