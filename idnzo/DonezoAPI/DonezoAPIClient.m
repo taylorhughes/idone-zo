@@ -7,17 +7,7 @@
 //
 
 #import "DonezoAPIClient.h"
-
-@interface DonezoAPIClient ()
-@property (nonatomic, copy) NSString *baseUrl;
-@property (nonatomic, readonly) NSString *apiUrl;
-
-- (BOOL)login:(NSError**)error;
-- (NSObject*)getObjectFromPath:(NSString*)path withKey:(NSString*)key error:(NSError**)error;
-- (NSObject*)getObjectFromPath:(NSString*)path withKey:(NSString*)key usingMethod:(NSString*)method andBody:(NSString*)body error:(NSError**)error;
-- (NSString*)responseFromRequestToPath:(NSString*)path withMethod:(NSString*)method andBody:(NSString*)body error:(NSError**)error;
-
-@end
+#import "DonezoAPIClient_Private.h"
 
 #define DEFAULT_BASE_URL @"http://www.done-zo.com/"
 #define API_PATH @"/api/0.1/"
@@ -88,11 +78,24 @@
     [req setHTTPBody:[body dataUsingEncoding:NSASCIIStringEncoding]];    
   }
   
-  NSHTTPURLResponse *response;
+  NSHTTPURLResponse *response = nil;
   NSData *responseData = [NSURLConnection sendSynchronousRequest:req returningResponse:&response error:error];      
   NSString *responseString = [[[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding] autorelease];
-  
   [req release];
+  
+  if (*error != nil)
+  {
+    return nil;
+  }
+  else if (response == nil || [response statusCode] >= 400)
+  {
+    NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
+    NSString *errorString = [NSString stringWithFormat:@"Bad response code from Done-zo. The service seems to be unavailable."];
+    [errorDetail setValue:errorString forKey:NSLocalizedDescriptionKey];
+    *error = [NSError errorWithDomain:@"DonezoAPI" code:100 userInfo:errorDetail];
+    
+    return nil;
+  }
   
   return responseString;
 }
@@ -101,19 +104,45 @@
 {
   return [self getObjectFromPath:path withKey:key usingMethod:nil andBody:nil error:error];
 }
-  
+
 - (NSObject*)getObjectFromPath:(NSString*)path withKey:(NSString*)key usingMethod:(NSString*)method andBody:(NSString*)body error:(NSError**)error
 {
   NSString *responseString = [self responseFromRequestToPath:path withMethod:method andBody:body error:error];
   
-  if (*error)
+  if (*error != nil)
   {
-    NSLog(@"Ruh roh! Error! %@", *error);
     return nil;
   }
   
+  NSDictionary *dict = [self parseDonezoResponse:responseString error:error];
+  NSObject *obj = [dict objectForKey:key];
+  if (*error == nil && obj == nil)
+  {
+    NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
+    NSString *errorString = [NSString stringWithFormat:@"Could not find proper key in Done-zo response!"];
+    [errorDetail setValue:errorString forKey:NSLocalizedDescriptionKey];
+    *error = [NSError errorWithDomain:@"DonezoAPI" code:100 userInfo:errorDetail];
+    
+    return nil;
+  }
+  
+  return obj;
+}
+
+- (NSDictionary*)parseDonezoResponse:(NSString*)responseString error:(NSError**)error
+{
   SBJsonParser *parser = [[[SBJsonParser alloc] init] autorelease];
   NSDictionary *dict = (NSDictionary*) [parser objectWithString:responseString];
+  
+  if (responseString != nil && ![responseString isEqualToString:@""] && dict == nil)
+  {
+    NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
+    NSString *errorString = [NSString stringWithFormat:@"Response from Done-zo was not understood."];
+    [errorDetail setValue:errorString forKey:NSLocalizedDescriptionKey];
+    *error = [NSError errorWithDomain:@"DonezoAPI" code:100 userInfo:errorDetail];
+    
+    return nil;
+  }
   
   NSString *taskError = [dict valueForKey:@"error"];
   if (taskError != nil)
@@ -126,7 +155,7 @@
     return nil;
   }
   
-  return [dict objectForKey:key];
+  return dict;
 }
 
 - (NSArray*)getLists:(NSError**)error
@@ -189,8 +218,6 @@
   
   NSString *path = [NSString stringWithFormat:@"/l/%@/", (*list).key];  
   [self responseFromRequestToPath:path withMethod:@"DELETE" andBody:nil error:error];
-  
-  //NSLog(@"Result from DELETE: %@", result);
   
   if (*error)
   {

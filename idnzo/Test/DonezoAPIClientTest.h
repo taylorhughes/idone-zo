@@ -8,6 +8,7 @@
 
 #import <SenTestingKit/SenTestingKit.h>
 #import "DonezoAPIClient.h"
+#import "DonezoAPIClient_Private.h"
 #import "MockDonezoAPIClient.h"
 
 @interface DonezoAPIClientTest : SenTestCase {

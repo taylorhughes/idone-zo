@@ -58,6 +58,7 @@
 		34C51AC40FB92A9D0024A5CD /* EditProjectPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C51AC30FB92A9D0024A5CD /* EditProjectPicker.m */; };
 		34C51AC50FB92A9D0024A5CD /* EditProjectPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C51AC30FB92A9D0024A5CD /* EditProjectPicker.m */; };
 		34C74259107570400045F527 /* GTMRegex.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C74258107570400045F527 /* GTMRegex.m */; };
+		34C742F9107A98DA0045F527 /* GTMRegex.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C74258107570400045F527 /* GTMRegex.m */; };
 		34E13DEA10225E54005A582E /* DonezoAPIClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E13DE310225E54005A582E /* DonezoAPIClient.m */; };
 		34E13DEB10225E54005A582E /* DonezoTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E13DE510225E54005A582E /* DonezoTask.m */; };
 		34E13DEC10225E54005A582E /* DonezoTaskList.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E13DE710225E54005A582E /* DonezoTaskList.m */; };
@@ -147,6 +148,7 @@
 		34C74256107570400045F527 /* GTMDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMDefines.h; sourceTree = "<group>"; };
 		34C74257107570400045F527 /* GTMRegex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMRegex.h; sourceTree = "<group>"; };
 		34C74258107570400045F527 /* GTMRegex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTMRegex.m; sourceTree = "<group>"; };
+		34C7430B107A9C3C0045F527 /* DonezoAPIClient_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DonezoAPIClient_Private.h; path = DonezoAPI/DonezoAPIClient_Private.h; sourceTree = "<group>"; };
 		34E13DE210225E54005A582E /* DonezoAPIClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DonezoAPIClient.h; path = DonezoAPI/DonezoAPIClient.h; sourceTree = "<group>"; };
 		34E13DE310225E54005A582E /* DonezoAPIClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DonezoAPIClient.m; path = DonezoAPI/DonezoAPIClient.m; sourceTree = "<group>"; };
 		34E13DE410225E54005A582E /* DonezoTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DonezoTask.h; path = DonezoAPI/DonezoTask.h; sourceTree = "<group>"; };
@@ -340,6 +342,7 @@
 			isa = PBXGroup;
 			children = (
 				34E13DE210225E54005A582E /* DonezoAPIClient.h */,
+				34C7430B107A9C3C0045F527 /* DonezoAPIClient_Private.h */,
 				34E13DE310225E54005A582E /* DonezoAPIClient.m */,
 				34E13DE410225E54005A582E /* DonezoTask.h */,
 				34E13DE510225E54005A582E /* DonezoTask.m */,
@@ -551,6 +554,7 @@
 				34762C35104EF27700498704 /* DNZOAppDelegate.m in Sources */,
 				347401FA1066742200B764A1 /* SyncTest.m in Sources */,
 				34388F8D1076B18900FC1AB3 /* DatePickerViewController.m in Sources */,
+				34C742F9107A98DA0045F527 /* GTMRegex.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

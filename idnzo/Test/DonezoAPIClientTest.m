@@ -81,6 +81,15 @@
   */
 }
 
+- (void) testBadResponseString
+{
+  NSError *error = nil;
+  NSDictionary *dict = [self.client parseDonezoResponse:@"500 server errorz" error:&error];
+  
+  STAssertTrue(error != nil, @"Bad response should produce an error!");
+  STAssertNil(dict, @"Returning dict object should be nil!");
+}
+
 - (void) testTasks
 {
   NSError *error = nil;
