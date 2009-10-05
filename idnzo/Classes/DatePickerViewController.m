@@ -76,7 +76,9 @@
 }
 - (void)setSelectedDate:(NSDate*)date
 {
+  // This line forces the nibfile to load the view
   self.view;
+  // ... so that this line has an effect
   self.picker.date = date ? date : [NSDate date];
 }
 
