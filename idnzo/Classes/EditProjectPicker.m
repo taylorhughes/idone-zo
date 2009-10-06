@@ -11,6 +11,7 @@
 @interface EditProjectPicker()
 - (void) save:(id)sender;
 - (void) cancel:(id)sender;
+@property (retain, nonatomic) UITextField *textField;
 @end
 
 #define FONT_SIZE 18.0
@@ -30,17 +31,17 @@
   {
     appendSelections = NO;
     
-    textField = [[[UITextField alloc] initWithFrame:CGRectZero] retain];
-    textField.delegate = self;
+    self.textField = [[UITextField alloc] initWithFrame:CGRectZero];
+    self.textField.delegate = self;
     
-    textField.textColor = [UIColor blackColor];
-    textField.font = [UIFont boldSystemFontOfSize:FONT_SIZE];
+    self.textField.textColor = [UIColor blackColor];
+    self.textField.font = [UIFont boldSystemFontOfSize:FONT_SIZE];
     
-    textField.returnKeyType = UIReturnKeyDone;
-    textField.keyboardType = UIKeyboardTypeDefault;
-    textField.autocorrectionType = UITextAutocorrectionTypeDefault;
+    self.textField.returnKeyType = UIReturnKeyDone;
+    self.textField.keyboardType = UIKeyboardTypeDefault;
+    self.textField.autocorrectionType = UITextAutocorrectionTypeDefault;
     
-    textField.contentMode = UIViewContentModeLeft;
+    self.textField.contentMode = UIViewContentModeLeft;
   }
   return self;
 }
@@ -111,13 +112,22 @@
 
 - (NSString*)selected
 {
-  return textField.text;
+  return self.textField.text;
 }
 - (void)setSelected:(NSString *)newSelected
 {
-  NSLog(@"Setting text to %@", newSelected);
-  textField.text = newSelected;
+  self.textField.text = newSelected;
 }
+
+- (NSString*)placeholder
+{
+  return self.textField.placeholder;
+}
+- (void)setPlaceholder:(NSString*)placeholder
+{
+  self.textField.placeholder = placeholder;
+}
+
 
 - (void)save:(id)sender
 {  
@@ -136,8 +146,16 @@
 
 #pragma mark Text view methods
 
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+//- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+//{
+//  // Commented out because this causes crazy behavior that crashes on saving a new project
+//  [self.tableView reloadData];
+//  return YES;
+//}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)aTextField
 {
+  [self.textField resignFirstResponder];
   [self.tableView reloadData];
   return YES;
 }
@@ -175,13 +193,13 @@
       if (cell == nil)
       {
         cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:@"TextViewCell"] autorelease];
-        [cell.contentView addSubview:textField];
+        [cell.contentView addSubview:self.textField];
         
         CGRect frame = cell.contentView.frame;
-        textField.frame = CGRectMake(frame.origin.x + TEXT_FIELD_HPADDING, 
-                                     frame.origin.y + TEXT_FIELD_VPADDING,
-                                     frame.size.width - TEXT_FIELD_HPADDING * 4,
-                                     frame.size.height - TEXT_FIELD_VPADDING * 2);
+        self.textField.frame = CGRectMake(frame.origin.x + TEXT_FIELD_HPADDING, 
+                                          frame.origin.y + TEXT_FIELD_VPADDING,
+                                          frame.size.width - TEXT_FIELD_HPADDING * 4,
+                                          frame.size.height - TEXT_FIELD_VPADDING * 2);
       }
       break;
       

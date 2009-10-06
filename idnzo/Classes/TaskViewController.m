@@ -212,8 +212,7 @@ static UIImage *unchecked;
 
 - (void) saveProject:(id)sender
 {
-  NSString *newProject = [[(EditProjectPicker*)sender selected] 
-                          stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+  NSString *newProject = [(EditProjectPicker*)sender selected];
   
   self.task.project = [Project findOrCreateProjectWithName:newProject inContext:[self.task managedObjectContext]];
   if (![self isNewTask])
@@ -431,7 +430,7 @@ static UIImage *unchecked;
       ((EditProjectPicker*)controller).selected = self.task.project.name;
       ((EditProjectPicker*)controller).target = self;
       ((EditProjectPicker*)controller).saveAction = @selector(saveProject:);
-      ((EditProjectPicker*)controller).textField.placeholder = @"New project";
+      ((EditProjectPicker*)controller).placeholder = @"New project";
       break;
       
     case 1:
@@ -442,7 +441,7 @@ static UIImage *unchecked;
       ((EditProjectPicker*)controller).selected = [self.task contextsString];
       ((EditProjectPicker*)controller).target = self;
       ((EditProjectPicker*)controller).saveAction = @selector(saveContexts:);
-      ((EditProjectPicker*)controller).textField.placeholder = @"@context";
+      ((EditProjectPicker*)controller).placeholder = @"@context";
       break;
       
     case 2:
