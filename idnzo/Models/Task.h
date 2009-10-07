@@ -23,9 +23,6 @@
 @property (nonatomic, retain) NSDate *updatedAt;
 @property (nonatomic, retain) NSDate *sortDate;
 
-@property (nonatomic, retain) NSNumber *complete;
-@property (nonatomic, retain) NSNumber *archived;
-@property (nonatomic, retain) NSNumber *deleted;
 @property (nonatomic, retain) TaskList *taskList;
 @property (nonatomic, retain) NSSet *contexts;
 @property (nonatomic, retain) Project *project;
@@ -36,6 +33,7 @@
 @property (nonatomic, assign) BOOL isComplete;
 @property (nonatomic, assign) BOOL isArchived;
 @property (nonatomic, assign) BOOL isDeleted;
+@property (nonatomic, assign) BOOL doSync;
 
 - (NSArray *)contextNames;
 - (void) hasBeenUpdated:(NSDate*)newUpdatedAt;

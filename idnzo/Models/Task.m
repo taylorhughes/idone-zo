@@ -7,6 +7,7 @@
 //
 
 #import "Task.h"
+#import "Task_Private.h"
 
 #import "TaskList.h"
 #import "Project.h"
@@ -17,6 +18,7 @@
 @dynamic body;
 @dynamic complete;
 @dynamic deleted;
+@dynamic sync;
 @dynamic contexts;
 @dynamic dueDate;
 @dynamic key;
@@ -111,6 +113,15 @@ NSDateFormatter *dueDateFormatter;
 - (void)setIsDeleted:(BOOL)isDeleted
 {
   self.deleted = [NSNumber numberWithInt:isDeleted];
+}
+
+- (BOOL)doSync
+{
+  return [self.sync intValue];
+}
+- (void)setDoSync:(BOOL)doSync
+{
+  self.sync = [NSNumber numberWithInt:doSync];
 }
 
 @end

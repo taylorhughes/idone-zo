@@ -7,6 +7,7 @@
 //
 
 #import "TaskList.h"
+#import "TaskList_Private.h"
 
 #import "Task.h"
 
@@ -15,5 +16,8 @@
 @dynamic name;
 @dynamic key;
 @dynamic tasks;
+
+@dynamic deleted;
+@dynamic sync;
 
 @end

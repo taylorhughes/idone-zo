@@ -243,7 +243,6 @@
     }
     else
     {
-      // this list is no longer present remotely. delete it here.
       [localTasksToDelete addObject:localTask];
     }
   }
@@ -293,20 +292,36 @@
   {
     DonezoTask *remoteTask = [remoteLocalTasks objectAtIndex:0];
     Task *localTask = [remoteLocalTasks objectAtIndex:1];
-    
-    NSTimeInterval remoteUpdatedInterval = [remoteTask.updatedAt timeIntervalSinceDate:localTask.updatedAt];
-    if (remoteUpdatedInterval > 0)
+
+    if (localTask.isDeleted)
     {
-      NSLog(@"Remote task (%@ - %@) is newer than local task (%@ - %@)...", remoteTask.body, remoteTask.updatedAt, localTask.body, localTask.updatedAt);
-      [self copyRemoteTask:remoteTask toLocalTask:localTask];
+      [self.client deleteTask:&remoteTask error:error];
+      if (*error) { return; }
+      [self.context deleteObject:localTask];
     }
-    else if (remoteUpdatedInterval < 0)
+    else
     {
-      NSLog(@"Local task (%@ - %@) is newer than remote task (%@ - %@)...", localTask.body, localTask.updatedAt, remoteTask.body, remoteTask.updatedAt);
-      [self copyLocalTask:localTask toRemoteTask:remoteTask];
-      [self.client saveTask:&remoteTask taskList:nil error:error];
-      [localTask hasBeenUpdated:remoteTask.updatedAt];
+      NSTimeInterval remoteUpdatedInterval = [remoteTask.updatedAt timeIntervalSinceDate:localTask.updatedAt];
+      if (remoteUpdatedInterval < 0 || localTask.isArchived)
+      {
+        [self copyLocalTask:localTask toRemoteTask:remoteTask];
+        [self.client saveTask:&remoteTask taskList:nil error:error];
+        if (*error) { return; }
+        
+        [localTask hasBeenUpdated:remoteTask.updatedAt];
+        if (localTask.isArchived)
+        {
+          // Now that we have sync'd the archival,
+          // do not sync this task anymore.
+          localTask.doSync = NO;
+        }
+      }
+      else if (remoteUpdatedInterval > 0)
+      {
+        [self copyRemoteTask:remoteTask toLocalTask:localTask];
+      }
     }
+    if (*error) { return; }
   }
 }
 

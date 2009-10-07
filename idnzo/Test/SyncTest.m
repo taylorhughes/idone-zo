@@ -270,7 +270,7 @@
   
   [self assertListsSynced:1];
   [self assertTasksSynced:1 forListWithKey:@"tasks"];
-  
+
   NSArray *tasks = [self.client getTasksForListWithKey:@"tasks" error:&error];
   DonezoTask *t = [tasks objectAtIndex:0];
   
@@ -283,7 +283,7 @@
   [self assertListsSynced:1];
   // This will compare the tasks to make sure they are equal.
   [self assertTasksSynced:1 forListWithKey:@"tasks"];
-    
+
   TaskList *localTaskList = [self localListWithKey:@"tasks"];
   NSArray *localTasks = [[localTaskList tasks] allObjects];
   Task *task = [localTasks objectAtIndex:0];
@@ -319,6 +319,50 @@
     [self assertTasksSynced:1 forListWithKey:@"tasks"];    
   }
 }
+
+- (void) testDeletedSyncedTaskLocally
+{
+  NSError *error = nil;
+  [self.client loadTasksAndTaskLists:@"{ \
+   \"task_lists\": [ \
+   { \"name\": \"Tasks\" } \
+   ], \
+   \"tasks\": [ \
+   { \"body\": \"A remote task!\", \"task_list\": \"tasks\", \"project\": \"Some project\" }, \
+   { \"body\": \"A second remote task!\", \"task_list\": \"tasks\" } \
+   ] \
+   }" error:&error];
+  
+  [self.syncMaster performSync:&error];
+  STAssertNil(error, @"Error should be nil.");
+  
+  [self assertListsSynced:1];
+  [self assertTasksSynced:2 forListWithKey:@"tasks"];
+  
+  TaskList *localTaskList = [self localListWithKey:@"tasks"];
+  NSArray *localTasks = [[localTaskList tasks] allObjects];
+  Task *task = [localTasks objectAtIndex:0];
+
+  // now delete the task
+  task.isDeleted = YES;
+  NSString *deletedBody = [task.body copy];
+
+  [self.syncMaster performSync:&error];
+  STAssertNil(error, @"Error should be nil.");
+  
+  [self assertListsSynced:1];
+  [self assertTasksSynced:1 forListWithKey:@"tasks"];
+  
+  localTaskList = [self localListWithKey:@"tasks"];
+  localTasks = [[localTaskList tasks] allObjects];
+  task = [localTasks objectAtIndex:0];
+  
+  STAssertTrue(![task.body isEqualToString:deletedBody], @"Apparently the wrong task was deleted!");
+}
+
+
+
+
 
 // Tests to make sure we properly handle the case where
 // a task was updated remotely and locally, so we choose the
