@@ -18,6 +18,7 @@
   NSDate   *updatedAt;
   NSDate   *sortDate;
   BOOL      isComplete;
+  BOOL      isArchived;
 }
 
 @property (nonatomic, copy) NSNumber *key;
@@ -29,6 +30,7 @@
 @property (nonatomic, copy) NSDate   *updatedAt;
 @property (nonatomic, copy) NSDate   *sortDate;
 @property (nonatomic, assign) BOOL    isComplete;
+@property (nonatomic, assign) BOOL    isArchived;
 
 + (DonezoTask*) taskFromDictionary:(NSDictionary*)dict;
 - (NSDictionary*) toDictionary;

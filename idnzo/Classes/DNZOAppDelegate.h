@@ -11,7 +11,7 @@
 #import "DonezoAPIClient.h"
 #import "DonezoSyncMaster.h"
 
-@class Project, Context, TaskList, Task, MainViewController;
+@class Project, Context, TaskList, Task, MainViewController, DonezoSyncMaster;
 
 extern NSString * const DonezoSyncStatusChangedNotification;
 

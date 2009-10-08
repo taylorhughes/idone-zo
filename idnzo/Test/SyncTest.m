@@ -38,6 +38,17 @@
   return [self.context executeFetchRequest:request error:&error];
 }
 
+- (NSArray *) tasksForList:(TaskList*)taskList
+{
+  NSDictionary *substitutions = [NSDictionary
+                                 dictionaryWithObject:taskList
+                                 forKey:@"taskList"];
+  NSFetchRequest *fetchRequest = [[[self.context persistentStoreCoordinator] managedObjectModel]
+                                  fetchRequestFromTemplateWithName:@"tasksForList"
+                                  substitutionVariables:substitutions];
+  return [self.context executeFetchRequest:fetchRequest error:nil];
+}
+
 - (void) setUp
 {
   NSManagedObjectModel *managedObjectModel = [[NSManagedObjectModel mergedModelFromBundles:[NSBundle allBundles]] retain];
@@ -102,7 +113,7 @@
   NSArray *remoteTasks = [client getTasksForListWithKey:key error:&error];
 
   STAssertNil(error, @"There has been an error fetching remote tasks! %@", [error description]);
-  NSArray *localTasks = [[[self localListWithKey:key] tasks] allObjects];
+  NSArray *localTasks = [self tasksForList:[self localListWithKey:key]];
   
   STAssertEquals([localTasks count], [remoteTasks count], @"Local and remote task counts for list %@ differ!", key);
   STAssertEquals([localTasks count], (NSUInteger)numTasks, @"Local and remote count should be %d for list %@!", numTasks, key);
@@ -360,7 +371,67 @@
   STAssertTrue(![task.body isEqualToString:deletedBody], @"Apparently the wrong task was deleted!");
 }
 
+- (void) testArchivedSyncedTaskLocally
+{
+  NSError *error = nil;
+  [self.client loadTasksAndTaskLists:@"{ \
+   \"task_lists\": [ \
+   { \"name\": \"Tasks\" } \
+   ], \
+   \"tasks\": [ \
+   { \"body\": \"A remote task!\", \"task_list\": \"tasks\", \"project\": \"Some project\" }, \
+   { \"body\": \"A second remote task!\", \"task_list\": \"tasks\" } \
+   ] \
+   }" error:&error];
+  
+  [self.syncMaster performSync:&error];
+  STAssertNil(error, @"Error should be nil.");
+  
+  [self assertListsSynced:1];
+  [self assertTasksSynced:2 forListWithKey:@"tasks"];
+  
+  TaskList *localTaskList = [self localListWithKey:@"tasks"];
+  NSArray *localTasks = [[localTaskList tasks] allObjects];
+  Task *task = [localTasks objectAtIndex:0];
+  
+  NSString *archivedBody = [task.body copy];
+  // now archive the task
+  task.isArchived = YES;
+  [task hasBeenUpdated];
+  
+  [self.syncMaster performSync:&error];
+  STAssertNil(error, @"Error should be nil.");
+  
+  [self assertListsSynced:1];
+  [self assertTasksSynced:1 forListWithKey:@"tasks"];
+  
+  localTaskList = [self localListWithKey:@"tasks"];
+  localTasks = [self tasksForList:localTaskList];
+  task = [localTasks objectAtIndex:0];
+  
+  STAssertTrue(![task.body isEqualToString:archivedBody], @"Apparently the wrong task was archived!");
+  
+  // Get the tasks we consider during a sync for this list
+  NSDictionary *substitutions = [NSDictionary
+                                 dictionaryWithObject:localTaskList
+                                 forKey:@"taskList"];
+  NSFetchRequest *fetchRequest = [[[self.context persistentStoreCoordinator] managedObjectModel]
+                                  fetchRequestFromTemplateWithName:@"tasksForListToSync"
+                                  substitutionVariables:substitutions];
+  localTasks = [self.context executeFetchRequest:fetchRequest error:nil];
+  
+  STAssertEquals((NSUInteger)1, [localTasks count], @"Tasks to sync should only have a single task.");
 
+  // Get ALL TASKS for this list
+  localTasks = [[localTaskList tasks] allObjects];
+  
+  STAssertEquals((NSUInteger)2, [localTasks count], @"All tasks should still have both tasks.");
+  
+  Task* taskA = ((Task*)[localTasks objectAtIndex:0]);
+  Task* taskB = ((Task*)[localTasks objectAtIndex:1]);
+  STAssertTrue(taskA.isArchived || taskB.isArchived, @"One of the tasks should be archived.");
+  STAssertTrue(!(taskA.isArchived && taskB.isArchived), @"One of the tasks should not be archived.");
+}
 
 
 

@@ -347,11 +347,18 @@
   remoteTask.contexts   = [localTask contextNames];
   remoteTask.dueDate    = localTask.dueDate;
   remoteTask.sortDate   = localTask.sortDate;
+  remoteTask.isArchived = localTask.isArchived;
 }
 
 - (NSArray*) getLocalTasksForTaskList:(TaskList*)taskList error:(NSError**)error
 {
-  return [[taskList tasks] allObjects];
+  NSDictionary *substitutions = [NSDictionary
+                                 dictionaryWithObject:taskList
+                                 forKey:@"taskList"];
+  NSFetchRequest *fetchRequest = [[[self.context persistentStoreCoordinator] managedObjectModel]
+                                  fetchRequestFromTemplateWithName:@"tasksForListToSync"
+                                  substitutionVariables:substitutions];
+  return [self.context executeFetchRequest:fetchRequest error:error];
 }
 
 - (NSArray*) getLocalTaskLists:(NSError**)error

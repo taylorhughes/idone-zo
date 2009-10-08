@@ -18,6 +18,7 @@
 @synthesize dueDate;
 @synthesize updatedAt;
 @synthesize isComplete;
+@synthesize isArchived;
 @synthesize sortDate;
 
 - (id) init
@@ -59,6 +60,14 @@
   else
   {
     [dict setValue:@"false" forKey:@"complete"];
+  }
+  if (self.isArchived)
+  {
+    [dict setValue:@"true" forKey:@"archived"];
+  }
+  else
+  {
+    [dict setValue:@"false" forKey:@"archived"];
   }
   [dict setValue:self.body forKey:@"body"];
   [dict setValue:self.project forKey:@"project"];
