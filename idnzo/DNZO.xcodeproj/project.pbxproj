@@ -49,6 +49,7 @@
 		3481B41B10165823003A2FC7 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3481B41910165823003A2FC7 /* Settings.bundle */; };
 		3494869810152A3B00DF81F3 /* TaskList.m in Sources */ = {isa = PBXBuildFile; fileRef = 3494869710152A3B00DF81F3 /* TaskList.m */; };
 		3494869910152A3B00DF81F3 /* TaskList.m in Sources */ = {isa = PBXBuildFile; fileRef = 3494869710152A3B00DF81F3 /* TaskList.m */; };
+		34961D56107EE6740068B551 /* red-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 34961D55107EE6740068B551 /* red-button.png */; };
 		34A282D8104DA3EB00F26A01 /* DonezoAPIClientTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 34770B340FAFE4C200AD8397 /* DonezoAPIClientTest.m */; };
 		34AF21F0102FC20B001FC4B7 /* MockDonezoAPIClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AF21ED102FC20B001FC4B7 /* MockDonezoAPIClient.m */; };
 		34B7D83E0FC3860600A91E43 /* checked.png in Resources */ = {isa = PBXBuildFile; fileRef = 34B7D83C0FC3860600A91E43 /* checked.png */; };
@@ -137,6 +138,7 @@
 		3490B9C20FA7DD60004195D9 /* Done-zo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Done-zo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3494869610152A3B00DF81F3 /* TaskList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskList.h; sourceTree = "<group>"; };
 		3494869710152A3B00DF81F3 /* TaskList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaskList.m; sourceTree = "<group>"; };
+		34961D55107EE6740068B551 /* red-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "red-button.png"; path = "Resources/red-button.png"; sourceTree = "<group>"; };
 		34AF21EC102FC20B001FC4B7 /* MockDonezoAPIClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MockDonezoAPIClient.h; path = Test/MockDonezoAPIClient.h; sourceTree = "<group>"; };
 		34AF21ED102FC20B001FC4B7 /* MockDonezoAPIClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MockDonezoAPIClient.m; path = Test/MockDonezoAPIClient.m; sourceTree = "<group>"; };
 		34AF21EE102FC20B001FC4B7 /* SyncTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SyncTest.h; path = Test/SyncTest.h; sourceTree = "<group>"; };
@@ -269,6 +271,7 @@
 				341E1EFE0FB14F2900D5B454 /* TaskView.xib */,
 				34388FD41076B87500FC1AB3 /* TaskDatePickerView.xib */,
 				8D1107310486CEB800E47090 /* Info.plist */,
+				34961D55107EE6740068B551 /* red-button.png */,
 				34770B430FAFE67B00AD8397 /* icon.png */,
 				34B7D83C0FC3860600A91E43 /* checked.png */,
 				34B7D83D0FC3860600A91E43 /* unchecked.png */,
@@ -453,6 +456,7 @@
 				3452D4A31049CC26005C717C /* Entitlements.plist in Resources */,
 				34388FD61076B87500FC1AB3 /* TaskDatePickerView.xib in Resources */,
 				343890041076BD8200FC1AB3 /* datepicker-background.png in Resources */,
+				34961D56107EE6740068B551 /* red-button.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

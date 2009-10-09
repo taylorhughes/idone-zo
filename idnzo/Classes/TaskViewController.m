@@ -8,7 +8,7 @@
 
 #import "TaskViewController.h"
 
-#define FADE_ANIMATION_DURATION 0.5
+#define FADE_ANIMATION_DURATION 0.2
 
 static UIImage *checked;
 static UIImage *unchecked;
@@ -23,6 +23,8 @@ static UIImage *unchecked;
 - (void) done:(id)sender;
 
 - (void) save;
+- (void) save:(BOOL)doRefresh;
+
 - (void) refresh;
 
 @end
@@ -64,6 +66,9 @@ static UIImage *unchecked;
     self.tableView.tableHeaderView = [[[UIView alloc] init] autorelease];
     [self.tableView.tableHeaderView addSubview:bodyView];
     [self.tableView.tableHeaderView addSubview:bodyEditView];
+    
+    bottomView.alpha = 0.0;
+    self.tableView.tableFooterView = bottomView;
   }
 }
 
@@ -81,8 +86,8 @@ static UIImage *unchecked;
 
 - (void) loadEditingWithNewTaskForList:(TaskList*)list
 {
-  [self loadTask:nil editing:YES];
   isNewTask = YES;
+  [self loadTask:nil editing:YES];
   self.task.taskList = (TaskList*)[self.editingContext objectWithID:[list objectID]];
 }
 
@@ -144,11 +149,16 @@ static UIImage *unchecked;
     {
       bodyView.alpha = 0.0;
       bodyEditView.alpha = 1.0;
+      if (!isNewTask)
+      {
+        bottomView.alpha = 1.0;
+      }
     }
     else
     {
       bodyView.alpha = 1.0;
       bodyEditView.alpha = 0.0;
+      bottomView.alpha = 0.0;
     }
   }
   
@@ -267,6 +277,23 @@ static UIImage *unchecked;
   [self refresh];
 }
 
+- (IBAction) deleteTask:(id)sender
+{  
+  if (self.task.key)
+  {
+    self.task.isDeleted = YES;
+    [self.task hasBeenUpdated]; 
+  }
+  else
+  {
+    [self.editingContext deleteObject:self.task];
+  }
+  
+  [self save:NO];
+  isEditing = NO;
+  [self.navigationController popViewControllerAnimated:YES];
+}
+
 - (void)edit:(id)sender
 {
   isEditing = YES;
@@ -301,7 +328,12 @@ static UIImage *unchecked;
 	[appDelegate.managedObjectContext mergeChangesFromContextDidSaveNotification:saveNotification];	
 }
 
-- (void) save
+- (void)save
+{
+  [self save:YES];
+}
+
+- (void) save:(BOOL)doRefresh
 {
   [self.task hasBeenUpdated];
   
@@ -315,7 +347,11 @@ static UIImage *unchecked;
     NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
   }
   [dnc removeObserver:self name:NSManagedObjectContextDidSaveNotification object:self.editingContext];
-  [self refresh];
+  
+  if (doRefresh)
+  {
+    [self refresh]; 
+  }
 }
 
 - (void) done:(id)sender
