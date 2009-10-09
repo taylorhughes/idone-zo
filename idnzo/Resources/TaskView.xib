@@ -93,7 +93,7 @@
 						<int key="IBUIContentMode">4</int>
 						<int key="IBUIContentHorizontalAlignment">0</int>
 						<int key="IBUIContentVerticalAlignment">0</int>
-						<object class="NSFont" key="IBUIFont" id="637921546">
+						<object class="NSFont" key="IBUIFont" id="189703429">
 							<string key="NSName">Helvetica-Bold</string>
 							<double key="NSSize">15</double>
 							<int key="NSfFlags">16</int>
@@ -155,7 +155,7 @@
 						<reference key="IBUINormalTitleShadowColor" ref="816058244"/>
 					</object>
 				</object>
-				<string key="NSFrameSize">{320, 57}</string>
+				<string key="NSFrameSize">{320, 67}</string>
 				<reference key="NSSuperview"/>
 				<object class="NSColor" key="IBUIBackgroundColor">
 					<int key="NSColorSpace">3</int>
@@ -164,22 +164,22 @@
 				</object>
 				<bool key="IBUIClearsContextBeforeDrawing">NO</bool>
 			</object>
-			<object class="IBUIView" id="115875964">
+			<object class="IBUIView" id="556448982">
 				<reference key="NSNextResponder"/>
 				<int key="NSvFlags">256</int>
 				<object class="NSMutableArray" key="NSSubviews">
 					<bool key="EncodedWithXMLCoder">YES</bool>
-					<object class="IBUIButton" id="741358266">
-						<reference key="NSNextResponder" ref="115875964"/>
+					<object class="IBUIButton" id="564365875">
+						<reference key="NSNextResponder" ref="556448982"/>
 						<int key="NSvFlags">264</int>
-						<string key="NSFrame">{{10, 6}, {300, 41}}</string>
-						<reference key="NSSuperview" ref="115875964"/>
+						<string key="NSFrame">{{10, 10}, {300, 41}}</string>
+						<reference key="NSSuperview" ref="556448982"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClearsContextBeforeDrawing">NO</bool>
 						<int key="IBUIContentMode">4</int>
 						<int key="IBUIContentHorizontalAlignment">0</int>
 						<int key="IBUIContentVerticalAlignment">0</int>
-						<reference key="IBUIFont" ref="637921546"/>
+						<reference key="IBUIFont" ref="189703429"/>
 						<int key="IBUIButtonType">1</int>
 						<bool key="IBUIReversesTitleShadowWhenHighlighted">YES</bool>
 						<string key="IBUINormalTitle">Delete task</string>
@@ -277,14 +277,14 @@
 					<object class="IBCocoaTouchOutletConnection" key="connection">
 						<string key="label">bottomView</string>
 						<reference key="source" ref="841351856"/>
-						<reference key="destination" ref="115875964"/>
+						<reference key="destination" ref="556448982"/>
 					</object>
 					<int key="connectionID">60</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchEventConnection" key="connection">
 						<string key="label">deleteTask:</string>
-						<reference key="source" ref="741358266"/>
+						<reference key="source" ref="564365875"/>
 						<reference key="destination" ref="841351856"/>
 						<int key="IBEventType">7</int>
 					</object>
@@ -354,18 +354,18 @@
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">58</int>
-						<reference key="object" ref="115875964"/>
+						<reference key="object" ref="556448982"/>
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="741358266"/>
+							<reference ref="564365875"/>
 						</object>
 						<reference key="parent" ref="0"/>
 						<string key="objectName">BottomView</string>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">59</int>
-						<reference key="object" ref="741358266"/>
-						<reference key="parent" ref="115875964"/>
+						<reference key="object" ref="564365875"/>
+						<reference key="parent" ref="556448982"/>
 					</object>
 				</object>
 			</object>
@@ -399,7 +399,7 @@
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-					<string>{{525, 995}, {320, 57}}</string>
+					<string>{{525, 985}, {320, 67}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>{{95, 972}, {320, 90}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
