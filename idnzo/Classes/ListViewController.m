@@ -177,6 +177,29 @@
 
 - (IBAction)archiveTasks:(id)sender
 {
+  BOOL didArchive = NO;
+  for (Task* task in self.tasks)
+  {
+    NSLog(@"Considering task to archive...");
+    if (task.isComplete)
+    {
+      NSLog(@"Archiving task...");
+      task.isArchived = YES;
+      [task hasBeenUpdated];
+      didArchive = YES;
+    }
+  }
+  if (didArchive)
+  {
+    DNZOAppDelegate *appDelegate = (DNZOAppDelegate *)[[UIApplication sharedApplication] delegate];
+    NSError *error = nil;
+    if (![appDelegate.managedObjectContext save:&error])
+    {
+      NSLog(@"Error saving archived tasks: %@ %@", [error description], [error userInfo]);
+    }
+    tasks = nil;
+    [self.tableView reloadData];
+  }
 }
 
 - (void)updateSyncDisplay:(NSNotification*)syncChangedNotification
