@@ -20,4 +20,29 @@
 @dynamic deleted;
 @dynamic sync;
 
+- (NSFetchRequest*)tasksForListRequest
+{
+  if (tasksForListRequest == nil)
+  {
+    DNZOAppDelegate *appDelegate = (DNZOAppDelegate *)[[UIApplication sharedApplication] delegate];
+    NSDictionary *substitutions = [NSDictionary dictionaryWithObject:self
+                                                              forKey:@"taskList"];
+    tasksForListRequest = [[appDelegate.managedObjectModel fetchRequestFromTemplateWithName:@"tasksForList"
+                                                                      substitutionVariables:substitutions] retain];
+  }
+  return tasksForListRequest;
+}
+
+- (NSUInteger) displayTasksCount
+{
+  DNZOAppDelegate *appDelegate = (DNZOAppDelegate *)[[UIApplication sharedApplication] delegate];
+  return [appDelegate.managedObjectContext countForFetchRequest:self.tasksForListRequest error:nil];
+}
+
+- (void) dealloc
+{
+  [tasksForListRequest release];
+  [super dealloc];
+}
+
 @end

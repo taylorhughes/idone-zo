@@ -61,13 +61,8 @@
   if (!tasks)
   {
     DNZOAppDelegate *appDelegate = (DNZOAppDelegate *)[[UIApplication sharedApplication] delegate];
-    NSDictionary *substitutions = [NSDictionary
-                                   dictionaryWithObject:taskList
-                                   forKey:@"taskList"];
     
-    NSFetchRequest *fetchRequest = [appDelegate.managedObjectModel
-                                    fetchRequestFromTemplateWithName:@"tasksForList"
-                                               substitutionVariables:substitutions];
+    NSFetchRequest *fetchRequest = [self.taskList tasksForListRequest];
     NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"sortDate" ascending:YES];
     fetchRequest.sortDescriptors = [NSArray arrayWithObjects:sort, nil];
     [sort release];

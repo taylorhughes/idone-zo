@@ -7,16 +7,22 @@
 //
 
 #import <CoreData/CoreData.h>
+#import "DNZOAppDelegate.h"
 
 @class Task;
 
 @interface TaskList : NSManagedObject  
 {
+ @private
+  NSFetchRequest *tasksForListRequest;
 }
 
 @property (nonatomic, retain) NSString *name;
 @property (nonatomic, retain) NSString *key;
 @property (nonatomic, retain) NSSet *tasks;
+
+@property (nonatomic, readonly) NSFetchRequest *tasksForListRequest;
+@property (nonatomic, readonly) NSUInteger displayTasksCount;
 
 @end
 
