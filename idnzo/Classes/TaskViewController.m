@@ -27,6 +27,8 @@ static UIImage *unchecked;
 
 - (void) refresh;
 
+- (IBAction) cancelDeleteTask:(id)sender doPop:(BOOL)doPopView;
+
 @end
 
 @implementation TaskViewController
@@ -291,19 +293,69 @@ static UIImage *unchecked;
   
   [self save:NO];
   isEditing = NO;
-  [self.navigationController dismissModalViewControllerAnimated:YES];
-  [self.navigationController popViewControllerAnimated:YES];
+
+  [self cancelDeleteTask:self doPop:YES];
 }
 - (IBAction) askToDeleteTask:(id)sender
 {
-  UIViewController *c = [[[UIViewController alloc] init] autorelease];
-  c.view = confirmationView;
-  [self.navigationController presentModalViewController:c animated:YES];
+  bgview = [[[UIView alloc] initWithFrame:self.view.frame] retain];
+  bgview.backgroundColor = [UIColor blackColor];
+  bgview.alpha = 0.0;
+  [self.view addSubview:bgview];
+  
+  CGRect frame = confirmationView.frame;
+  frame.origin = CGPointMake(0.0, self.view.bounds.size.height);
+  confirmationView.frame = frame;
+  [self.view addSubview:confirmationView];            
+  
+  // Animate to new location
+  [UIView beginAnimations:@"presentWithSuperview" context:nil];
+  frame.origin = CGPointMake(0.0, self.view.bounds.size.height - confirmationView.bounds.size.height);
+  confirmationView.frame = frame;
+  bgview.alpha = 0.2;
+  [UIView commitAnimations];
+}
+
+- (void)animationDidStop:(NSString *)animationID finished:(NSNumber *)finished context:(void *)context
+{
+  [confirmationView removeFromSuperview];
+  [bgview removeFromSuperview];
+  [bgview release];
+  if ([animationID isEqualToString:@"removeAndPopFromSuperviewWithAnimation"])
+  {  
+    [self.navigationController popViewControllerAnimated:YES];
+  }
 }
 - (IBAction) cancelDeleteTask:(id)sender
 {
-  [self.navigationController dismissModalViewControllerAnimated:YES];
+  [self cancelDeleteTask:sender doPop:NO];
 }
+
+- (IBAction) cancelDeleteTask:(id)sender doPop:(BOOL)doPopView
+{
+  if (!doPopView)
+  {
+    [UIView beginAnimations:@"removeFromSuperviewWithAnimation" context:nil];
+  }
+  else
+  {
+    [UIView beginAnimations:@"removeAndPopFromSuperviewWithAnimation" context:nil];
+  }
+
+  
+  // Set delegate and selector to remove from superview when animation completes
+  [UIView setAnimationDelegate:self];
+  [UIView setAnimationDidStopSelector:@selector(animationDidStop:finished:context:)];
+  
+  // Move this view to bottom of superview
+  CGRect frame = confirmationView.frame;
+  frame.origin = CGPointMake(0.0, confirmationView.superview.bounds.size.height);
+  confirmationView.frame = frame;
+  bgview.alpha = 0.0;
+  
+  [UIView commitAnimations];    
+}
+
 
 - (void)edit:(id)sender
 {
@@ -512,6 +564,8 @@ static UIImage *unchecked;
 {
   [bodyView release];
   [bodyEditView release];
+  [confirmationView release];
+  [bgview release];
   
   [topLabel release];
   [topCheckmark release];
