@@ -24,6 +24,7 @@
   IBOutlet UIView *bodyView;
   IBOutlet UIView *bodyEditView;
   IBOutlet UIView *bottomView;
+  IBOutlet UIView *confirmationView;
   
   IBOutlet UILabel *topLabel;
   IBOutlet UIButton *topCheckmark;
@@ -35,7 +36,9 @@
 - (void) loadTask:(Task*)newTask editing:(BOOL)editing;
 - (void) loadEditingWithNewTaskForList:(TaskList*)list;
 
+- (IBAction) askToDeleteTask:(id)sender;
 - (IBAction) deleteTask:(id)sender;
+- (IBAction) cancelDeleteTask:(id)sender;
 
 @property (nonatomic, readonly) BOOL isEditing;
 

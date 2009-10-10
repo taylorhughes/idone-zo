@@ -13,7 +13,7 @@
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
 			<integer value="54"/>
-			<integer value="69"/>
+			<integer value="63"/>
 			<integer value="58"/>
 			<integer value="45"/>
 		</object>
@@ -180,7 +180,7 @@
 						<int key="IBUIContentMode">4</int>
 						<int key="IBUIContentHorizontalAlignment">0</int>
 						<int key="IBUIContentVerticalAlignment">0</int>
-						<object class="NSFont" key="IBUIFont" id="72777522">
+						<object class="NSFont" key="IBUIFont" id="446752123">
 							<string key="NSName">Helvetica-Bold</string>
 							<double key="NSSize">18</double>
 							<int key="NSfFlags">16</int>
@@ -189,12 +189,12 @@
 						<bool key="IBUIReversesTitleShadowWhenHighlighted">YES</bool>
 						<string key="IBUINormalTitle">Delete Task</string>
 						<reference key="IBUIHighlightedTitleColor" ref="546601465"/>
-						<object class="NSColor" key="IBUINormalTitleColor" id="103028582">
+						<object class="NSColor" key="IBUINormalTitleColor" id="52873089">
 							<int key="NSColorSpace">1</int>
 							<bytes key="NSRGB">MSAxIDEAA</bytes>
 						</object>
 						<reference key="IBUINormalTitleShadowColor" ref="816058244"/>
-						<object class="NSCustomResource" key="IBUINormalBackgroundImage" id="1037458924">
+						<object class="NSCustomResource" key="IBUINormalBackgroundImage">
 							<string key="NSClassName">NSImage</string>
 							<string key="NSResourceName">red-button.png</string>
 						</object>
@@ -210,16 +210,16 @@
 				<bool key="IBUIClearsContextBeforeDrawing">NO</bool>
 				<float key="IBUIAlpha">0.0</float>
 			</object>
-			<object class="IBUIView" id="655553346">
+			<object class="IBUIView" id="699983363">
 				<reference key="NSNextResponder"/>
-				<int key="NSvFlags">292</int>
+				<int key="NSvFlags">256</int>
 				<object class="NSMutableArray" key="NSSubviews">
 					<bool key="EncodedWithXMLCoder">YES</bool>
-					<object class="IBUIImageView" id="619215447">
-						<reference key="NSNextResponder" ref="655553346"/>
-						<int key="NSvFlags">292</int>
+					<object class="IBUIImageView" id="510374583">
+						<reference key="NSNextResponder" ref="699983363"/>
+						<int key="NSvFlags">264</int>
 						<string key="NSFrameSize">{320, 143}</string>
-						<reference key="NSSuperview" ref="655553346"/>
+						<reference key="NSSuperview" ref="699983363"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClearsContextBeforeDrawing">NO</bool>
 						<int key="IBUIContentMode">4</int>
@@ -229,61 +229,42 @@
 							<string key="NSResourceName">confirm-dialog.png</string>
 						</object>
 					</object>
-					<object class="IBUIButton" id="612941392">
-						<reference key="NSNextResponder" ref="655553346"/>
-						<int key="NSvFlags">264</int>
-						<string key="NSFrame">{{126, -295}, {300, 41}}</string>
-						<reference key="NSSuperview" ref="655553346"/>
-						<bool key="IBUIOpaque">NO</bool>
-						<bool key="IBUIClearsContextBeforeDrawing">NO</bool>
-						<int key="IBUIContentMode">4</int>
-						<int key="IBUIContentHorizontalAlignment">0</int>
-						<int key="IBUIContentVerticalAlignment">0</int>
-						<reference key="IBUIFont" ref="72777522"/>
-						<int key="IBUIButtonType">1</int>
-						<bool key="IBUIReversesTitleShadowWhenHighlighted">YES</bool>
-						<string key="IBUINormalTitle">Delete task</string>
-						<reference key="IBUIHighlightedTitleColor" ref="546601465"/>
-						<reference key="IBUINormalTitleColor" ref="103028582"/>
-						<reference key="IBUINormalTitleShadowColor" ref="816058244"/>
-						<reference key="IBUINormalBackgroundImage" ref="1037458924"/>
-					</object>
-					<object class="IBUIButton" id="314535498">
-						<reference key="NSNextResponder" ref="655553346"/>
+					<object class="IBUIButton" id="646684770">
+						<reference key="NSNextResponder" ref="699983363"/>
 						<int key="NSvFlags">264</int>
 						<string key="NSFrame">{{20, 20}, {280, 41}}</string>
-						<reference key="NSSuperview" ref="655553346"/>
+						<reference key="NSSuperview" ref="699983363"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClearsContextBeforeDrawing">NO</bool>
 						<int key="IBUIContentMode">4</int>
 						<int key="IBUIContentHorizontalAlignment">0</int>
 						<int key="IBUIContentVerticalAlignment">0</int>
-						<reference key="IBUIFont" ref="72777522"/>
+						<reference key="IBUIFont" ref="446752123"/>
 						<int key="IBUIButtonType">1</int>
 						<bool key="IBUIReversesTitleShadowWhenHighlighted">YES</bool>
 						<string key="IBUINormalTitle">Delete Task</string>
 						<reference key="IBUIHighlightedTitleColor" ref="546601465"/>
-						<reference key="IBUINormalTitleColor" ref="103028582"/>
+						<reference key="IBUINormalTitleColor" ref="52873089"/>
 						<reference key="IBUINormalTitleShadowColor" ref="816058244"/>
 						<object class="NSCustomResource" key="IBUINormalBackgroundImage">
 							<string key="NSClassName">NSImage</string>
 							<string key="NSResourceName">confirm-delete.png</string>
 						</object>
 					</object>
-					<object class="IBUIButton" id="528313950">
-						<reference key="NSNextResponder" ref="655553346"/>
-						<int key="NSvFlags">292</int>
+					<object class="IBUIButton" id="1051257980">
+						<reference key="NSNextResponder" ref="699983363"/>
+						<int key="NSvFlags">264</int>
 						<string key="NSFrame">{{20, 82}, {280, 41}}</string>
-						<reference key="NSSuperview" ref="655553346"/>
+						<reference key="NSSuperview" ref="699983363"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClearsContextBeforeDrawing">NO</bool>
 						<int key="IBUIContentHorizontalAlignment">0</int>
 						<int key="IBUIContentVerticalAlignment">0</int>
-						<reference key="IBUIFont" ref="72777522"/>
+						<reference key="IBUIFont" ref="446752123"/>
 						<int key="IBUIButtonType">1</int>
 						<string key="IBUINormalTitle">Cancel</string>
 						<reference key="IBUIHighlightedTitleColor" ref="546601465"/>
-						<reference key="IBUINormalTitleColor" ref="103028582"/>
+						<reference key="IBUINormalTitleColor" ref="52873089"/>
 						<reference key="IBUINormalTitleShadowColor" ref="816058244"/>
 						<object class="NSCustomResource" key="IBUINormalBackgroundImage">
 							<string key="NSClassName">NSImage</string>
@@ -298,7 +279,9 @@
 					<bytes key="NSWhite">MSAwAA</bytes>
 					<reference key="NSCustomColorSpace" ref="346346633"/>
 				</object>
+				<bool key="IBUIOpaque">NO</bool>
 				<bool key="IBUIClearsContextBeforeDrawing">NO</bool>
+				<int key="IBUIContentMode">4</int>
 			</object>
 		</object>
 		<object class="IBObjectContainer" key="IBDocument.Objects">
@@ -378,30 +361,38 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchEventConnection" key="connection">
-						<string key="label">deleteTask:</string>
+						<string key="label">askToDeleteTask:</string>
 						<reference key="source" ref="564365875"/>
 						<reference key="destination" ref="841351856"/>
 						<int key="IBEventType">7</int>
 					</object>
-					<int key="connectionID">62</int>
+					<int key="connectionID">70</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchEventConnection" key="connection">
 						<string key="label">deleteTask:</string>
-						<reference key="source" ref="612941392"/>
+						<reference key="source" ref="646684770"/>
 						<reference key="destination" ref="841351856"/>
 						<int key="IBEventType">7</int>
 					</object>
-					<int key="connectionID">65</int>
+					<int key="connectionID">71</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchEventConnection" key="connection">
-						<string key="label">deleteTask:</string>
-						<reference key="source" ref="314535498"/>
+						<string key="label">cancelDeleteTask:</string>
+						<reference key="source" ref="1051257980"/>
 						<reference key="destination" ref="841351856"/>
 						<int key="IBEventType">7</int>
 					</object>
-					<int key="connectionID">67</int>
+					<int key="connectionID">72</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">confirmationView</string>
+						<reference key="source" ref="841351856"/>
+						<reference key="destination" ref="699983363"/>
+					</object>
+					<int key="connectionID">73</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -482,35 +473,30 @@
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">63</int>
-						<reference key="object" ref="655553346"/>
+						<reference key="object" ref="699983363"/>
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="612941392"/>
-							<reference ref="314535498"/>
-							<reference ref="528313950"/>
-							<reference ref="619215447"/>
+							<reference ref="1051257980"/>
+							<reference ref="510374583"/>
+							<reference ref="646684770"/>
 						</object>
 						<reference key="parent" ref="0"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">64</int>
-						<reference key="object" ref="612941392"/>
-						<reference key="parent" ref="655553346"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">66</int>
-						<reference key="object" ref="314535498"/>
-						<reference key="parent" ref="655553346"/>
+						<string key="objectName">ConfirmationView</string>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">68</int>
-						<reference key="object" ref="528313950"/>
-						<reference key="parent" ref="655553346"/>
+						<reference key="object" ref="1051257980"/>
+						<reference key="parent" ref="699983363"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">69</int>
-						<reference key="object" ref="619215447"/>
-						<reference key="parent" ref="655553346"/>
+						<reference key="object" ref="510374583"/>
+						<reference key="parent" ref="699983363"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">66</int>
+						<reference key="object" ref="646684770"/>
+						<reference key="parent" ref="699983363"/>
 					</object>
 				</object>
 			</object>
@@ -534,7 +520,6 @@
 					<string>59.IBPluginDependency</string>
 					<string>63.IBEditorWindowLastContentRect</string>
 					<string>63.IBPluginDependency</string>
-					<string>64.IBPluginDependency</string>
 					<string>66.IBPluginDependency</string>
 					<string>68.IBPluginDependency</string>
 					<string>69.IBPluginDependency</string>
@@ -552,11 +537,10 @@
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>{{525, 985}, {320, 67}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-					<string>{{95, 972}, {320, 90}}</string>
+					<string>{{485, 578}, {320, 90}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-					<string>{{482, 718}, {320, 143}}</string>
-					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
+					<string>{{386, 731}, {320, 143}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -579,7 +563,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">69</int>
+			<int key="maxID">73</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -602,8 +586,19 @@
 					<string key="className">TaskViewController</string>
 					<string key="superclassName">UITableViewController</string>
 					<object class="NSMutableDictionary" key="actions">
-						<string key="NS.key.0">deleteTask:</string>
-						<string key="NS.object.0">id</string>
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>askToDeleteTask:</string>
+							<string>cancelDeleteTask:</string>
+							<string>deleteTask:</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+						</object>
 					</object>
 					<object class="NSMutableDictionary" key="outlets">
 						<bool key="EncodedWithXMLCoder">YES</bool>
@@ -612,12 +607,14 @@
 							<string>bodyEditView</string>
 							<string>bodyView</string>
 							<string>bottomView</string>
+							<string>confirmationView</string>
 							<string>topButton</string>
 							<string>topCheckmark</string>
 							<string>topLabel</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>UIView</string>
 							<string>UIView</string>
 							<string>UIView</string>
 							<string>UIView</string>

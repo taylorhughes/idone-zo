@@ -291,7 +291,18 @@ static UIImage *unchecked;
   
   [self save:NO];
   isEditing = NO;
+  [self.navigationController dismissModalViewControllerAnimated:YES];
   [self.navigationController popViewControllerAnimated:YES];
+}
+- (IBAction) askToDeleteTask:(id)sender
+{
+  UIViewController *c = [[[UIViewController alloc] init] autorelease];
+  c.view = confirmationView;
+  [self.navigationController presentModalViewController:c animated:YES];
+}
+- (IBAction) cancelDeleteTask:(id)sender
+{
+  [self.navigationController dismissModalViewControllerAnimated:YES];
 }
 
 - (void)edit:(id)sender
