@@ -25,7 +25,7 @@
   IBOutlet UIView *bodyEditView;
   IBOutlet UIView *bottomView;
   
-  UIView *bgview;
+  UIView *bgView;
   IBOutlet UIView *confirmationView;
   
   IBOutlet UILabel *topLabel;

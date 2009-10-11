@@ -298,29 +298,32 @@ static UIImage *unchecked;
 }
 - (IBAction) askToDeleteTask:(id)sender
 {
-  bgview = [[[UIView alloc] initWithFrame:self.view.frame] retain];
-  bgview.backgroundColor = [UIColor blackColor];
-  bgview.alpha = 0.0;
-  [self.view addSubview:bgview];
+  UIView *superview = self.navigationController.view;
   
-  CGRect frame = confirmationView.frame;
-  frame.origin = CGPointMake(0.0, self.view.bounds.size.height);
+  CGRect frame = superview.frame;
+  bgView = [[[UIView alloc] initWithFrame:frame] retain];
+  bgView.backgroundColor = [UIColor blackColor];
+  bgView.alpha = 0.0;
+  [superview addSubview:bgView];
+  
+  frame = confirmationView.frame;
+  frame.origin = CGPointMake(0.0, superview.bounds.size.height);
   confirmationView.frame = frame;
-  [self.view addSubview:confirmationView];            
+  [superview addSubview:confirmationView];            
   
   // Animate to new location
   [UIView beginAnimations:@"presentWithSuperview" context:nil];
-  frame.origin = CGPointMake(0.0, self.view.bounds.size.height - confirmationView.bounds.size.height);
+  frame.origin = CGPointMake(0.0, superview.bounds.size.height - confirmationView.bounds.size.height);
   confirmationView.frame = frame;
-  bgview.alpha = 0.2;
+  bgView.alpha = 0.5;
   [UIView commitAnimations];
 }
 
 - (void)animationDidStop:(NSString *)animationID finished:(NSNumber *)finished context:(void *)context
 {
   [confirmationView removeFromSuperview];
-  [bgview removeFromSuperview];
-  [bgview release];
+  [bgView removeFromSuperview];
+  [bgView release];
   if ([animationID isEqualToString:@"removeAndPopFromSuperviewWithAnimation"])
   {  
     [self.navigationController popViewControllerAnimated:YES];
@@ -351,7 +354,7 @@ static UIImage *unchecked;
   CGRect frame = confirmationView.frame;
   frame.origin = CGPointMake(0.0, confirmationView.superview.bounds.size.height);
   confirmationView.frame = frame;
-  bgview.alpha = 0.0;
+  bgView.alpha = 0.0;
   
   [UIView commitAnimations];    
 }
@@ -565,7 +568,7 @@ static UIImage *unchecked;
   [bodyView release];
   [bodyEditView release];
   [confirmationView release];
-  [bgview release];
+  [bgView release];
   
   [topLabel release];
   [topCheckmark release];
