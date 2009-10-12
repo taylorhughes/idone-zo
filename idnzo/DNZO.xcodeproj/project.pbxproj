@@ -53,6 +53,7 @@
 		34961E4C107FFAFC0068B551 /* confirm-cancel.png in Resources */ = {isa = PBXBuildFile; fileRef = 34961E49107FFAFC0068B551 /* confirm-cancel.png */; };
 		34961E4D107FFAFC0068B551 /* confirm-delete.png in Resources */ = {isa = PBXBuildFile; fileRef = 34961E4A107FFAFC0068B551 /* confirm-delete.png */; };
 		34961E4E107FFAFC0068B551 /* confirm-dialog.png in Resources */ = {isa = PBXBuildFile; fileRef = 34961E4B107FFAFC0068B551 /* confirm-dialog.png */; };
+		34961F0C1082AA0F0068B551 /* confirm-cancel-highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 34961F0B1082AA0F0068B551 /* confirm-cancel-highlighted.png */; };
 		34A282D8104DA3EB00F26A01 /* DonezoAPIClientTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 34770B340FAFE4C200AD8397 /* DonezoAPIClientTest.m */; };
 		34AF21F0102FC20B001FC4B7 /* MockDonezoAPIClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AF21ED102FC20B001FC4B7 /* MockDonezoAPIClient.m */; };
 		34B7D83E0FC3860600A91E43 /* checked.png in Resources */ = {isa = PBXBuildFile; fileRef = 34B7D83C0FC3860600A91E43 /* checked.png */; };
@@ -145,6 +146,7 @@
 		34961E49107FFAFC0068B551 /* confirm-cancel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "confirm-cancel.png"; path = "Resources/confirm-cancel.png"; sourceTree = "<group>"; };
 		34961E4A107FFAFC0068B551 /* confirm-delete.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "confirm-delete.png"; path = "Resources/confirm-delete.png"; sourceTree = "<group>"; };
 		34961E4B107FFAFC0068B551 /* confirm-dialog.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "confirm-dialog.png"; path = "Resources/confirm-dialog.png"; sourceTree = "<group>"; };
+		34961F0B1082AA0F0068B551 /* confirm-cancel-highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "confirm-cancel-highlighted.png"; path = "Resources/confirm-cancel-highlighted.png"; sourceTree = "<group>"; };
 		34AF21EC102FC20B001FC4B7 /* MockDonezoAPIClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MockDonezoAPIClient.h; path = Test/MockDonezoAPIClient.h; sourceTree = "<group>"; };
 		34AF21ED102FC20B001FC4B7 /* MockDonezoAPIClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MockDonezoAPIClient.m; path = Test/MockDonezoAPIClient.m; sourceTree = "<group>"; };
 		34AF21EE102FC20B001FC4B7 /* SyncTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SyncTest.h; path = Test/SyncTest.h; sourceTree = "<group>"; };
@@ -284,6 +286,7 @@
 				34961E4B107FFAFC0068B551 /* confirm-dialog.png */,
 				34961E4A107FFAFC0068B551 /* confirm-delete.png */,
 				34961E49107FFAFC0068B551 /* confirm-cancel.png */,
+				34961F0B1082AA0F0068B551 /* confirm-cancel-highlighted.png */,
 				343890021076BD8200FC1AB3 /* datepicker-background.png */,
 				34FAAB28101141B700B74477 /* Tasks.xcdatamodel */,
 			);
@@ -469,6 +472,7 @@
 				34961E4C107FFAFC0068B551 /* confirm-cancel.png in Resources */,
 				34961E4D107FFAFC0068B551 /* confirm-delete.png in Resources */,
 				34961E4E107FFAFC0068B551 /* confirm-dialog.png in Resources */,
+				34961F0C1082AA0F0068B551 /* confirm-cancel-highlighted.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
