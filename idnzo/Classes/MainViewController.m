@@ -135,7 +135,7 @@
   if (cell == nil)
   {
     // Create a new cell. CGRectZero allows the cell to determine the appropriate size.
-    cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"MyIdentifier"] autorelease];
+    cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"MyIdentifier"] autorelease];
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
   }
   
