@@ -172,19 +172,18 @@
 
 - (IBAction)archiveTasks:(id)sender
 {
-  BOOL didArchive = NO;
-  for (Task* task in self.tasks)
+  NSMutableArray *archivedPaths = [NSMutableArray arrayWithCapacity:[self.tasks count]];
+  for (NSInteger i = 0; i < [self.tasks count]; i++)
   {
-    NSLog(@"Considering task to archive...");
+    Task* task = [self.tasks objectAtIndex:i];
     if (task.isComplete)
     {
-      NSLog(@"Archiving task...");
       task.isArchived = YES;
       [task hasBeenUpdated];
-      didArchive = YES;
+      [archivedPaths addObject:[NSIndexPath indexPathForRow:i inSection:0]];
     }
   }
-  if (didArchive)
+  if ([archivedPaths count] > 0)
   {
     DNZOAppDelegate *appDelegate = (DNZOAppDelegate *)[[UIApplication sharedApplication] delegate];
     NSError *error = nil;
@@ -193,7 +192,8 @@
       NSLog(@"Error saving archived tasks: %@ %@", [error description], [error userInfo]);
     }
     tasks = nil;
-    [self.tableView reloadData];
+    
+    [self.tableView deleteRowsAtIndexPaths:archivedPaths withRowAnimation:UITableViewRowAnimationFade];
   }
 }
 
