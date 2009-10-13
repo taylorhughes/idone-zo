@@ -18,16 +18,24 @@ static UIImage *unchecked;
 @property (nonatomic, retain) NSManagedObjectContext *editingContext;
 @property (nonatomic, retain) Task *task;
 
-- (void) edit:(id)sender;
-- (void) cancel:(id)sender;
-- (void) done:(id)sender;
+- (void) onClickEdit:(id)sender;
+- (void) onClickCancel:(id)sender;
+- (void) onClickDone:(id)sender;
+
+- (void) edit:(BOOL)animated;
+- (void) cancel:(BOOL)animated;
 
 - (void) save;
 - (void) save:(BOOL)doRefresh;
 
 - (void) refresh;
+- (void) refreshHeaderAndFooter;
 
-- (IBAction) cancelDeleteTask:(id)sender doPop:(BOOL)doPopView;
+- (IBAction) hideDeleteTaskConfirmation:(id)sender doPop:(BOOL)doPopView;
+
+- (BOOL)hasProject;
+- (BOOL)hasContexts;
+- (BOOL)hasDueDate;
 
 @end
 
@@ -52,6 +60,7 @@ static UIImage *unchecked;
   if (self != nil)
   {
     isNewTask = NO;
+    isEditing = NO;
   }
   return self;
 }
@@ -70,7 +79,9 @@ static UIImage *unchecked;
     [self.tableView.tableHeaderView addSubview:bodyEditView];
     
     bottomView.alpha = 0.0;
-    self.tableView.tableFooterView = bottomView;
+    [self.tableView addSubview:bottomView];
+    
+    [self cancel:NO];
   }
 }
 
@@ -89,6 +100,8 @@ static UIImage *unchecked;
 - (void) loadEditingWithNewTaskForList:(TaskList*)list
 {
   isNewTask = YES;
+  // This initial refresh is necessary or inserting rows for edit will not work
+  [self refresh];
   [self loadTask:nil editing:YES];
   self.task.taskList = (TaskList*)[self.editingContext objectWithID:[list objectID]];
 }
@@ -100,70 +113,158 @@ static UIImage *unchecked;
   if (isEditing && !editing)
   {
     // cancel edit
-    [self cancel:self];
+    [self cancel:NO];
   }
   else if (!isEditing && editing)
   {
     // begin edit
-    [self edit:self];
+    [self edit:NO];
   }
 }
 
-- (void) refresh
-{
-  if (self.isEditing)
+- (void) edit:(BOOL)animated
+{  
+  DNZOAppDelegate *appDelegate = (DNZOAppDelegate *)[[UIApplication sharedApplication] delegate];
+  
+	// Create a new managed object context for the new book -- set its persistent store coordinator to the same as that from the fetched results controller's context.
+	self.editingContext = [[[NSManagedObjectContext alloc] init] autorelease];
+	[self.editingContext setPersistentStoreCoordinator:[appDelegate.managedObjectContext persistentStoreCoordinator]];
+  
+  if (self.task != nil)
   {
-    // Change the buttons
-    UIBarButtonItem *done = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
-                                                                          target:self
-                                                                          action:@selector(done:)];
-    [self.navigationItem setRightBarButtonItem:done animated:YES];
-    [done release];
-
-    if ([self isNewTask])
-    {
-      UIBarButtonItem *cancel = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
-                                                                              target:self
-                                                                              action:@selector(cancel:)];
-      [self.navigationItem setLeftBarButtonItem:cancel animated:YES];
-      [cancel release];
-    }
-    [self.navigationItem setHidesBackButton:YES animated:YES];
+    self.task = (Task*)[self.editingContext objectWithID:[self.task objectID]];
   }
   else
   {
-    UIBarButtonItem *edit = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit
-                                                                          target:self
-                                                                          action:@selector(edit:)];
-    [self.navigationItem setRightBarButtonItem:edit animated:YES];
-    [edit release];
-    
-    [self.navigationItem setHidesBackButton:NO animated:YES];
+    self.task = (Task*)[NSEntityDescription insertNewObjectForEntityForName:@"Task" inManagedObjectContext:self.editingContext];
   }
   
-  [topCheckmark setImage:(self.task.isComplete ? checked : unchecked) forState:UIControlStateNormal];
+  // Change the buttons
+  UIBarButtonItem *done = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
+                                                                        target:self
+                                                                        action:@selector(onClickDone:)];
+  [self.navigationItem setRightBarButtonItem:done animated:animated];
+  [done release];
   
-  //bodyCell.accessoryType = self.isEditing ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
-    
-  if ((self.isEditing && bodyEditView.alpha == 0) || (!self.isEditing && bodyEditView.alpha == 1.0))
+  if ([self isNewTask])
   {
-    if (self.isEditing)
-    {
-      bodyView.alpha = 0.0;
-      bodyEditView.alpha = 1.0;
-      if (!isNewTask)
-      {
-        bottomView.alpha = 1.0;
-      }
-    }
-    else
-    {
-      bodyView.alpha = 1.0;
-      bodyEditView.alpha = 0.0;
-      bottomView.alpha = 0.0;
-    }
+    UIBarButtonItem *cancel = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
+                                                                            target:self
+                                                                            action:@selector(onClickCancel:)];
+    [self.navigationItem setLeftBarButtonItem:cancel animated:animated];
+    [cancel release];
+  }
+  [self.navigationItem setHidesBackButton:YES animated:animated];  
+  
+  // insert rows that were not shown previously
+  
+  NSMutableArray* insertedPaths = [NSMutableArray arrayWithCapacity:3];
+  NSMutableArray* updatedPaths = [NSMutableArray arrayWithCapacity:3];
+  
+  UITableViewRowAnimation animation = animated ? UITableViewRowAnimationFade : UITableViewRowAnimationNone;
+  
+  [([self hasProject]) ?  updatedPaths : insertedPaths addObject:[NSIndexPath indexPathForRow:0 inSection:0]];
+  [([self hasContexts]) ? updatedPaths : insertedPaths addObject:[NSIndexPath indexPathForRow:1 inSection:0]];
+  [([self hasDueDate]) ?  updatedPaths : insertedPaths addObject:[NSIndexPath indexPathForRow:2 inSection:0]];
+  
+  isEditing = YES;
+  
+  [self.tableView insertRowsAtIndexPaths:insertedPaths withRowAnimation:animation];
+  [self.tableView reloadRowsAtIndexPaths:updatedPaths withRowAnimation:animation];
+    
+  if (animated)
+  {
+    [UIView beginAnimations:@"beginEditing" context:nil];
   }
   
+  bodyView.alpha = 0.0;
+  bodyEditView.alpha = 1.0;
+  if (!isNewTask)
+  {
+    bottomView.alpha = 1.0;
+  }
+  [self refreshHeaderAndFooter];
+  
+  if (animated)
+  {
+    [UIView commitAnimations];
+  }
+}
+
+- (void) cancel:(BOOL)animated
+{
+  UIBarButtonItem *edit = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit
+                                                                        target:self
+                                                                        action:@selector(onClickEdit:)];
+  [self.navigationItem setRightBarButtonItem:edit animated:animated];
+  [edit release];
+  
+  [self.navigationItem setHidesBackButton:NO animated:animated];
+    
+  // remove unused rows
+  
+  BOOL wasEditing = isEditing;
+  isEditing = NO;
+  
+  if (wasEditing && animated)
+  {
+    NSMutableArray* deletedPaths = [NSMutableArray arrayWithCapacity:3];
+    NSMutableArray* updatedPaths = [NSMutableArray arrayWithCapacity:3];
+    
+    UITableViewRowAnimation animation = animated ? UITableViewRowAnimationFade : UITableViewRowAnimationNone;
+    
+    NSInteger numRows = [self hasProject] + [self hasContexts] + [self hasDueDate];
+    if (![self hasProject])
+    {
+      [deletedPaths addObject:[NSIndexPath indexPathForRow:0 inSection:0]];
+    }
+    else if (numRows >= 1)
+    {
+      [updatedPaths addObject:[NSIndexPath indexPathForRow:0 inSection:0]];
+    }
+    if (![self hasContexts])
+    {
+      [deletedPaths addObject:[NSIndexPath indexPathForRow:1 inSection:0]];  
+    }
+    else if (numRows >= 2)
+    {
+      [updatedPaths addObject:[NSIndexPath indexPathForRow:1 inSection:0]];
+    }
+    if (![self hasDueDate])
+    {
+      [deletedPaths addObject:[NSIndexPath indexPathForRow:2 inSection:0]];
+    }
+    else if (numRows == 3)
+    {
+      [updatedPaths addObject:[NSIndexPath indexPathForRow:2 inSection:0]];
+    }
+    
+    [self.tableView deleteRowsAtIndexPaths:deletedPaths withRowAnimation:animation];
+    [self.tableView reloadRowsAtIndexPaths:updatedPaths withRowAnimation:animation];    
+  }
+  else
+  {
+    [self refresh];
+  }
+  
+  if (animated)
+  {
+    [UIView beginAnimations:@"beginCanceling" context:nil];
+  }
+  
+  bodyView.alpha = 1.0;
+  bodyEditView.alpha = 0.0;
+  bottomView.alpha = 0.0;
+  [self refreshHeaderAndFooter];
+  
+  if (animated)
+  {
+    [UIView commitAnimations];
+  }
+}
+
+- (void) refreshHeaderAndFooter
+{
   CGFloat width = topLabel.frame.size.width;
   // Resize body cell according to how tall the text is
   CGSize newSize = [self.task.body sizeWithFont:topLabel.font
@@ -199,6 +300,17 @@ static UIImage *unchecked;
   // Forces the size to be reloaded
   self.tableView.tableHeaderView = self.tableView.tableHeaderView;
   
+  CGRect footerFrame = bottomView.frame;
+  CGRect sectionFrame = [self.tableView rectForSection:0];
+  footerFrame.origin = CGPointMake(footerFrame.origin.x, self.tableView.tableHeaderView.frame.size.height + sectionFrame.size.height);
+  bottomView.frame = footerFrame;
+}
+
+- (void) refresh
+{
+  [topCheckmark setImage:(self.task.isComplete ? checked : unchecked) forState:UIControlStateNormal];
+  
+  [self refreshHeaderAndFooter];
   [self.tableView reloadData];
 }
 
@@ -292,9 +404,8 @@ static UIImage *unchecked;
   }
   
   [self save:NO];
-  isEditing = NO;
 
-  [self cancelDeleteTask:self doPop:YES];
+  [self hideDeleteTaskConfirmation:self doPop:YES];
 }
 - (IBAction) askToDeleteTask:(id)sender
 {
@@ -331,10 +442,10 @@ static UIImage *unchecked;
 }
 - (IBAction) cancelDeleteTask:(id)sender
 {
-  [self cancelDeleteTask:sender doPop:NO];
+  [self hideDeleteTaskConfirmation:sender doPop:NO];
 }
 
-- (IBAction) cancelDeleteTask:(id)sender doPop:(BOOL)doPopView
+- (IBAction) hideDeleteTaskConfirmation:(id)sender doPop:(BOOL)doPopView
 {
   if (!doPopView)
   {
@@ -344,7 +455,6 @@ static UIImage *unchecked;
   {
     [UIView beginAnimations:@"removeAndPopFromSuperviewWithAnimation" context:nil];
   }
-
   
   // Set delegate and selector to remove from superview when animation completes
   [UIView setAnimationDelegate:self];
@@ -359,33 +469,9 @@ static UIImage *unchecked;
   [UIView commitAnimations];    
 }
 
-
-- (void)edit:(id)sender
+- (void)onClickEdit:(id)sender
 {
-  isEditing = YES;
-  
-  [UIView beginAnimations:@"Fade in edit mode" context:nil];
-  [UIView setAnimationDuration:FADE_ANIMATION_DURATION];
-  [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
-  
-  [self refresh];
-  
-  [UIView commitAnimations];
-  
-  DNZOAppDelegate *appDelegate = (DNZOAppDelegate *)[[UIApplication sharedApplication] delegate];
-  
-	// Create a new managed object context for the new book -- set its persistent store coordinator to the same as that from the fetched results controller's context.
-	self.editingContext = [[[NSManagedObjectContext alloc] init] autorelease];
-	[self.editingContext setPersistentStoreCoordinator:[appDelegate.managedObjectContext persistentStoreCoordinator]];
-  
-  if (self.task != nil)
-  {
-    self.task = (Task*)[self.editingContext objectWithID:[self.task objectID]];
-  }
-  else
-  {
-    self.task = (Task*)[NSEntityDescription insertNewObjectForEntityForName:@"Task" inManagedObjectContext:self.editingContext];
-  }
+  [self edit:YES];
 }
 
 - (void)editingContextDidSave:(NSNotification*)saveNotification
@@ -416,20 +502,19 @@ static UIImage *unchecked;
   
   if (doRefresh)
   {
-    [self refresh]; 
+    [self refresh];
   }
 }
 
-- (void) done:(id)sender
-{ 
+- (void) onClickDone:(id)sender
+{
   if (![self isNewTask])
   {
     // Reload task with new updated task
     DNZOAppDelegate *appDelegate = (DNZOAppDelegate *)[[UIApplication sharedApplication] delegate];
     self.task = (Task*)[appDelegate.managedObjectContext objectWithID:[self.task objectID]];
     
-    isEditing = NO;
-    [self refresh];
+    [self cancel:YES];
   }
   else
   {
@@ -443,8 +528,9 @@ static UIImage *unchecked;
   self.editingContext = nil;
 }
 
-- (void) cancel:(id)sender
+- (void) onClickCancel:(id)sender
 {
+  // Only possible with new tasks; can't cancel editing existing tasks
   self.editingContext = nil;
   [self.navigationController.parentViewController dismissModalViewControllerAnimated:YES];
 }
