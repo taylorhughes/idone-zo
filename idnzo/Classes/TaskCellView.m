@@ -18,6 +18,7 @@ static UIImage *checked;
 @implementation TaskCellView
 
 @synthesize task, wasCompleted;
+@synthesize highlighted;
 
 #define PADDING 2.0
 #define PADDING_BETWEEN_DETAILS PADDING * 3
@@ -69,6 +70,15 @@ static UIImage *checked;
 	[self setNeedsDisplay];
 }
 
+- (void)setHighlighted:(BOOL)newHighlighted
+{
+  if (highlighted != newHighlighted)
+  {
+    highlighted = newHighlighted;
+    [self setNeedsDisplay];
+  }
+}
+
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
   UITouch *touch = (UITouch*) [[touches allObjects] objectAtIndex:0];
@@ -106,12 +116,12 @@ static UIImage *checked;
 { 
 	CGContextRef context = UIGraphicsGetCurrentContext();
 	
-	// Color and font for the main text items (time zone name, time)
-	UIColor *mainTextColor = [UIColor blackColor];
+	// Color and font for the task body text
+	UIColor *mainTextColor = self.isHighlighted ? [UIColor whiteColor] : [UIColor blackColor];
 	UIFont *mainFont = [UIFont boldSystemFontOfSize:MAIN_FONT_SIZE];
   
-	// Color and font for the secondary text items (GMT offset, day)
-	UIColor *secondaryTextColor = [UIColor darkGrayColor];
+	// Color and font for the details text
+	UIColor *secondaryTextColor = self.isHighlighted ? [UIColor whiteColor] : [UIColor darkGrayColor];
 	UIFont *secondaryFont = [UIFont systemFontOfSize:SECONDARY_FONT_SIZE];
   
   UIImage *image = task.isComplete ? checked : unchecked;
@@ -135,7 +145,7 @@ static UIImage *checked;
                      forWidth:width
                      withFont:mainFont
                   minFontSize:MAIN_FONT_SIZE
-               actualFontSize:NULL
+               actualFontSize:nil
                 lineBreakMode:UILineBreakModeTailTruncation
            baselineAdjustment:UIBaselineAdjustmentAlignBaselines];
   
@@ -145,8 +155,10 @@ static UIImage *checked;
   // DRAW STRIKETHROUGH
   if (task.isComplete)
   {
+    UIColor *lineColor = self.isHighlighted ? [UIColor whiteColor] : [UIColor darkGrayColor];
+    
     CGContextSetLineWidth(context, LINE_WEIGHT);
-    CGContextSetStrokeColorWithColor(context, [[UIColor darkGrayColor] CGColor]);
+    CGContextSetStrokeColorWithColor(context, [lineColor CGColor]);
       
     CGContextMoveToPoint(context, left, lineTop);
     CGContextAddLineToPoint(context, left + titleSize.width, lineTop);
