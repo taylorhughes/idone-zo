@@ -54,6 +54,7 @@
 		34961E4D107FFAFC0068B551 /* confirm-delete.png in Resources */ = {isa = PBXBuildFile; fileRef = 34961E4A107FFAFC0068B551 /* confirm-delete.png */; };
 		34961E4E107FFAFC0068B551 /* confirm-dialog.png in Resources */ = {isa = PBXBuildFile; fileRef = 34961E4B107FFAFC0068B551 /* confirm-dialog.png */; };
 		34961F0C1082AA0F0068B551 /* confirm-cancel-highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 34961F0B1082AA0F0068B551 /* confirm-cancel-highlighted.png */; };
+		34962145108685B50068B551 /* sort-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 34962144108685B50068B551 /* sort-button.png */; };
 		34A282D8104DA3EB00F26A01 /* DonezoAPIClientTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 34770B340FAFE4C200AD8397 /* DonezoAPIClientTest.m */; };
 		34AF21F0102FC20B001FC4B7 /* MockDonezoAPIClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AF21ED102FC20B001FC4B7 /* MockDonezoAPIClient.m */; };
 		34B7D83E0FC3860600A91E43 /* checked.png in Resources */ = {isa = PBXBuildFile; fileRef = 34B7D83C0FC3860600A91E43 /* checked.png */; };
@@ -147,6 +148,7 @@
 		34961E4A107FFAFC0068B551 /* confirm-delete.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "confirm-delete.png"; path = "Resources/confirm-delete.png"; sourceTree = "<group>"; };
 		34961E4B107FFAFC0068B551 /* confirm-dialog.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "confirm-dialog.png"; path = "Resources/confirm-dialog.png"; sourceTree = "<group>"; };
 		34961F0B1082AA0F0068B551 /* confirm-cancel-highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "confirm-cancel-highlighted.png"; path = "Resources/confirm-cancel-highlighted.png"; sourceTree = "<group>"; };
+		34962144108685B50068B551 /* sort-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "sort-button.png"; path = "Resources/sort-button.png"; sourceTree = "<group>"; };
 		34AF21EC102FC20B001FC4B7 /* MockDonezoAPIClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MockDonezoAPIClient.h; path = Test/MockDonezoAPIClient.h; sourceTree = "<group>"; };
 		34AF21ED102FC20B001FC4B7 /* MockDonezoAPIClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MockDonezoAPIClient.m; path = Test/MockDonezoAPIClient.m; sourceTree = "<group>"; };
 		34AF21EE102FC20B001FC4B7 /* SyncTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SyncTest.h; path = Test/SyncTest.h; sourceTree = "<group>"; };
@@ -261,6 +263,7 @@
 				3416ECEA0FC2567C00D8BD53 /* Main Views */,
 				080E96DDFE201D6D7F000001 /* Subviews */,
 				348E18D50FA7DE8D00B75000 /* Test Cases */,
+				3496213B108682D30068B551 /* Images */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
@@ -273,21 +276,12 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				3452D4A21049CC26005C717C /* Entitlements.plist */,
 				34770B300FAFE4A300AD8397 /* MainWindow.xib */,
 				34770B2F0FAFE4A300AD8397 /* ListView.xib */,
 				341E1EFE0FB14F2900D5B454 /* TaskView.xib */,
 				34388FD41076B87500FC1AB3 /* TaskDatePickerView.xib */,
 				8D1107310486CEB800E47090 /* Info.plist */,
-				34961D55107EE6740068B551 /* red-button.png */,
-				34770B430FAFE67B00AD8397 /* icon.png */,
-				34B7D83C0FC3860600A91E43 /* checked.png */,
-				34B7D83D0FC3860600A91E43 /* unchecked.png */,
-				34961E4B107FFAFC0068B551 /* confirm-dialog.png */,
-				34961E4A107FFAFC0068B551 /* confirm-delete.png */,
-				34961E49107FFAFC0068B551 /* confirm-cancel.png */,
-				34961F0B1082AA0F0068B551 /* confirm-cancel-highlighted.png */,
-				343890021076BD8200FC1AB3 /* datepicker-background.png */,
+				3452D4A21049CC26005C717C /* Entitlements.plist */,
 				34FAAB28101141B700B74477 /* Tasks.xcdatamodel */,
 			);
 			name = Resources;
@@ -345,6 +339,23 @@
 				34770B340FAFE4C200AD8397 /* DonezoAPIClientTest.m */,
 			);
 			name = "Test Cases";
+			sourceTree = "<group>";
+		};
+		3496213B108682D30068B551 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				34962144108685B50068B551 /* sort-button.png */,
+				34961D55107EE6740068B551 /* red-button.png */,
+				34770B430FAFE67B00AD8397 /* icon.png */,
+				34B7D83C0FC3860600A91E43 /* checked.png */,
+				34B7D83D0FC3860600A91E43 /* unchecked.png */,
+				34961E4B107FFAFC0068B551 /* confirm-dialog.png */,
+				34961E4A107FFAFC0068B551 /* confirm-delete.png */,
+				34961E49107FFAFC0068B551 /* confirm-cancel.png */,
+				34961F0B1082AA0F0068B551 /* confirm-cancel-highlighted.png */,
+				343890021076BD8200FC1AB3 /* datepicker-background.png */,
+			);
+			name = Images;
 			sourceTree = "<group>";
 		};
 		34C74255107570400045F527 /* GTM */ = {
@@ -473,6 +484,7 @@
 				34961E4D107FFAFC0068B551 /* confirm-delete.png in Resources */,
 				34961E4E107FFAFC0068B551 /* confirm-dialog.png in Resources */,
 				34961F0C1082AA0F0068B551 /* confirm-cancel-highlighted.png in Resources */,
+				34962145108685B50068B551 /* sort-button.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
