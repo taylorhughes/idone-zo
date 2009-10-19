@@ -22,6 +22,7 @@ static UIImage *unchecked;
 - (void) onClickCancel:(id)sender;
 - (void) onClickDone:(id)sender;
 
+- (void) createEditingContext;
 - (void) edit:(BOOL)animated;
 - (void) cancel:(BOOL)animated;
 
@@ -110,19 +111,19 @@ static UIImage *unchecked;
 {
   self.task = newTask;
   
-  if (isEditing && !editing)
+  if (!editing)
   {
     // cancel edit
     [self cancel:NO];
   }
-  else if (!isEditing && editing)
+  else 
   {
     // begin edit
     [self edit:NO];
   }
 }
 
-- (void) edit:(BOOL)animated
+- (void) createEditingContext
 {  
   DNZOAppDelegate *appDelegate = (DNZOAppDelegate *)[[UIApplication sharedApplication] delegate];
   
@@ -138,6 +139,11 @@ static UIImage *unchecked;
   {
     self.task = (Task*)[NSEntityDescription insertNewObjectForEntityForName:@"Task" inManagedObjectContext:self.editingContext];
   }
+}
+
+- (void) edit:(BOOL)animated
+{  
+  [self createEditingContext];
   
   // Change the buttons
   UIBarButtonItem *done = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
@@ -193,9 +199,13 @@ static UIImage *unchecked;
 
 - (void) cancel:(BOOL)animated
 {
-  UIBarButtonItem *edit = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit
-                                                                        target:self
-                                                                        action:@selector(onClickEdit:)];
+  UIBarButtonItem *edit = nil;
+  if (!self.task.isComplete)
+  {
+    edit = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit
+                                                         target:self
+                                                         action:@selector(onClickEdit:)];
+  }
   [self.navigationItem setRightBarButtonItem:edit animated:animated];
   [edit release];
   
@@ -254,7 +264,7 @@ static UIImage *unchecked;
   
   bodyView.alpha = 1.0;
   bodyEditView.alpha = 0.0;
-  bottomView.alpha = 0.0;
+  bottomView.alpha = self.task.isComplete ? 1.0 : 0.0;
   [self refreshHeaderAndFooter];
   
   if (animated)
@@ -388,11 +398,18 @@ static UIImage *unchecked;
     NSLog(@"Error saving task: %@ %@", [error description], [error userInfo]);
   }
   
+  [self cancel:YES];
   [self refresh];
 }
 
 - (IBAction) deleteTask:(id)sender
 {  
+  // This happens when deleting completed tasks 
+  if (!self.isEditing)
+  {
+    [self createEditingContext];
+  }
+  
   if (self.task.key)
   {
     self.task.isDeleted = YES;
