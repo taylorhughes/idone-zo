@@ -12,9 +12,6 @@
 
 - (NSArray*) getCurrentTasks:(NSError**)error;
 
-- (NSArray*) syncLists:(NSError**)error;
-- (void) syncList:(TaskList*)taskList error:(NSError**)error;
-
 - (NSArray*) getLocalTasksForTaskList:(TaskList*)taskList error:(NSError**)error;
 - (NSArray*) getLocalTaskLists:(NSError**)error;
 
@@ -46,7 +43,7 @@
   [super dealloc];
 }
 
-- (void) performSync:(NSError**)error
+- (void) syncAll:(NSError**)error
 {
   NSLog(@"Syncing lists..");
   NSArray *lists = [self syncLists:error];

@@ -10,10 +10,11 @@
 #import "Context.h"
 #import "DonezoAPIClient.h"
 #import "DonezoSyncMaster.h"
+#import "DonezoSyncOperation.h"
 
 @class Project, Context, TaskList, Task, MainViewController, DonezoSyncMaster;
 
-extern NSString * const DonezoSyncStatusChangedNotification;
+extern NSString* const DonezoShouldSyncNotification;
 
 @interface DNZOAppDelegate : NSObject <UIApplicationDelegate> {
   UIWindow *window;
@@ -30,7 +31,6 @@ extern NSString * const DonezoSyncStatusChangedNotification;
   DonezoSyncMaster *syncMaster;
   
   NSOperationQueue *operationQueue;
-  BOOL isSyncing;
 }
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;
@@ -40,16 +40,6 @@ extern NSString * const DonezoSyncStatusChangedNotification;
 @property (nonatomic, retain, readonly) NSManagedObjectModel *managedObjectModel;
 @property (nonatomic, retain, readonly) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, retain, readonly) NSPersistentStoreCoordinator *persistentStoreCoordinator;
-
-@property (nonatomic, readonly) NSString *storePath;
-
-@property (nonatomic, retain) DonezoAPIClient *donezoAPIClient;
-@property (nonatomic, retain) DonezoSyncMaster *syncMaster;
-
-@property (nonatomic, retain) NSOperationQueue *operationQueue;
-
-- (void)sync;
-- (BOOL)isSyncing;
 
 @end
 

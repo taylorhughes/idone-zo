@@ -1,10 +1,7 @@
 
 #import "ListViewController.h"
 
-@interface ListViewController () 
-
-- (void)updateSyncDisplay:(NSNotification*)syncChangedNotification;
-
+@interface ListViewController ()
 @end
 
 @implementation ListViewController
@@ -90,14 +87,6 @@
   UIBarButtonItem *add = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
                                                    target:self action:@selector(addNewTask:)] autorelease];
   self.navigationItem.rightBarButtonItem = add;
-  
-  DNZOAppDelegate *appDelegate = (DNZOAppDelegate *)[[UIApplication sharedApplication] delegate];
-  NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
-  [dnc addObserver:self
-          selector:@selector(updateSyncDisplay:) 
-              name:DonezoSyncStatusChangedNotification
-            object:appDelegate];
-  [self updateSyncDisplay:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -197,17 +186,13 @@
   }
 }
 
-- (void)updateSyncDisplay:(NSNotification*)syncChangedNotification
-{
-  DNZOAppDelegate *appDelegate = (DNZOAppDelegate *)[[UIApplication sharedApplication] delegate];
-  self.syncButton.enabled = ![appDelegate isSyncing];
-}
-
 
 - (IBAction)sync:(id)sender
 {
-  DNZOAppDelegate *appDelegate = (DNZOAppDelegate *)[[UIApplication sharedApplication] delegate];
-  [appDelegate sync];
+  NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
+
+  NSDictionary *info = [NSDictionary dictionaryWithObject:self.taskList forKey:@"list"];
+  [dnc postNotificationName:DonezoShouldSyncNotification object:self userInfo:info];
 }
 
 - (void)addNewTask:(id)sender

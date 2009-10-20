@@ -175,7 +175,7 @@
   list = (TaskList*)[NSEntityDescription insertNewObjectForEntityForName:@"TaskList" inManagedObjectContext:self.context];
   list.name = @"Tasks";
    
-  [self.syncMaster performSync:&error];
+  [self.syncMaster syncAll:&error];
   
   TaskList *localTasks = [self localListWithKey:@"tasks"];
   STAssertNotNil(localTasks, @"Local tasks should not be nil!");
@@ -187,14 +187,14 @@
   list = (TaskList*)[NSEntityDescription insertNewObjectForEntityForName:@"TaskList" inManagedObjectContext:self.context];
   list.name = @"Yet another List";
   
-  [self.syncMaster performSync:&error];
+  [self.syncMaster syncAll:&error];
   [self assertListsSynced:4];
   
   DonezoTaskList *remoteList = [client getListWithKey:@"groceries" error:&error];
   [client deleteList:&remoteList error:&error];
   STAssertNil(error, @"Encountered an error! %@", [error description]);
   
-  [self.syncMaster performSync:&error];
+  [self.syncMaster syncAll:&error];
   [self assertListsSynced:3];
   
   /*
@@ -203,7 +203,7 @@
   [self.context deleteObject:list];
   STAssertNil(error, @"Encountered an error! %@", [error description]);
   
-  [self.syncMaster performSync:&error];
+  [self.syncMaster syncAll:&error];
   [self assertListsSynced:2];
   */
 }
@@ -257,7 +257,7 @@
   task.isComplete = YES;
   task.body = @"A second task in the Another List list.";
   
-  [self.syncMaster performSync:&error];
+  [self.syncMaster syncAll:&error];
  
   [self assertListsSynced:3];
   [self assertTasksSynced:2 forListWithKey:@"groceries"];
@@ -277,7 +277,7 @@
    ] \
    }" error:&error];
   
-  [self.syncMaster performSync:&error];
+  [self.syncMaster syncAll:&error];
   
   [self assertListsSynced:1];
   [self assertTasksSynced:1 forListWithKey:@"tasks"];
@@ -289,7 +289,7 @@
   t.body = newBody;
   [self.client saveTask:&t taskList:nil error:&error];
     
-  [self.syncMaster performSync:&error];
+  [self.syncMaster syncAll:&error];
   
   [self assertListsSynced:1];
   // This will compare the tasks to make sure they are equal.
@@ -315,7 +315,7 @@
     STAssertTrue(interval > 0, @"New updated at should be larger than old updated at, but was: %0.4f", interval);
     oldUpdatedAt = [task.updatedAt copy];
     
-    [self.syncMaster performSync:&error];
+    [self.syncMaster syncAll:&error];
     STAssertNil(error, @"Error should be nil.");
     
     // reload task object
@@ -344,7 +344,7 @@
    ] \
    }" error:&error];
   
-  [self.syncMaster performSync:&error];
+  [self.syncMaster syncAll:&error];
   STAssertNil(error, @"Error should be nil.");
   
   [self assertListsSynced:1];
@@ -358,7 +358,7 @@
   task.isDeleted = YES;
   NSString *deletedBody = [task.body copy];
 
-  [self.syncMaster performSync:&error];
+  [self.syncMaster syncAll:&error];
   STAssertNil(error, @"Error should be nil.");
   
   [self assertListsSynced:1];
@@ -384,7 +384,7 @@
    ] \
    }" error:&error];
   
-  [self.syncMaster performSync:&error];
+  [self.syncMaster syncAll:&error];
   STAssertNil(error, @"Error should be nil.");
   
   [self assertListsSynced:1];
@@ -399,7 +399,7 @@
   task.isArchived = YES;
   [task hasBeenUpdated];
   
-  [self.syncMaster performSync:&error];
+  [self.syncMaster syncAll:&error];
   STAssertNil(error, @"Error should be nil.");
   
   [self assertListsSynced:1];

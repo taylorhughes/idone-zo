@@ -398,6 +398,7 @@ static UIImage *unchecked;
     NSLog(@"Error saving task: %@ %@", [error description], [error userInfo]);
   }
   
+  // Refreshes view to hide/show delete/edit buttons
   [self cancel:YES];
   [self refresh];
 }

@@ -22,6 +22,10 @@
 @property (retain, nonatomic) NSManagedObjectContext *context;
 
 - (id) initWithDonezoClient:(DonezoAPIClient*)donezoClient andContext:(NSManagedObjectContext*)context;
-- (void) performSync:(NSError**)error;
+
+- (void) syncAll:(NSError**)error;
+
+- (NSArray*) syncLists:(NSError**)error;
+- (void) syncList:(TaskList*)taskList error:(NSError**)error;
 
 @end

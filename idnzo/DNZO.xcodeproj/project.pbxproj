@@ -35,6 +35,8 @@
 		34388FD61076B87500FC1AB3 /* TaskDatePickerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34388FD41076B87500FC1AB3 /* TaskDatePickerView.xib */; };
 		343890031076BD8200FC1AB3 /* datepicker-background.png in Resources */ = {isa = PBXBuildFile; fileRef = 343890021076BD8200FC1AB3 /* datepicker-background.png */; };
 		343890041076BD8200FC1AB3 /* datepicker-background.png in Resources */ = {isa = PBXBuildFile; fileRef = 343890021076BD8200FC1AB3 /* datepicker-background.png */; };
+		343B0532108D6668007F2425 /* DonezoSyncOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 343B0531108D6668007F2425 /* DonezoSyncOperation.m */; };
+		343B0533108D6668007F2425 /* DonezoSyncOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 343B0531108D6668007F2425 /* DonezoSyncOperation.m */; };
 		3452D4A31049CC26005C717C /* Entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3452D4A21049CC26005C717C /* Entitlements.plist */; };
 		347401FA1066742200B764A1 /* SyncTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AF21EF102FC20B001FC4B7 /* SyncTest.m */; };
 		34762C35104EF27700498704 /* DNZOAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* DNZOAppDelegate.m */; };
@@ -126,6 +128,8 @@
 		34388F8B1076B18900FC1AB3 /* DatePickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatePickerViewController.m; sourceTree = "<group>"; };
 		34388FD41076B87500FC1AB3 /* TaskDatePickerView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskDatePickerView.xib; sourceTree = "<group>"; };
 		343890021076BD8200FC1AB3 /* datepicker-background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "datepicker-background.png"; path = "Resources/datepicker-background.png"; sourceTree = "<group>"; };
+		343B0530108D6668007F2425 /* DonezoSyncOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DonezoSyncOperation.h; sourceTree = "<group>"; };
+		343B0531108D6668007F2425 /* DonezoSyncOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DonezoSyncOperation.m; sourceTree = "<group>"; };
 		3452D4A21049CC26005C717C /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Entitlements.plist; sourceTree = "<group>"; };
 		34770B260FAFE45B00AD8397 /* ListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ListViewController.h; path = Classes/ListViewController.h; sourceTree = "<group>"; };
 		34770B270FAFE45B00AD8397 /* ListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ListViewController.m; path = Classes/ListViewController.m; sourceTree = "<group>"; };
@@ -260,6 +264,8 @@
 				1D3623250D0F684500981E51 /* DNZOAppDelegate.m */,
 				3412016E10294BF200A0439E /* DonezoSyncMaster.h */,
 				3412016F10294BF200A0439E /* DonezoSyncMaster.m */,
+				343B0530108D6668007F2425 /* DonezoSyncOperation.h */,
+				343B0531108D6668007F2425 /* DonezoSyncOperation.m */,
 				3416ECEA0FC2567C00D8BD53 /* Main Views */,
 				080E96DDFE201D6D7F000001 /* Subviews */,
 				348E18D50FA7DE8D00B75000 /* Test Cases */,
@@ -553,6 +559,7 @@
 				3412017010294BF200A0439E /* DonezoSyncMaster.m in Sources */,
 				34C74259107570400045F527 /* GTMRegex.m in Sources */,
 				34388F8C1076B18900FC1AB3 /* DatePickerViewController.m in Sources */,
+				343B0532108D6668007F2425 /* DonezoSyncOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -591,6 +598,7 @@
 				347401FA1066742200B764A1 /* SyncTest.m in Sources */,
 				34388F8D1076B18900FC1AB3 /* DatePickerViewController.m in Sources */,
 				34C742F9107A98DA0045F527 /* GTMRegex.m in Sources */,
+				343B0533108D6668007F2425 /* DonezoSyncOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

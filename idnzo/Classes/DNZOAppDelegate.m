@@ -8,11 +8,26 @@
 
 #import "DNZOAppDelegate.h"
 
-NSString * const DonezoSyncStatusChangedNotification = @"DonezoSyncStatusChangedNotification";
+NSString* const DonezoShouldSyncNotification = @"DonezoShouldSyncNotification";
 
-@interface DNZOAppDelegate (Private)
+@interface DNZOAppDelegate ()
+
 - (void)createInitialObjects;
+
+- (void) onSyncEvent:(NSNotification*)syncNotification;
+
+- (void) sync;
+- (void) sync:(TaskList*)list;
+
+@property (nonatomic, readonly) NSString *storePath;
+
+@property (nonatomic, retain) DonezoAPIClient *donezoAPIClient;
+@property (nonatomic, retain) DonezoSyncMaster *syncMaster;
+
+@property (nonatomic, retain) NSOperationQueue *operationQueue;
+
 @end
+
 
 @implementation DNZOAppDelegate
 
@@ -27,10 +42,15 @@ NSString * const DonezoSyncStatusChangedNotification = @"DonezoSyncStatusChanged
 {
   self = [super init];
   if (self != nil)
-  {
-    isSyncing = NO;
-    
+  { 
     self.operationQueue = [[[NSOperationQueue alloc] init] autorelease];
+    [self.operationQueue setMaxConcurrentOperationCount:1];
+    
+    NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
+    [dnc addObserver:self
+            selector:@selector(onSyncEvent:) 
+                name:DonezoShouldSyncNotification
+              object:nil];
     
     // settings holder
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -62,39 +82,69 @@ NSString * const DonezoSyncStatusChangedNotification = @"DonezoSyncStatusChanged
   return self;
 }
 
-- (BOOL) isSyncing
+- (void) onSyncEvent:(NSNotification*)syncNotification
 {
-  return isSyncing;
+  TaskList *list = [[syncNotification userInfo] valueForKey:@"list"];
+  [self sync:list];
 }
 
 - (void) sync
+{
+  [self sync:nil];
+}
+- (void) sync:(TaskList*)list
 { 
-  isSyncing = YES;
-  NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
-  [dnc postNotificationName:DonezoSyncStatusChangedNotification object:self];
+  [self.operationQueue setSuspended:YES];
+  NSString *identifier = @"syncAll";
+  if (list.key != nil)
+  {
+    identifier = [NSString stringWithFormat:@"sync-%@", list.key];
+  }
   
-  UIApplication* app = [UIApplication sharedApplication];
-  app.networkActivityIndicatorVisible = YES;
-  
-  // Make a copy of the context that is up to date for now
-  self.syncMaster.context = [[[NSManagedObjectContext alloc] init] autorelease];
-  [self.syncMaster.context setPersistentStoreCoordinator:self.persistentStoreCoordinator];
-  
-  NSInvocationOperation *syncOperation = [[NSInvocationOperation alloc]
+  BOOL operationQueued = NO;
+  for (DonezoSyncOperation *operation in [self.operationQueue operations])
+  {
+    if ([operation.identifier isEqualToString:identifier])
+    {
+      operationQueued = YES;
+      break;
+    }
+  }
+
+  if (operationQueued)
+  {
+    NSLog(@"Operation already enqueued; won't do it again.");
+  }
+  else
+  {
+    NSLog(@"Adding '%@' to operation queue...", identifier);
+    
+    // Make a copy of the context that is up to date for now
+    self.syncMaster.context = [[[NSManagedObjectContext alloc] init] autorelease];
+    [self.syncMaster.context setPersistentStoreCoordinator:self.persistentStoreCoordinator];
+    
+    DonezoSyncOperation *syncOperation = [[DonezoSyncOperation alloc]
                                           initWithTarget:self
                                           selector:@selector(syncOperation)
                                           object:nil];
-  [self.operationQueue addOperation:syncOperation];
-  [syncOperation release];
+    syncOperation.identifier = identifier;
+    
+    [self.operationQueue addOperation:syncOperation];
+    [syncOperation release];    
+  }
+  
+  [self.operationQueue setSuspended:NO];
 }
 
 - (void) syncOperation
 {
+  UIApplication* app = [UIApplication sharedApplication];
+  app.networkActivityIndicatorVisible = YES;
   //
   // WARNING: Operates in a separate thread, do not make non-threadsafe calls here!
   //
   NSError *error = nil;
-  [self.syncMaster performSync:&error];
+  [self.syncMaster syncAll:&error];
   [self performSelectorOnMainThread:@selector(finishSync:) withObject:error waitUntilDone:YES];
 }
 
@@ -105,8 +155,6 @@ NSString * const DonezoSyncStatusChangedNotification = @"DonezoSyncStatusChanged
   
   UIApplication* app = [UIApplication sharedApplication];
   app.networkActivityIndicatorVisible = NO;
-  
-  NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
   
   if (error != nil)
   {
@@ -122,6 +170,7 @@ NSString * const DonezoSyncStatusChangedNotification = @"DonezoSyncStatusChanged
   }
   else
   {
+    NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
     [dnc addObserver:self
             selector:@selector(syncingContextDidSave:) 
                 name:NSManagedObjectContextDidSaveNotification
@@ -138,9 +187,6 @@ NSString * const DonezoSyncStatusChangedNotification = @"DonezoSyncStatusChanged
     [dnc removeObserver:self name:NSManagedObjectContextDidSaveNotification object:self.syncMaster.context];
     [self.mainController reloadData];
   }
-  
-  isSyncing = NO;
-  [dnc postNotificationName:DonezoSyncStatusChangedNotification object:self];
 }
 
 - (void)syncingContextDidSave:(NSNotification*)saveNotification
