@@ -98,13 +98,17 @@ NSString* const DonezoShouldSyncNotification = @"DonezoShouldSyncNotification";
   NSString *identifier = @"syncAll";
   if (list.key != nil)
   {
-    identifier = [NSString stringWithFormat:@"sync-%@", list.key];
+    identifier = [NSString stringWithFormat:@"syncList:%@", list.key];
+  }
+  else
+  {
+    list = nil;
   }
   
   BOOL operationQueued = NO;
   for (DonezoSyncOperation *operation in [self.operationQueue operations])
   {
-    if ([operation.identifier isEqualToString:identifier])
+    if (![operation isExecuting] && [operation.identifier isEqualToString:identifier])
     {
       operationQueued = YES;
       break;
@@ -113,20 +117,16 @@ NSString* const DonezoShouldSyncNotification = @"DonezoShouldSyncNotification";
 
   if (operationQueued)
   {
-    NSLog(@"Operation already enqueued; won't do it again.");
+    NSLog(@"Operation '%@' already enqueued.", identifier);
   }
   else
   {
     NSLog(@"Adding '%@' to operation queue...", identifier);
     
-    // Make a copy of the context that is up to date for now
-    self.syncMaster.context = [[[NSManagedObjectContext alloc] init] autorelease];
-    [self.syncMaster.context setPersistentStoreCoordinator:self.persistentStoreCoordinator];
-    
     DonezoSyncOperation *syncOperation = [[DonezoSyncOperation alloc]
                                           initWithTarget:self
-                                          selector:@selector(syncOperation)
-                                          object:nil];
+                                          selector:@selector(syncOperation:)
+                                          object:list];
     syncOperation.identifier = identifier;
     
     [self.operationQueue addOperation:syncOperation];
@@ -136,15 +136,36 @@ NSString* const DonezoShouldSyncNotification = @"DonezoShouldSyncNotification";
   [self.operationQueue setSuspended:NO];
 }
 
-- (void) syncOperation
+- (void) syncOperation:(NSObject*)object
 {
-  UIApplication* app = [UIApplication sharedApplication];
-  app.networkActivityIndicatorVisible = YES;
   //
   // WARNING: Operates in a separate thread, do not make non-threadsafe calls here!
   //
+
+  UIApplication* app = [UIApplication sharedApplication];
+  app.networkActivityIndicatorVisible = YES;
+  
+  self.syncMaster.context = [[[NSManagedObjectContext alloc] init] autorelease];
+  [self.syncMaster.context setPersistentStoreCoordinator:self.persistentStoreCoordinator];
+  
   NSError *error = nil;
-  [self.syncMaster syncAll:&error];
+  
+  TaskList *list = nil;
+  if (object != nil)
+  {
+    list = (TaskList*)object;
+    list = (TaskList*)[self.syncMaster.context objectWithID:[list objectID]];
+  }
+  
+  if (list == nil)
+  {
+    [self.syncMaster syncAll:&error];
+  }
+  else
+  {
+    [self.syncMaster syncList:list error:&error];
+  }
+
   [self performSelectorOnMainThread:@selector(finishSync:) withObject:error waitUntilDone:YES];
 }
 

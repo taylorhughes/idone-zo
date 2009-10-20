@@ -25,7 +25,6 @@
 @property (retain, nonatomic) IBOutlet UIBarButtonItem *syncButton;
 
 - (IBAction) archiveTasks:(id)sender;
-- (IBAction) sync:(id)sender;
 
 - (void) reloadData;
 

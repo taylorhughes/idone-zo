@@ -78,11 +78,6 @@
 								<reference key="IBUIToolbar" ref="1038543166"/>
 								<int key="IBUISystemItemIdentifier">5</int>
 							</object>
-							<object class="IBUIBarButtonItem" id="347505612">
-								<float key="IBUIWidth">43</float>
-								<reference key="IBUIToolbar" ref="1038543166"/>
-								<int key="IBUISystemItemIdentifier">13</int>
-							</object>
 							<object class="IBUIBarButtonItem" id="366844586">
 								<reference key="IBUIToolbar" ref="1038543166"/>
 								<int key="IBUISystemItemIdentifier">12</int>
@@ -151,22 +146,6 @@
 					</object>
 					<int key="connectionID">14</int>
 				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchEventConnection" key="connection">
-						<string key="label">sync:</string>
-						<reference key="source" ref="347505612"/>
-						<reference key="destination" ref="372490531"/>
-					</object>
-					<int key="connectionID">17</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchOutletConnection" key="connection">
-						<string key="label">syncButton</string>
-						<reference key="source" ref="372490531"/>
-						<reference key="destination" ref="347505612"/>
-					</object>
-					<int key="connectionID">18</int>
-				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -209,7 +188,6 @@
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<reference ref="440243845"/>
-							<reference ref="347505612"/>
 							<reference ref="592671130"/>
 							<reference ref="435054310"/>
 							<reference ref="366844586"/>
@@ -219,11 +197,6 @@
 					<object class="IBObjectRecord">
 						<int key="objectID">7</int>
 						<reference key="object" ref="592671130"/>
-						<reference key="parent" ref="1038543166"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">15</int>
-						<reference key="object" ref="347505612"/>
 						<reference key="parent" ref="1038543166"/>
 					</object>
 					<object class="IBObjectRecord">
@@ -251,7 +224,6 @@
 					<string>-2.CustomClassName</string>
 					<string>1.IBEditorWindowLastContentRect</string>
 					<string>1.IBPluginDependency</string>
-					<string>15.IBPluginDependency</string>
 					<string>16.IBPluginDependency</string>
 					<string>19.IBPluginDependency</string>
 					<string>20.IBPluginDependency</string>
@@ -265,7 +237,6 @@
 					<string>ListViewController</string>
 					<string>UIResponder</string>
 					<string>{{579, 386}, {320, 480}}</string>
-					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>

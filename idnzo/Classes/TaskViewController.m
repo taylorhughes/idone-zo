@@ -38,6 +38,8 @@ static UIImage *unchecked;
 - (BOOL)hasContexts;
 - (BOOL)hasDueDate;
 
+- (void)notifySync;
+
 @end
 
 @implementation TaskViewController
@@ -398,6 +400,8 @@ static UIImage *unchecked;
     NSLog(@"Error saving task: %@ %@", [error description], [error userInfo]);
   }
   
+  [self notifySync];
+  
   // Refreshes view to hide/show delete/edit buttons
   [self cancel:YES];
   [self refresh];
@@ -518,11 +522,23 @@ static UIImage *unchecked;
   }
   [dnc removeObserver:self name:NSManagedObjectContextDidSaveNotification object:self.editingContext];
   
+  [self notifySync];
+  
   if (doRefresh)
   {
     [self refresh];
   }
 }
+
+- (void) notifySync
+{
+  NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
+  
+  NSDictionary *info = [NSDictionary dictionaryWithObject:self.task.taskList forKey:@"list"];
+  [dnc postNotificationName:DonezoShouldSyncNotification object:self userInfo:info];
+}
+
+
 
 - (void) onClickDone:(id)sender
 {
@@ -665,7 +681,6 @@ static UIImage *unchecked;
   
   return nil;
 }
-
 
 - (void)dealloc
 {

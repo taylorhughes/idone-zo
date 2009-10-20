@@ -2,6 +2,7 @@
 #import "ListViewController.h"
 
 @interface ListViewController ()
+- (void) notifySync;
 @end
 
 @implementation ListViewController
@@ -146,6 +147,7 @@
       NSLog(@"Error saving clicked task: %@ %@", [error description], [error userInfo]);
     }
     
+    [self notifySync];
     [self.tableView reloadData];
   }
   else
@@ -183,11 +185,12 @@
     tasks = nil;
     
     [self.tableView deleteRowsAtIndexPaths:archivedPaths withRowAnimation:UITableViewRowAnimationFade];
+    [self notifySync];
   }
 }
 
 
-- (IBAction)sync:(id)sender
+- (void) notifySync
 {
   NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
 
