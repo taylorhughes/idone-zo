@@ -148,6 +148,12 @@ NSString* const DonezoShouldSyncNotification = @"DonezoShouldSyncNotification";
   self.syncMaster.context = [[[NSManagedObjectContext alloc] init] autorelease];
   [self.syncMaster.context setPersistentStoreCoordinator:self.persistentStoreCoordinator];
   
+  NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
+  [dnc addObserver:self
+          selector:@selector(contextDidSave:) 
+              name:NSManagedObjectContextDidSaveNotification
+            object:nil];
+    
   NSError *error = nil;
   
   TaskList *list = nil;
@@ -165,8 +171,26 @@ NSString* const DonezoShouldSyncNotification = @"DonezoShouldSyncNotification";
   {
     [self.syncMaster syncList:list error:&error];
   }
-
+  
+  [dnc removeObserver:self name:NSManagedObjectContextDidSaveNotification object:nil];
+  
   [self performSelectorOnMainThread:@selector(finishSync:) withObject:error waitUntilDone:YES];
+}
+
+- (void) contextDidSave:(NSNotification*)saveNotification
+{
+  [self performSelectorOnMainThread:@selector(mergeChangesForAllContexts:) 
+                         withObject:saveNotification
+                      waitUntilDone:YES];
+}
+
+- (void) mergeChangesForAllContexts:(id)obj
+{
+  NSNotification *saveNotification = (NSNotification*)obj;
+  [self.managedObjectContext mergeChangesFromContextDidSaveNotification:saveNotification];
+  [self.syncMaster.context mergeChangesFromContextDidSaveNotification:saveNotification];
+
+  [self.mainController reloadData];
 }
 
 // Operates on the main thread
@@ -191,28 +215,8 @@ NSString* const DonezoShouldSyncNotification = @"DonezoShouldSyncNotification";
   }
   else
   {
-    NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
-    [dnc addObserver:self
-            selector:@selector(syncingContextDidSave:) 
-                name:NSManagedObjectContextDidSaveNotification
-              object:self.syncMaster.context];
-    
-    if (![self.syncMaster.context save:&error])
-    {
-      NSLog(@"Error saving synced context! %@ %@", [error description], [error userInfo]);
-    }
-    else
-    {
-      NSLog(@"Sync completed successfully!");
-    }
-    [dnc removeObserver:self name:NSManagedObjectContextDidSaveNotification object:self.syncMaster.context];
-    [self.mainController reloadData];
+    NSLog(@"Sync completed successfully!");
   }
-}
-
-- (void)syncingContextDidSave:(NSNotification*)saveNotification
-{
-	[self.managedObjectContext mergeChangesFromContextDidSaveNotification:saveNotification];	
 }
 
 - (void) applicationDidFinishLaunching:(UIApplication *)application

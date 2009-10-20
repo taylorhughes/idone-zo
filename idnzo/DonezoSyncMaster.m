@@ -170,12 +170,28 @@
     }
     [self.context deleteObject:listToDelete];
   }
+  if ([self.context hasChanges])
+  {
+    if (![self.context save:error])
+    {
+      return nil;
+    }
+  }
+  
   for (DonezoTaskList *listToAddLocally in newRemoteLists)
   {
     TaskList *newList = (TaskList*)[NSEntityDescription insertNewObjectForEntityForName:@"TaskList" inManagedObjectContext:self.context];
     newList.name = listToAddLocally.name;
     newList.key = listToAddLocally.key;
   }
+  if ([self.context hasChanges])
+  {
+    if (![self.context save:error])
+    {
+      return nil;
+    }
+  }
+  
   for (TaskList *listToAdd in localListsToAddRemotely)
   {    
     DonezoTaskList *list = [[[DonezoTaskList alloc] init] autorelease];
@@ -187,6 +203,11 @@
       return nil;
     }
     listToAdd.key = list.key;
+    
+    if (![self.context save:error])
+    {
+      return nil;
+    }
   }
   
   // final collection of TaskList* objects -- todo: replace this with a premade collection or something
@@ -259,6 +280,14 @@
     //NSLog(@"Deleting local task: %@", taskToDelete.key);
     [self.context deleteObject:localTask];
   }
+  if ([self.context hasChanges])
+  {
+    if (![self.context save:error])
+    {
+      return;
+    }
+  }
+  
   for (DonezoTask *remoteTask in newRemoteTasks)
   {
     //NSLog(@"Adding remote task locally: %@", taskToAddLocally.key);
@@ -266,6 +295,14 @@
     localTask.taskList = taskList;
     [self copyRemoteTask:remoteTask toLocalTask:localTask];
   }
+  if ([self.context hasChanges])
+  {
+    if (![self.context save:error])
+    {
+      return;
+    }
+  }
+  
   for (Task *localTask in newLocalTasks)
   {
     //NSLog(@"Adding local task remotely: %@", taskToAdd.key);
@@ -284,6 +321,11 @@
     }
     localTask.key = remoteTask.key;
     [localTask hasBeenUpdated:remoteTask.updatedAt];
+    
+    if (![self.context save:error])
+    {
+      return;
+    }
   }
   for (NSArray *remoteLocalTasks in tasksToSync)
   {
@@ -318,7 +360,16 @@
         [self copyRemoteTask:remoteTask toLocalTask:localTask];
       }
     }
-    if (*error) { return; }
+    
+    if (*error == nil && [self.context hasChanges])
+    {
+      [self.context save:error];
+    }
+    
+    if (*error)
+    {
+      return;
+    }
   }
 }
 

@@ -70,22 +70,28 @@ static UIImage *unchecked;
 
 - (void) viewDidLoad
 {
-  [super viewDidLoad];  
-  if (self.tableView.tableHeaderView == nil)
-  {
-    [topButton addTarget:self action:@selector(editNameClicked:) forControlEvents:UIControlEventTouchUpInside];
-    [topButton.titleLabel setLineBreakMode:UILineBreakModeWordWrap];
-    [topCheckmark addTarget:self action:@selector(checkmarkClicked:) forControlEvents:UIControlEventTouchUpInside];
-    
-    self.tableView.tableHeaderView = [[[UIView alloc] init] autorelease];
-    [self.tableView.tableHeaderView addSubview:bodyView];
-    [self.tableView.tableHeaderView addSubview:bodyEditView];
-    
-    bottomView.alpha = 0.0;
-    [self.tableView addSubview:bottomView];
-    
-    [self cancel:NO];
-  }
+  [super viewDidLoad];
+  
+  NSAssert(self.tableView.tableHeaderView == nil, @"Table header view should always be nil when this fires.");
+  
+  [topButton addTarget:self action:@selector(editNameClicked:) forControlEvents:UIControlEventTouchUpInside];
+  [topButton.titleLabel setLineBreakMode:UILineBreakModeWordWrap];
+  [topCheckmark addTarget:self action:@selector(checkmarkClicked:) forControlEvents:UIControlEventTouchUpInside];
+  
+  self.tableView.tableHeaderView = [[[UIView alloc] init] autorelease];
+  [self.tableView.tableHeaderView addSubview:bodyView];
+  [self.tableView.tableHeaderView addSubview:bodyEditView];
+  
+  bottomView.alpha = 0.0;
+  [self.tableView addSubview:bottomView];
+  
+  [self cancel:NO];
+  
+  NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
+  [dnc addObserver:self
+          selector:@selector(contextDidSave:) 
+              name:NSManagedObjectContextDidSaveNotification
+            object:nil];
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -452,14 +458,19 @@ static UIImage *unchecked;
   [UIView commitAnimations];
 }
 
+
+#define ANIMATION_REMOVE_DELETE         @"removeFromSuperviewWithAnimation"
+#define ANIMATION_REMOVE_DELETE_AND_POP @"removeAndPopFromSuperviewWithAnimation"
+
 - (void)animationDidStop:(NSString *)animationID finished:(NSNumber *)finished context:(void *)context
 {
   [confirmationView removeFromSuperview];
   [bgView removeFromSuperview];
   [bgView release];
-  if ([animationID isEqualToString:@"removeAndPopFromSuperviewWithAnimation"])
+  if ([animationID isEqualToString:ANIMATION_REMOVE_DELETE_AND_POP])
   {  
     [self.navigationController popViewControllerAnimated:YES];
+    self.editingContext = nil;
   }
 }
 - (IBAction) cancelDeleteTask:(id)sender
@@ -471,11 +482,11 @@ static UIImage *unchecked;
 {
   if (!doPopView)
   {
-    [UIView beginAnimations:@"removeFromSuperviewWithAnimation" context:nil];
+    [UIView beginAnimations:ANIMATION_REMOVE_DELETE context:nil];
   }
   else
   {
-    [UIView beginAnimations:@"removeAndPopFromSuperviewWithAnimation" context:nil];
+    [UIView beginAnimations:ANIMATION_REMOVE_DELETE_AND_POP context:nil];
   }
   
   // Set delegate and selector to remove from superview when animation completes
@@ -491,6 +502,7 @@ static UIImage *unchecked;
   [UIView commitAnimations];    
 }
 
+
 - (void)onClickEdit:(id)sender
 {
   [self edit:YES];
@@ -500,6 +512,23 @@ static UIImage *unchecked;
 {
   DNZOAppDelegate *appDelegate = (DNZOAppDelegate *)[[UIApplication sharedApplication] delegate];
 	[appDelegate.managedObjectContext mergeChangesFromContextDidSaveNotification:saveNotification];	
+}
+
+- (void)contextDidSave:(NSNotification*)saveNotification
+{
+  [self performSelectorOnMainThread:@selector(updateEditingContextWithChangesFromMainContext:)
+                         withObject:saveNotification
+                      waitUntilDone:YES];
+}
+- (void)updateEditingContextWithChangesFromMainContext:(id)obj
+{
+  if (self.editingContext != nil)
+  {
+    NSLog(@"Refreshing editing context with changes from main context...");
+    NSNotification* saveNotification = (NSNotification*)obj;
+    [self.editingContext mergeChangesFromContextDidSaveNotification:saveNotification];
+    [self refresh];
+  }
 }
 
 - (void)save
