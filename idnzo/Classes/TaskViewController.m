@@ -475,6 +475,7 @@ static UIImage *unchecked;
   {  
     [self.navigationController popViewControllerAnimated:YES];
     self.editingContext = nil;
+    self.task = nil;
   }
 }
 - (IBAction) cancelDeleteTask:(id)sender

@@ -148,14 +148,13 @@
   if (cell == nil)
   {
     // Create a new cell. CGRectZero allows the cell to determine the appropriate size.
-    cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"MyIdentifier"] autorelease];
+    cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"MyIdentifier"] autorelease];
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
   }
   
   TaskList *taskList = [self.taskLists objectAtIndex:indexPath.row];
   cell.textLabel.text = taskList.name;
   
-  /*
   // Commented out because we need to reloadData when the count changes (new task, task deleted)
   NSUInteger count = [taskList displayTasksCount];
   if (count == 0)
@@ -170,7 +169,6 @@
   {
     cell.detailTextLabel.text = [NSString stringWithFormat:@"%d tasks", count];
   }
-  */
   
   return cell;
 }
