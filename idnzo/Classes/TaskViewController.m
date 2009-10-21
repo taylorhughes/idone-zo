@@ -92,6 +92,10 @@ static UIImage *unchecked;
           selector:@selector(contextDidSave:) 
               name:NSManagedObjectContextDidSaveNotification
             object:nil];
+  [dnc addObserver:self
+          selector:@selector(donezoDataUpdated:) 
+              name:DonezoDataUpdatedNotification
+            object:nil];
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -527,8 +531,13 @@ static UIImage *unchecked;
     NSLog(@"Refreshing editing context with changes from main context...");
     NSNotification* saveNotification = (NSNotification*)obj;
     [self.editingContext mergeChangesFromContextDidSaveNotification:saveNotification];
-    [self refresh];
   }
+}
+
+- (void) donezoDataUpdated:(NSNotification*)notification
+{
+  // NSLog(@"TaskViewController: Handled updated data.");
+  [self refresh];
 }
 
 - (void)save

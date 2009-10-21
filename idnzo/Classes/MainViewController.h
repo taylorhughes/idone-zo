@@ -12,6 +12,4 @@
 @property (retain, nonatomic) NSArray *taskLists;
 @property (nonatomic, retain) ListViewController *listViewController;
 
-- (void) reloadData;
-
 @end

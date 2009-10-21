@@ -24,6 +24,19 @@
   {
     [self loadLastViewedList:listName];
   }
+  
+  NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
+  [dnc addObserver:self
+          selector:@selector(donzoDataUpdated:) 
+              name:DonezoDataUpdatedNotification
+            object:nil];
+}
+
+- (void) donzoDataUpdated:(NSNotification*)notification
+{
+  // NSLog(@"MainViewController: Handled updated data.");
+  self.taskLists = nil;
+  [self.tableView reloadData];
 }
 
 - (void) dealloc
@@ -169,19 +182,6 @@
   [self loadListViewForList:clickedList];
   
   return nil;
-}
-
-- (void) reloadData
-{
-  self.taskLists = nil;
-  [self.tableView reloadData];
-  
-  if ([self.listViewController.taskList isDeleted])
-  {
-    NSLog(@"Shit! Task list is deleted.");
-  }
-  
-  [self.listViewController reloadData];
 }
 
 @end

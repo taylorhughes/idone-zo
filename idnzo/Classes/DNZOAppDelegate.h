@@ -15,6 +15,7 @@
 @class Project, Context, TaskList, Task, MainViewController, DonezoSyncMaster;
 
 extern NSString* const DonezoShouldSyncNotification;
+extern NSString* const DonezoDataUpdatedNotification;
 
 @interface DNZOAppDelegate : NSObject <UIApplicationDelegate> {
   UIWindow *window;

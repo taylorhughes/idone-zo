@@ -8,7 +8,8 @@
 
 #import "DNZOAppDelegate.h"
 
-NSString* const DonezoShouldSyncNotification = @"DonezoShouldSyncNotification";
+NSString* const DonezoShouldSyncNotification  = @"DonezoShouldSyncNotification";
+NSString* const DonezoDataUpdatedNotification = @"DonezoDataUpdatedNotification";
 
 @interface DNZOAppDelegate ()
 
@@ -189,8 +190,9 @@ NSString* const DonezoShouldSyncNotification = @"DonezoShouldSyncNotification";
   NSNotification *saveNotification = (NSNotification*)obj;
   [self.managedObjectContext mergeChangesFromContextDidSaveNotification:saveNotification];
   [self.syncMaster.context mergeChangesFromContextDidSaveNotification:saveNotification];
-
-  [self.mainController reloadData];
+  
+  [[NSNotificationCenter defaultCenter] postNotificationName:DonezoDataUpdatedNotification
+                                                      object:self];
 }
 
 // Operates on the main thread

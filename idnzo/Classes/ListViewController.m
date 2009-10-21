@@ -3,6 +3,9 @@
 
 @interface ListViewController ()
 - (void) notifySync;
+
+@property (retain, nonatomic) NSArray *tasks;
+
 @end
 
 @implementation ListViewController
@@ -13,14 +16,39 @@
 @synthesize taskViewController;
 @synthesize syncButton;
 
-- (id) init
-{
-  self = [super init];
-  if (self != nil)
-  {
 
-  }
-  return self;
+- (void)viewDidLoad
+{
+  [super viewDidLoad];
+  
+  UIBarButtonItem *add = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
+                                                                        target:self action:@selector(addNewTask:)] autorelease];
+  self.navigationItem.rightBarButtonItem = add;
+  
+  NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
+  [dnc addObserver:self
+          selector:@selector(donezoDataUpdated:) 
+              name:DonezoDataUpdatedNotification
+            object:nil];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+  tasks = nil;
+  [tableView reloadData];
+}
+
+
+
+
+
+
+
+- (void) donezoDataUpdated:(NSNotification*)notification
+{
+  // NSLog(@"ListViewController: Handled updated data.");
+  self.tasks = nil;
+  [self.tableView reloadData];
 }
 
 - (TaskViewController *)taskViewController
@@ -31,12 +59,6 @@
     taskViewController = [[TaskViewController alloc] initWithNibName:@"TaskView" bundle:nil];
   }
   return taskViewController;
-}
-
-- (void) reloadData
-{
-  tasks = nil;
-  [self.tableView reloadData];
 }
 
 - (void) setTaskList:(TaskList *)list
@@ -66,35 +88,24 @@
     [sort release];
     
     NSError *error = nil;
-    tasks = [[appDelegate.managedObjectContext executeFetchRequest:fetchRequest error:&error] retain];
+    self.tasks = [appDelegate.managedObjectContext executeFetchRequest:fetchRequest error:&error];
     if (error != nil)
     {
       NSLog(@"Error fetching tasks! %@ %@", [error description], [error userInfo]);
-      tasks = [NSArray array];
+      self.tasks = [NSArray array];
     }
     else
     {
-      NSLog(@"Fetch request was successful; got %d task(s).", [tasks count]);
-      //NSLog(@"Order is: %@", [tasks valueForKey:@"sortDate"]);
+      NSLog(@"Fetched %d tasks for list '%@'.", [tasks count], self.taskList.name);
     }
   }
   return tasks;
 }
 
-- (void)viewDidLoad
-{
-  [super viewDidLoad];
-  
-  UIBarButtonItem *add = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
-                                                   target:self action:@selector(addNewTask:)] autorelease];
-  self.navigationItem.rightBarButtonItem = add;
-}
 
-- (void)viewWillAppear:(BOOL)animated
-{
-  tasks = nil;
-  [tableView reloadData];
-}
+
+
+
 
 // This table will always only have one section.
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tv
