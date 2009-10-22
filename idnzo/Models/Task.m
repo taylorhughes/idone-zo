@@ -56,7 +56,15 @@ NSDateFormatter *dueDateFormatter;
 
 - (void) hasBeenUpdated
 {
-  [self hasBeenUpdated:[NSDate date]];
+  NSDate *newUpdatedAt = [NSDate date];
+  if ([newUpdatedAt timeIntervalSinceDate:self.updatedAt] <= 0)
+  {
+    // This happens when UTC is not synced between remote server and phone.
+    // NSLog(@"New updated at was not newer than existing updatedAt; incrementing instead.");
+    NSTimeInterval interval = [self.updatedAt timeIntervalSinceReferenceDate] + 0.0001;
+    newUpdatedAt = [NSDate dateWithTimeIntervalSinceReferenceDate:interval];
+  }
+  [self hasBeenUpdated:newUpdatedAt];
 }
 - (void) hasBeenUpdated:(NSDate*)newUpdatedAt
 {

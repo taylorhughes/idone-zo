@@ -341,8 +341,11 @@
     else
     {
       NSTimeInterval remoteUpdatedInterval = [remoteTask.updatedAt timeIntervalSinceDate:localTask.updatedAt];
+      // NSLog(@"Remote: %0.8f Local: %0.8f", [remoteTask.updatedAt timeIntervalSinceReferenceDate], [localTask.updatedAt timeIntervalSinceReferenceDate]);
       if (remoteUpdatedInterval < 0 || localTask.isArchived)
       {
+        // NSLog(@"Local task is newer than remote task: %@", localTask.body);
+        
         [self copyLocalTask:localTask toRemoteTask:remoteTask];
         [self.client saveTask:&remoteTask taskList:nil error:error];
         if (*error) { return; }
@@ -357,6 +360,7 @@
       }
       else if (remoteUpdatedInterval > 0)
       {
+        // NSLog(@"Remote task is newer than local task: %@", localTask.body);
         [self copyRemoteTask:remoteTask toLocalTask:localTask];
       }
     }
