@@ -5,6 +5,7 @@
 - (void) notifySync;
 
 @property (retain, nonatomic) NSArray *tasks;
+@property (retain, nonatomic) SortViewController *sortViewController;
 
 @end
 
@@ -14,6 +15,7 @@
 @synthesize taskList;
 @synthesize tasks;
 @synthesize taskViewController;
+@synthesize sortViewController;
 @synthesize syncButton;
 
 
@@ -34,7 +36,7 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-  tasks = nil;
+  self.tasks = nil;
   [tableView reloadData];
 }
 
@@ -56,9 +58,18 @@
   // Instantiate the detail view controller if necessary.
   if (taskViewController == nil)
   {
-    taskViewController = [[TaskViewController alloc] initWithNibName:@"TaskView" bundle:nil];
+    self.taskViewController = [[TaskViewController alloc] initWithNibName:@"TaskView" bundle:nil];
   }
   return taskViewController;
+}
+
+- (SortViewController *)sortViewController
+{
+  if (sortViewController == nil)
+  {
+    self.sortViewController = [[SortViewController alloc] initWithStyle:UITableViewStyleGrouped];
+  }
+  return sortViewController;
 }
 
 - (void) setTaskList:(TaskList *)list
@@ -69,8 +80,7 @@
   }
   if (tasks)
   {
-    [tasks release];
-    tasks = nil;
+    self.tasks = nil;
   }
   taskList = [list retain];
   self.title = [taskList name];
@@ -83,9 +93,10 @@
     DNZOAppDelegate *appDelegate = (DNZOAppDelegate *)[[UIApplication sharedApplication] delegate];
     
     NSFetchRequest *fetchRequest = [self.taskList tasksForListRequest];
-    NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"sortDate" ascending:YES];
-    fetchRequest.sortDescriptors = [NSArray arrayWithObjects:sort, nil];
-    [sort release];
+    NSSortDescriptor *sort = self.sortViewController.sorter;
+    NSSortDescriptor *secondarySort = [[NSSortDescriptor alloc] initWithKey:@"body" ascending:YES];
+    fetchRequest.sortDescriptors = [NSArray arrayWithObjects:sort, secondarySort, nil];
+    [secondarySort release];
     
     NSError *error = nil;
     self.tasks = [appDelegate.managedObjectContext executeFetchRequest:fetchRequest error:&error];
@@ -104,8 +115,14 @@
 
 
 
-
-
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+  if (![self.sortViewController isDefaultSort])
+  {
+    return [NSString stringWithFormat:@"Sorted by %@", [self.sortViewController sortedTitle]];
+  }
+  return nil;
+}
 
 // This table will always only have one section.
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tv
@@ -164,7 +181,7 @@
   else
   {
     TaskViewController *controller = self.taskViewController;
-    [controller loadTask:clickedTask editing:NO];
+    [controller loadTask:clickedTask editing:NO positionInList:[indexPath row] ofTotalCount:[self.tasks count]];
     
     [self.navigationController pushViewController:controller animated:YES];    
   }
@@ -193,7 +210,7 @@
     {
       NSLog(@"Error saving archived tasks: %@ %@", [error description], [error userInfo]);
     }
-    tasks = nil;
+    self.tasks = nil;
     
     [self.tableView deleteRowsAtIndexPaths:archivedPaths withRowAnimation:UITableViewRowAnimationFade];
     [self notifySync];
@@ -214,10 +231,18 @@
   TaskViewController *tvc = [[[TaskViewController alloc] initWithNibName:@"TaskView" bundle:nil] autorelease];
   [tvc loadEditingWithNewTaskForList:self.taskList];
   
-  UINavigationController *modalNavigationController = [[[UINavigationController alloc] initWithRootViewController:tvc] autorelease];
-  
+  UINavigationController *modalNavigationController =
+    [[[UINavigationController alloc] initWithRootViewController:tvc] autorelease];
   [self.navigationController presentModalViewController:modalNavigationController animated:YES];
 }
+
+- (IBAction) sort:(id)sender
+{
+  UINavigationController *modalNavigationController =
+    [[[UINavigationController alloc] initWithRootViewController:self.sortViewController] autorelease];
+  [self.navigationController presentModalViewController:modalNavigationController animated:YES];  
+}
+
 
 - (void)dealloc
 {
@@ -225,6 +250,7 @@
   [taskList release];
   [tasks release];
   [taskViewController release];
+  [sortViewController release];
   [super dealloc];
 }
 

@@ -43,11 +43,14 @@
   
   [save release];
   [cancel release];
+  
+  self.picker.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:0];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
   [super viewWillAppear:animated];
+  self.navigationItem.title = @"Due Date";
   noneSelected = NO;
 }
 
@@ -79,7 +82,19 @@
   // This line forces the nibfile to load the view
   self.view;
   // ... so that this line has an effect
-  self.picker.date = date ? date : [NSDate date];
+  if (!date)
+  {
+    // Output the current date to a string, then read it back in as UTC;
+    // this allows us to get the current date as 10/10/2010 00:00:00 UTC, 
+    // for example if it's 10/10/2010 in the current timezone but not in UTC.
+    NSDateFormatter *formatter = [[[NSDateFormatter alloc] init] retain];
+    [formatter setDateStyle:NSDateFormatterShortStyle];
+    [formatter setTimeStyle:NSDateFormatterNoStyle];
+    NSString *stringDate = [formatter stringFromDate:[NSDate date]];
+    [formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+    date = [formatter dateFromString:stringDate];
+  }
+  [self.picker setDate:date animated:NO];
 }
 
 - (void)onClickSelectNoneButton:(id)sender

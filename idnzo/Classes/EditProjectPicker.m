@@ -23,6 +23,7 @@
 @synthesize options, target, saveAction;
 @synthesize appendSelections;
 @synthesize textField;
+@synthesize title;
 
 - (id)init
 {
@@ -89,7 +90,8 @@
 - (void)viewWillAppear:(BOOL)animated
 { 
   [super viewWillAppear:animated];
-  
+
+  self.navigationItem.title = self.title;
   if (options)
   {
     for (NSInteger i = 0; i < self.options.count; i++)

@@ -17,6 +17,7 @@
   NSObject *target;
   SEL saveAction;
   BOOL appendSelections;
+  NSString *title;
 }
 
 - (NSString *)selected;
@@ -27,5 +28,6 @@
 @property (nonatomic) BOOL appendSelections;
 @property (nonatomic) SEL saveAction;
 @property (retain, nonatomic) NSString *placeholder;
+@property (retain, nonatomic) NSString *title;
 
 @end

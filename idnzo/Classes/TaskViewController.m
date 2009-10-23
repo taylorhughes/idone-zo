@@ -18,6 +18,8 @@ static UIImage *unchecked;
 @property (nonatomic, retain) NSManagedObjectContext *editingContext;
 @property (nonatomic, retain) Task *task;
 
+- (void) loadTask:(Task*)newTask editing:(BOOL)editing;
+
 - (void) onClickEdit:(id)sender;
 - (void) onClickCancel:(id)sender;
 - (void) onClickDone:(id)sender;
@@ -121,7 +123,20 @@ static UIImage *unchecked;
 
 - (void) loadTask:(Task*)newTask editing:(BOOL)editing
 {
+  [self loadTask:newTask editing:editing positionInList:-1 ofTotalCount:-1];
+}
+
+- (void) loadTask:(Task*)newTask editing:(BOOL)editing positionInList:(NSInteger)position ofTotalCount:(NSInteger)total
+{
   self.task = newTask;
+  if (position >= 0 && total > 0)
+  {
+    self.navigationItem.title = [NSString stringWithFormat:@"Task %d of %d", position + 1, total];
+  }
+  else
+  {
+    self.navigationItem.title = @"New Task";
+  }
   
   if (!editing)
   {
@@ -691,7 +706,8 @@ static UIImage *unchecked;
       ((EditProjectPicker*)controller).selected = self.task.project.name;
       ((EditProjectPicker*)controller).target = self;
       ((EditProjectPicker*)controller).saveAction = @selector(saveProject:);
-      ((EditProjectPicker*)controller).placeholder = @"New project";
+      ((EditProjectPicker*)controller).placeholder = @"New Project";
+      ((EditProjectPicker*)controller).title = @"Project";
       break;
       
     case 1:
@@ -703,6 +719,7 @@ static UIImage *unchecked;
       ((EditProjectPicker*)controller).target = self;
       ((EditProjectPicker*)controller).saveAction = @selector(saveContexts:);
       ((EditProjectPicker*)controller).placeholder = @"@context";
+      ((EditProjectPicker*)controller).title = @"Contexts";
       break;
       
     case 2:
