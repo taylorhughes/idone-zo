@@ -39,6 +39,8 @@
 - (void) hasBeenUpdated:(NSDate*)newUpdatedAt;
 - (void) hasBeenUpdated;
 
++ (NSDateFormatter *)dueDateFormatter;
+
 @end
 
 

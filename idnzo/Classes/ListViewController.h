@@ -5,10 +5,12 @@
 #import "TaskViewController.h"
 #import "MainViewController.h"
 #import "SortViewController.h"
+#import "FilterViewController.h"
 #import "TaskCell.h"
 #import "TaskCellView.h"
 
-@class TaskList, Task, TaskViewController, MainViewController, SortViewController, TaskCell, TaskCellView;
+@class TaskList, Task, TaskViewController, MainViewController, SortViewController, \
+       FilterViewController, TaskCell, TaskCellView;
 
 @interface ListViewController : UIViewController {
   IBOutlet UITableView *tableView;
@@ -16,6 +18,7 @@
   NSArray *tasks;
   TaskViewController *taskViewController;
   SortViewController *sortViewController;
+  FilterViewController *filterViewController;
   UIBarButtonItem *syncButton;
 }
 
@@ -27,5 +30,6 @@
 
 - (IBAction) archiveTasks:(id)sender;
 - (IBAction) sort:(id)sender;
+- (IBAction) filter:(id)sender;
 
 @end

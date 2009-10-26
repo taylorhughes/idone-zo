@@ -19,6 +19,8 @@
 
 @property (nonatomic, retain) NSString * name;
 
+- (NSInteger)compare:(Project*)other;
+
 @end
 
 

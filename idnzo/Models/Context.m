@@ -83,4 +83,10 @@
   return array;
 }
 
+
+- (NSInteger) compare:(Context*)other
+{
+  return [self.name compare:other.name];
+}
+
 @end

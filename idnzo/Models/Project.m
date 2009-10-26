@@ -78,4 +78,10 @@
   return match;
 }
 
+
+- (NSInteger)compare:(Project*)other
+{
+  return [self.name compare:other.name];
+}
+
 @end

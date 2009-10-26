@@ -44,6 +44,8 @@
   [super viewWillAppear:animated];
   
   self.textView.text = self.text;
+  
+  self.navigationItem.title = @"Description";
 }
 
 - (void)viewDidAppear:(BOOL)animated

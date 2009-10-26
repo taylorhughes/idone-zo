@@ -15,6 +15,8 @@
 
 @property (nonatomic, retain) NSString * name;
 
+- (NSInteger) compare:(Context*)other;
+
 + (Context*) findContextWithName:(NSString*)name inContext:(NSManagedObjectContext*)context;
 + (Context*) findOrCreateContextWithName:(NSString*)name inContext:(NSManagedObjectContext*)context;
 + (NSArray*) findOrCreateContextsWithNames:(NSArray*)names inContext:(NSManagedObjectContext*)context;

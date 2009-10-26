@@ -57,6 +57,8 @@
 		34961E4E107FFAFC0068B551 /* confirm-dialog.png in Resources */ = {isa = PBXBuildFile; fileRef = 34961E4B107FFAFC0068B551 /* confirm-dialog.png */; };
 		34961F0C1082AA0F0068B551 /* confirm-cancel-highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 34961F0B1082AA0F0068B551 /* confirm-cancel-highlighted.png */; };
 		34962145108685B50068B551 /* sort-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 34962144108685B50068B551 /* sort-button.png */; };
+		349BE2691095007500C80146 /* FilterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 349BE2681095007400C80146 /* FilterViewController.m */; };
+		349BE26A1095007500C80146 /* FilterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 349BE2681095007400C80146 /* FilterViewController.m */; };
 		349D81021091509100A61237 /* SortViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 349D81011091509100A61237 /* SortViewController.m */; };
 		349D81031091509100A61237 /* SortViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 349D81011091509100A61237 /* SortViewController.m */; };
 		34A282D8104DA3EB00F26A01 /* DonezoAPIClientTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 34770B340FAFE4C200AD8397 /* DonezoAPIClientTest.m */; };
@@ -155,6 +157,8 @@
 		34961E4B107FFAFC0068B551 /* confirm-dialog.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "confirm-dialog.png"; path = "Resources/confirm-dialog.png"; sourceTree = "<group>"; };
 		34961F0B1082AA0F0068B551 /* confirm-cancel-highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "confirm-cancel-highlighted.png"; path = "Resources/confirm-cancel-highlighted.png"; sourceTree = "<group>"; };
 		34962144108685B50068B551 /* sort-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "sort-button.png"; path = "Resources/sort-button.png"; sourceTree = "<group>"; };
+		349BE2671095007400C80146 /* FilterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilterViewController.h; sourceTree = "<group>"; };
+		349BE2681095007400C80146 /* FilterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilterViewController.m; sourceTree = "<group>"; };
 		349D81001091509100A61237 /* SortViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SortViewController.h; sourceTree = "<group>"; };
 		349D81011091509100A61237 /* SortViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SortViewController.m; sourceTree = "<group>"; };
 		34AF21EC102FC20B001FC4B7 /* MockDonezoAPIClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MockDonezoAPIClient.h; path = Test/MockDonezoAPIClient.h; sourceTree = "<group>"; };
@@ -243,6 +247,8 @@
 				34388F8B1076B18900FC1AB3 /* DatePickerViewController.m */,
 				349D81001091509100A61237 /* SortViewController.h */,
 				349D81011091509100A61237 /* SortViewController.m */,
+				349BE2671095007400C80146 /* FilterViewController.h */,
+				349BE2681095007400C80146 /* FilterViewController.m */,
 			);
 			name = Subviews;
 			path = Classes;
@@ -567,6 +573,7 @@
 				34388F8C1076B18900FC1AB3 /* DatePickerViewController.m in Sources */,
 				343B0532108D6668007F2425 /* DonezoSyncOperation.m in Sources */,
 				349D81021091509100A61237 /* SortViewController.m in Sources */,
+				349BE26A1095007500C80146 /* FilterViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -607,6 +614,7 @@
 				34C742F9107A98DA0045F527 /* GTMRegex.m in Sources */,
 				343B0533108D6668007F2425 /* DonezoSyncOperation.m in Sources */,
 				349D81031091509100A61237 /* SortViewController.m in Sources */,
+				349BE2691095007500C80146 /* FilterViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

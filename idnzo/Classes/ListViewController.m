@@ -6,6 +6,7 @@
 
 @property (retain, nonatomic) NSArray *tasks;
 @property (retain, nonatomic) SortViewController *sortViewController;
+@property (retain, nonatomic) FilterViewController *filterViewController;
 
 @end
 
@@ -16,6 +17,7 @@
 @synthesize tasks;
 @synthesize taskViewController;
 @synthesize sortViewController;
+@synthesize filterViewController;
 @synthesize syncButton;
 
 
@@ -70,6 +72,15 @@
     self.sortViewController = [[SortViewController alloc] initWithStyle:UITableViewStyleGrouped];
   }
   return sortViewController;
+}
+
+- (FilterViewController *)filterViewController
+{
+  if (filterViewController == nil)
+  {
+    self.filterViewController = [[FilterViewController alloc] initWithStyle:UITableViewStyleGrouped];
+  }
+  return filterViewController;
 }
 
 - (void) setTaskList:(TaskList *)list
@@ -239,8 +250,39 @@
 - (IBAction) sort:(id)sender
 {
   UINavigationController *modalNavigationController =
-    [[[UINavigationController alloc] initWithRootViewController:self.sortViewController] autorelease];
+  [[[UINavigationController alloc] initWithRootViewController:self.sortViewController] autorelease];
   [self.navigationController presentModalViewController:modalNavigationController animated:YES];  
+}
+
+- (IBAction) filter:(id)sender
+{
+  NSMutableSet *projects = [NSMutableSet setWithCapacity:[self.tasks count]];
+  NSMutableSet *contexts = [NSMutableSet setWithCapacity:[self.tasks count]];
+  NSMutableSet *dueDates = [NSMutableSet setWithCapacity:[self.tasks count]];
+  
+  for (Task* task in self.tasks)
+  {
+    if (task.project)
+    {
+      [projects addObject:task.project]; 
+    }
+    if ([task.contexts count] > 0)
+    {
+      [contexts addObjectsFromArray:[task.contexts allObjects]];
+    }
+    if (task.dueDate)
+    {
+      [dueDates addObject:task.dueDate];
+    }
+  }
+  
+  self.filterViewController.contexts = [[contexts allObjects] sortedArrayUsingSelector:@selector(compare:)];
+  self.filterViewController.projects = [[projects allObjects] sortedArrayUsingSelector:@selector(compare:)];
+  self.filterViewController.dueDates = [[dueDates allObjects] sortedArrayUsingSelector:@selector(compare:)];
+  
+  UINavigationController *modalNavigationController =
+    [[[UINavigationController alloc] initWithRootViewController:self.filterViewController] autorelease];
+  [self.navigationController presentModalViewController:modalNavigationController animated:YES];
 }
 
 
