@@ -3,7 +3,7 @@
 //  DNZO
 //
 //  Created by Taylor Hughes on 10/06/09.
-//  Copyright 2009 __MyCompanyName__. All rights reserved.
+//  Copyright 2009 Two-Stitch Software. All rights reserved.
 //
 
 @interface Task()

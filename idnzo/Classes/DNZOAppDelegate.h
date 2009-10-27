@@ -3,7 +3,7 @@
 //  DNZO
 //
 //  Created by Taylor Hughes on 4/26/09.
-//  Copyright __MyCompanyName__ 2009. All rights reserved.
+//  Copyright Two-Stitch Software 2009. All rights reserved.
 //
 
 #import "MainViewController.h"

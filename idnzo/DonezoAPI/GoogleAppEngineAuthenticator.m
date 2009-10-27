@@ -3,7 +3,7 @@
 //  DNZO
 //
 //  Created by Taylor Hughes on 7/22/09.
-//  Copyright 2009 __MyCompanyName__. All rights reserved.
+//  Copyright 2009 Two-Stitch Software. All rights reserved.
 //
 
 #include "GoogleAppEngineAuthenticator.h"
@@ -71,9 +71,9 @@
 {
   NSMutableDictionary *postBody = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                                    @"GOOGLE", @"accountType",
+                                   @"ah", @"service",
                                    self.username, @"Email",
                                    self.password, @"Passwd",
-                                   @"ah", @"service",
                                    nil];
   
   if (self.appDescription != nil)
@@ -160,16 +160,12 @@
   NSString *authURL = [[self.url absoluteString] stringByAppendingPathComponent:@"_ah/login"];
   authURL = [authURL stringByAppendingFormat:@"?%@", [authArgs toFormEncodedString]];
   
-  //NSLog(@"Here's the path: %@", authURL);
-  
-  //NSHTTPURLResponse *cookieResponse;
   NSError *cookieError;
   NSMutableURLRequest *cookieRequest = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:authURL]];
   
   [cookieRequest setHTTPMethod:@"GET"];
   [cookieRequest setValue:USER_AGENT_STRING forHTTPHeaderField:@"User-Agent"];
   
-  //NSData *cookieData = 
   [NSURLConnection sendSynchronousRequest:cookieRequest returningResponse:nil error:&cookieError];
   [cookieRequest release];
   
@@ -188,6 +184,7 @@
   int port = [[self.url port] intValue];
   switch(port)
   {
+    case 443:
     case 80:
     case 0:
       return YES;
@@ -200,7 +197,7 @@
   [url release];
   [username release];
   [password release];
-  
+  [continueToPath release];
   [appDescription release];
   
   [super dealloc];

@@ -3,7 +3,7 @@
 //  DNZO
 //
 //  Created by Taylor Hughes on 7/28/09.
-//  Copyright 2009 Nemean Networks. All rights reserved.
+//  Copyright 2009 Two-Stitch Software. All rights reserved.
 //
 
 @interface DonezoTaskList : NSObject {

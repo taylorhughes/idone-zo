@@ -3,7 +3,7 @@
 //  DNZO
 //
 //  Created by Taylor Hughes on 10/2/09.
-//  Copyright 2009 Nemean Networks. All rights reserved.
+//  Copyright 2009 Two-Stitch Software. All rights reserved.
 //
 
 #import "DatePickerViewController.h"
