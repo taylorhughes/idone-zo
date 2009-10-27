@@ -8,6 +8,7 @@
 
 #include "GoogleAppEngineAuthenticator.h"
 
+// Removes the compiler warning for the private API call 
 @interface NSURLRequest (Private)
 + setAllowsAnyHTTPSCertificate:(BOOL)yesOrNo forHost:(NSString*)host;
 @end
@@ -81,8 +82,6 @@
     [postBody setValue:self.appDescription forKey:@"source"];
   }
   
-  //NSLog(@"Here's the post body: %@", postBody);
-  
   NSURL *authURL = [NSURL URLWithString:AUTH_URL];
   NSMutableURLRequest *authRequest = [[NSMutableURLRequest alloc] initWithURL:authURL];
   [authRequest setValue:USER_AGENT_STRING forHTTPHeaderField:@"User-Agent"];
@@ -91,7 +90,10 @@
   [authRequest setHTTPBody:[[postBody toFormEncodedString] dataUsingEncoding:NSUTF8StringEncoding]];
 
 #if TARGET_IPHONE_SIMULATOR
-  // There is apparently no other way to do this.
+  NSLog(@"Accepting all HTTPS certificates for this session.");
+  // This is a private API call. In some environments, NSURLRequest may 
+  // not have access to the proper set of acceptable HTTPS certificates,
+  // and NSURLRequests will fail erroneously (eg. in unit tests).
   [NSURLRequest setAllowsAnyHTTPSCertificate:YES forHost:[authURL host]];
 #endif
   
@@ -148,7 +150,6 @@
   
   if (authToken != nil)
   {
-    //NSLog(@"Appending auth token %@ ...", authToken);
     [authArgs setValue:authToken forKey:@"auth"];
   }
   else
