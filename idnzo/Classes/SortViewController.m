@@ -16,6 +16,8 @@
 
 @implementation SortViewController
 
+@synthesize descending;
+
 - (void)viewDidLoad
 {
   [super viewDidLoad];
@@ -42,29 +44,21 @@
   return selectedIndex == 0;
 }
 
-- (NSSortDescriptor*) sorter
+- (NSString*) sortKey
 {
   // return the proper sorter given the current selection
-  NSString *key = nil;
   switch (selectedIndex)
   {
     case 1:
-      key = @"body";
-      break;
+      return @"body";
     case 2:
-      key = @"project.name";
-      break;
+      return @"project.name";
     case 3:
-      key = @"dueDate";
-      break;
-      
-    default:
-    case 0:
-      key = @"sortDate";
-      break;
+      return @"dueDate";
+    case 4:
+      return @"complete";
   }
-  
-  return [[[NSSortDescriptor alloc] initWithKey:key ascending:!descending] autorelease];
+  return @"sortDate";
 }
 
 
@@ -77,7 +71,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-  return 4;
+  return 5;
 }
 
 - (NSString*) sortedTitle
@@ -87,7 +81,7 @@
   {
     return str;
   }
-  return [str stringByAppendingString:@", Descending"];
+  return [str stringByAppendingString:@" (descending)"];
 }
 
 - (NSString*) titleForIndex:(NSUInteger)index
@@ -95,11 +89,13 @@
   switch (index)
   {
     case 1:
-      return @"Task Body";
+      return @"Task";
     case 2:
       return @"Project";
     case 3:
       return @"Due Date";
+    case 4:
+      return @"Completed";
   }
   return @"Default";
 }

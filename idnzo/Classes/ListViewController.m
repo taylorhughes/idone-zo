@@ -107,8 +107,25 @@
     DNZOAppDelegate *appDelegate = (DNZOAppDelegate *)[[UIApplication sharedApplication] delegate];
     
     NSFetchRequest *fetchRequest = [self.taskList tasksForListRequest];
-    NSSortDescriptor *sort = self.sortViewController.sorter;
-    NSSortDescriptor *secondarySort = [[NSSortDescriptor alloc] initWithKey:@"body" ascending:YES];
+    // Case-insensitive body sort
+    NSString *sortKey = self.sortViewController.sortKey;
+    NSSortDescriptor *sort = nil;
+    if (sortKey && ([sortKey isEqual:@"body"] || [sortKey isEqual:@"project.name"]))
+    {
+      sort = [[[NSSortDescriptor alloc] initWithKey:sortKey
+                                          ascending:!self.sortViewController.descending
+                                           selector:@selector(localizedCaseInsensitiveCompare:)] autorelease];
+    }
+    else
+    {
+      sort = [[[NSSortDescriptor alloc] initWithKey:sortKey
+                                          ascending:!self.sortViewController.descending] autorelease];      
+    }
+
+    NSSortDescriptor *secondarySort = [[NSSortDescriptor alloc] initWithKey:@"body" 
+                                                                  ascending:YES 
+                                                                   selector:@selector(localizedCaseInsensitiveCompare:)];
+    
     fetchRequest.sortDescriptors = [NSArray arrayWithObjects:sort, secondarySort, nil];
     [secondarySort release];
     
@@ -128,7 +145,7 @@
 }
 
 - (NSArray *)filteredTasks
-{
+{  
   if (!filteredTasks)
   {
     NSObject *filter = self.filterViewController.selectedObject;

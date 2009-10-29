@@ -11,7 +11,8 @@
   NSInteger selectedIndex;
 }
 
-@property (nonatomic, readonly) NSSortDescriptor *sorter;
+@property (nonatomic, readonly) NSString *sortKey;
+@property (nonatomic, readonly) BOOL descending;
 
 - (BOOL)isDefaultSort;
 - (NSString*)sortedTitle;
