@@ -10,7 +10,6 @@
 
 @interface FilterViewController ()
 
-@property (nonatomic, retain) NSIndexPath *selectedPath;
 @property (nonatomic, retain) NSArray *sections;
 
 @end
@@ -22,7 +21,7 @@
 @synthesize dueDates;
 @synthesize sections;
 
-@synthesize selectedPath;
+@synthesize selectedObject;
 
 - (id) initWithStyle:(UITableViewStyle)style
 {
@@ -96,11 +95,6 @@
   dueDates = [newDueDates retain];
 }
 
-- (NSManagedObject*)selectedObject
-{
-  return [[self.sections objectAtIndex:[self.selectedPath section]] objectAtIndex:[self.selectedPath row]];
-}
-
 
 #pragma mark Table view methods
 
@@ -145,22 +139,23 @@
   }
   
   NSArray *section = [self.sections objectAtIndex:[indexPath section]];
+  NSObject *object = [section objectAtIndex:[indexPath row]];
   if (section == self.projects)
   {
-    cell.textLabel.text = ((Project*)[section objectAtIndex:[indexPath row]]).name;
+    cell.textLabel.text = ((Project*)object).name;
   }
   else if (section == self.contexts)
   {
-    cell.textLabel.text = [@"@" stringByAppendingString:((Context*)[section objectAtIndex:[indexPath row]]).name];
+    cell.textLabel.text = [@"@" stringByAppendingString:((Context*)object).name];
   }
   else if (section == self.dueDates)
   {
-    cell.textLabel.text = [[Task dueDateFormatter] stringFromDate:(NSDate*)[section objectAtIndex:[indexPath row]]];
+    cell.textLabel.text = [[Task dueDateFormatter] stringFromDate:(NSDate*)object];
   }
   
   cell.textLabel.textColor = [UIColor blackColor];
   cell.accessoryType = UITableViewCellAccessoryNone;
-  if ([indexPath isEqual:selectedPath])
+  if ([object isEqual:self.selectedObject])
   {
     cell.textLabel.textColor = [UIColor colorWithRed:(50.0/255.0) green:(79.0/255.0) blue:(133.0/255.0) alpha:1.0];
     cell.accessoryType = UITableViewCellAccessoryCheckmark;
@@ -171,13 +166,16 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-  if ([indexPath isEqual:selectedPath])
+  NSArray *section = [self.sections objectAtIndex:[indexPath section]];
+  NSObject *object = [section objectAtIndex:[indexPath row]];
+  
+  if ([object isEqual:self.selectedObject])
   {
-    self.selectedPath = nil;
+    self.selectedObject = nil;
   }
   else
   {
-    self.selectedPath = indexPath;
+    self.selectedObject = object;
   }
   
   [self.tableView reloadData];
@@ -198,7 +196,7 @@
   [projects release];
   [dueDates release];
   [sections release];
-  [selectedPath release];
+  [selectedObject release];
   [super dealloc];
 }
 

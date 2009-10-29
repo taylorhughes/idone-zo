@@ -16,6 +16,7 @@
   IBOutlet UITableView *tableView;
   TaskList *taskList;
   NSArray *tasks;
+  NSArray *filteredTasks;
   TaskViewController *taskViewController;
   SortViewController *sortViewController;
   FilterViewController *filterViewController;
@@ -25,6 +26,7 @@
 @property (nonatomic, retain) UITableView *tableView;
 @property (retain, nonatomic) TaskList *taskList;
 @property (retain, readonly, nonatomic) NSArray *tasks;
+@property (retain, readonly, nonatomic) NSArray *filteredTasks;
 @property (retain, nonatomic) TaskViewController *taskViewController;
 @property (retain, nonatomic) IBOutlet UIBarButtonItem *syncButton;
 

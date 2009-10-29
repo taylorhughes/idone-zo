@@ -2,9 +2,12 @@
 #import "ListViewController.h"
 
 @interface ListViewController ()
+
 - (void) notifySync;
+- (void) resetTasks;
 
 @property (retain, nonatomic) NSArray *tasks;
+@property (retain, nonatomic) NSArray *filteredTasks;
 @property (retain, nonatomic) SortViewController *sortViewController;
 @property (retain, nonatomic) FilterViewController *filterViewController;
 
@@ -15,6 +18,7 @@
 @synthesize tableView;
 @synthesize taskList;
 @synthesize tasks;
+@synthesize filteredTasks;
 @synthesize taskViewController;
 @synthesize sortViewController;
 @synthesize filterViewController;
@@ -38,7 +42,7 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-  self.tasks = nil;
+  [self resetTasks];
   [tableView reloadData];
 }
 
@@ -46,12 +50,10 @@
 
 
 
-
-
 - (void) donezoDataUpdated:(NSNotification*)notification
 {
-  // NSLog(@"ListViewController: Handled updated data.");
-  self.tasks = nil;
+  // Is this necessary?
+  [self resetTasks];
   [self.tableView reloadData];
 }
 
@@ -85,16 +87,17 @@
 
 - (void) setTaskList:(TaskList *)list
 {
-  if (taskList)
-  {
-    [taskList release];
-  }
-  if (tasks)
-  {
-    self.tasks = nil;
-  }
+  [taskList release];
   taskList = [list retain];
-  self.title = [taskList name];
+  self.title = taskList.name;
+  
+  [self resetTasks];
+}
+
+- (void) resetTasks
+{
+  self.tasks = nil;
+  self.filteredTasks = nil;
 }
 
 - (NSArray *)tasks
@@ -118,12 +121,51 @@
     }
     else
     {
-      NSLog(@"Fetched %d tasks for list '%@'.", [tasks count], self.taskList.name);
+      NSLog(@"Fetched %d tasks for list '%@'.", [self.tasks count], self.taskList.name);
     }
   }
   return tasks;
 }
 
+- (NSArray *)filteredTasks
+{
+  if (!filteredTasks)
+  {
+    NSObject *filter = self.filterViewController.selectedObject;
+    
+    if (!filter)
+    {
+      self.filteredTasks = self.tasks;
+    }
+    else
+    {
+      NSMutableArray *filtered = [NSMutableArray arrayWithCapacity:[self.tasks count]];
+      for (Task* task in self.tasks)
+      {
+        BOOL included = NO;
+        if ([filter isKindOfClass:[NSDate class]])
+        {
+          included = [task.dueDate isEqual:filter];
+        }
+        else if ([filter isKindOfClass:[Project class]])
+        {
+          included = [task.project isEqual:filter];
+        }
+        else if ([filter isKindOfClass:[Context class]])
+        {
+          included = [task.contexts containsObject:filter];
+        }
+        
+        if (included)
+        {
+          [filtered addObject:task];
+        }
+      }
+      self.filteredTasks = filtered;
+    }
+  }
+  return filteredTasks;
+}
 
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
@@ -144,8 +186,7 @@
 // One row per book, the number of books is the number of rows.
 - (NSInteger)tableView:(UITableView *)tv numberOfRowsInSection:(NSInteger)section
 {
-  NSInteger count = [self.tasks count];
-  return count;
+  return [self.filteredTasks count];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -163,7 +204,7 @@
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
   }
   
-  Task *task = [self.tasks objectAtIndex:indexPath.row];
+  Task *task = [self.filteredTasks objectAtIndex:indexPath.row];
   cell.task = task;
   return cell;
 }
@@ -171,7 +212,7 @@
 - (NSIndexPath *)tableView:(UITableView *)tv willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 { 
   TaskCell *cell = (TaskCell*)[self.tableView cellForRowAtIndexPath:indexPath];
-  Task *clickedTask = [self.tasks objectAtIndex:indexPath.row];
+  Task *clickedTask = [self.filteredTasks objectAtIndex:indexPath.row];
   
   if (cell.taskCellView.wasCompleted)
   {
@@ -192,7 +233,7 @@
   else
   {
     TaskViewController *controller = self.taskViewController;
-    [controller loadTask:clickedTask editing:NO positionInList:[indexPath row] ofTotalCount:[self.tasks count]];
+    [controller loadTask:clickedTask editing:NO positionInList:[indexPath row] ofTotalCount:[self.filteredTasks count]];
     
     [self.navigationController pushViewController:controller animated:YES];    
   }
@@ -202,10 +243,10 @@
 
 - (IBAction)archiveTasks:(id)sender
 {
-  NSMutableArray *archivedPaths = [NSMutableArray arrayWithCapacity:[self.tasks count]];
-  for (NSInteger i = 0; i < [self.tasks count]; i++)
+  NSMutableArray *archivedPaths = [NSMutableArray arrayWithCapacity:[self.filteredTasks count]];
+  for (NSInteger i = 0; i < [self.filteredTasks count]; i++)
   {
-    Task* task = [self.tasks objectAtIndex:i];
+    Task* task = [self.filteredTasks objectAtIndex:i];
     if (task.isComplete)
     {
       task.isArchived = YES;
@@ -221,7 +262,7 @@
     {
       NSLog(@"Error saving archived tasks: %@ %@", [error description], [error userInfo]);
     }
-    self.tasks = nil;
+    [self resetTasks];
     
     [self.tableView deleteRowsAtIndexPaths:archivedPaths withRowAnimation:UITableViewRowAnimationFade];
     [self notifySync];
@@ -256,6 +297,7 @@
 
 - (IBAction) filter:(id)sender
 {
+  // These should maybe be cached or some such somehow. Only load them when self.tasks changes -- or something.
   NSMutableSet *projects = [NSMutableSet setWithCapacity:[self.tasks count]];
   NSMutableSet *contexts = [NSMutableSet setWithCapacity:[self.tasks count]];
   NSMutableSet *dueDates = [NSMutableSet setWithCapacity:[self.tasks count]];
@@ -291,6 +333,7 @@
   [tableView release];
   [taskList release];
   [tasks release];
+  [filteredTasks release];
   [taskViewController release];
   [sortViewController release];
   [super dealloc];

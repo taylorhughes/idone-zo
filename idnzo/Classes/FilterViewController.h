@@ -16,13 +16,13 @@
   NSArray *dueDates;
   NSArray *sections;
   
-  NSIndexPath *selectedPath;
+  NSObject *selectedObject;
 }
 
 @property (nonatomic, retain) NSArray *contexts;
 @property (nonatomic, retain) NSArray *projects;
 @property (nonatomic, retain) NSArray *dueDates;
 
-@property (nonatomic, readonly) NSManagedObject *selectedObject;
+@property (nonatomic, retain) NSObject *selectedObject;
 
 @end
