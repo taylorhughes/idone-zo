@@ -187,10 +187,45 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
+  NSMutableArray *strings = [NSMutableArray arrayWithCapacity:2];
+  
   if (![self.sortViewController isDefaultSort])
   {
-    return [NSString stringWithFormat:@"Sorted by %@", [self.sortViewController sortedTitle]];
+    NSString *sortString = [NSString stringWithFormat:@"%@ %@", 
+                            (self.sortViewController.descending ? @"\u25BC" : @"\u25B2"),
+                            [self.sortViewController sortedTitle]];
+    [strings addObject:sortString];
   }
+  
+  NSObject *filter = self.filterViewController.selectedObject;
+  if (filter != nil)
+  {
+    NSString *filterString = @"";
+    if ([filter isKindOfClass:[NSDate class]])
+    {
+      filterString = [[Task dueDateFormatter] stringFromDate:(NSDate*)filter];
+    }
+    else if ([filter isKindOfClass:[Project class]])
+    {
+      filterString = ((Project*)filter).name;
+    }
+    else if ([filter isKindOfClass:[Context class]])
+    {
+      filterString = [@"@" stringByAppendingString:((Context*)filter).name];
+    }
+    [strings addObject:filterString];    
+  }
+  
+  if ([strings count] > 0)
+  {
+    //                                          \u25EE vertical ellipsis
+    //                                          \u2219 bullet
+    //                                          \u2236 "ratio" (:)
+    //                                          \u205D tricolon
+    //                                          \u2223 tall thin bar
+    return [strings componentsJoinedByString:@" \u2219 "];
+  }
+  
   return nil;
 }
 

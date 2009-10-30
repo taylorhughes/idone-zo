@@ -76,12 +76,7 @@
 
 - (NSString*) sortedTitle
 {
-  NSString *str = [self titleForIndex:selectedIndex];
-  if (!descending)
-  {
-    return str;
-  }
-  return [str stringByAppendingString:@" (descending)"];
+  return [self titleForIndex:selectedIndex];
 }
 
 - (NSString*) titleForIndex:(NSUInteger)index
