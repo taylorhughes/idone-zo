@@ -696,17 +696,44 @@ static UIImage *unchecked;
   if ([self hasProject] && row == 0)
   {
     cell.textLabel.text = @"project";
-    cell.detailTextLabel.text = self.task.project.name;    
+    if (self.task.project != nil)
+    {
+      cell.detailTextLabel.text = self.task.project.name;
+      cell.detailTextLabel.textColor = [UIColor blackColor];
+    }
+    else
+    {
+      cell.detailTextLabel.text = @"Done-zo";
+      cell.detailTextLabel.textColor = [UIColor lightGrayColor];  
+    }
   }
   if ([self hasContexts] && row == [self hasProject])
   {
     cell.textLabel.text = @"contexts";
-    cell.detailTextLabel.text = self.task.contextsString;      
+    if ([self.task.contexts count] > 0)
+    {
+      cell.detailTextLabel.text = self.task.contextsString;      
+      cell.detailTextLabel.textColor = [UIColor blackColor];
+    }
+    else
+    {
+      cell.detailTextLabel.text = @"@home @work";
+      cell.detailTextLabel.textColor = [UIColor lightGrayColor];  
+    }
   }
   if ([self hasDueDate] && row == [self hasProject] + [self hasContexts])
   {
     cell.textLabel.text = @"due date";
-    cell.detailTextLabel.text = self.task.dueString;
+    if (self.task.dueDate != nil)
+    {
+      cell.detailTextLabel.text = self.task.dueString;
+      cell.detailTextLabel.textColor = [UIColor blackColor];
+    }
+    else
+    {
+      cell.detailTextLabel.text = [[Task dueDateFormatter] stringFromDate:[NSDate date]];
+      cell.detailTextLabel.textColor = [UIColor lightGrayColor];
+    }
   }
   
   return cell;
