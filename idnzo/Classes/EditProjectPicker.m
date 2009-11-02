@@ -210,16 +210,18 @@
       if (cell == nil)
       {
         cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:@"NormalCell"] autorelease];
-        cell.textLabel.font = [UIFont systemFontOfSize:FONT_SIZE];
+        cell.textLabel.font = [UIFont boldSystemFontOfSize:FONT_SIZE];
       }
       
       cell.textLabel.text = [self.options objectAtIndex:[indexPath row]];
       if ([self selectedContains:cell.textLabel.text])
       {
+        cell.textLabel.textColor = DONEZO_SELECTED_TEXT_COLOR;
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
       }
       else
       {
+        cell.textLabel.textColor = [UIColor blackColor];
         cell.accessoryType = UITableViewCellAccessoryNone;
       }
       break;

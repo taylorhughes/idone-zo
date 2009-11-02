@@ -15,7 +15,8 @@
 
 @implementation TextFieldController
 
-@synthesize text, textView, target, saveAction;
+@synthesize text, textView, target;
+@synthesize saveAction, cancelAction;
 
 - (id)init
 {
@@ -45,7 +46,7 @@
   
   self.textView.text = self.text;
   
-  self.navigationItem.title = @"Description";
+  self.navigationItem.title = self.title;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -65,13 +66,14 @@
   {
     [target performSelector:saveAction withObject:self];
   }
-  
-  [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)cancel:(id)sender
 {
-  [self.navigationController popViewControllerAnimated:YES];
+  if (target && cancelAction)
+  {
+    [target performSelector:cancelAction withObject:self];
+  }
 }
 
 - (void)dealloc

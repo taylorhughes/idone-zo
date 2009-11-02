@@ -112,7 +112,7 @@
   cell.detailTextLabel.text = nil;
   if (selectedIndex == [indexPath row])
   {
-    cell.textLabel.textColor = [UIColor colorWithRed:(50.0/255.0) green:(79.0/255.0) blue:(133.0/255.0) alpha:1.0];
+    cell.textLabel.textColor = DONEZO_SELECTED_TEXT_COLOR;
     if (selectedIndex == 0)
     {
       cell.accessoryType = UITableViewCellAccessoryCheckmark;

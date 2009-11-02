@@ -11,11 +11,14 @@
   UITextView *textView;
   NSObject *target;
   SEL saveAction;
+  SEL cancelAction;
 }
 
 @property (nonatomic, copy) NSString *text;
 @property (nonatomic, retain) IBOutlet UITextView *textView;
 @property (nonatomic, retain) NSObject *target;
+
 @property (nonatomic) SEL saveAction;
+@property (nonatomic) SEL cancelAction;
 
 @end

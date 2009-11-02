@@ -33,6 +33,7 @@
   IBOutlet UIButton *topButton;
   
   BOOL isNewTask;
+  BOOL isFirstAppearance;
 }
 
 - (void) loadTask:(Task*)newTask editing:(BOOL)editing positionInList:(NSInteger)position ofTotalCount:(NSInteger)total;

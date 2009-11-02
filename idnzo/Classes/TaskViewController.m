@@ -19,14 +19,16 @@ static UIImage *unchecked;
 @property (nonatomic, retain) Task *task;
 
 - (void) loadTask:(Task*)newTask editing:(BOOL)editing;
+- (BOOL) isNewTask;
 
 - (void) onClickEdit:(id)sender;
-- (void) onClickCancel:(id)sender;
 - (void) onClickDone:(id)sender;
 
 - (void) createEditingContext;
 - (void) edit:(BOOL)animated;
 - (void) cancel:(BOOL)animated;
+
+- (void) editDescription:(BOOL)animated;
 
 - (void) save;
 - (void) save:(BOOL)doRefresh;
@@ -66,6 +68,7 @@ static UIImage *unchecked;
   {
     isNewTask = NO;
     isEditing = NO;
+    isFirstAppearance = YES;
   }
   return self;
 }
@@ -76,7 +79,7 @@ static UIImage *unchecked;
   
   NSAssert(self.tableView.tableHeaderView == nil, @"Table header view should always be nil when this fires.");
   
-  [topButton addTarget:self action:@selector(editNameClicked:) forControlEvents:UIControlEventTouchUpInside];
+  [topButton addTarget:self action:@selector(onClickEditDescription:) forControlEvents:UIControlEventTouchUpInside];
   [topButton.titleLabel setLineBreakMode:UILineBreakModeWordWrap];
   [topCheckmark addTarget:self action:@selector(checkmarkClicked:) forControlEvents:UIControlEventTouchUpInside];
   
@@ -105,6 +108,13 @@ static UIImage *unchecked;
   [super viewWillAppear:animated];
   // This is important because by now self.view has the proper bounds
   [self refresh];
+  
+  if ([self isNewTask] && isFirstAppearance)
+  {
+    [self editDescription:NO];
+  }
+  
+  isFirstAppearance = NO;
 }
 
 - (BOOL) isNewTask
@@ -115,10 +125,14 @@ static UIImage *unchecked;
 - (void) loadEditingWithNewTaskForList:(TaskList*)list
 {
   isNewTask = YES;
+  
   // This initial refresh is necessary or inserting rows for edit will not work
   [self refresh];
+  
   [self loadTask:nil editing:YES];
   self.task.taskList = (TaskList*)[self.editingContext objectWithID:[list objectID]];
+  
+  isFirstAppearance = YES;
 }
 
 - (void) loadTask:(Task*)newTask editing:(BOOL)editing
@@ -179,14 +193,6 @@ static UIImage *unchecked;
   [self.navigationItem setRightBarButtonItem:done animated:animated];
   [done release];
   
-  if ([self isNewTask])
-  {
-    UIBarButtonItem *cancel = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
-                                                                            target:self
-                                                                            action:@selector(onClickCancel:)];
-    [self.navigationItem setLeftBarButtonItem:cancel animated:animated];
-    [cancel release];
-  }
   [self.navigationItem setHidesBackButton:YES animated:animated];  
   
   // insert rows that were not shown previously
@@ -212,7 +218,7 @@ static UIImage *unchecked;
   
   bodyView.alpha = 0.0;
   bodyEditView.alpha = 1.0;
-  if (!isNewTask)
+  if (![self isNewTask])
   {
     bottomView.alpha = 1.0;
   }
@@ -351,23 +357,55 @@ static UIImage *unchecked;
   [self.tableView reloadData];
 }
 
-- (void)editNameClicked:(id)sender
+- (void)onClickEditDescription:(id)sender
+{
+  [self editDescription:YES];
+}
+
+- (void)editDescription:(BOOL)animated
 {
   TextFieldController *controller = [[TextFieldController alloc] init];
   controller.textView.font = [UIFont systemFontOfSize:17.0f];
   controller.text = self.task.body;
   controller.target = self; 
-  controller.saveAction = @selector(editNameSaved:);
-  [self.navigationController pushViewController:controller animated:YES];
+  controller.saveAction = @selector(saveDescription:);
+  controller.cancelAction = @selector(cancelDescription:);
+  
+  if ([self isNewTask])
+  {
+    controller.title = @"New Task";
+  }
+  else
+  {
+    controller.title = @"Task";
+  }
+
+  
+  [self.navigationController pushViewController:controller animated:animated];
   [controller release];
 }
 
-- (void)editNameSaved:(id)sender
+- (void)saveDescription:(id)sender
 {
   self.task.body = [(TextFieldController*)sender text];
-  if (![self isNewTask])
+  [self save];
+  
+  // pops the textviewcontroller
+  [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)cancelDescription:(id)sender
+{
+  // If this is a new task and we haven't saved the body, cancel and dismiss the modal controller
+  if ([self isNewTask] && self.task.body == nil)
   {
-    [self save];
+    self.editingContext = nil;
+    [self.navigationController.parentViewController dismissModalViewControllerAnimated:YES];
+  }
+  else
+  {
+    // pops the textviewcontroller
+    [self.navigationController popViewControllerAnimated:YES];  
   }
 }
 
@@ -376,10 +414,7 @@ static UIImage *unchecked;
   NSString *newProject = [(EditProjectPicker*)sender selected];
   
   self.task.project = [Project findOrCreateProjectWithName:newProject inContext:[self.task managedObjectContext]];
-  if (![self isNewTask])
-  {
-    [self save];
-  }
+  [self save];
 }
 - (void) saveContexts:(id)sender
 {
@@ -399,18 +434,12 @@ static UIImage *unchecked;
   }
   
   self.task.contexts = [NSSet setWithArray:[Context findOrCreateContextsWithNames:contextsArray inContext:[self.task managedObjectContext]]];
-  if (![self isNewTask])
-  {
-    [self save];
-  }
+  [self save];
 }
 - (void)saveDate:(id)sender
 {
   self.task.dueDate = [(DatePickerViewController*)sender selectedDate];
-  if (![self isNewTask])
-  {
-    [self save];
-  }
+  [self save];
 }
 
 - (void)checkmarkClicked:(id)sender
@@ -608,7 +637,6 @@ static UIImage *unchecked;
   }
   else
   {
-    [self save];
     [self.navigationController.parentViewController dismissModalViewControllerAnimated:YES];
     
     // Reload task with new updated task
@@ -616,13 +644,6 @@ static UIImage *unchecked;
     self.task = (Task*)[appDelegate.managedObjectContext objectWithID:[self.task objectID]];
   }
   self.editingContext = nil;
-}
-
-- (void) onClickCancel:(id)sender
-{
-  // Only possible with new tasks; can't cancel editing existing tasks
-  self.editingContext = nil;
-  [self.navigationController.parentViewController dismissModalViewControllerAnimated:YES];
 }
 
 

@@ -17,6 +17,8 @@
 extern NSString* const DonezoShouldSyncNotification;
 extern NSString* const DonezoDataUpdatedNotification;
 
+extern UIColor*  const DonezoSelectedTextColor;
+
 @interface DNZOAppDelegate : NSObject <UIApplicationDelegate> {
   UIWindow *window;
   
