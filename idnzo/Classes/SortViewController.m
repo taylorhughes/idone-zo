@@ -119,11 +119,11 @@
     }
     else if (descending)
     {
-      cell.detailTextLabel.text = @"Descending";
+      cell.detailTextLabel.text = @"Descending \u25BC";
     }
     else
     {
-      cell.detailTextLabel.text = @"Ascending";
+      cell.detailTextLabel.text = @"Ascending \u25B2";
     }
   }
   
@@ -152,6 +152,11 @@
   [self.navigationController.parentViewController dismissModalViewControllerAnimated:YES];
 }
 
+- (void)reset
+{
+  selectedIndex = 0;
+  [self.tableView reloadData];
+}
 
 - (void)dealloc
 {

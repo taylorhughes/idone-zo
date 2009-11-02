@@ -187,7 +187,15 @@
   [self.navigationController.parentViewController dismissModalViewControllerAnimated:YES];
 }
 
-
+- (void)reset
+{
+  self.sections = nil;
+  self.contexts = nil;
+  self.projects = nil;
+  self.dueDates = nil;
+  self.selectedObject = nil;
+  [self.tableView reloadData];
+}
 
 
 - (void)dealloc

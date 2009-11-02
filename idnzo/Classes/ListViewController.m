@@ -91,6 +91,11 @@
   taskList = [list retain];
   self.title = taskList.name;
   
+  [self.filterViewController reset];
+  [self.sortViewController reset];
+  // Scroll to top
+  [self.tableView scrollRectToVisible:CGRectMake(0,0,1,1) animated:NO];
+  
   [self resetTasks];
 }
 

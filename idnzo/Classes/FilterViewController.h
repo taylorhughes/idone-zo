@@ -25,4 +25,6 @@
 
 @property (nonatomic, retain) NSObject *selectedObject;
 
+- (void) reset;
+
 @end

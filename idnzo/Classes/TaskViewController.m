@@ -588,6 +588,8 @@ static UIImage *unchecked;
 {
   NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
   
+  [dnc postNotificationName:DonezoDataUpdatedNotification object:self];
+  
   NSDictionary *info = [NSDictionary dictionaryWithObject:self.task.taskList forKey:@"list"];
   [dnc postNotificationName:DonezoShouldSyncNotification object:self userInfo:info];
 }

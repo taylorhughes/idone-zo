@@ -16,5 +16,6 @@
 
 - (BOOL)isDefaultSort;
 - (NSString*)sortedTitle;
+- (void) reset;
 
 @end
