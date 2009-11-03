@@ -681,59 +681,68 @@ static UIImage *unchecked;
 
 - (UITableViewCell *)tableView:(UITableView *)tv cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	UITableViewCell *cell;
-
-  cell = [self.tableView dequeueReusableCellWithIdentifier:@"DetailCell"];
-  if (cell == nil)
-  {
-    cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"DetailCell"] autorelease];
-  }
-  
-  cell.accessoryType = self.isEditing ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
-  
   NSUInteger row = [indexPath row];
   
+  NSString *textLabel = nil;
+  NSString *detailLabel = nil;
+
   if ([self hasProject] && row == 0)
   {
-    cell.textLabel.text = @"project";
     if (self.task.project != nil)
     {
-      cell.detailTextLabel.text = self.task.project.name;
-      cell.detailTextLabel.textColor = [UIColor blackColor];
+      textLabel = @"project";
+      detailLabel = self.task.project.name;
     }
     else
     {
-      cell.detailTextLabel.text = @"Done-zo";
-      cell.detailTextLabel.textColor = [UIColor lightGrayColor];  
+      textLabel = @"add project";
     }
   }
   if ([self hasContexts] && row == [self hasProject])
   {
-    cell.textLabel.text = @"contexts";
     if ([self.task.contexts count] > 0)
     {
-      cell.detailTextLabel.text = self.task.contextsString;      
-      cell.detailTextLabel.textColor = [UIColor blackColor];
+      textLabel = @"contexts";
+      detailLabel = self.task.contextsString;
     }
     else
     {
-      cell.detailTextLabel.text = @"@home @work";
-      cell.detailTextLabel.textColor = [UIColor lightGrayColor];  
+      textLabel = @"add contexts";
     }
   }
   if ([self hasDueDate] && row == [self hasProject] + [self hasContexts])
   {
-    cell.textLabel.text = @"due date";
     if (self.task.dueDate != nil)
     {
-      cell.detailTextLabel.text = self.task.dueString;
-      cell.detailTextLabel.textColor = [UIColor blackColor];
+      textLabel = @"due date";
+      detailLabel = self.task.dueString;
     }
     else
     {
-      cell.detailTextLabel.text = [[Task dueDateFormatter] stringFromDate:[NSDate date]];
-      cell.detailTextLabel.textColor = [UIColor lightGrayColor];
+      textLabel = @"add due date";
     }
+  }
+  
+  NSString *identifier = detailLabel == nil ? @"DetailCellLeft" : @"DetailCellRight";
+  
+  AdjustableTextLabelWidthCell *cell = (AdjustableTextLabelWidthCell*)[self.tableView dequeueReusableCellWithIdentifier:identifier];
+  if (cell == nil)
+  {
+    cell = [[[AdjustableTextLabelWidthCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:identifier] autorelease];
+  } 
+  cell.accessoryType = self.isEditing ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
+  
+  if (detailLabel)
+  {
+    cell.textLabel.text = textLabel;
+    cell.detailTextLabel.text = detailLabel;
+  }
+  else
+  {
+    cell.autoresizesSubviews = YES;
+    cell.textLabel.textAlignment = UITextAlignmentLeft;
+    cell.textLabelWidth = 150.0;
+    cell.textLabel.text = textLabel;
   }
   
   return cell;

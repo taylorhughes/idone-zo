@@ -93,6 +93,7 @@ NSDateFormatter *dueDateFormatter;
   {
     [contextNames addObject:context.name];
   }
+  [contextNames sortUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
   return contextNames;
 }
 

@@ -12,6 +12,7 @@
 #import "EditProjectPicker.h"
 #import "DatePickerViewController.h"
 #import "TextFieldController.h"
+#import "AdjustableTextLabelWidthCell.h"
 
 @class Task;
 

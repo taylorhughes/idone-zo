@@ -29,6 +29,8 @@
 		341E1F020FB14F2900D5B454 /* TaskView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 341E1EFE0FB14F2900D5B454 /* TaskView.xib */; };
 		34205CB10FB2641800A9F048 /* TextFieldController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34205CB00FB2641800A9F048 /* TextFieldController.m */; };
 		34205CB20FB2641800A9F048 /* TextFieldController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34205CB00FB2641800A9F048 /* TextFieldController.m */; };
+		34307872109FF37D00A66D5A /* AdjustableTextLabelWidthCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 34307871109FF37D00A66D5A /* AdjustableTextLabelWidthCell.m */; };
+		34307873109FF37D00A66D5A /* AdjustableTextLabelWidthCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 34307871109FF37D00A66D5A /* AdjustableTextLabelWidthCell.m */; };
 		34388F8C1076B18900FC1AB3 /* DatePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34388F8B1076B18900FC1AB3 /* DatePickerViewController.m */; };
 		34388F8D1076B18900FC1AB3 /* DatePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34388F8B1076B18900FC1AB3 /* DatePickerViewController.m */; };
 		34388FD51076B87500FC1AB3 /* TaskDatePickerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34388FD41076B87500FC1AB3 /* TaskDatePickerView.xib */; };
@@ -128,6 +130,8 @@
 		341E1EFE0FB14F2900D5B454 /* TaskView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = TaskView.xib; path = Resources/TaskView.xib; sourceTree = "<group>"; };
 		34205CAF0FB2641800A9F048 /* TextFieldController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextFieldController.h; sourceTree = "<group>"; };
 		34205CB00FB2641800A9F048 /* TextFieldController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextFieldController.m; sourceTree = "<group>"; };
+		34307870109FF37D00A66D5A /* AdjustableTextLabelWidthCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdjustableTextLabelWidthCell.h; sourceTree = "<group>"; };
+		34307871109FF37D00A66D5A /* AdjustableTextLabelWidthCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdjustableTextLabelWidthCell.m; sourceTree = "<group>"; };
 		34388F8A1076B18900FC1AB3 /* DatePickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatePickerViewController.h; sourceTree = "<group>"; };
 		34388F8B1076B18900FC1AB3 /* DatePickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatePickerViewController.m; sourceTree = "<group>"; };
 		34388FD41076B87500FC1AB3 /* TaskDatePickerView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskDatePickerView.xib; sourceTree = "<group>"; };
@@ -249,6 +253,8 @@
 				349D81011091509100A61237 /* SortViewController.m */,
 				349BE2671095007400C80146 /* FilterViewController.h */,
 				349BE2681095007400C80146 /* FilterViewController.m */,
+				34307870109FF37D00A66D5A /* AdjustableTextLabelWidthCell.h */,
+				34307871109FF37D00A66D5A /* AdjustableTextLabelWidthCell.m */,
 			);
 			name = Subviews;
 			path = Classes;
@@ -574,6 +580,7 @@
 				343B0532108D6668007F2425 /* DonezoSyncOperation.m in Sources */,
 				349D81021091509100A61237 /* SortViewController.m in Sources */,
 				349BE26A1095007500C80146 /* FilterViewController.m in Sources */,
+				34307872109FF37D00A66D5A /* AdjustableTextLabelWidthCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -615,6 +622,7 @@
 				343B0533108D6668007F2425 /* DonezoSyncOperation.m in Sources */,
 				349D81031091509100A61237 /* SortViewController.m in Sources */,
 				349BE2691095007500C80146 /* FilterViewController.m in Sources */,
+				34307873109FF37D00A66D5A /* AdjustableTextLabelWidthCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
