@@ -261,7 +261,15 @@
     }
     else
     {
-      self.selected = cell.textLabel.text;
+      if ([self.selected isEqual:cell.textLabel.text])
+      {
+        self.selected = nil;
+      }
+      else
+      {
+        self.selected = cell.textLabel.text;
+      }
+      [self save:self];
     }
     
     return indexPath;
