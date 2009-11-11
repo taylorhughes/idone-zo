@@ -118,7 +118,7 @@
 - (void)dealloc
 {
   [task release];
-  [textFieldController release];
+  [textViewController release];
   [dismissTarget release];
   
   [super dealloc];

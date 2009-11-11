@@ -27,8 +27,6 @@
 		341E1E240FB138F000D5B454 /* TaskViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 341E1E220FB138F000D5B454 /* TaskViewController.m */; };
 		341E1F000FB14F2900D5B454 /* TaskView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 341E1EFE0FB14F2900D5B454 /* TaskView.xib */; };
 		341E1F020FB14F2900D5B454 /* TaskView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 341E1EFE0FB14F2900D5B454 /* TaskView.xib */; };
-		34205CB10FB2641800A9F048 /* TextFieldController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34205CB00FB2641800A9F048 /* TextFieldController.m */; };
-		34205CB20FB2641800A9F048 /* TextFieldController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34205CB00FB2641800A9F048 /* TextFieldController.m */; };
 		34307872109FF37D00A66D5A /* AdjustableTextLabelWidthCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 34307871109FF37D00A66D5A /* AdjustableTextLabelWidthCell.m */; };
 		34307873109FF37D00A66D5A /* AdjustableTextLabelWidthCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 34307871109FF37D00A66D5A /* AdjustableTextLabelWidthCell.m */; };
 		34388F8C1076B18900FC1AB3 /* DatePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34388F8B1076B18900FC1AB3 /* DatePickerViewController.m */; };
@@ -51,6 +49,16 @@
 		34770B440FAFE67B00AD8397 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 34770B430FAFE67B00AD8397 /* icon.png */; };
 		3481B41A10165823003A2FC7 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3481B41910165823003A2FC7 /* Settings.bundle */; };
 		3481B41B10165823003A2FC7 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3481B41910165823003A2FC7 /* Settings.bundle */; };
+		3489366410AA5D620054237D /* EditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3489366310AA5D620054237D /* EditViewController.m */; };
+		3489366510AA5D620054237D /* EditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3489366310AA5D620054237D /* EditViewController.m */; };
+		3489366810AA5D950054237D /* TextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3489366710AA5D950054237D /* TextViewController.m */; };
+		3489366910AA5D950054237D /* TextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3489366710AA5D950054237D /* TextViewController.m */; };
+		3489369610AA5E870054237D /* TextFieldViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3489369510AA5E870054237D /* TextFieldViewController.m */; };
+		3489369710AA5E870054237D /* TextFieldViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3489369510AA5E870054237D /* TextFieldViewController.m */; };
+		348936D810AA66AD0054237D /* tableview-background.png in Resources */ = {isa = PBXBuildFile; fileRef = 348936D710AA66AD0054237D /* tableview-background.png */; };
+		348936D910AA66AD0054237D /* tableview-background.png in Resources */ = {isa = PBXBuildFile; fileRef = 348936D710AA66AD0054237D /* tableview-background.png */; };
+		3489371B10AA6BD80054237D /* TextFieldView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3489371A10AA6BD80054237D /* TextFieldView.xib */; };
+		3489371C10AA6BD80054237D /* TextFieldView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3489371A10AA6BD80054237D /* TextFieldView.xib */; };
 		3494869810152A3B00DF81F3 /* TaskList.m in Sources */ = {isa = PBXBuildFile; fileRef = 3494869710152A3B00DF81F3 /* TaskList.m */; };
 		3494869910152A3B00DF81F3 /* TaskList.m in Sources */ = {isa = PBXBuildFile; fileRef = 3494869710152A3B00DF81F3 /* TaskList.m */; };
 		34961D56107EE6740068B551 /* red-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 34961D55107EE6740068B551 /* red-button.png */; };
@@ -128,8 +136,6 @@
 		341E1E210FB138F000D5B454 /* TaskViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TaskViewController.h; path = Classes/TaskViewController.h; sourceTree = "<group>"; };
 		341E1E220FB138F000D5B454 /* TaskViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TaskViewController.m; path = Classes/TaskViewController.m; sourceTree = "<group>"; };
 		341E1EFE0FB14F2900D5B454 /* TaskView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = TaskView.xib; path = Resources/TaskView.xib; sourceTree = "<group>"; };
-		34205CAF0FB2641800A9F048 /* TextFieldController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextFieldController.h; sourceTree = "<group>"; };
-		34205CB00FB2641800A9F048 /* TextFieldController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextFieldController.m; sourceTree = "<group>"; };
 		34307870109FF37D00A66D5A /* AdjustableTextLabelWidthCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdjustableTextLabelWidthCell.h; sourceTree = "<group>"; };
 		34307871109FF37D00A66D5A /* AdjustableTextLabelWidthCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdjustableTextLabelWidthCell.m; sourceTree = "<group>"; };
 		34388F8A1076B18900FC1AB3 /* DatePickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatePickerViewController.h; sourceTree = "<group>"; };
@@ -149,6 +155,14 @@
 		34770B340FAFE4C200AD8397 /* DonezoAPIClientTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DonezoAPIClientTest.m; path = Test/DonezoAPIClientTest.m; sourceTree = "<group>"; };
 		34770B430FAFE67B00AD8397 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon.png; path = Resources/icon.png; sourceTree = "<group>"; };
 		3481B41910165823003A2FC7 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		3489366210AA5D620054237D /* EditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditViewController.h; sourceTree = "<group>"; };
+		3489366310AA5D620054237D /* EditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditViewController.m; sourceTree = "<group>"; };
+		3489366610AA5D950054237D /* TextViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextViewController.h; sourceTree = "<group>"; };
+		3489366710AA5D950054237D /* TextViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextViewController.m; sourceTree = "<group>"; };
+		3489369410AA5E870054237D /* TextFieldViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextFieldViewController.h; sourceTree = "<group>"; };
+		3489369510AA5E870054237D /* TextFieldViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextFieldViewController.m; sourceTree = "<group>"; };
+		348936D710AA66AD0054237D /* tableview-background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "tableview-background.png"; path = "Resources/tableview-background.png"; sourceTree = "<group>"; };
+		3489371A10AA6BD80054237D /* TextFieldView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = TextFieldView.xib; path = Resources/TextFieldView.xib; sourceTree = "<group>"; };
 		348E18C60FA7DE1E00B75000 /* Test.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Test.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		348E18C70FA7DE1E00B75000 /* Test-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Test-Info.plist"; sourceTree = "<group>"; };
 		3490B9A60FA7DB15004195D9 /* DNZO_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNZO_Prefix.pch; sourceTree = "<group>"; };
@@ -239,8 +253,12 @@
 		080E96DDFE201D6D7F000001 /* Subviews */ = {
 			isa = PBXGroup;
 			children = (
-				34205CAF0FB2641800A9F048 /* TextFieldController.h */,
-				34205CB00FB2641800A9F048 /* TextFieldController.m */,
+				3489366610AA5D950054237D /* TextViewController.h */,
+				3489366710AA5D950054237D /* TextViewController.m */,
+				3489369410AA5E870054237D /* TextFieldViewController.h */,
+				3489369510AA5E870054237D /* TextFieldViewController.m */,
+				3489366210AA5D620054237D /* EditViewController.h */,
+				3489366310AA5D620054237D /* EditViewController.m */,
 				34C51AC20FB92A9D0024A5CD /* EditProjectPicker.h */,
 				34C51AC30FB92A9D0024A5CD /* EditProjectPicker.m */,
 				3416EC220FC22C3D00D8BD53 /* TaskCell.h */,
@@ -300,6 +318,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				3489371A10AA6BD80054237D /* TextFieldView.xib */,
 				34770B300FAFE4A300AD8397 /* MainWindow.xib */,
 				34770B2F0FAFE4A300AD8397 /* ListView.xib */,
 				341E1EFE0FB14F2900D5B454 /* TaskView.xib */,
@@ -368,6 +387,7 @@
 		3496213B108682D30068B551 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				348936D710AA66AD0054237D /* tableview-background.png */,
 				34962144108685B50068B551 /* sort-button.png */,
 				34961D55107EE6740068B551 /* red-button.png */,
 				34770B430FAFE67B00AD8397 /* icon.png */,
@@ -509,6 +529,8 @@
 				34961E4E107FFAFC0068B551 /* confirm-dialog.png in Resources */,
 				34961F0C1082AA0F0068B551 /* confirm-cancel-highlighted.png in Resources */,
 				34962145108685B50068B551 /* sort-button.png in Resources */,
+				348936D810AA66AD0054237D /* tableview-background.png in Resources */,
+				3489371B10AA6BD80054237D /* TextFieldView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -522,6 +544,8 @@
 				3481B41A10165823003A2FC7 /* Settings.bundle in Resources */,
 				34388FD51076B87500FC1AB3 /* TaskDatePickerView.xib in Resources */,
 				343890031076BD8200FC1AB3 /* datepicker-background.png in Resources */,
+				348936D910AA66AD0054237D /* tableview-background.png in Resources */,
+				3489371C10AA6BD80054237D /* TextFieldView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -553,7 +577,6 @@
 				34770B2C0FAFE45B00AD8397 /* ListViewController.m in Sources */,
 				34770B2D0FAFE45B00AD8397 /* MainViewController.m in Sources */,
 				341E1E230FB138F000D5B454 /* TaskViewController.m in Sources */,
-				34205CB20FB2641800A9F048 /* TextFieldController.m in Sources */,
 				34C51AC50FB92A9D0024A5CD /* EditProjectPicker.m in Sources */,
 				3416EC280FC22C3D00D8BD53 /* TaskCell.m in Sources */,
 				3416EC290FC22C3D00D8BD53 /* TaskCellView.m in Sources */,
@@ -581,6 +604,9 @@
 				349D81021091509100A61237 /* SortViewController.m in Sources */,
 				349BE26A1095007500C80146 /* FilterViewController.m in Sources */,
 				34307872109FF37D00A66D5A /* AdjustableTextLabelWidthCell.m in Sources */,
+				3489366410AA5D620054237D /* EditViewController.m in Sources */,
+				3489366810AA5D950054237D /* TextViewController.m in Sources */,
+				3489369610AA5E870054237D /* TextFieldViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -592,7 +618,6 @@
 				34770B2A0FAFE45B00AD8397 /* ListViewController.m in Sources */,
 				34770B2B0FAFE45B00AD8397 /* MainViewController.m in Sources */,
 				341E1E240FB138F000D5B454 /* TaskViewController.m in Sources */,
-				34205CB10FB2641800A9F048 /* TextFieldController.m in Sources */,
 				34C51AC40FB92A9D0024A5CD /* EditProjectPicker.m in Sources */,
 				3416EC260FC22C3D00D8BD53 /* TaskCell.m in Sources */,
 				3416EC270FC22C3D00D8BD53 /* TaskCellView.m in Sources */,
@@ -623,6 +648,9 @@
 				349D81031091509100A61237 /* SortViewController.m in Sources */,
 				349BE2691095007500C80146 /* FilterViewController.m in Sources */,
 				34307873109FF37D00A66D5A /* AdjustableTextLabelWidthCell.m in Sources */,
+				3489366510AA5D620054237D /* EditViewController.m in Sources */,
+				3489366910AA5D950054237D /* TextViewController.m in Sources */,
+				3489369710AA5E870054237D /* TextFieldViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -11,7 +11,7 @@
 #import "DNZOAppDelegate.h"
 #import "EditProjectPicker.h"
 #import "DatePickerViewController.h"
-#import "TextFieldController.h"
+#import "TextViewController.h"
 #import "AdjustableTextLabelWidthCell.h"
 
 @class Task;

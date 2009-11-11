@@ -1,19 +1,19 @@
 //
-//  TextFieldController.m
+//  TextViewController.m
 //  DNZO
 //
 //  Created by Taylor Hughes on 5/6/09.
 //  Copyright 2009 Two-Stitch Software. All rights reserved.
 //
 
-#import "TextFieldController.h"
+#import "TextViewController.h"
 
-@interface TextFieldController ()
+@interface TextViewController ()
 - (void) save:(id)sender;
 - (void) cancel:(id)sender;
 @end
 
-@implementation TextFieldController
+@implementation TextViewController
 
 @synthesize text, textView, target;
 @synthesize saveAction, cancelAction;

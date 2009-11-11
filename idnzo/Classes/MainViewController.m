@@ -15,7 +15,7 @@
 @synthesize taskLists;
 @synthesize listViewController;
 
-- (void)awakeFromNib
+- (void)viewDidLoad
 {
   NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
   NSString *listName = [defaults objectForKey:@"lastListViewed"];
@@ -25,6 +25,11 @@
     [self loadLastViewedList:listName];
   }
   
+  UIBarButtonItem *add = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
+                                                                       target:self action:@selector(onClickAddList:)];
+  self.navigationItem.rightBarButtonItem = add;
+  [add release];
+  
   NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
   [dnc addObserver:self
           selector:@selector(donzoDataUpdated:) 
@@ -32,19 +37,21 @@
             object:nil];
 }
 
-- (void) donzoDataUpdated:(NSNotification*)notification
+- (void)viewWillAppear:(BOOL)animated
 {
-  // NSLog(@"MainViewController: Handled updated data.");
-  self.taskLists = nil;
-  [self.tableView reloadData];
+  [self recordViewedList:nil];
 }
 
-- (void) dealloc
+- (ListViewController *)listViewController
 {
-  [taskLists release];
-  [listViewController release];
-  [super dealloc];
+  // Instantiate the detail view controller if necessary.
+  if (listViewController == nil)
+  {
+    listViewController = [[ListViewController alloc] initWithNibName:@"ListView" bundle:nil];
+  }
+  return listViewController;
 }
+
 
 - (void) loadLastViewedList:(NSObject*)object
 {
@@ -85,19 +92,54 @@
   [self loadListViewForList:list animated:YES];
 }
 
-- (void)viewWillAppear:(BOOL)animated
+
+- (void) onClickAddList:(id)sender
 {
-  [self recordViewedList:nil];
+  TextFieldViewController *tfvc = [[TextFieldViewController alloc] initWithNibName:@"TextFieldView" bundle:nil];
+  
+  tfvc.title = @"Add Task List";
+  tfvc.placeholder = @"New Task List";
+  tfvc.saveAction = @selector(addList:);
+  tfvc.target = self;
+  
+  UINavigationController *modalNavigationController =
+    [[[UINavigationController alloc] initWithRootViewController:tfvc] autorelease];
+  [self.navigationController presentModalViewController:modalNavigationController animated:YES];  
 }
 
-- (ListViewController *)listViewController
+- (void) addList:(id)sender
 {
-  // Instantiate the detail view controller if necessary.
-  if (listViewController == nil)
+  TextFieldViewController *tfvc = (TextFieldViewController*)sender;
+  NSString *name = [tfvc.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+  NSLog(@"Adding new list with name %@", name);
+  
+  if ([name isEqualToString:@""])
   {
-    listViewController = [[ListViewController alloc] initWithNibName:@"ListView" bundle:nil];
+    // Empty string
+    return;
   }
-  return listViewController;
+  
+  DNZOAppDelegate *appDelegate = (DNZOAppDelegate *)[[UIApplication sharedApplication] delegate];
+  NSManagedObjectContext *context = appDelegate.managedObjectContext;
+  TaskList *newList = (TaskList*)[NSEntityDescription insertNewObjectForEntityForName:@"TaskList" inManagedObjectContext:context];
+  newList.name = name;
+  
+  NSError *error;
+  if (![context save:&error])
+  {
+    NSLog(@"Error saving new task list with name %@ and error %@", name, [error localizedDescription]);
+  }
+  
+  NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
+  [dnc postNotificationName:DonezoDataUpdatedNotification object:self];
+  [dnc postNotificationName:DonezoShouldSyncNotification object:self];
+}
+
+- (void) donzoDataUpdated:(NSNotification*)notification
+{
+  // NSLog(@"MainViewController: Handled updated data.");
+  self.taskLists = nil;
+  [self.tableView reloadData];
 }
 
 - (NSArray *) taskLists
@@ -126,6 +168,8 @@
   }
   return taskLists;
 }
+
+
 
 #pragma mark Table Delegate and Data Source Methods
 // These methods are all part of either the UITableViewDelegate or UITableViewDataSource protocols.
@@ -180,6 +224,14 @@
   [self loadListViewForList:clickedList];
   
   return nil;
+}
+
+
+- (void) dealloc
+{
+  [taskLists release];
+  [listViewController release];
+  [super dealloc];
 }
 
 @end

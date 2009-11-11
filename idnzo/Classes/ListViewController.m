@@ -29,9 +29,10 @@
 {
   [super viewDidLoad];
   
-  UIBarButtonItem *add = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
-                                                                        target:self action:@selector(addNewTask:)] autorelease];
+  UIBarButtonItem *add = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
+                                                                       target:self action:@selector(onClickAddTask:)];
   self.navigationItem.rightBarButtonItem = add;
+  [add release];
   
   NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
   [dnc addObserver:self
@@ -335,7 +336,7 @@
   [dnc postNotificationName:DonezoShouldSyncNotification object:self userInfo:info];
 }
 
-- (void)addNewTask:(id)sender
+- (void) onClickAddTask:(id)sender
 {
   TaskViewController *tvc = [[[TaskViewController alloc] initWithNibName:@"TaskView" bundle:nil] autorelease];
   [tvc loadEditingWithNewTaskForList:self.taskList];
@@ -348,7 +349,7 @@
 - (IBAction) sort:(id)sender
 {
   UINavigationController *modalNavigationController =
-  [[[UINavigationController alloc] initWithRootViewController:self.sortViewController] autorelease];
+    [[[UINavigationController alloc] initWithRootViewController:self.sortViewController] autorelease];
   [self.navigationController presentModalViewController:modalNavigationController animated:YES];  
 }
 

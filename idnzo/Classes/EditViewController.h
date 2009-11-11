@@ -7,15 +7,15 @@
 //
 
 #import "Task.h"
-#import "TextFieldController.h"
+#import "TextViewController.h"
 #import "Project.h"
 #import "EditProjectPicker.h"
 
-@class Task, TextFieldController, Project, EditProjectPicker;
+@class Task, TextViewController, Project, EditProjectPicker;
 
 @interface EditViewController : UITableViewController <UITextViewDelegate> {
   Task *task;
-  TextFieldController *textFieldController;
+  TextViewController *textViewController;
   
   NSObject *dismissTarget;
   SEL saveAction;

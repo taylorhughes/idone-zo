@@ -364,7 +364,7 @@ static UIImage *unchecked;
 
 - (void)editDescription:(BOOL)animated
 {
-  TextFieldController *controller = [[TextFieldController alloc] init];
+  TextViewController *controller = [[TextViewController alloc] init];
   controller.textView.font = [UIFont systemFontOfSize:17.0f];
   controller.text = self.task.body;
   controller.target = self; 
@@ -387,7 +387,7 @@ static UIImage *unchecked;
 
 - (void)saveDescription:(id)sender
 {
-  self.task.body = [(TextFieldController*)sender text];
+  self.task.body = [(TextViewController*)sender text];
   [self save];
   
   // pops the textviewcontroller
