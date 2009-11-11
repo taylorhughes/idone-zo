@@ -198,6 +198,42 @@
   }
 }
 
+- (void) testArchivedTasks
+{ 
+  NSError *error = nil;
+  
+  DonezoTaskList *list = [[self.client getLists:&error] objectAtIndex:0];
+  NSArray *tasks = [self.client getTasksForListWithKey:list.key error:&error];
+
+  NSUInteger archived = 0;
+  NSUInteger unarchived = [tasks count];
+  
+  NSDate *start = [NSDate dateWithTimeIntervalSinceNow:-60];
+  NSDate *end =   [NSDate dateWithTimeIntervalSinceNow:600];
+  
+  NSArray *archivedTasks = [self.client getArchivedTasksCompletedBetweenDate:start andDate:end error:&error];
+  STAssertEquals((NSUInteger)0, [archivedTasks count], @"Archived tasks count should be zero at the start.");
+  
+  for (DonezoTask *task in tasks)
+  {
+    task.isComplete = YES;
+    task.isArchived = YES;
+    [self.client saveTask:&task taskList:list error:&error];
+    
+    STAssertNil(error, @"Error should be nil but was %@", error);
+    
+    unarchived -= 1;
+    archived += 1;
+
+    archivedTasks = [self.client getArchivedTasksCompletedBetweenDate:start andDate:end error:&error];
+    NSArray *remainingTasks = [self.client getTasksForListWithKey:list.key error:&error];
+    
+    STAssertEquals(archived, [archivedTasks count], @"Archived tasks count is wrong; was %d, should be %d", [archivedTasks count], archived);
+    STAssertEquals(unarchived, [remainingTasks count], @"Remaining tasks count is wrong; was %d, should be %d", [remainingTasks count], unarchived);
+  }
+
+}
+
 - (void) testTaskLists
 {
   NSError *error = nil;
@@ -215,5 +251,6 @@
   STAssertEqualObjects(@"tasks", list.key, @"Task list key should be 'tasks'");
   STAssertEquals(2, [list.tasksCount intValue], @"Tasks count should be 2.");
 }
+
 
 @end

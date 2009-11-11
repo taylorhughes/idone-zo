@@ -385,7 +385,7 @@
    }" error:&error];
   
   [self.syncMaster syncAll:&error];
-  STAssertNil(error, @"Error should be nil.");
+  STAssertNil(error, @"Error should be nil, but was %@", [error description]);
   
   [self assertListsSynced:1];
   [self assertTasksSynced:2 forListWithKey:@"tasks"];
@@ -396,6 +396,7 @@
   
   NSString *archivedBody = [task.body copy];
   // now archive the task
+  task.isComplete = YES;
   task.isArchived = YES;
   [task hasBeenUpdated];
   

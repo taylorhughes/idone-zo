@@ -115,7 +115,7 @@
   
   if ([name isEqualToString:@""])
   {
-    // Empty string
+    // Empty string; should we display an alert or something?
     return;
   }
   

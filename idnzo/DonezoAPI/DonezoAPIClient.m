@@ -243,6 +243,25 @@
   return array;
 }
 
+- (NSArray*) getArchivedTasksCompletedBetweenDate:(NSDate*)start andDate:(NSDate*)finish error:(NSError**)error
+{
+  if (![self login:error]) { return nil; }
+
+  NSString *startString  = [DonezoAPIClient donezoDetailedDateStringFromDate:start];
+  NSString *finishString = [DonezoAPIClient donezoDetailedDateStringFromDate:finish];
+  
+  NSString *path = [NSString stringWithFormat:@"/a/?start_at=%@&end_at=%@", [startString urlencoded], [finishString urlencoded]];
+  NSArray *tasks = (NSArray*) [self getObjectFromPath:path withKey:@"tasks" error:error];
+  
+  NSMutableArray *array = [[[NSMutableArray alloc] init] autorelease];
+  for (NSDictionary *tasksDict in tasks)
+  {
+    [array addObject:[DonezoTask taskFromDictionary:tasksDict]];
+  }
+  
+  return array;
+}
+
 
 - (void) saveTask:(DonezoTask**)task taskList:(DonezoTaskList*)list error:(NSError**)error
 {
@@ -292,6 +311,7 @@
   }
   (*task).key = nil;
 }
+
 
 //                      for dates:        2009-08-03 00:00:00 
 #define DONEZO_DATE_INPUT_FORMAT        @"yyyy-MM-dd HH:mm:ss"
