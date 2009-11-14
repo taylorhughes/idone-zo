@@ -29,6 +29,8 @@
 {
   [super viewDidLoad];
   
+  suspendUpdates = NO;
+  
   UIBarButtonItem *add = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
                                                                        target:self action:@selector(onClickAddTask:)];
   self.navigationItem.rightBarButtonItem = add;
@@ -53,9 +55,12 @@
 
 - (void) donezoDataUpdated:(NSNotification*)notification
 {
-  // Is this necessary?
-  [self resetTasks];
-  [self.tableView reloadData];
+  if (!suspendUpdates)
+  {
+    // Is this necessary?
+    [self resetTasks];
+    [self.tableView reloadData];    
+  }
 }
 
 - (TaskViewController *)taskViewController
@@ -314,16 +319,27 @@
   }
   if ([archivedPaths count] > 0)
   {
+    //
+    // This keeps the resultant donezoDataUpdated notification from
+    // resetting the list under us, since we're manually removing rows 
+    // from the table below.
+    //
+    suspendUpdates = YES;
+    
     DNZOAppDelegate *appDelegate = (DNZOAppDelegate *)[[UIApplication sharedApplication] delegate];
     NSError *error = nil;
     if (![appDelegate.managedObjectContext save:&error])
     {
       NSLog(@"Error saving archived tasks: %@ %@", [error description], [error userInfo]);
     }
+    
     [self resetTasks];
+    // This may also cause donezoDataUpdated notifications
+    [self notifySync];
     
     [self.tableView deleteRowsAtIndexPaths:archivedPaths withRowAnimation:UITableViewRowAnimationFade];
-    [self notifySync];
+    
+    suspendUpdates = NO;
   }
 }
 

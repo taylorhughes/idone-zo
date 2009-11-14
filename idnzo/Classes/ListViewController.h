@@ -21,6 +21,7 @@
   SortViewController *sortViewController;
   FilterViewController *filterViewController;
   UIBarButtonItem *syncButton;
+  BOOL suspendUpdates;
 }
 
 @property (nonatomic, retain) UITableView *tableView;
