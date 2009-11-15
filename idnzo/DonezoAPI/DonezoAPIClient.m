@@ -28,10 +28,10 @@
       baseURL = DEFAULT_BASE_URL;
     }
     self.baseUrl = baseURL;
-    self.gaeAuth = [[GoogleAppEngineAuthenticator alloc] initForGAEAppAtUrl:[NSURL URLWithString:baseURL]
-                                                                     toPath:API_PATH
-                                                               withUsername:username
-                                                                andPassword:password];
+    self.gaeAuth = [[[GoogleAppEngineAuthenticator alloc] initForGAEAppAtUrl:[NSURL URLWithString:baseURL]
+                                                                      toPath:API_PATH
+                                                                withUsername:username
+                                                                 andPassword:password] autorelease];
   }
   return self;
 }
@@ -50,11 +50,24 @@
 
 - (BOOL) login:(NSError**)error
 {
-  if (self.gaeAuth.hasLoggedIn)
+  BOOL loggedIn = NO;
+  //
+  // API calls should be able to happen in parallel without a problem, 
+  // but we want to ensure multiple simultaneous calls don't result in multiple
+  // simultaneous login attempts against the same GAE Auth class.
+  //
+  @synchronized(self)
   {
-    return YES;
+    if (self.gaeAuth.hasLoggedIn)
+    {
+      loggedIn = YES;
+    }
+    else
+    {
+      loggedIn = [self.gaeAuth login:error];
+    }
   }
-  return [self.gaeAuth login:error];
+  return loggedIn;
 }
 
 - (NSString*)apiUrl
