@@ -22,9 +22,17 @@
 {
   [super viewWillAppear:animated];
   
-  self.navigationItem.title = self.title;
+  if (self.title)
+  {
+    self.navigationItem.title = [@"Archived Tasks: " stringByAppendingString:self.title];
+  }
+  else
+  {
+    self.navigationItem.title = @"Archived Tasks";
+  }
   
   self.localTasks = nil;
+  self.remoteTasks = nil;
   [self.tableView reloadData];
   
   // show a message indicating that we are loading remote tasks
@@ -80,7 +88,7 @@
     tasks = [NSArray array];
   }
   
-  NSLog(@"Performing selector on main thread...");
+  NSLog(@"Fetched %d remote archived tasks", [tasks count]);
   [self performSelectorOnMainThread:@selector(showRemoteTasks:) withObject:tasks waitUntilDone:YES];
 }
 
@@ -95,11 +103,12 @@
   if (!remoteTasks)
   {
     self.remoteTasks = [NSArray array];
+    // Queue is needed in this case to make sure the operation happens asynch'ly
+    NSOperationQueue *queue = [[[NSOperationQueue alloc] init] autorelease];
     NSInvocationOperation *loadRemote = [[NSInvocationOperation alloc] initWithTarget:self 
                                                                              selector:@selector(loadRemoteTasks)
                                                                                object:nil];
-    // TODO: Make this occur in a separate thread — WTF?
-    [loadRemote start];
+    [queue addOperation:loadRemote];
   }
   
   return remoteTasks;
@@ -128,12 +137,16 @@ static NSInteger compareLocalRemoteTasks(id a, id b, void *context)
   {
     if (task.key != nil)
     {
-      [keys addObject:task.key];
+      // task.key is a _PFCachedNumber, not an NSNumber derivative; 
+      // in order to make the NSSet member/hash functionality work properly
+      // they need to be properly comparable.
+      NSNumber *key = [[NSNumber alloc] initWithInt:[task.key intValue]];
+      [keys addObject:key];
+      [key release];
     }
   }
   for (DonezoTask* task in self.remoteTasks)
   {
-    // TODO: fix member function to actually work with NSNumbers in this context
     if (![keys member:task.key])
     {
       [array addObject:task];
