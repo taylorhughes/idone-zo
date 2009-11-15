@@ -12,7 +12,6 @@
   NSArray *taskLists;
   
   NSArray *archivedLabels;
-  NSArray *archivedRanges;
 }
 
 @property (retain, nonatomic) NSArray *taskLists;

@@ -336,7 +336,6 @@
   [taskLists release];
   [listViewController release];
   [archivedLabels release];
-  [archivedRanges release];
   [super dealloc];
 }
 
