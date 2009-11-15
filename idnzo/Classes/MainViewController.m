@@ -1,6 +1,8 @@
 
 #import "MainViewController.h"
 
+// Static date range creation
+
 @interface MainViewController ()
 
 - (void) loadListViewForList:(TaskList*)list;
@@ -63,6 +65,51 @@
   return archivedListViewController;
 }
 
+- (NSArray*)archivedLabels
+{
+  if (!archivedLabels)
+  {
+    archivedLabels = [[NSArray alloc] initWithObjects:
+                      @"Today",
+                      @"Yesterday",
+                      @"This Week",
+                      @"Last Week",
+                      nil];
+  }
+  return archivedLabels;
+}
+
+- (NSArray*)getStartAndEndDatesForArchivedLabelPosition:(NSUInteger)index
+{
+  NSDate *start = [NSDate date];
+  NSDate *end = [NSDate date];
+  
+  switch (index)
+  {
+    case 0:
+      // Today: midnight this morning to midnight tonight, local time zone
+      start = [DonezoDates thisMorningAtMidnight];
+      end =   [DonezoDates tonightAtMidnight];
+      break;
+    case 1:
+      // Yesterday: midnight this morning to midnight yesterday morning
+      start = [DonezoDates yesterdayMorningAtMidnight];
+      end =   [DonezoDates thisMorningAtMidnight];
+      break;
+    case 2:
+      // This Week: midnight this past sunday to midnight next saturday
+      start = [DonezoDates beginningOfThisWeek];
+      end =   [DonezoDates endOfThisWeek];
+      break;
+    case 3:
+      // Last Week: midnight two sundays ago to midnight this past sunday
+      start = [DonezoDates beginningOfLastWeek];
+      end =   [DonezoDates beginningOfThisWeek];
+      break;
+  }
+  
+  return [NSArray arrayWithObjects:start, end, nil];
+}
 
 - (void) loadLastViewedList:(NSObject*)object
 {
@@ -201,7 +248,7 @@
     // archived tasks
     case 1:
     default:
-      return 1;
+      return [self.archivedLabels count];
   }
 }
 
@@ -254,7 +301,7 @@
       
     // archived tasks
     case 1:
-      cell.textLabel.text = @"This week";
+      cell.textLabel.text = [self.archivedLabels objectAtIndex:[indexPath row]];
       // Setting this to an empty string is required to fix a rendering issue in iPhoneOS 3.1.2
       cell.detailTextLabel.text = @"";
       break;
@@ -272,8 +319,11 @@
   }
   else
   {
-    self.archivedListViewController.start = [NSDate dateWithTimeIntervalSinceNow:-100000];
-    self.archivedListViewController.end   = [NSDate dateWithTimeIntervalSinceNow:100000];
+    self.archivedListViewController.title = [self.archivedLabels objectAtIndex:[indexPath row]];
+    NSArray *range = [self getStartAndEndDatesForArchivedLabelPosition:[indexPath row]];
+
+    self.archivedListViewController.start = [range objectAtIndex:0];
+    self.archivedListViewController.end   = [range objectAtIndex:1];
     [self.navigationController pushViewController:self.archivedListViewController animated:YES];
   }
 
@@ -285,6 +335,8 @@
 {
   [taskLists release];
   [listViewController release];
+  [archivedLabels release];
+  [archivedRanges release];
   [super dealloc];
 }
 

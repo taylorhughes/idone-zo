@@ -260,8 +260,8 @@
 {
   if (![self login:error]) { return nil; }
 
-  NSString *startString  = [DonezoAPIClient donezoDetailedDateStringFromDate:start];
-  NSString *finishString = [DonezoAPIClient donezoDetailedDateStringFromDate:finish];
+  NSString *startString  = [DonezoDates donezoDetailedDateStringFromDate:start];
+  NSString *finishString = [DonezoDates donezoDetailedDateStringFromDate:finish];
   
   NSString *path = [NSString stringWithFormat:@"/a/?start_at=%@&end_at=%@", [startString urlencoded], [finishString urlencoded]];
   NSArray *tasks = (NSArray*) [self getObjectFromPath:path withKey:@"tasks" error:error];
@@ -326,78 +326,5 @@
 }
 
 
-//                      for dates:        2009-08-03 00:00:00 
-#define DONEZO_DATE_INPUT_FORMAT        @"yyyy-MM-dd HH:mm:ss"
-
-#define DONEZO_DATE_OUTPUT_FORMAT       @"MM dd yyyy"
-#define DONEZO_DATETIME_OUTPUT_FORMAT   @"yyyy-MM-dd HH:mm:ss"
-
-+ (NSDate*) dateFromDonezoDateString:(NSString*)stringDate
-{
-  if (stringDate == nil || [stringDate isKindOfClass:[NSNull class]])
-  {
-    return nil;
-  }
-
-  NSDate *date = nil;
-  NSDateFormatter *formatter = [[[NSDateFormatter alloc] init] autorelease];
-  [formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-  [formatter setDateFormat:DONEZO_DATE_INPUT_FORMAT];
-  if ([stringDate rangeOfString:@"."].location == NSNotFound)
-  {
-    // no precision
-    date = [formatter dateFromString:stringDate];
-  }
-  else
-  {
-    // NSDateFormatter ***ROUNDS TO MILLISECONDS***; manually add milliseconds instead
-    NSArray *datePieces = [stringDate componentsSeparatedByString:@"."];
-    stringDate = [datePieces objectAtIndex:0];
-    NSTimeInterval interval = [(NSString*)[datePieces objectAtIndex:1] intValue] / 1000000.0;
-    interval += [[formatter dateFromString:stringDate] timeIntervalSinceReferenceDate];
-    
-    date = [[[NSDate alloc] initWithTimeIntervalSinceReferenceDate:interval] autorelease];
-  }
-  return date;
-}
-
-+ (NSString*) donezoDetailedDateStringFromDate:(NSDate*)date
-{
-  if (date == nil || [date isKindOfClass:[NSNull class]])
-  {
-    return nil;
-  }
-  
-  // NSDateFormatter ***ROUNDS TO MILLISECONDS IN OUTPUT***; manually add milliseconds instead
-  NSTimeInterval interval = [date timeIntervalSinceReferenceDate];
-  NSString *microseconds = [[[NSString stringWithFormat:@"%0.6f", interval] componentsSeparatedByString:@"."] objectAtIndex:1];
-  
-  NSDateFormatter *formatter = [[[NSDateFormatter alloc] init] autorelease];
-  [formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-  [formatter setDateFormat:DONEZO_DATETIME_OUTPUT_FORMAT];
-  
-  NSString *dateString = [NSString stringWithFormat:@"%@.%@", [formatter stringFromDate:date], microseconds];
-  
-  return dateString;
-}
-
-+ (NSString*) donezoDateStringFromDate:(NSDate*)date
-{
-  if (date == nil || [date isKindOfClass:[NSNull class]])
-  {
-    return nil;
-  }
-  
-  NSDateFormatter *formatter = [[[NSDateFormatter alloc] init] autorelease];
-  [formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-  [formatter setDateFormat:DONEZO_DATE_OUTPUT_FORMAT];
-  return [formatter stringFromDate:date];  
-}
-
-//- (NSArray*)getArchivedTasksFromDate:(NSDate*)start toDate:(NSDate*)finish error:(NSError**)error
-//{
-//  if (![self login:error]) { return nil; }
-//  return nil;
-//}
 
 @end

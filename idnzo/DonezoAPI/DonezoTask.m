@@ -47,9 +47,9 @@
 
 - (NSDictionary*) toDictionary
 {
-  NSString *sortString = [DonezoAPIClient donezoDetailedDateStringFromDate:self.sortDate];
+  NSString *sortString = [DonezoDates donezoDetailedDateStringFromDate:self.sortDate];
   NSString *contextsString = [self.contexts componentsJoinedByString:@","];
-  NSString *dateString = [DonezoAPIClient donezoDateStringFromDate:self.dueDate];
+  NSString *dateString = [DonezoDates donezoDateStringFromDate:self.dueDate];
   
   NSMutableDictionary *dict = [NSMutableDictionary dictionary];
   
@@ -102,10 +102,10 @@
   {
     task.contexts = [NSArray array];
   }
-  task.dueDate =     [DonezoAPIClient dateFromDonezoDateString:[dict valueForKey:@"due_date"]];
-  task.updatedAt =   [DonezoAPIClient dateFromDonezoDateString:[dict valueForKey:@"updated_at"]];
-  task.completedAt = [DonezoAPIClient dateFromDonezoDateString:[dict valueForKey:@"completed_at"]];
-  task.sortDate =    [DonezoAPIClient dateFromDonezoDateString:[dict valueForKey:@"sort_date"]];
+  task.dueDate =     [DonezoDates dateFromDonezoDateString:[dict valueForKey:@"due_date"]];
+  task.updatedAt =   [DonezoDates dateFromDonezoDateString:[dict valueForKey:@"updated_at"]];
+  task.completedAt = [DonezoDates dateFromDonezoDateString:[dict valueForKey:@"completed_at"]];
+  task.sortDate =    [DonezoDates dateFromDonezoDateString:[dict valueForKey:@"sort_date"]];
   
   return task;
 }

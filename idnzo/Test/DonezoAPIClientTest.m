@@ -47,8 +47,8 @@
 {
   NSDate *now = [NSDate date];
   
-  NSString *dateString = [DonezoAPIClient donezoDetailedDateStringFromDate:now];
-  NSDate *mangledNow = [DonezoAPIClient dateFromDonezoDateString:dateString];
+  NSString *dateString = [DonezoDates donezoDetailedDateStringFromDate:now];
+  NSDate *mangledNow = [DonezoDates dateFromDonezoDateString:dateString];
   
   NSString *a = [NSString stringWithFormat:@"%0.6f", [now timeIntervalSinceReferenceDate]];
   NSString *b = [NSString stringWithFormat:@"%0.6f", [mangledNow timeIntervalSinceReferenceDate]];
@@ -162,7 +162,7 @@
   STAssertNotNil(newNewTask.project, @"New project should not be null.");
   STAssertEqualObjects(originalTask.project, newNewTask.project, @"New task's project was not saved properly.");
   STAssertNotNil(newNewTask.dueDate, @"New due date should not be null");
-  STAssertEqualObjects([DonezoAPIClient donezoDateStringFromDate:originalTask.dueDate], [DonezoAPIClient donezoDateStringFromDate:newNewTask.dueDate], @"New task's due date was not saved properly.");
+  STAssertEqualObjects([DonezoDates donezoDateStringFromDate:originalTask.dueDate], [DonezoDates donezoDateStringFromDate:newNewTask.dueDate], @"New task's due date was not saved properly.");
   STAssertNotNil(newNewTask.sortDate, @"New sort date should not be null");
   NSString *a = [NSString stringWithFormat:@"%0.6f", [originalTask.sortDate timeIntervalSinceReferenceDate]];
   NSString *b = [NSString stringWithFormat:@"%0.6f", [newNewTask.sortDate timeIntervalSinceReferenceDate]];

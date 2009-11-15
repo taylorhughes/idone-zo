@@ -11,6 +11,7 @@
 #import "DonezoTask.h"
 #import "DonezoTaskList.h"
 #import "NSString+Donezo.h"
+#import "DonezoDates.h"
 
 @class DonezoTask;
 
@@ -35,9 +36,5 @@
 - (void) deleteList:(DonezoTaskList**)list error:(NSError**)error;
 
 - (NSArray*) getArchivedTasksCompletedBetweenDate:(NSDate*)start andDate:(NSDate*)finish error:(NSError**)error;
-
-+ (NSDate*) dateFromDonezoDateString:(NSString*)stringDate;
-+ (NSString*) donezoDateStringFromDate:(NSDate*)date;
-+ (NSString*) donezoDetailedDateStringFromDate:(NSDate*)date;
 
 @end
