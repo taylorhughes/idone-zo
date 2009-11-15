@@ -22,7 +22,6 @@ NSString* const DonezoDataUpdatedNotification = @"DonezoDataUpdatedNotification"
 
 @property (nonatomic, readonly) NSString *storePath;
 
-@property (nonatomic, retain) DonezoAPIClient *donezoAPIClient;
 @property (nonatomic, retain) DonezoSyncMaster *syncMaster;
 
 @property (nonatomic, retain) NSOperationQueue *operationQueue;
@@ -309,9 +308,9 @@ NSString* const DonezoDataUpdatedNotification = @"DonezoDataUpdatedNotification"
   return persistentStoreCoordinator;
 }
 
-/**
- * Returns the path to the application's SQLite datastore.
- */
+//
+// Returns the path to the application's SQLite datastore.
+//
 - (NSString *)storePath
 {
   NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);

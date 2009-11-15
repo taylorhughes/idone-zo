@@ -268,7 +268,8 @@
   }
   
   Task *task = [self.filteredTasks objectAtIndex:indexPath.row];
-  cell.task = task;
+  [cell displayLocalTask:task];
+  
   return cell;
 }
 

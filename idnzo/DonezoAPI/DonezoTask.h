@@ -15,6 +15,7 @@
   NSString *project;
   NSArray  *contexts;
   NSDate   *dueDate;
+  NSDate   *completedAt;
   NSDate   *updatedAt;
   NSDate   *sortDate;
   BOOL      isComplete;
@@ -27,6 +28,7 @@
 @property (nonatomic, copy) NSString *project;
 @property (nonatomic, copy) NSArray  *contexts;
 @property (nonatomic, copy) NSDate   *dueDate;
+@property (nonatomic, copy) NSDate   *completedAt;
 @property (nonatomic, copy) NSDate   *updatedAt;
 @property (nonatomic, copy) NSDate   *sortDate;
 @property (nonatomic, assign) BOOL    isComplete;

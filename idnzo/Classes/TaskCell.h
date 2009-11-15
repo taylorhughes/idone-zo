@@ -6,17 +6,20 @@
 //  Copyright 2009 Two-Stitch Software. All rights reserved.
 //
 
-#import "Task.h"
 #import "TaskCellView.h"
+#import "Task.h"
+#import "DonezoTask.h"
 
-@class Task, TaskCellView;
+@class TaskCellView;
 
 @interface TaskCell : UITableViewCell {
-  Task *task;
   TaskCellView *taskCellView;
 }
 
-@property (nonatomic, retain) Task *task;
 @property (nonatomic, retain, readonly) TaskCellView *taskCellView;
+
+- (void) displayLocalTask:(Task*)task;
+- (void) displayLocalTask:(Task*)task archived:(BOOL)isArchived;
+- (void) displayRemoteTask:(DonezoTask*)task;
 
 @end

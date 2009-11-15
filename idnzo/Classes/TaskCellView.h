@@ -12,16 +12,24 @@
 @class Task, Project;
 
 @interface TaskCellView : UIView {
-  Task *task;
+  NSString *body;
+  NSArray *details;
+  BOOL isComplete;
   BOOL wasCompleted;
   BOOL highlighted;
+  BOOL archivedDisplay;
 }
 
-@property (nonatomic, retain) Task *task;
+@property (nonatomic) BOOL isComplete;
+@property (nonatomic, retain) NSString *body;
+// An array of strings to put on the second row
+@property (nonatomic, retain) NSArray *details;
+@property (nonatomic, assign) BOOL archivedDisplay;
+
+// Indicates whether the checkbox was clicked/touched with the latest event
 @property (nonatomic, assign) BOOL wasCompleted;
 @property (nonatomic, getter=isHighlighted) BOOL highlighted;
 
 + (NSInteger) height;
-// Indicates whether the checkbox was clicked/touched with the latest event
 
 @end

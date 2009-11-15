@@ -11,14 +11,14 @@
 static UIImage *unchecked;
 static UIImage *checked;
 
-@interface TaskCellView()
-- (NSArray *)getDetails;
-@end
-
 @implementation TaskCellView
 
-@synthesize task, wasCompleted;
+@synthesize isComplete;
+@synthesize body;
+@synthesize details;
+@synthesize wasCompleted;
 @synthesize highlighted;
+@synthesize archivedDisplay;
 
 // horizontal space between project / context / date
 #define PADDING_BETWEEN_DETAILS 5.0
@@ -37,6 +37,8 @@ static UIImage *checked;
 #define SECONDARY_TEXT_SIZE 14.0
 
 #define TEXT_LEFT 32.0
+#define ARCHIVED_TEXT_LEFT 7.0
+
 #define TEXT_RIGHT_PADDING 10.0
 #define CELL_HEIGHT 46.0
 
@@ -68,16 +70,6 @@ static UIImage *checked;
   return self;
 }
 
-- (void)setTask:(Task*)newTask
-{
-  if (task)
-  {
-    [task release];
-  }
-  task = [newTask retain];
-	[self setNeedsDisplay];
-}
-
 - (void)setHighlighted:(BOOL)newHighlighted
 {
   if (highlighted != newHighlighted)
@@ -91,7 +83,7 @@ static UIImage *checked;
 {
   UITouch *touch = (UITouch*) [[touches allObjects] objectAtIndex:0];
   CGPoint relative = [touch locationInView:self];
-  UIImage *image = task.isComplete ? checked : unchecked;
+  UIImage *image = self.isComplete ? checked : unchecked;
   if (relative.x >= IMAGE_LEFT - TOUCH_BUFFER && relative.x <= IMAGE_LEFT + image.size.width  + TOUCH_BUFFER &&
       relative.y >= IMAGE_TOP  - TOUCH_BUFFER && relative.y <= IMAGE_TOP  + image.size.height + TOUCH_BUFFER)
   {
@@ -100,25 +92,6 @@ static UIImage *checked;
   }
   
   [super touchesBegan:touches withEvent:event];
-}
-
-- (NSArray*)getDetails
-{
-  NSMutableArray *array = [[[NSMutableArray alloc] initWithCapacity:3] autorelease];
-  if (task.project)
-  {
-    [array addObject:task.project.name];
-  }
-  if (task.contexts && [task.contexts count] > 0)
-  {
-    [array addObject:task.contextsString];
-  }
-  if (task.dueDate)
-  {
-    [array addObject:task.dueString];
-  }
-  
-  return array;
 }
 
 - (void)drawRect:(CGRect)rect
@@ -133,10 +106,13 @@ static UIImage *checked;
 	UIColor *secondaryTextColor = self.isHighlighted ? [UIColor whiteColor] : [UIColor darkGrayColor];
 	UIFont *secondaryFont = [UIFont systemFontOfSize:SECONDARY_TEXT_SIZE];
   
-  UIImage *image = task.isComplete ? checked : unchecked;
-  [image drawInRect:CGRectMake(IMAGE_LEFT, IMAGE_TOP, image.size.width, image.size.height)];
+  if (!self.archivedDisplay)
+  {
+    UIImage *image = self.isComplete ? checked : unchecked;
+    [image drawInRect:CGRectMake(IMAGE_LEFT, IMAGE_TOP, image.size.width, image.size.height)];    
+  }
   
-  if (task.isComplete)
+  if (self.isComplete && !self.archivedDisplay)
   {
     [secondaryTextColor set];
   }
@@ -145,66 +121,71 @@ static UIImage *checked;
     [mainTextColor set];
   }
   
-  CGFloat width = self.bounds.size.width - TEXT_LEFT - TEXT_RIGHT_PADDING;
-  CGPoint point = CGPointMake(TEXT_LEFT, MAIN_TEXT_TOP);
+  CGFloat textLeft = self.archivedDisplay ? ARCHIVED_TEXT_LEFT : TEXT_LEFT;
   
-  [self.task.body drawAtPoint:point 
-                     forWidth:width
-                     withFont:mainFont
-                  minFontSize:MAIN_TEXT_SIZE
-               actualFontSize:nil
-                lineBreakMode:UILineBreakModeTailTruncation
-           baselineAdjustment:UIBaselineAdjustmentAlignBaselines];
+  CGFloat width = self.bounds.size.width - textLeft - TEXT_RIGHT_PADDING;
+  CGPoint point = CGPointMake(textLeft, MAIN_TEXT_TOP);
   
-  CGSize titleSize = [self.task.body sizeWithFont:mainFont
-                                constrainedToSize:CGSizeMake(width, MAIN_TEXT_SIZE)
-                                    lineBreakMode:UILineBreakModeTailTruncation];
+  [self.body drawAtPoint:point 
+                forWidth:width
+                withFont:mainFont
+             minFontSize:MAIN_TEXT_SIZE
+          actualFontSize:nil
+           lineBreakMode:UILineBreakModeTailTruncation
+      baselineAdjustment:UIBaselineAdjustmentAlignBaselines];
+  
+  CGSize titleSize = [self.body sizeWithFont:mainFont
+                           constrainedToSize:CGSizeMake(width, MAIN_TEXT_SIZE)
+                               lineBreakMode:UILineBreakModeTailTruncation];
   
   CGFloat lineTop = MAIN_TEXT_TOP + floor(MAIN_TEXT_SIZE * 0.67);
 
   // DRAW STRIKETHROUGH
-  if (task.isComplete)
+  if (self.isComplete && !self.archivedDisplay)
   {
     UIColor *lineColor = self.isHighlighted ? [UIColor whiteColor] : [UIColor darkGrayColor];
     
     CGContextSetLineWidth(context, LINE_WEIGHT);
     CGContextSetStrokeColorWithColor(context, [lineColor CGColor]);
       
-    CGContextMoveToPoint(context, TEXT_LEFT, lineTop);
-    CGContextAddLineToPoint(context, TEXT_LEFT + titleSize.width, lineTop);
+    CGContextMoveToPoint(context, textLeft, lineTop);
+    CGContextAddLineToPoint(context, textLeft + titleSize.width, lineTop);
     CGContextStrokePath(context);
   }
     
   // DRAW DETAIL STUFF
   
-  [secondaryTextColor set];
   
-  NSArray *details = [self getDetails];
-  CGFloat left = TEXT_LEFT;
-  CGFloat detailWidth = (width - [details count] * PADDING_BETWEEN_DETAILS) / [details count];
-  for (NSString *detail in details)
+  if (self.details)
   {
-    point = CGPointMake(left, SECONDARY_TEXT_TOP);
-    
-    CGSize size = [detail sizeWithFont:secondaryFont
-                     constrainedToSize:CGSizeMake(detailWidth, SECONDARY_TEXT_SIZE)
-                         lineBreakMode:UILineBreakModeTailTruncation];
-    
-    [detail drawAtPoint:point 
-               forWidth:size.width
-               withFont:secondaryFont
-            minFontSize:SECONDARY_TEXT_SIZE
-         actualFontSize:nil
-          lineBreakMode:UILineBreakModeTailTruncation
-     baselineAdjustment:UIBaselineAdjustmentAlignBaselines];
-    
-    left += size.width + PADDING_BETWEEN_DETAILS;
-  }
+    [secondaryTextColor set];
+    CGFloat left = textLeft;
+    CGFloat detailWidth = (width - [self.details count] * PADDING_BETWEEN_DETAILS) / [self.details count];
+    for (NSString *detail in self.details)
+    {
+      point = CGPointMake(left, SECONDARY_TEXT_TOP);
+      
+      CGSize size = [detail sizeWithFont:secondaryFont
+                       constrainedToSize:CGSizeMake(detailWidth, SECONDARY_TEXT_SIZE)
+                           lineBreakMode:UILineBreakModeTailTruncation];
+      
+      [detail drawAtPoint:point 
+                 forWidth:size.width
+                 withFont:secondaryFont
+              minFontSize:SECONDARY_TEXT_SIZE
+           actualFontSize:nil
+            lineBreakMode:UILineBreakModeTailTruncation
+       baselineAdjustment:UIBaselineAdjustmentAlignBaselines];
+      
+      left += size.width + PADDING_BETWEEN_DETAILS;
+    }    
+  } // end if details
 }
 
 - (void)dealloc
 {
-  [task release];
+  [body release];
+  [details release];
   [super dealloc];
 }
 

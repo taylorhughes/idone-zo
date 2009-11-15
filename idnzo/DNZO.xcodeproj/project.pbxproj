@@ -59,6 +59,8 @@
 		348936D910AA66AD0054237D /* tableview-background.png in Resources */ = {isa = PBXBuildFile; fileRef = 348936D710AA66AD0054237D /* tableview-background.png */; };
 		3489371B10AA6BD80054237D /* TextFieldView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3489371A10AA6BD80054237D /* TextFieldView.xib */; };
 		3489371C10AA6BD80054237D /* TextFieldView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3489371A10AA6BD80054237D /* TextFieldView.xib */; };
+		349066EA10AF6C7200F2AAFF /* ArchivedListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 349066E910AF6C7200F2AAFF /* ArchivedListViewController.m */; };
+		349066EB10AF6C7200F2AAFF /* ArchivedListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 349066E910AF6C7200F2AAFF /* ArchivedListViewController.m */; };
 		3494869810152A3B00DF81F3 /* TaskList.m in Sources */ = {isa = PBXBuildFile; fileRef = 3494869710152A3B00DF81F3 /* TaskList.m */; };
 		3494869910152A3B00DF81F3 /* TaskList.m in Sources */ = {isa = PBXBuildFile; fileRef = 3494869710152A3B00DF81F3 /* TaskList.m */; };
 		34961D56107EE6740068B551 /* red-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 34961D55107EE6740068B551 /* red-button.png */; };
@@ -165,6 +167,8 @@
 		3489371A10AA6BD80054237D /* TextFieldView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = TextFieldView.xib; path = Resources/TextFieldView.xib; sourceTree = "<group>"; };
 		348E18C60FA7DE1E00B75000 /* Test.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Test.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		348E18C70FA7DE1E00B75000 /* Test-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Test-Info.plist"; sourceTree = "<group>"; };
+		349066E810AF6C7200F2AAFF /* ArchivedListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ArchivedListViewController.h; path = classes/ArchivedListViewController.h; sourceTree = "<group>"; };
+		349066E910AF6C7200F2AAFF /* ArchivedListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ArchivedListViewController.m; path = classes/ArchivedListViewController.m; sourceTree = "<group>"; };
 		3490B9A60FA7DB15004195D9 /* DNZO_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNZO_Prefix.pch; sourceTree = "<group>"; };
 		3490B9C20FA7DD60004195D9 /* Done-zo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Done-zo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3494869610152A3B00DF81F3 /* TaskList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskList.h; sourceTree = "<group>"; };
@@ -348,6 +352,8 @@
 				34770B290FAFE45B00AD8397 /* MainViewController.m */,
 				34770B260FAFE45B00AD8397 /* ListViewController.h */,
 				34770B270FAFE45B00AD8397 /* ListViewController.m */,
+				349066E810AF6C7200F2AAFF /* ArchivedListViewController.h */,
+				349066E910AF6C7200F2AAFF /* ArchivedListViewController.m */,
 				341E1E210FB138F000D5B454 /* TaskViewController.h */,
 				341E1E220FB138F000D5B454 /* TaskViewController.m */,
 			);
@@ -607,6 +613,7 @@
 				3489366410AA5D620054237D /* EditViewController.m in Sources */,
 				3489366810AA5D950054237D /* TextViewController.m in Sources */,
 				3489369610AA5E870054237D /* TextFieldViewController.m in Sources */,
+				349066EB10AF6C7200F2AAFF /* ArchivedListViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -651,6 +658,7 @@
 				3489366510AA5D620054237D /* EditViewController.m in Sources */,
 				3489366910AA5D950054237D /* TextViewController.m in Sources */,
 				3489369710AA5E870054237D /* TextFieldViewController.m in Sources */,
+				349066EA10AF6C7200F2AAFF /* ArchivedListViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

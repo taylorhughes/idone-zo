@@ -5,6 +5,7 @@
 //
 
 @interface DonezoAPIClient ()
+
 @property (nonatomic, copy) NSString *baseUrl;
 @property (nonatomic, readonly) NSString *apiUrl;
 

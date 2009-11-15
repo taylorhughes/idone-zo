@@ -26,6 +26,7 @@
 @dynamic sortDate;
 @dynamic taskList;
 @dynamic updatedAt;
+@dynamic completedAt;
 
 NSDateFormatter *dueDateFormatter;
 
@@ -41,17 +42,12 @@ NSDateFormatter *dueDateFormatter;
   return dueDateFormatter;
 }
 
-- (void) dealloc
-{
-  [super dealloc];
-}
-
 - (void) awakeFromInsert
 {
   [super awakeFromInsert];
   // Always set these to be now in case
   [self hasBeenUpdated];
-  self.sortDate =  [NSDate date];
+  self.sortDate = [NSDate date];
 }
 
 - (void) hasBeenUpdated
@@ -103,6 +99,18 @@ NSDateFormatter *dueDateFormatter;
 }
 - (void)setIsComplete:(BOOL)isComplete
 {
+  if (isComplete)
+  {
+    if (!self.completedAt)
+    {
+      self.completedAt = [NSDate date];
+    }
+  }
+  else
+  {
+    self.completedAt = nil;
+  }
+
   self.complete = [NSNumber numberWithInt:isComplete];
 }
 
@@ -131,6 +139,12 @@ NSDateFormatter *dueDateFormatter;
 - (void)setDoSync:(BOOL)doSync
 {
   self.sync = [NSNumber numberWithInt:doSync];
+}
+
+
+- (void) dealloc
+{
+  [super dealloc];
 }
 
 @end

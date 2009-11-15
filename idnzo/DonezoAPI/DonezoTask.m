@@ -17,6 +17,7 @@
 @synthesize contexts;
 @synthesize dueDate;
 @synthesize updatedAt;
+@synthesize completedAt;
 @synthesize isComplete;
 @synthesize isArchived;
 @synthesize sortDate;
@@ -101,12 +102,10 @@
   {
     task.contexts = [NSArray array];
   }
-  task.dueDate =   [DonezoAPIClient dateFromDonezoDateString:[dict valueForKey:@"due_date"]];
-  task.updatedAt = [DonezoAPIClient dateFromDonezoDateString:[dict valueForKey:@"updated_at"]];
-  NSString *sortDateStr = [dict valueForKey:@"sort_date"];
-  //NSLog(@"Input sort date string: %@",sortDateStr);
-  task.sortDate =  [DonezoAPIClient dateFromDonezoDateString:sortDateStr];
-  //NSLog(@"Output sort date: %0.6f", [task.sortDate timeIntervalSinceReferenceDate]);
+  task.dueDate =     [DonezoAPIClient dateFromDonezoDateString:[dict valueForKey:@"due_date"]];
+  task.updatedAt =   [DonezoAPIClient dateFromDonezoDateString:[dict valueForKey:@"updated_at"]];
+  task.completedAt = [DonezoAPIClient dateFromDonezoDateString:[dict valueForKey:@"completed_at"]];
+  task.sortDate =    [DonezoAPIClient dateFromDonezoDateString:[dict valueForKey:@"sort_date"]];
   
   return task;
 }

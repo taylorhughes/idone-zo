@@ -20,6 +20,7 @@
 @property (nonatomic, retain) NSString *body;
 
 @property (nonatomic, retain) NSDate *dueDate;
+@property (nonatomic, retain) NSDate *completedAt;
 @property (nonatomic, retain) NSDate *updatedAt;
 @property (nonatomic, retain) NSDate *sortDate;
 
@@ -30,12 +31,16 @@
 @property (readonly, nonatomic, copy) NSString *dueString;
 @property (readonly, nonatomic, copy) NSString *contextsString;
 
+// These properties modify underlying NSNumber* objects
 @property (nonatomic, assign) BOOL isComplete;
 @property (nonatomic, assign) BOOL isArchived;
 @property (nonatomic, assign) BOOL isDeleted;
+// Whether we should continue syncing this object
 @property (nonatomic, assign) BOOL doSync;
 
 - (NSArray *)contextNames;
+
+// Updates updatedAt so we know to sync the new version properly
 - (void) hasBeenUpdated:(NSDate*)newUpdatedAt;
 - (void) hasBeenUpdated;
 

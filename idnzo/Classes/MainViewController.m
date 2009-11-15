@@ -14,6 +14,7 @@
 
 @synthesize taskLists;
 @synthesize listViewController;
+@synthesize archivedListViewController;
 
 - (void)viewDidLoad
 {
@@ -50,6 +51,16 @@
     listViewController = [[ListViewController alloc] initWithNibName:@"ListView" bundle:nil];
   }
   return listViewController;
+}
+
+- (ArchivedListViewController *)archivedListViewController
+{
+  // Instantiate the detail view controller if necessary.
+  if (archivedListViewController == nil)
+  {
+    archivedListViewController = [[ArchivedListViewController alloc] initWithStyle:UITableViewStylePlain];
+  }
+  return archivedListViewController;
 }
 
 
@@ -172,18 +183,40 @@
 
 
 #pragma mark Table Delegate and Data Source Methods
-// These methods are all part of either the UITableViewDelegate or UITableViewDataSource protocols.
 
-// This table will always only have one section.
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tv
 {
-  return 1;
+  return 2;
 }
 
-// One row per book, the number of books is the number of rows.
 - (NSInteger)tableView:(UITableView *)tv numberOfRowsInSection:(NSInteger)section
 {
-  return [self.taskLists count];
+  switch (section)
+  {
+    // regular lists
+    case 0:
+      return [self.taskLists count];
+    
+    // archived tasks
+    case 1:
+    default:
+      return 1;
+  }
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+  switch (section)
+  {
+    // archived tasks
+    case 1:
+      return @"Archived Tasks";
+      
+    case 0:
+    default:
+      return nil;
+  }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tv cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -196,22 +229,33 @@
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
   }
   
-  TaskList *taskList = [self.taskLists objectAtIndex:indexPath.row];
-  cell.textLabel.text = taskList.name;
-  
-  // Commented out because we need to reloadData when the count changes (new task, task deleted)
-  NSUInteger count = [taskList displayTasksCount];
-  if (count == 0)
+  TaskList *taskList = nil;
+  switch ([indexPath section])
   {
-    cell.detailTextLabel.text = @"No tasks";
-  }
-  else if (count == 1)
-  {
-    cell.detailTextLabel.text = @"1 task";
-  }
-  else if (count > 1)
-  {
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"%d tasks", count];
+    case 0:
+      taskList = [self.taskLists objectAtIndex:indexPath.row];
+      cell.textLabel.text = taskList.name;
+      
+      // Commented out because we need to reloadData when the count changes (new task, task deleted)
+      NSUInteger count = [taskList displayTasksCount];
+      if (count == 0)
+      {
+        cell.detailTextLabel.text = @"No tasks";
+      }
+      else if (count == 1)
+      {
+        cell.detailTextLabel.text = @"1 task";
+      }
+      else if (count > 1)
+      {
+        cell.detailTextLabel.text = [NSString stringWithFormat:@"%d tasks", count];
+      }
+      break;
+      
+    // archived tasks
+    case 1:
+      cell.textLabel.text = @"This week";
+      break;
   }
   
   return cell;
@@ -219,10 +263,18 @@
 
 - (NSIndexPath *)tableView:(UITableView *)tv willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-  TaskList *clickedList = [self.taskLists objectAtIndex:indexPath.row];
+  if ([indexPath section] == 0)
+  {
+    TaskList *clickedList = [self.taskLists objectAtIndex:indexPath.row];
+    [self loadListViewForList:clickedList];    
+  }
+  else
+  {
+    self.archivedListViewController.start = [NSDate dateWithTimeIntervalSinceNow:-100000];
+    self.archivedListViewController.end   = [NSDate dateWithTimeIntervalSinceNow:100000];
+    [self.navigationController pushViewController:self.archivedListViewController animated:YES];
+  }
 
-  [self loadListViewForList:clickedList];
-  
   return nil;
 }
 

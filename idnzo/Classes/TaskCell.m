@@ -12,17 +12,7 @@
 
 @implementation TaskCell
 
-@synthesize task, taskCellView;
-
-- (void)setTask:(Task *)newTask
-{
-  if (task)
-  {
-    [task release];
-  }
-  task = [newTask retain];
-  taskCellView.task = task;
-}
+@synthesize taskCellView;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -36,8 +26,67 @@
 	return self;
 }
 
-- (void)dealloc {
-  [task release];
+- (void) displayLocalTask:(Task*)task
+{
+  [self displayLocalTask:task archived:NO];
+}
+
+- (void) displayLocalTask:(Task*)task archived:(BOOL)isArchived
+{
+  // We could probably use task.isArchived, but that feels wrong
+  self.taskCellView.archivedDisplay = isArchived;
+  self.taskCellView.isComplete = task.isComplete;
+  
+  
+  self.taskCellView.body = task.body;
+  
+  NSMutableArray *details = [[NSMutableArray alloc] initWithCapacity:3];
+  if (task.project)
+  {
+    [details addObject:task.project.name];
+  }
+  if ([task.contexts count] > 0)
+  {
+    [details addObject:task.contextsString];
+  }
+  if (task.dueDate)
+  {
+    [details addObject:task.dueString];
+  }
+  self.taskCellView.details = details;
+  [details release];
+  
+  [self.taskCellView setNeedsDisplay];
+}
+
+- (void) displayRemoteTask:(DonezoTask*)task
+{
+  self.taskCellView.archivedDisplay = YES;
+  
+  self.taskCellView.body = task.body; //[@"[remote] " stringByAppendingString:task.body];
+  
+  NSMutableArray *details = [[NSMutableArray alloc] initWithCapacity:3];
+  if (task.project)
+  {
+    [details addObject:task.project];
+  }
+  if ([task.contexts count] > 0)
+  {
+    NSString *contextsString = [@"@" stringByAppendingString:[task.contexts componentsJoinedByString:@" @"]];
+    [details addObject:contextsString];
+  }
+  if (task.dueDate)
+  {
+    [details addObject:[[Task dueDateFormatter] stringFromDate:task.dueDate]];
+  }
+  self.taskCellView.details = details;
+  [details release];
+  
+  [self.taskCellView setNeedsDisplay];
+}
+
+- (void)dealloc
+{
 	[taskCellView release];
   [super dealloc];
 }
