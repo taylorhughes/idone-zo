@@ -255,6 +255,8 @@
     // archived tasks
     case 1:
       cell.textLabel.text = @"This week";
+      // Setting this to an empty string is required to fix a rendering issue in iPhoneOS 3.1.2
+      cell.detailTextLabel.text = @"";
       break;
   }
   

@@ -723,7 +723,15 @@ static UIImage *unchecked;
     }
   }
   
-  NSString *identifier = detailLabel == nil ? @"DetailCellLeft" : @"DetailCellRight";
+  NSString *identifier = nil;
+  if (detailLabel == nil)
+  {
+    identifier = @"DetailCellLeft";
+  }
+  else
+  {
+    identifier = @"DetailCellRight";
+  }
   
   AdjustableTextLabelWidthCell *cell = (AdjustableTextLabelWidthCell*)[self.tableView dequeueReusableCellWithIdentifier:identifier];
   if (cell == nil)
@@ -739,6 +747,8 @@ static UIImage *unchecked;
   }
   else
   {
+    // Setting this to an empty string is required to fix a rendering issue in iPhoneOS 3.1.2
+    cell.detailTextLabel.text = @"";
     cell.autoresizesSubviews = YES;
     cell.textLabel.textAlignment = UITextAlignmentLeft;
     cell.textLabelWidth = 150.0;
