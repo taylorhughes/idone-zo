@@ -28,18 +28,22 @@ static NSCalendar *gregorian;
 + (NSDate*) beginningOfThisWeek
 {  
   NSDate *today = [[NSDate alloc] init];
-  NSDate *beginningOfWeek = nil;
-  BOOL ok = [gregorian rangeOfUnit:NSWeekCalendarUnit
-                         startDate:&beginningOfWeek
-                          interval:NULL
-                           forDate:today];
-  if (!ok)
-  {
-    NSLog(@"Could not fetch beginning of week for some reason.");
-  }
+  
+  NSDateComponents *weekdayComponents = [gregorian components:NSWeekdayCalendarUnit fromDate:today];
+  
+  NSDateComponents *componentsToSubtract = [[NSDateComponents alloc] init];
+  // Sunday is 1
+  [componentsToSubtract setDay:0 - ([weekdayComponents weekday] - 1)];
+  
+  NSDate *beginningOfWeek = [gregorian dateByAddingComponents:componentsToSubtract toDate:today options:0];
+  [componentsToSubtract release];
+  
+  // Remote hours, seconds, etc. from date
+  NSDateComponents *components = [gregorian components:(NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit)
+                                              fromDate:beginningOfWeek];
   
   [today release];
-  return beginningOfWeek;
+  return [gregorian dateFromComponents:components];
 }
 
 + (NSDate*) endOfThisWeek

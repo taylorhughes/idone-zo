@@ -31,6 +31,10 @@
     self.navigationItem.title = @"Archived Tasks";
   }
   
+  NSLog(@"Showing archived tasks for %@ to %@",
+        [DonezoDates donezoDetailedDateStringFromDate:self.start], 
+        [DonezoDates donezoDetailedDateStringFromDate:self.end]);
+  
   self.localTasks = nil;
   self.remoteTasks = nil;
   [self.tableView reloadData];
@@ -159,6 +163,11 @@ static NSInteger compareLocalRemoteTasks(id a, id b, void *context)
 }
 
 #pragma mark Table view methods
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	return [TaskCellView height];
+}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
