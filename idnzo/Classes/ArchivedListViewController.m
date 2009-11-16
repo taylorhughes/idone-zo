@@ -42,11 +42,6 @@
   // show a message indicating that we are loading remote tasks
 }
 
-- (void)viewDidAppear:(BOOL)animated
-{
-  [super viewDidAppear:animated];
-}
-
 - (NSArray*) localTasks
 {
   if (!localTasks)
@@ -81,19 +76,28 @@
   // This happens in a separate thread
   DNZOAppDelegate *appDelegate = (DNZOAppDelegate *)[[UIApplication sharedApplication] delegate];
   
-  NSError *error = nil;
-  NSArray *tasks = [appDelegate.donezoAPIClient getArchivedTasksCompletedBetweenDate:self.start
-                                                                             andDate:self.end
-                                                                               error:&error];
+  NSError *error =  nil;
+  
+  NSDate *myStart = [self.start copy];
+  NSDate *myEnd =   [self.end copy];
+  NSArray *tasks =  [appDelegate.donezoAPIClient getArchivedTasksCompletedBetweenDate:myStart
+                                                                              andDate:myEnd
+                                                                                error:&error];
   
   if (error != nil)
   {
     NSLog(@"Error fetching remote archived tasks! WTFOMG, %@", [error localizedDescription]);
-    tasks = [NSArray array];
   }
-  
-  NSLog(@"Fetched %d remote archived tasks", [tasks count]);
-  [self performSelectorOnMainThread:@selector(showRemoteTasks:) withObject:tasks waitUntilDone:YES];
+  else if (![self.start isEqualToDate:myStart] || ![self.end isEqualToDate:myEnd])
+  {
+    NSLog(@"Whoops, start and end time have changed since the request was made. Forget about it.");
+  }
+  else
+  {
+    // Success!
+    NSLog(@"Fetched %d remote archived tasks", [tasks count]);
+    [self performSelectorOnMainThread:@selector(showRemoteTasks:) withObject:tasks waitUntilDone:YES];
+  }
 }
 
 - (void) showRemoteTasks:(id)tasks

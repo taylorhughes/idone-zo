@@ -18,8 +18,9 @@
   NSArray *remoteTasks;
 }
 
-@property (nonatomic, copy) NSDate *start;
-@property (nonatomic, copy) NSDate *end;
+// Atomic is the default
+@property (copy) NSDate *start;
+@property (copy) NSDate *end;
 
 @property (nonatomic, retain) NSArray *localTasks;
 @property (retain) NSArray *remoteTasks;
