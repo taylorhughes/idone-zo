@@ -34,6 +34,7 @@ extern UIColor*  const DonezoSelectedTextColor;
   DonezoSyncMaster *syncMaster;
   
   NSOperationQueue *operationQueue;
+  NSInteger networkIndicatorShown;
 }
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;
@@ -45,6 +46,9 @@ extern UIColor*  const DonezoSelectedTextColor;
 @property (nonatomic, retain, readonly) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
 @property (nonatomic, retain) DonezoAPIClient *donezoAPIClient;
+
+- (void) showNetworkIndicator;
+- (void) hideNetworkIndicator;
 
 @end
 

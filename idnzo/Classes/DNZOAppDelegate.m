@@ -42,7 +42,9 @@ NSString* const DonezoDataUpdatedNotification = @"DonezoDataUpdatedNotification"
 {
   self = [super init];
   if (self != nil)
-  { 
+  {
+    networkIndicatorShown = 0;
+    
     self.operationQueue = [[[NSOperationQueue alloc] init] autorelease];
     [self.operationQueue setMaxConcurrentOperationCount:1];
     
@@ -142,8 +144,7 @@ NSString* const DonezoDataUpdatedNotification = @"DonezoDataUpdatedNotification"
   // WARNING: Operates in a separate thread, do not make non-threadsafe calls here!
   //
 
-  UIApplication* app = [UIApplication sharedApplication];
-  app.networkActivityIndicatorVisible = YES;
+  [self showNetworkIndicator];
   
   self.syncMaster.context = [[[NSManagedObjectContext alloc] init] autorelease];
   [self.syncMaster.context setPersistentStoreCoordinator:self.persistentStoreCoordinator];
@@ -199,8 +200,7 @@ NSString* const DonezoDataUpdatedNotification = @"DonezoDataUpdatedNotification"
 {
   NSError *error = (NSError*)arg;
   
-  UIApplication* app = [UIApplication sharedApplication];
-  app.networkActivityIndicatorVisible = NO;
+  [self hideNetworkIndicator];
   
   if (error != nil)
   {
@@ -217,6 +217,29 @@ NSString* const DonezoDataUpdatedNotification = @"DonezoDataUpdatedNotification"
   else
   {
     NSLog(@"Sync completed successfully!");
+  }
+}
+
+- (void) showNetworkIndicator
+{
+  @synchronized (self) {
+    if (networkIndicatorShown <= 0)
+    {
+      UIApplication* app = [UIApplication sharedApplication];
+      app.networkActivityIndicatorVisible = YES;
+    }
+    networkIndicatorShown++;
+  }
+}
+- (void) hideNetworkIndicator
+{
+  @synchronized (self) {
+    networkIndicatorShown--;
+    if (networkIndicatorShown <= 0)
+    {
+      UIApplication* app = [UIApplication sharedApplication];
+      app.networkActivityIndicatorVisible = NO;
+    }
   }
 }
 

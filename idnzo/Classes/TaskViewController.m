@@ -17,6 +17,7 @@ static UIImage *unchecked;
 
 @property (nonatomic, retain) NSManagedObjectContext *editingContext;
 @property (nonatomic, retain) Task *task;
+@property (nonatomic, retain) ConfirmationViewController *confirm;
 
 - (void) loadTask:(Task*)newTask editing:(BOOL)editing;
 - (BOOL) isNewTask;
@@ -35,8 +36,6 @@ static UIImage *unchecked;
 
 - (void) refresh;
 - (void) refreshHeaderAndFooter;
-
-- (IBAction) hideDeleteTaskConfirmation:(id)sender doPop:(BOOL)doPopView;
 
 - (BOOL)hasProject;
 - (BOOL)hasContexts;
@@ -60,6 +59,7 @@ static UIImage *unchecked;
 @synthesize task;
 @synthesize editingContext;
 @synthesize isEditing;
+@synthesize confirm;
 
 - (id) init
 {
@@ -461,7 +461,29 @@ static UIImage *unchecked;
   [self refresh];
 }
 
-- (IBAction) deleteTask:(id)sender
+
+- (IBAction) askToDeleteTask:(id)sender
+{
+  UIView *superview = self.navigationController.view;
+  
+  self.confirm = [ConfirmationViewController confirmationViewWithSuperview:superview];
+  
+  [self.confirm.confirmButton setTitle:@"Delete Task" forState:UIControlStateNormal];
+  [self.confirm.cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
+  
+  self.confirm.target = self;
+  self.confirm.confirmAction = @selector(deleteTask);
+  // This is overwritten by deleteTask() if the task is deleted
+  self.confirm.afterHideAction = @selector(cleanupConfirmation);
+  
+  [self.confirm show];
+}
+
+- (void) cleanupConfirmation
+{
+  self.confirm = nil;
+}
+- (void) deleteTask
 {  
   // This happens when deleting completed tasks 
   if (!self.isEditing)
@@ -481,74 +503,15 @@ static UIImage *unchecked;
   
   [self save:NO];
 
-  [self hideDeleteTaskConfirmation:self doPop:YES];
+  self.confirm.afterHideAction = @selector(finishDeletingTask);
 }
-- (IBAction) askToDeleteTask:(id)sender
-{
-  UIView *superview = self.navigationController.view;
+- (void) finishDeletingTask
+{ 
+  [self.navigationController popViewControllerAnimated:YES];
+  self.editingContext = nil;
+  self.task = nil;
   
-  CGRect frame = superview.frame;
-  bgView = [[[UIView alloc] initWithFrame:frame] retain];
-  bgView.backgroundColor = [UIColor blackColor];
-  bgView.alpha = 0.0;
-  [superview addSubview:bgView];
-  
-  frame = confirmationView.frame;
-  frame.origin = CGPointMake(0.0, superview.bounds.size.height);
-  confirmationView.frame = frame;
-  [superview addSubview:confirmationView];            
-  
-  // Animate to new location
-  [UIView beginAnimations:@"presentWithSuperview" context:nil];
-  frame.origin = CGPointMake(0.0, superview.bounds.size.height - confirmationView.bounds.size.height);
-  confirmationView.frame = frame;
-  bgView.alpha = 0.5;
-  [UIView commitAnimations];
-}
-
-
-#define ANIMATION_REMOVE_DELETE         @"removeFromSuperviewWithAnimation"
-#define ANIMATION_REMOVE_DELETE_AND_POP @"removeAndPopFromSuperviewWithAnimation"
-
-- (void)animationDidStop:(NSString *)animationID finished:(NSNumber *)finished context:(void *)context
-{
-  [confirmationView removeFromSuperview];
-  [bgView removeFromSuperview];
-  [bgView release];
-  if ([animationID isEqualToString:ANIMATION_REMOVE_DELETE_AND_POP])
-  {  
-    [self.navigationController popViewControllerAnimated:YES];
-    self.editingContext = nil;
-    self.task = nil;
-  }
-}
-- (IBAction) cancelDeleteTask:(id)sender
-{
-  [self hideDeleteTaskConfirmation:sender doPop:NO];
-}
-
-- (IBAction) hideDeleteTaskConfirmation:(id)sender doPop:(BOOL)doPopView
-{
-  if (!doPopView)
-  {
-    [UIView beginAnimations:ANIMATION_REMOVE_DELETE context:nil];
-  }
-  else
-  {
-    [UIView beginAnimations:ANIMATION_REMOVE_DELETE_AND_POP context:nil];
-  }
-  
-  // Set delegate and selector to remove from superview when animation completes
-  [UIView setAnimationDelegate:self];
-  [UIView setAnimationDidStopSelector:@selector(animationDidStop:finished:context:)];
-  
-  // Move this view to bottom of superview
-  CGRect frame = confirmationView.frame;
-  frame.origin = CGPointMake(0.0, confirmationView.superview.bounds.size.height);
-  confirmationView.frame = frame;
-  bgView.alpha = 0.0;
-  
-  [UIView commitAnimations];    
+  [self cleanupConfirmation];
 }
 
 
@@ -811,8 +774,6 @@ static UIImage *unchecked;
 {
   [bodyView release];
   [bodyEditView release];
-  [confirmationView release];
-  [bgView release];
   
   [topLabel release];
   [topCheckmark release];

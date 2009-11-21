@@ -13,6 +13,7 @@
 #import "DatePickerViewController.h"
 #import "TextViewController.h"
 #import "AdjustableTextLabelWidthCell.h"
+#import "ConfirmationViewController.h"
 
 @class Task;
 
@@ -26,23 +27,20 @@
   IBOutlet UIView *bodyEditView;
   IBOutlet UIView *bottomView;
   
-  UIView *bgView;
-  IBOutlet UIView *confirmationView;
-  
   IBOutlet UILabel *topLabel;
   IBOutlet UIButton *topCheckmark;
   IBOutlet UIButton *topButton;
   
   BOOL isNewTask;
   BOOL isFirstAppearance;
+  
+  ConfirmationViewController *confirm;
 }
 
 - (void) loadTask:(Task*)newTask editing:(BOOL)editing positionInList:(NSInteger)position ofTotalCount:(NSInteger)total;
 - (void) loadEditingWithNewTaskForList:(TaskList*)list;
 
 - (IBAction) askToDeleteTask:(id)sender;
-- (IBAction) deleteTask:(id)sender;
-- (IBAction) cancelDeleteTask:(id)sender;
 
 @property (nonatomic, readonly) BOOL isEditing;
 

@@ -10,6 +10,7 @@
 @property (retain, nonatomic) NSArray *filteredTasks;
 @property (retain, nonatomic) SortViewController *sortViewController;
 @property (retain, nonatomic) FilterViewController *filterViewController;
+@property (retain, nonatomic) ConfirmationViewController *confirm;
 
 @end
 
@@ -22,7 +23,7 @@
 @synthesize taskViewController;
 @synthesize sortViewController;
 @synthesize filterViewController;
-@synthesize syncButton;
+@synthesize confirm;
 
 
 - (void)viewDidLoad
@@ -305,7 +306,52 @@
   return nil;
 }
 
-- (IBAction)archiveTasks:(id)sender
+- (IBAction)askToArchiveTasks:(id)sender
+{
+  BOOL hasCompleted = NO;
+  for (Task* task in self.filteredTasks)
+  {
+    if (task.isComplete)
+    {
+      hasCompleted = YES;
+      break;
+    }
+  }
+  
+  if (!hasCompleted)
+  {
+    NSString *message = @"Pressing this button will move completed tasks to the archive, but there are no completed tasks at the moment.";
+    
+    UIAlertView *alert = [[UIAlertView alloc]
+                              initWithTitle:@"No tasks to archive"
+                                    message:message
+                                   delegate:nil
+                          cancelButtonTitle:@"OK"
+                          otherButtonTitles:nil];
+    [alert show];
+    [alert release];
+  }
+  else
+  {
+    self.confirm = [ConfirmationViewController confirmationViewWithSuperview:self.navigationController.view];
+    
+    self.confirm.target = self;
+    self.confirm.confirmAction = @selector(archiveTasks);
+    self.confirm.afterHideAction = @selector(cleanupConfirmation);
+    
+    [self.confirm.confirmButton setTitle:@"Archive Completed Tasks" forState:UIControlStateNormal];
+    [self.confirm.cancelButton setTitle:@"Don't Archive" forState:UIControlStateNormal];
+    
+    [self.confirm show];
+  }
+}
+
+- (void)cleanupConfirmation
+{
+  self.confirm = nil;
+}
+
+- (void)archiveTasks
 {
   NSMutableArray *archivedPaths = [NSMutableArray arrayWithCapacity:[self.filteredTasks count]];
   for (NSInteger i = 0; i < [self.filteredTasks count]; i++)
@@ -344,7 +390,10 @@
   }
 }
 
-
+- (IBAction) sync:(id)sender
+{
+  [self notifySync];
+}
 - (void) notifySync
 {
   NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
@@ -411,6 +460,8 @@
   [filteredTasks release];
   [taskViewController release];
   [sortViewController release];
+  [filterViewController release];
+  [confirm release];
   [super dealloc];
 }
 

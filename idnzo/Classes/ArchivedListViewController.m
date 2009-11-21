@@ -75,6 +75,7 @@
 {
   // This happens in a separate thread
   DNZOAppDelegate *appDelegate = (DNZOAppDelegate *)[[UIApplication sharedApplication] delegate];
+  [appDelegate showNetworkIndicator];
   
   NSError *error =  nil;
   
@@ -83,6 +84,7 @@
   NSArray *tasks =  [appDelegate.donezoAPIClient getArchivedTasksCompletedBetweenDate:myStart
                                                                               andDate:myEnd
                                                                                 error:&error];
+  [appDelegate hideNetworkIndicator];
   
   if (error != nil)
   {
