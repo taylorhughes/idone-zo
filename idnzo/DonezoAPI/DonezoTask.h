@@ -11,6 +11,7 @@
 @interface DonezoTask : NSObject {
   NSNumber *key;
   NSString *taskListKey;
+  NSString *taskListName;
   NSString *body;
   NSString *project;
   NSArray  *contexts;
@@ -24,6 +25,8 @@
 
 @property (nonatomic, copy) NSNumber *key;
 @property (nonatomic, copy) NSString *taskListKey;
+// Only available for archived tasks
+@property (nonatomic, copy) NSString *taskListName;
 @property (nonatomic, copy) NSString *body;
 @property (nonatomic, copy) NSString *project;
 @property (nonatomic, copy) NSArray  *contexts;

@@ -40,7 +40,11 @@
   
   self.taskCellView.body = task.body;
   
-  NSMutableArray *details = [[NSMutableArray alloc] initWithCapacity:3];
+  NSMutableArray *details = [[NSMutableArray alloc] initWithCapacity:4];
+  if (isArchived)
+  {
+    [details addObject:[task.taskList name]];
+  }
   if (task.project)
   {
     [details addObject:task.project.name];
@@ -65,7 +69,11 @@
   
   self.taskCellView.body = task.body; //[@"[remote] " stringByAppendingString:task.body];
   
-  NSMutableArray *details = [[NSMutableArray alloc] initWithCapacity:3];
+  NSMutableArray *details = [[NSMutableArray alloc] initWithCapacity:4];
+  if (task.taskListName)
+  {
+    [details addObject:task.taskListName];
+  }
   if (task.project)
   {
     [details addObject:task.project];

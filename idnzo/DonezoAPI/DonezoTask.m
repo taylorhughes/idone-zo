@@ -12,6 +12,7 @@
 
 @synthesize key;
 @synthesize taskListKey;
+@synthesize taskListName;
 @synthesize body;
 @synthesize project;
 @synthesize contexts;
@@ -90,6 +91,7 @@
   task.isComplete = (BOOL)[(NSNumber*)[dict valueForKey:@"complete"] intValue];
   task.key = [dict valueForKey:@"id"];
   task.taskListKey = [dict valueForKey:@"task_list"];
+  task.taskListName = [dict valueForKey:@"task_list_name"];
   task.body = [dict valueForKey:@"body"];
   task.project = [dict valueForKey:@"project"];
   
