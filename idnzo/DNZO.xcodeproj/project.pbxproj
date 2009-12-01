@@ -63,6 +63,7 @@
 		3489371C10AA6BD80054237D /* TextFieldView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3489371A10AA6BD80054237D /* TextFieldView.xib */; };
 		349066EA10AF6C7200F2AAFF /* ArchivedListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 349066E910AF6C7200F2AAFF /* ArchivedListViewController.m */; };
 		349066EB10AF6C7200F2AAFF /* ArchivedListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 349066E910AF6C7200F2AAFF /* ArchivedListViewController.m */; };
+		34916AEA10C4E359009F932A /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 34916AE910C4E359009F932A /* Default.png */; };
 		3494869810152A3B00DF81F3 /* TaskList.m in Sources */ = {isa = PBXBuildFile; fileRef = 3494869710152A3B00DF81F3 /* TaskList.m */; };
 		3494869910152A3B00DF81F3 /* TaskList.m in Sources */ = {isa = PBXBuildFile; fileRef = 3494869710152A3B00DF81F3 /* TaskList.m */; };
 		34961D56107EE6740068B551 /* red-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 34961D55107EE6740068B551 /* red-button.png */; };
@@ -178,6 +179,7 @@
 		349066E910AF6C7200F2AAFF /* ArchivedListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ArchivedListViewController.m; path = classes/ArchivedListViewController.m; sourceTree = "<group>"; };
 		3490B9A60FA7DB15004195D9 /* DNZO_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNZO_Prefix.pch; sourceTree = "<group>"; };
 		3490B9C20FA7DD60004195D9 /* Done-zo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Done-zo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		34916AE910C4E359009F932A /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = Resources/Default.png; sourceTree = "<group>"; };
 		3494869610152A3B00DF81F3 /* TaskList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskList.h; sourceTree = "<group>"; };
 		3494869710152A3B00DF81F3 /* TaskList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaskList.m; sourceTree = "<group>"; };
 		34961D55107EE6740068B551 /* red-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "red-button.png"; path = "Resources/red-button.png"; sourceTree = "<group>"; };
@@ -405,6 +407,7 @@
 		3496213B108682D30068B551 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				34916AE910C4E359009F932A /* Default.png */,
 				348936D710AA66AD0054237D /* tableview-background.png */,
 				34962144108685B50068B551 /* sort-button.png */,
 				34961D55107EE6740068B551 /* red-button.png */,
@@ -553,6 +556,7 @@
 				3489371B10AA6BD80054237D /* TextFieldView.xib in Resources */,
 				34FDCFBA10B7627E00625D62 /* ConfirmationView.xib in Resources */,
 				3488E39410C1FA9600D7921C /* ArchivedListView.xib in Resources */,
+				34916AEA10C4E359009F932A /* Default.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
