@@ -12,6 +12,7 @@
 
 @synthesize localTasks, remoteTasks;
 @synthesize start, end;
+@synthesize tableView;
 
 - (void)viewDidLoad
 {
@@ -38,8 +39,6 @@
   self.localTasks = nil;
   self.remoteTasks = nil;
   [self.tableView reloadData];
-  
-  // show a message indicating that we are loading remote tasks
 }
 
 - (NSArray*) localTasks

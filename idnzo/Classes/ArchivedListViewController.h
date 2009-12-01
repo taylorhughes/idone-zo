@@ -8,7 +8,7 @@
 
 #import "DNZOAppDelegate.h"
 
-@interface ArchivedListViewController : UITableViewController {
+@interface ArchivedListViewController : UIViewController <UITableViewDelegate, UITableViewDataSource> {
   NSDate *start;
   NSDate *end;
   
@@ -16,11 +16,18 @@
   NSArray *localTasks;
   // Array of remote DonezoTask* objects
   NSArray *remoteTasks;
+  
+  UIView *loadingView;
+  CGRect loadingBounds;
+  
+  UITableView *tableView;
 }
 
 // Atomic is the default
 @property (copy) NSDate *start;
 @property (copy) NSDate *end;
+
+@property (nonatomic, retain) IBOutlet UITableView *tableView;
 
 @property (nonatomic, retain) NSArray *localTasks;
 @property (retain) NSArray *remoteTasks;

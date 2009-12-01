@@ -60,7 +60,7 @@
   // Instantiate the detail view controller if necessary.
   if (archivedListViewController == nil)
   {
-    archivedListViewController = [[ArchivedListViewController alloc] initWithStyle:UITableViewStylePlain];
+    archivedListViewController = [[ArchivedListViewController alloc] initWithNibName:@"ArchivedListView" bundle:nil];
   }
   return archivedListViewController;
 }
