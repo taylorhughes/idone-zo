@@ -44,6 +44,8 @@
 - (void) viewDidLoad
 {
   [super viewDidLoad];
+  
+  [self.confirmButton.titleLabel setShadowOffset:CGSizeMake(0, -1.0)];
 }
 
 - (void) show
