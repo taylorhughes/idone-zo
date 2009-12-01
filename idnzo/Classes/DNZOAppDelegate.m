@@ -44,6 +44,7 @@ NSString* const DonezoDataUpdatedNotification = @"DonezoDataUpdatedNotification"
   if (self != nil)
   {
     networkIndicatorShown = 0;
+    hasDisplayedError = NO;
     
     self.operationQueue = [[[NSOperationQueue alloc] init] autorelease];
     [self.operationQueue setMaxConcurrentOperationCount:1];
@@ -87,6 +88,14 @@ NSString* const DonezoDataUpdatedNotification = @"DonezoDataUpdatedNotification"
 - (void) onSyncEvent:(NSNotification*)syncNotification
 {
   TaskList *list = [[syncNotification userInfo] valueForKey:@"list"];
+  NSNumber *userForced = [[syncNotification userInfo] valueForKey:@"userForced"];
+  
+  if (userForced && [userForced intValue] == 1)
+  {
+    // This will cause an error to be shown again if the sync fails, since the user requested it
+    hasDisplayedError = NO;
+  }
+  
   [self sync:list];
 }
 
@@ -205,14 +214,20 @@ NSString* const DonezoDataUpdatedNotification = @"DonezoDataUpdatedNotification"
   if (error != nil)
   {
     NSLog(@"Error syncing! %@ %@", [error description], [error userInfo]);
-    UIAlertView *errorAlert = [[UIAlertView alloc]
-                                    initWithTitle:@"Done-zo sync error"
-                                          message:[error localizedDescription]
-                                         delegate:nil
-                                cancelButtonTitle:@"OK"
-                                otherButtonTitles:nil];
-    [errorAlert show];
-    [errorAlert release];
+    
+    if (!hasDisplayedError)
+    {
+      UIAlertView *errorAlert = [[UIAlertView alloc]
+                                 initWithTitle:@"Done-zo sync error"
+                                 message:[error localizedDescription]
+                                 delegate:nil
+                                 cancelButtonTitle:@"OK"
+                                 otherButtonTitles:nil];
+      [errorAlert show];
+      [errorAlert release];
+      
+      hasDisplayedError = YES;
+    }
   }
   else
   {

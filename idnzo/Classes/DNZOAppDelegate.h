@@ -35,6 +35,7 @@ extern UIColor*  const DonezoSelectedTextColor;
   
   NSOperationQueue *operationQueue;
   NSInteger networkIndicatorShown;
+  BOOL hasDisplayedError;
 }
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;

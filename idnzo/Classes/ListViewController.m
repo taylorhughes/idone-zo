@@ -4,6 +4,7 @@
 @interface ListViewController ()
 
 - (void) notifySync;
+- (void) notifySync:(BOOL)userForced;
 - (void) resetTasks;
 
 @property (retain, nonatomic) NSArray *tasks;
@@ -392,13 +393,22 @@
 
 - (IBAction) sync:(id)sender
 {
-  [self notifySync];
+  [self notifySync:YES];
 }
+
 - (void) notifySync
+{
+  [self notifySync:NO];
+}
+- (void) notifySync:(BOOL)userForced
 {
   NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
 
-  NSDictionary *info = [NSDictionary dictionaryWithObject:self.taskList forKey:@"list"];
+  NSMutableDictionary *info = [NSMutableDictionary dictionaryWithObject:self.taskList forKey:@"list"];
+  if (userForced)
+  {
+    [info setValue:[NSNumber numberWithInt:1] forKey:@"userForced"];
+  }
   [dnc postNotificationName:DonezoShouldSyncNotification object:self userInfo:info];
 }
 
