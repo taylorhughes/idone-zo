@@ -8,16 +8,31 @@
 
 #import "ArchivedListViewController.h"
 
+@interface ArchivedListViewController (Private)
+
+- (void) showLoadingIndicator;
+- (void) hideLoadingIndicator;
+
+@end
+
 @implementation ArchivedListViewController
 
 @synthesize localTasks, remoteTasks;
+
 @synthesize start, end;
+
 @synthesize tableView;
 @synthesize loadingView;
+
+@synthesize currentOperation, queue;
+
 
 - (void)viewDidLoad
 {
   [super viewDidLoad];
+  
+  self.queue = [[NSOperationQueue alloc] init];
+  [self.queue release];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -42,6 +57,33 @@
 {
   [super viewDidAppear:animated];
 }
+
+
+- (void) showLoadingIndicator
+{
+  @synchronized (self)
+  {
+    if (loadingIndicatorShown++ >= 0)
+    {
+      self.loadingView.hidden = NO;
+      [self.loadingView setNeedsDisplay];
+    }    
+  }
+  [(DNZOAppDelegate *)[[UIApplication sharedApplication] delegate] showNetworkIndicator];
+}
+- (void) hideLoadingIndicator
+{
+  @synchronized (self)
+  {
+    if (--loadingIndicatorShown <= 0)
+    {
+      self.loadingView.hidden = YES;
+      [self.loadingView setNeedsDisplay];
+    }
+  }
+  [(DNZOAppDelegate *)[[UIApplication sharedApplication] delegate] hideNetworkIndicator];
+}
+
 
 - (NSArray*) localTasks
 {
@@ -74,33 +116,25 @@
 
 - (void) loadRemoteTasks
 {
-  NSLog(@"Loading remote tasks!");
-  
-  // This happens in a separate thread
+  void *operation = currentOperation;
   DNZOAppDelegate *appDelegate = (DNZOAppDelegate *)[[UIApplication sharedApplication] delegate];
-  self.loadingView.hidden = NO;
-  [self.loadingView setNeedsDisplay];
-  [appDelegate showNetworkIndicator];
+  
+  [self showLoadingIndicator];
   
   NSError *error =  nil;
-  
-  NSDate *myStart = [self.start copy];
-  NSDate *myEnd =   [self.end copy];
-  NSArray *tasks =  [appDelegate.donezoAPIClient getArchivedTasksCompletedBetweenDate:myStart
-                                                                              andDate:myEnd
+  NSArray *tasks =  [appDelegate.donezoAPIClient getArchivedTasksCompletedBetweenDate:self.start
+                                                                              andDate:self.end
                                                                                 error:&error];
 
-  self.loadingView.hidden = YES;
-  [self.loadingView setNeedsDisplay];
-  [appDelegate hideNetworkIndicator];
+  [self hideLoadingIndicator];
   
   if (error != nil)
   {
     NSLog(@"Error fetching remote archived tasks! WTFOMG, %@", [error localizedDescription]);
   }
-  else if (![self.start isEqualToDate:myStart] || ![self.end isEqualToDate:myEnd])
+  else if (operation != currentOperation)
   {
-    NSLog(@"Whoops, start and end time have changed since the request was made. Forget about it.");
+    NSLog(@"Whoops, operation has changed since the request was made. Forget about it.");
   }
   else
   {
@@ -120,22 +154,20 @@
 {
   if (!remoteTasks)
   {
-    self.remoteTasks = [NSArray array];
-    // Queue is needed in this case to make sure the operation happens asynch'ly
-    if (!queue)
+    @synchronized(self)
     {
-      queue = [[NSOperationQueue alloc] init];
+      self.remoteTasks = [NSArray array];
+      self.currentOperation = [[[NSInvocationOperation alloc] initWithTarget:self 
+                                                                    selector:@selector(loadRemoteTasks)
+                                                                      object:nil] autorelease];
+      [self.queue addOperation:self.currentOperation];
     }
-    NSInvocationOperation *loadRemote = [[NSInvocationOperation alloc] initWithTarget:self 
-                                                                             selector:@selector(loadRemoteTasks)
-                                                                               object:nil];
-    [queue addOperation:loadRemote];
   }
   
   return remoteTasks;
 }
 
-// Static C function for comparing task objects, Task*/DonezoTask* agnostic
+// Static function for comparing task objects, Task*/DonezoTask* agnostic
 static NSInteger compareLocalRemoteTasks(id a, id b, void *context)
 {
   NSDate *da, *db = nil;
@@ -143,6 +175,7 @@ static NSInteger compareLocalRemoteTasks(id a, id b, void *context)
   da = (NSDate*)[a performSelector:@selector(completedAt)];
   db = (NSDate*)[b performSelector:@selector(completedAt)];
   
+  // negative to reverse sort
   return -[da compare:db];
 }
 
@@ -234,6 +267,7 @@ static NSInteger compareLocalRemoteTasks(id a, id b, void *context)
 - (void)dealloc
 {
   [queue release];
+  [currentOperation release];
   
   [localTasks release];
   [remoteTasks release];

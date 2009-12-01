@@ -16,8 +16,11 @@
   NSArray *localTasks;
   // Array of remote DonezoTask* objects
   NSArray *remoteTasks;
-  NSOperationQueue *queue;
   
+  NSOperationQueue *queue;
+  NSOperation *currentOperation;
+  
+  NSInteger loadingIndicatorShown;
   UIView *loadingView;
   
   UITableView *tableView;
@@ -32,6 +35,9 @@
 
 @property (nonatomic, retain) NSArray *localTasks;
 @property (retain) NSArray *remoteTasks;
+
+@property (retain) NSOperationQueue *queue;
+@property (retain) NSOperation *currentOperation;
 
 // Returns a sorted array of Task* and DonezoTask* objects,
 // sorted with a common sorter
