@@ -13,6 +13,7 @@
 @synthesize localTasks, remoteTasks;
 @synthesize start, end;
 @synthesize tableView;
+@synthesize loadingView;
 
 - (void)viewDidLoad
 {
@@ -23,14 +24,7 @@
 {
   [super viewWillAppear:animated];
   
-  if (self.title)
-  {
-    self.navigationItem.title = [@"Archived Tasks: " stringByAppendingString:self.title];
-  }
-  else
-  {
-    self.navigationItem.title = @"Archived Tasks";
-  }
+  self.navigationItem.title = @"Archived Tasks";
   
   NSLog(@"Showing archived tasks for %@ to %@",
         [DonezoDates donezoDetailedDateStringFromDate:self.start], 
@@ -38,7 +32,15 @@
   
   self.localTasks = nil;
   self.remoteTasks = nil;
+  
   [self.tableView reloadData];
+  
+  self.loadingView.hidden = NO;
+}
+
+- (void) viewDidAppear:(BOOL)animated
+{
+  [super viewDidAppear:animated];
 }
 
 - (NSArray*) localTasks
@@ -72,8 +74,12 @@
 
 - (void) loadRemoteTasks
 {
+  NSLog(@"Loading remote tasks!");
+  
   // This happens in a separate thread
   DNZOAppDelegate *appDelegate = (DNZOAppDelegate *)[[UIApplication sharedApplication] delegate];
+  self.loadingView.hidden = NO;
+  [self.loadingView setNeedsDisplay];
   [appDelegate showNetworkIndicator];
   
   NSError *error =  nil;
@@ -83,6 +89,9 @@
   NSArray *tasks =  [appDelegate.donezoAPIClient getArchivedTasksCompletedBetweenDate:myStart
                                                                               andDate:myEnd
                                                                                 error:&error];
+
+  self.loadingView.hidden = YES;
+  [self.loadingView setNeedsDisplay];
   [appDelegate hideNetworkIndicator];
   
   if (error != nil)
@@ -113,7 +122,10 @@
   {
     self.remoteTasks = [NSArray array];
     // Queue is needed in this case to make sure the operation happens asynch'ly
-    NSOperationQueue *queue = [[[NSOperationQueue alloc] init] autorelease];
+    if (!queue)
+    {
+      queue = [[NSOperationQueue alloc] init];
+    }
     NSInvocationOperation *loadRemote = [[NSInvocationOperation alloc] initWithTarget:self 
                                                                              selector:@selector(loadRemoteTasks)
                                                                                object:nil];
@@ -211,13 +223,27 @@ static NSInteger compareLocalRemoteTasks(id a, id b, void *context)
   return nil;
 }
 
-
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+  return [@"Tasks Completed " stringByAppendingString:self.title];
+}
 
 
 
 
 - (void)dealloc
 {
+  [queue release];
+  
+  [localTasks release];
+  [remoteTasks release];
+  
+  [start release];
+  [end release];
+  
+  [loadingView release];
+  [tableView release];
+  
   [super dealloc];
 }
 

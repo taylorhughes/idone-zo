@@ -16,9 +16,9 @@
   NSArray *localTasks;
   // Array of remote DonezoTask* objects
   NSArray *remoteTasks;
+  NSOperationQueue *queue;
   
   UIView *loadingView;
-  CGRect loadingBounds;
   
   UITableView *tableView;
 }
@@ -28,6 +28,7 @@
 @property (copy) NSDate *end;
 
 @property (nonatomic, retain) IBOutlet UITableView *tableView;
+@property (nonatomic, retain) IBOutlet UIView *loadingView;
 
 @property (nonatomic, retain) NSArray *localTasks;
 @property (retain) NSArray *remoteTasks;
