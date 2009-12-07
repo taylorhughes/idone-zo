@@ -15,8 +15,6 @@
 @implementation MainViewController
 
 @synthesize taskLists;
-@synthesize listViewController;
-@synthesize archivedListViewController;
 
 - (void)viewDidLoad
 {
@@ -63,6 +61,16 @@
     archivedListViewController = [[ArchivedListViewController alloc] initWithNibName:@"ArchivedListView" bundle:nil];
   }
   return archivedListViewController;
+}
+
+- (SettingsViewController *)settingsViewController
+{
+  // Instantiate the detail view controller if necessary.
+  if (settingsViewController == nil)
+  {
+    settingsViewController = [[SettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+  }
+  return settingsViewController;
 }
 
 - (NSArray*)archivedLabels
@@ -234,7 +242,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tv
 {
-  return 2;
+  return 3;
 }
 
 - (NSInteger)tableView:(UITableView *)tv numberOfRowsInSection:(NSInteger)section
@@ -247,8 +255,14 @@
     
     // archived tasks
     case 1:
-    default:
       return [self.archivedLabels count];
+      
+    // settings
+    case 2:
+      return 1;
+      
+    default:
+      return 0;
   }
 }
 
@@ -260,7 +274,6 @@
     case 1:
       return @"Archived Tasks";
       
-    case 0:
     default:
       return nil;
   }
@@ -305,6 +318,11 @@
       // Setting this to an empty string is required to fix a rendering issue in iPhoneOS 3.1.2
       cell.detailTextLabel.text = @"";
       break;
+      
+    case 2:
+      cell.textLabel.text = @"Settings";
+      // Setting this to an empty string is required to fix a rendering issue in iPhoneOS 3.1.2
+      cell.detailTextLabel.text = @"";
   }
   
   return cell;
@@ -312,19 +330,24 @@
 
 - (NSIndexPath *)tableView:(UITableView *)tv willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-  if ([indexPath section] == 0)
+  switch ([indexPath section])
   {
-    TaskList *clickedList = [self.taskLists objectAtIndex:indexPath.row];
-    [self loadListViewForList:clickedList];    
-  }
-  else
-  {
-    self.archivedListViewController.title = [self.archivedLabels objectAtIndex:[indexPath row]];
-    NSArray *range = [self getStartAndEndDatesForArchivedLabelPosition:[indexPath row]];
+    case 0:
+      [self loadListViewForList:[self.taskLists objectAtIndex:indexPath.row]];    
+      break;
+      
+    case 1:
+      self.archivedListViewController.title = [self.archivedLabels objectAtIndex:[indexPath row]];
+      NSArray *range = [self getStartAndEndDatesForArchivedLabelPosition:[indexPath row]];
 
-    self.archivedListViewController.start = [range objectAtIndex:0];
-    self.archivedListViewController.end   = [range objectAtIndex:1];
-    [self.navigationController pushViewController:self.archivedListViewController animated:YES];
+      self.archivedListViewController.start = [range objectAtIndex:0];
+      self.archivedListViewController.end   = [range objectAtIndex:1];
+      [self.navigationController pushViewController:self.archivedListViewController animated:YES];
+      break;
+      
+    case 2:
+      [self.navigationController pushViewController:self.settingsViewController animated:YES];
+      break;
   }
 
   return nil;
@@ -335,7 +358,10 @@
 {
   [taskLists release];
   [listViewController release];
+  [settingsViewController release];
+  [archivedListViewController release];
   [archivedLabels release];
+  
   [super dealloc];
 }
 

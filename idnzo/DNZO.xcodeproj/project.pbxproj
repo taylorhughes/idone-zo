@@ -82,6 +82,8 @@
 		34B7D83F0FC3860600A91E43 /* unchecked.png in Resources */ = {isa = PBXBuildFile; fileRef = 34B7D83D0FC3860600A91E43 /* unchecked.png */; };
 		34B7D8400FC3860600A91E43 /* checked.png in Resources */ = {isa = PBXBuildFile; fileRef = 34B7D83C0FC3860600A91E43 /* checked.png */; };
 		34B7D8410FC3860600A91E43 /* unchecked.png in Resources */ = {isa = PBXBuildFile; fileRef = 34B7D83D0FC3860600A91E43 /* unchecked.png */; };
+		34B9D5B210CCA75A0087EDCC /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B9D5B110CCA75A0087EDCC /* SettingsViewController.m */; };
+		34B9D5B310CCA75A0087EDCC /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B9D5B110CCA75A0087EDCC /* SettingsViewController.m */; };
 		34C51AC40FB92A9D0024A5CD /* EditProjectPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C51AC30FB92A9D0024A5CD /* EditProjectPicker.m */; };
 		34C51AC50FB92A9D0024A5CD /* EditProjectPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C51AC30FB92A9D0024A5CD /* EditProjectPicker.m */; };
 		34C74259107570400045F527 /* GTMRegex.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C74258107570400045F527 /* GTMRegex.m */; };
@@ -198,6 +200,8 @@
 		34AF21EF102FC20B001FC4B7 /* SyncTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SyncTest.m; path = Test/SyncTest.m; sourceTree = "<group>"; };
 		34B7D83C0FC3860600A91E43 /* checked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = checked.png; path = Resources/checked.png; sourceTree = "<group>"; };
 		34B7D83D0FC3860600A91E43 /* unchecked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = unchecked.png; path = Resources/unchecked.png; sourceTree = "<group>"; };
+		34B9D5B010CCA75A0087EDCC /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
+		34B9D5B110CCA75A0087EDCC /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		34C51AC20FB92A9D0024A5CD /* EditProjectPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditProjectPicker.h; sourceTree = "<group>"; };
 		34C51AC30FB92A9D0024A5CD /* EditProjectPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditProjectPicker.m; sourceTree = "<group>"; };
 		34C74256107570400045F527 /* GTMDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMDefines.h; sourceTree = "<group>"; };
@@ -370,6 +374,8 @@
 				349066E910AF6C7200F2AAFF /* ArchivedListViewController.m */,
 				341E1E210FB138F000D5B454 /* TaskViewController.h */,
 				341E1E220FB138F000D5B454 /* TaskViewController.m */,
+				34B9D5B010CCA75A0087EDCC /* SettingsViewController.h */,
+				34B9D5B110CCA75A0087EDCC /* SettingsViewController.m */,
 			);
 			name = "Main Views";
 			sourceTree = "<group>";
@@ -637,6 +643,7 @@
 				349066EB10AF6C7200F2AAFF /* ArchivedListViewController.m in Sources */,
 				3443E32610B0B071000D5B27 /* DonezoDates.m in Sources */,
 				34FDCEFB10B74D1300625D62 /* ConfirmationViewController.m in Sources */,
+				34B9D5B210CCA75A0087EDCC /* SettingsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -683,6 +690,7 @@
 				349066EA10AF6C7200F2AAFF /* ArchivedListViewController.m in Sources */,
 				3443E32510B0B071000D5B27 /* DonezoDates.m in Sources */,
 				34FDCEF910B74D1300625D62 /* ConfirmationViewController.m in Sources */,
+				34B9D5B310CCA75A0087EDCC /* SettingsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
