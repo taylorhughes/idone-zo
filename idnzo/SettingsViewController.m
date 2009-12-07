@@ -16,6 +16,8 @@
 @synthesize password;
 
 #define SYNC_ENABLED_KEY @"syncEnabled"
+#define USERNAME_KEY @"username"
+#define PASSWORD_KEY @"password"
 
 - (UITableViewCell*)switchCell
 {
@@ -55,8 +57,15 @@
   
   self.isSyncEnabled = [defaults boolForKey:SYNC_ENABLED_KEY];
   
-  self.username = [defaults stringForKey:@"username"];
-  self.password = [defaults stringForKey:@"password"];
+  self.username = [defaults stringForKey:USERNAME_KEY];
+  self.password = [defaults stringForKey:PASSWORD_KEY];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+  [super viewWillAppear:animated];
+  
+  [self.tableView reloadData];
 }
 
 - (BOOL) isSyncEnabled
@@ -136,7 +145,8 @@
       cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1
                                      reuseIdentifier:cellIdentifier] autorelease];
     }
-   
+    
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     if ([indexPath row] == 0)
     {
       cell.textLabel.text = @"Google Username";
@@ -159,23 +169,52 @@
     return nil;
   }
   
+  TextFieldViewController *tfvc = [[TextFieldViewController alloc] initWithNibName:@"TextFieldView" bundle:nil];
   
+  tfvc.target = self;
+  
+  if ([indexPath row] == 0)
+  {
+    tfvc.title = @"Google Username";
+    tfvc.placeholder = @"some@user.com";
+    tfvc.text = self.username;
+    tfvc.textField.autocorrectionType = UITextAutocorrectionTypeNo;
+    tfvc.saveAction = @selector(saveUsername:);
+  }
+  else
+  {
+    tfvc.title = @"Google Password";
+    tfvc.textField.secureTextEntry = YES;
+    tfvc.saveAction = @selector(savePassword:);
+  }
+  
+  [self.navigationController pushViewController:tfvc animated:YES];
   
   return nil;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)saveUsername:(id)sender
 {
-  // Navigation logic may go here. Create and push another view controller.
-  // AnotherViewController *anotherViewController = [[AnotherViewController alloc] initWithNibName:@"AnotherView" bundle:nil];
-  // [self.navigationController pushViewController:anotherViewController];
-  // [anotherViewController release];
+  TextFieldViewController *tfvc = (TextFieldViewController*)sender;
+  self.username = [tfvc.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+  
+  NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+  [defaults setValue:self.username forKey:USERNAME_KEY];
 }
-
+- (void)savePassword:(id)sender
+{
+  TextFieldViewController *tfvc = (TextFieldViewController*)sender;
+  self.password = tfvc.text;
+  
+  NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+  [defaults setValue:self.password forKey:PASSWORD_KEY];
+}
 
 
 - (void)dealloc
 {
+  [username release];
+  [password release];
   [switchCell release];
   [switchWidget release];
   [super dealloc];

@@ -6,6 +6,8 @@
 //  Copyright 2009 Two-Stitch Software. All rights reserved.
 //
 
+#include "TextFieldViewController.h"
+
 @interface SettingsViewController : UITableViewController {
   UITableViewCell *switchCell;
   UISwitch *switchWidget;

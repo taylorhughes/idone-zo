@@ -8,12 +8,31 @@
 
 #import "TextFieldViewController.h"
 
+@interface TextFieldViewController ()
+
+- (BOOL) wasPresentedModally;
+
+@end
+
 @implementation TextFieldViewController
 
 @synthesize text, placeholder;
 
 @synthesize target;
 @synthesize saveAction, cancelAction;
+
+
+- (UITextField *)textField
+{
+  // ensure this is loaded
+  self.view;
+  return textField;
+}
+
+- (BOOL) wasPresentedModally
+{
+  return [[self.navigationController viewControllers] count] == 1;
+}
 
 - (void) viewWillAppear:(BOOL)animated
 {
@@ -30,8 +49,8 @@
   self.navigationItem.rightBarButtonItem = save;
   self.navigationItem.leftBarButtonItem = cancel;
   
-  textField.text = self.text;
-  textField.placeholder = self.placeholder;
+  self.textField.text = self.text;
+  self.textField.placeholder = self.placeholder;
   
   self.navigationItem.title = self.title;
 }
@@ -52,7 +71,14 @@
     [self.target performSelector:self.cancelAction withObject:self];
   }
   
-  [self.navigationController dismissModalViewControllerAnimated:YES];
+  if ([self wasPresentedModally])
+  {
+    [self.navigationController dismissModalViewControllerAnimated:YES];
+  }
+  else
+  {
+    [self.navigationController popViewControllerAnimated:YES];
+  }
 }
 - (void) save:(id)sender
 {
@@ -63,7 +89,14 @@
     [self.target performSelector:self.saveAction withObject:self];
   }
   
-  [self.navigationController dismissModalViewControllerAnimated:YES];
+  if ([self wasPresentedModally])
+  {
+    [self.navigationController dismissModalViewControllerAnimated:YES];
+  }
+  else
+  {
+    [self.navigationController popViewControllerAnimated:YES];
+  }
 }
 
 - (void) dealloc

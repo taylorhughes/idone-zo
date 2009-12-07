@@ -23,6 +23,8 @@
 @property (nonatomic, retain) NSString *placeholder;
 @property (nonatomic, retain) NSObject *target;
 
+@property (nonatomic, readonly) UITextField *textField;
+
 @property (nonatomic) SEL saveAction;
 @property (nonatomic) SEL cancelAction;
 
