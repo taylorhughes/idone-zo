@@ -11,13 +11,7 @@
 @implementation SettingsViewController
 
 @synthesize switchCell, switchWidget;
-
 @synthesize username;
-@synthesize password;
-
-#define SYNC_ENABLED_KEY @"syncEnabled"
-#define USERNAME_KEY @"username"
-#define PASSWORD_KEY @"password"
 
 - (UITableViewCell*)switchCell
 {
@@ -52,13 +46,8 @@
   
   self.title = @"Settings";
   
-  // Load things
-  NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-  
-  self.isSyncEnabled = [defaults boolForKey:SYNC_ENABLED_KEY];
-  
-  self.username = [defaults stringForKey:USERNAME_KEY];
-  self.password = [defaults stringForKey:PASSWORD_KEY];
+  self.isSyncEnabled = [SettingsHelper isSyncEnabled];
+  self.username = [SettingsHelper username];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -79,16 +68,14 @@
 
 - (void) onClickSwitch:(id)sender
 {
-  NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-  BOOL wasOn = [defaults boolForKey:SYNC_ENABLED_KEY];
   BOOL on = self.switchWidget.on;
   
-  if (on == wasOn)
+  if (on == [SettingsHelper isSyncEnabled])
   {
     return;
   }
       
-  [defaults setBool:on forKey:SYNC_ENABLED_KEY];
+  [SettingsHelper setIsSyncEnabled:on];
   
   NSIndexSet *set = [NSIndexSet indexSetWithIndex:1];
   if (on)
@@ -101,10 +88,6 @@
   }
 }
 
-- (BOOL) hasPassword
-{
-  return self.password && [self.password length] > 0;
-}
 
 #pragma mark Table view methods
 
@@ -155,7 +138,7 @@
     else
     {
       cell.textLabel.text = @"Google Password";
-      cell.detailTextLabel.text = [self hasPassword] ? @"••••••••" : @"";
+      cell.detailTextLabel.text = [SettingsHelper hasPassword] ? @"••••••••" : @"";
     }
   }
   
@@ -198,23 +181,18 @@
   TextFieldViewController *tfvc = (TextFieldViewController*)sender;
   self.username = [tfvc.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
   
-  NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-  [defaults setValue:self.username forKey:USERNAME_KEY];
+  [SettingsHelper setUsername:self.username];
 }
 - (void)savePassword:(id)sender
 {
   TextFieldViewController *tfvc = (TextFieldViewController*)sender;
-  self.password = tfvc.text;
-  
-  NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-  [defaults setValue:self.password forKey:PASSWORD_KEY];
+  [SettingsHelper setPassword:tfvc.text];
 }
 
 
 - (void)dealloc
 {
   [username release];
-  [password release];
   [switchCell release];
   [switchWidget release];
   [super dealloc];

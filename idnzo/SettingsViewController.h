@@ -7,13 +7,13 @@
 //
 
 #include "TextFieldViewController.h"
+#include "SettingsHelper.h"
 
 @interface SettingsViewController : UITableViewController {
   UITableViewCell *switchCell;
   UISwitch *switchWidget;
   
   NSString *username;
-  NSString *password;
 }
 
 @property (nonatomic, retain) UITableViewCell *switchCell;
@@ -21,10 +21,7 @@
 @property (nonatomic) BOOL isSyncEnabled;
 
 @property (nonatomic, copy) NSString *username;
-@property (nonatomic, copy) NSString *password;
 
 - (void) onClickSwitch:(id)sender;
-
-- (BOOL) hasPassword;
 
 @end

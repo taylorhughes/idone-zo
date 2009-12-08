@@ -49,8 +49,6 @@
 		34770B310FAFE4A300AD8397 /* ListView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34770B2F0FAFE4A300AD8397 /* ListView.xib */; };
 		34770B320FAFE4A300AD8397 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34770B300FAFE4A300AD8397 /* MainWindow.xib */; };
 		34770B440FAFE67B00AD8397 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 34770B430FAFE67B00AD8397 /* icon.png */; };
-		3481B41A10165823003A2FC7 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3481B41910165823003A2FC7 /* Settings.bundle */; };
-		3481B41B10165823003A2FC7 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3481B41910165823003A2FC7 /* Settings.bundle */; };
 		3488E39410C1FA9600D7921C /* ArchivedListView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3488E39310C1FA9600D7921C /* ArchivedListView.xib */; };
 		3488E39510C1FA9600D7921C /* ArchivedListView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3488E39310C1FA9600D7921C /* ArchivedListView.xib */; };
 		3489366810AA5D950054237D /* TextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3489366710AA5D950054237D /* TextViewController.m */; };
@@ -84,6 +82,11 @@
 		34B7D8410FC3860600A91E43 /* unchecked.png in Resources */ = {isa = PBXBuildFile; fileRef = 34B7D83D0FC3860600A91E43 /* unchecked.png */; };
 		34B9D5B210CCA75A0087EDCC /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B9D5B110CCA75A0087EDCC /* SettingsViewController.m */; };
 		34B9D5B310CCA75A0087EDCC /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B9D5B110CCA75A0087EDCC /* SettingsViewController.m */; };
+		34B9D6F210CDCBC00087EDCC /* SFHFKeychainUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B9D6F110CDCBC00087EDCC /* SFHFKeychainUtils.m */; };
+		34B9D6F310CDCBC00087EDCC /* SFHFKeychainUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B9D6F110CDCBC00087EDCC /* SFHFKeychainUtils.m */; };
+		34B9D6F810CDCCC50087EDCC /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34B9D6F710CDCCC50087EDCC /* Security.framework */; };
+		34B9D70F10CDCE110087EDCC /* SettingsHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B9D70E10CDCE110087EDCC /* SettingsHelper.m */; };
+		34B9D71010CDCE110087EDCC /* SettingsHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B9D70E10CDCE110087EDCC /* SettingsHelper.m */; };
 		34C51AC40FB92A9D0024A5CD /* EditProjectPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C51AC30FB92A9D0024A5CD /* EditProjectPicker.m */; };
 		34C51AC50FB92A9D0024A5CD /* EditProjectPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C51AC30FB92A9D0024A5CD /* EditProjectPicker.m */; };
 		34C74259107570400045F527 /* GTMRegex.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C74258107570400045F527 /* GTMRegex.m */; };
@@ -167,7 +170,6 @@
 		34770B330FAFE4C200AD8397 /* DonezoAPIClientTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DonezoAPIClientTest.h; path = Test/DonezoAPIClientTest.h; sourceTree = "<group>"; };
 		34770B340FAFE4C200AD8397 /* DonezoAPIClientTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DonezoAPIClientTest.m; path = Test/DonezoAPIClientTest.m; sourceTree = "<group>"; };
 		34770B430FAFE67B00AD8397 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon.png; path = Resources/icon.png; sourceTree = "<group>"; };
-		3481B41910165823003A2FC7 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		3488E39310C1FA9600D7921C /* ArchivedListView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ArchivedListView.xib; sourceTree = "<group>"; };
 		3489366610AA5D950054237D /* TextViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextViewController.h; sourceTree = "<group>"; };
 		3489366710AA5D950054237D /* TextViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextViewController.m; sourceTree = "<group>"; };
@@ -202,6 +204,11 @@
 		34B7D83D0FC3860600A91E43 /* unchecked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = unchecked.png; path = Resources/unchecked.png; sourceTree = "<group>"; };
 		34B9D5B010CCA75A0087EDCC /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		34B9D5B110CCA75A0087EDCC /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
+		34B9D6F010CDCBC00087EDCC /* SFHFKeychainUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SFHFKeychainUtils.h; path = SFHF/SFHFKeychainUtils.h; sourceTree = "<group>"; };
+		34B9D6F110CDCBC00087EDCC /* SFHFKeychainUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SFHFKeychainUtils.m; path = SFHF/SFHFKeychainUtils.m; sourceTree = "<group>"; };
+		34B9D6F710CDCCC50087EDCC /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		34B9D70D10CDCE110087EDCC /* SettingsHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsHelper.h; sourceTree = "<group>"; };
+		34B9D70E10CDCE110087EDCC /* SettingsHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsHelper.m; sourceTree = "<group>"; };
 		34C51AC20FB92A9D0024A5CD /* EditProjectPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditProjectPicker.h; sourceTree = "<group>"; };
 		34C51AC30FB92A9D0024A5CD /* EditProjectPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditProjectPicker.m; sourceTree = "<group>"; };
 		34C74256107570400045F527 /* GTMDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMDefines.h; sourceTree = "<group>"; };
@@ -253,6 +260,7 @@
 				34FAABED101148BC00B74477 /* CoreGraphics.framework in Frameworks */,
 				34FAABF2101148C400B74477 /* UIKit.framework in Frameworks */,
 				34FAAC2D1011490B00B74477 /* CoreData.framework in Frameworks */,
+				34B9D6F810CDCCC50087EDCC /* Security.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -310,8 +318,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
-				34C74255107570400045F527 /* GTM */,
-				34F60D0C101FE6DB00577EFA /* JSON */,
+				34B9D6EE10CDCBAA0087EDCC /* Ext */,
 				34E13BFB1017CA92005A582E /* Donezo API */,
 				34174693101523BD00DEBB76 /* Models */,
 				3490B9A60FA7DB15004195D9 /* DNZO_Prefix.pch */,
@@ -322,6 +329,8 @@
 				3412016F10294BF200A0439E /* DonezoSyncMaster.m */,
 				343B0530108D6668007F2425 /* DonezoSyncOperation.h */,
 				343B0531108D6668007F2425 /* DonezoSyncOperation.m */,
+				34B9D70D10CDCE110087EDCC /* SettingsHelper.h */,
+				34B9D70E10CDCE110087EDCC /* SettingsHelper.m */,
 				3416ECEA0FC2567C00D8BD53 /* Main Views */,
 				080E96DDFE201D6D7F000001 /* Subviews */,
 				348E18D50FA7DE8D00B75000 /* Test Cases */,
@@ -330,7 +339,6 @@
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
 				348E18C70FA7DE1E00B75000 /* Test-Info.plist */,
-				3481B41910165823003A2FC7 /* Settings.bundle */,
 			);
 			name = CustomTemplate;
 			sourceTree = "<group>";
@@ -359,6 +367,7 @@
 				34FAABF1101148C400B74477 /* UIKit.framework */,
 				34FAABEC101148BC00B74477 /* CoreGraphics.framework */,
 				34FAABE71011487800B74477 /* Foundation.framework */,
+				34B9D6F710CDCCC50087EDCC /* Security.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -427,6 +436,25 @@
 				343890021076BD8200FC1AB3 /* datepicker-background.png */,
 			);
 			name = Images;
+			sourceTree = "<group>";
+		};
+		34B9D6EE10CDCBAA0087EDCC /* Ext */ = {
+			isa = PBXGroup;
+			children = (
+				34B9D6EF10CDCBB10087EDCC /* SFHF */,
+				34C74255107570400045F527 /* GTM */,
+				34F60D0C101FE6DB00577EFA /* JSON */,
+			);
+			name = Ext;
+			sourceTree = "<group>";
+		};
+		34B9D6EF10CDCBB10087EDCC /* SFHF */ = {
+			isa = PBXGroup;
+			children = (
+				34B9D6F010CDCBC00087EDCC /* SFHFKeychainUtils.h */,
+				34B9D6F110CDCBC00087EDCC /* SFHFKeychainUtils.m */,
+			);
+			name = SFHF;
 			sourceTree = "<group>";
 		};
 		34C74255107570400045F527 /* GTM */ = {
@@ -548,7 +576,6 @@
 				341E1F020FB14F2900D5B454 /* TaskView.xib in Resources */,
 				34B7D8400FC3860600A91E43 /* checked.png in Resources */,
 				34B7D8410FC3860600A91E43 /* unchecked.png in Resources */,
-				3481B41B10165823003A2FC7 /* Settings.bundle in Resources */,
 				3452D4A31049CC26005C717C /* Entitlements.plist in Resources */,
 				34388FD61076B87500FC1AB3 /* TaskDatePickerView.xib in Resources */,
 				343890041076BD8200FC1AB3 /* datepicker-background.png in Resources */,
@@ -573,7 +600,6 @@
 				341E1F000FB14F2900D5B454 /* TaskView.xib in Resources */,
 				34B7D83E0FC3860600A91E43 /* checked.png in Resources */,
 				34B7D83F0FC3860600A91E43 /* unchecked.png in Resources */,
-				3481B41A10165823003A2FC7 /* Settings.bundle in Resources */,
 				34388FD51076B87500FC1AB3 /* TaskDatePickerView.xib in Resources */,
 				343890031076BD8200FC1AB3 /* datepicker-background.png in Resources */,
 				348936D910AA66AD0054237D /* tableview-background.png in Resources */,
@@ -644,6 +670,8 @@
 				3443E32610B0B071000D5B27 /* DonezoDates.m in Sources */,
 				34FDCEFB10B74D1300625D62 /* ConfirmationViewController.m in Sources */,
 				34B9D5B210CCA75A0087EDCC /* SettingsViewController.m in Sources */,
+				34B9D6F210CDCBC00087EDCC /* SFHFKeychainUtils.m in Sources */,
+				34B9D70F10CDCE110087EDCC /* SettingsHelper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -691,6 +719,8 @@
 				3443E32510B0B071000D5B27 /* DonezoDates.m in Sources */,
 				34FDCEF910B74D1300625D62 /* ConfirmationViewController.m in Sources */,
 				34B9D5B310CCA75A0087EDCC /* SettingsViewController.m in Sources */,
+				34B9D6F310CDCBC00087EDCC /* SFHFKeychainUtils.m in Sources */,
+				34B9D71010CDCE110087EDCC /* SettingsHelper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
