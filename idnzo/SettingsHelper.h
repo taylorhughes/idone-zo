@@ -12,11 +12,14 @@
 }
 
 + (BOOL) isSyncEnabled;
-+ (BOOL) hasPassword;
 + (NSString*) username;
++ (NSString*) password;
++ (BOOL) hasPassword;
 
 + (void) setIsSyncEnabled:(BOOL)enabled;
 + (void) setUsername:(NSString*)username;
 + (void) setPassword:(NSString*)username;
+
++ (NSString*) URL;
 
 @end

@@ -55,11 +55,8 @@ NSString* const DonezoDataUpdatedNotification = @"DonezoDataUpdatedNotification"
                 name:DonezoShouldSyncNotification
               object:nil];
     
-    // settings holder
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    
     NSLog(@"SQLite store: %@", self.storePath);
-    BOOL resetOnLaunch = [defaults boolForKey:@"resetOnLaunch"];
+    BOOL resetOnLaunch = NO;
     BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:self.storePath];
     if (resetOnLaunch && fileExists)
     {
@@ -73,8 +70,6 @@ NSString* const DonezoDataUpdatedNotification = @"DonezoDataUpdatedNotification"
       {
         fileExists = NO;
       }
-      
-      [defaults setBool:NO forKey:@"resetOnLaunch"];
     }
     if (!fileExists)
     {
@@ -260,12 +255,9 @@ NSString* const DonezoDataUpdatedNotification = @"DonezoDataUpdatedNotification"
 
 - (void) applicationDidFinishLaunching:(UIApplication *)application
 { 
-  // settings holder
-  NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-  
-  NSString *donezoUsername = [defaults stringForKey:@"username"];
-  NSString *donezoPassword = [defaults stringForKey:@"password"];
-  NSString *donezoURL = [defaults stringForKey:@"donezoURL"];
+  NSString *donezoUsername = [SettingsHelper username];
+  NSString *donezoPassword = [SettingsHelper password];
+  NSString *donezoURL =      [SettingsHelper URL];
   
   NSLog(@"Got user %@ for URL %@", donezoUsername, donezoURL);
   

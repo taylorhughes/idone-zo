@@ -11,6 +11,7 @@
 #import "DonezoAPIClient.h"
 #import "DonezoSyncMaster.h"
 #import "DonezoSyncOperation.h"
+#import "SettingsHelper.h"
 
 @class Project, Context, TaskList, Task, MainViewController, DonezoSyncMaster;
 

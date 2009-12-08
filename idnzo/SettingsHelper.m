@@ -14,6 +14,9 @@
 #define USERNAME_KEY @"username"
 #define PASSWORD_KEY @"password"
 
+#define SERVICE_NAME @"Done-zo"
+
+
 @implementation SettingsHelper
 
 + (BOOL) isSyncEnabled
@@ -23,7 +26,15 @@
 
 + (NSString*) password
 {
-  return [DEFAULTS stringForKey:PASSWORD_KEY];
+  NSError *error = nil;
+  NSString *pass = [SFHFKeychainUtils getPasswordForUsername:USERNAME_KEY andServiceName:SERVICE_NAME error:&error];
+  
+  if (error != nil)
+  {
+    NSLog(@"Error fetching password from keychain: %@ (%@)", error, [error userInfo]);
+  }
+  
+  return pass;
 }
 
 + (BOOL) hasPassword
@@ -47,9 +58,28 @@
   [DEFAULTS setValue:username forKey:USERNAME_KEY];
 }
 
-+ (void) setPassword:(NSString*)username
++ (void) setPassword:(NSString*)password
 {
-  [DEFAULTS setValue:username forKey:PASSWORD_KEY];
+  NSError *error = nil;
+  [SFHFKeychainUtils storeUsername:USERNAME_KEY 
+                       andPassword:password
+                    forServiceName:SERVICE_NAME 
+                    updateExisting:YES
+                             error:&error];
+  
+  if (error != nil)
+  {
+    NSLog(@"Error saving password! %@ (%@)", error, [error userInfo]);
+  }
+}
+
++ (NSString*) URL
+{
+#if TARGET_IPHONE_SIMULATOR
+  return @"http://dnzo-staging.appspot.com/";
+#else
+  return @"http://www.done-zo.com/";
+#endif
 }
 
 @end
