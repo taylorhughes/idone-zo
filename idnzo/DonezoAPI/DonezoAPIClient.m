@@ -11,7 +11,10 @@
 
 #define DEFAULT_BASE_URL @"http://www.done-zo.com/"
 #define API_PATH @"/api/0.1/"
-#define USER_AGENT_STRING @"Done-zo Client 0.1"
+
+#ifndef USER_AGENT_STRING
+#define USER_AGENT_STRING @"Done-zo API Client (unknown client)"
+#endif
 
 @implementation DonezoAPIClient
 
@@ -80,7 +83,7 @@
   NSURL *url = [NSURL URLWithString:[self.apiUrl stringByAppendingPathComponent:path]];
   NSMutableURLRequest *req = [[NSMutableURLRequest alloc] initWithURL:url];
   [req setValue:USER_AGENT_STRING forHTTPHeaderField:@"User-Agent"];
-
+  
   if (method != nil)
   {
     [req setHTTPMethod:method];

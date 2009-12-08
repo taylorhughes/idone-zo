@@ -25,7 +25,9 @@
 @end
 
 #define AUTH_URL @"https://google.com/accounts/ClientLogin"
-#define USER_AGENT_STRING @"Done-zo Client 0.1"
+#ifndef USER_AGENT_STRING
+#define USER_AGENT_STRING @"GoogleAppEngineAuthenticator (unknown client)"
+#endif
 
 @implementation GoogleAppEngineAuthenticator
 
