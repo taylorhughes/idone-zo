@@ -18,6 +18,8 @@
 - (void) copyRemoteTask:(DonezoTask*)remoteTask toLocalTask:(Task*)localTask;
 - (void) copyLocalTask:(Task*)localTask toRemoteTask:(DonezoTask*)remoteTask;
 
+- (BOOL) errorOrCanceled:(NSError**)error;
+
 @end
 
 @implementation DonezoSyncMaster
@@ -32,8 +34,22 @@
   {
     self.client = donezoClient;
     self.context = managedObjectContext;
+    canceled = NO;
   }
   return self;
+}
+
+- (void) cancel
+{
+  canceled = YES;
+}
+- (BOOL) isCanceled
+{
+  return canceled;
+}
+- (BOOL) errorOrCanceled:(NSError**)error
+{
+  return [self isCanceled] || *error != nil;
 }
 
 - (void) dealloc
@@ -47,20 +63,20 @@
 {
   NSLog(@"Syncing lists..");
   NSArray *lists = [self syncLists:error];
-  if (*error != nil) return;
+  if ([self errorOrCanceled:error]) return;
   
   for (TaskList *list in lists)
   {
     NSLog(@"Syncing tasks for list %@...", list.name);
     [self syncList:list error:error];
-    if (*error != nil) { return; }
+    if ([self errorOrCanceled:error]) { return; }
   }
 }
 
 - (NSArray*) syncLists:(NSError**)error
 {
   NSArray *localLists = [self getLocalTaskLists:error];
-  if (*error != nil) { return nil; }
+  if ([self errorOrCanceled:error]) { return nil; }
     
   NSMutableArray *savedLocalLists = [NSMutableArray arrayWithCapacity:[localLists count]];
   NSMutableArray *newLocalLists = [NSMutableArray arrayWithCapacity:[localLists count]];
@@ -78,9 +94,10 @@
       [newLocalLists addObject:localList];
     }
   }
-      
+  
+  if ([self errorOrCanceled:error]) { return nil; }
   NSMutableArray *newRemoteLists = [NSMutableArray arrayWithArray:[self.client getLists:error]];
-  if (*error != nil) { return nil; }
+  if ([self errorOrCanceled:error]) { return nil; }
   
   NSMutableArray *localListsToDelete = [NSMutableArray arrayWithCapacity:[savedLocalLists count]];
   NSMutableArray *localListsToAddRemotely = [NSMutableArray arrayWithCapacity:[newLocalLists count]];
@@ -154,13 +171,15 @@
     }
   }
   
+  if ([self errorOrCanceled:error]) { return nil; }
+  
   NSLog(@"=== Syncing lists ===");
   NSLog(@"New local lists:        %d", [localListsToAddRemotely count]);
   NSLog(@"Local lists to delete:  %d", [localListsToDelete count]);
   NSLog(@"New remote lists:       %d", [newRemoteLists count]);
   
   //
-  // Now, add and remove existing lists as detailed by the various collections.
+  // Remove existing, deleted lists
   //
   for (TaskList *listToDelete in localListsToDelete)
   {
@@ -172,12 +191,13 @@
   }
   if ([self.context hasChanges])
   {
-    if (![self.context save:error])
-    {
-      return nil;
-    }
+    [self.context save:error];
   }
+  if ([self errorOrCanceled:error]) { return nil; }
   
+  //
+  // Add new lists
+  //
   for (DonezoTaskList *listToAddLocally in newRemoteLists)
   {
     TaskList *newList = (TaskList*)[NSEntityDescription insertNewObjectForEntityForName:@"TaskList" inManagedObjectContext:self.context];
@@ -186,28 +206,26 @@
   }
   if ([self.context hasChanges])
   {
-    if (![self.context save:error])
-    {
-      return nil;
-    }
+    [self.context save:error];
   }
+  if ([self errorOrCanceled:error]) { return nil; }
   
+  //
+  // Add new local lists remotely
+  //
   for (TaskList *listToAdd in localListsToAddRemotely)
   {    
     DonezoTaskList *list = [[[DonezoTaskList alloc] init] autorelease];
     list.name = listToAdd.name;
     
     [client saveList:&list error:error];
-    if (*error)
-    {
-      return nil;
-    }
+    // In this case, do not check canceled -- would leave data inconsistent
+    if (*error) { return nil; }
     listToAdd.key = list.key;
     
-    if (![self.context save:error])
-    {
-      return nil;
-    }
+    [self.context save:error];
+    // Now we can check canceled
+    if ([self errorOrCanceled:error]) { return nil; }
   }
   
   // final collection of TaskList* objects -- todo: replace this with a premade collection or something
@@ -217,7 +235,7 @@
 - (void) syncList:(TaskList*)taskList error:(NSError**)error
 {
   NSArray *localTasks = [self getLocalTasksForTaskList:taskList error:error];
-  if (*error != nil) { return; }
+  if ([self errorOrCanceled:error]) { return; }
   
   NSMutableArray *savedLocalTasks = [NSMutableArray arrayWithCapacity:[localTasks count]];
   NSMutableArray *newLocalTasks = [NSMutableArray arrayWithCapacity:[localTasks count]];
@@ -236,8 +254,9 @@
     }
   }
   
+  if ([self errorOrCanceled:error]) { return; }
   NSMutableArray *newRemoteTasks = [NSMutableArray arrayWithArray:[self.client getTasksForListWithKey:taskList.key error:error]];
-  if (*error != nil) { return; }
+  if ([self errorOrCanceled:error]) { return; }
   
   NSMutableArray *tasksToSync = [NSMutableArray arrayWithCapacity:[savedLocalTasks count]];
   NSMutableArray *localTasksToDelete = [NSMutableArray arrayWithCapacity:[savedLocalTasks count]];
@@ -265,6 +284,7 @@
     }
   }
   
+  if ([self errorOrCanceled:error]) { return; }
   
   NSLog(@"=== SYNC: %@ ===", taskList.key);
   NSLog(@"%d local tasks to delete..", [localTasksToDelete count]);
@@ -273,35 +293,32 @@
   NSLog(@"%d existing tasks to sync.", [tasksToSync count]);
     
   //
-  // Now, add and remove existing lists as detailed by the various collections.
+  // Delete tasks that have been deleted remotely
   //
   for (Task *localTask in localTasksToDelete)
   {
-    //NSLog(@"Deleting local task: %@", taskToDelete.key);
     [self.context deleteObject:localTask];
   }
   if ([self.context hasChanges])
   {
-    if (![self.context save:error])
-    {
-      return;
-    }
+    [self.context save:error];
   }
+  if ([self errorOrCanceled:error]) { return; }
   
+  //
+  // Add tasks that were added remotely
+  //
   for (DonezoTask *remoteTask in newRemoteTasks)
   {
-    //NSLog(@"Adding remote task locally: %@", taskToAddLocally.key);
     Task *localTask = (Task*)[NSEntityDescription insertNewObjectForEntityForName:@"Task" inManagedObjectContext:self.context];
     localTask.taskList = taskList;
     [self copyRemoteTask:remoteTask toLocalTask:localTask];
   }
   if ([self.context hasChanges])
   {
-    if (![self.context save:error])
-    {
-      return;
-    }
+    [self.context save:error];
   }
+  if ([self errorOrCanceled:error]) { return; }
   
   for (Task *localTask in newLocalTasks)
   {
@@ -315,17 +332,13 @@
     remoteList.name = taskList.name;
     
     [client saveTask:&remoteTask taskList:remoteList error:error];
-    if (*error)
-    {
-      return;
-    }
+    // Don't check canceled here; would leave data inconsistent
+    if (*error) { return; }
     localTask.key = remoteTask.key;
     [localTask hasBeenUpdated:remoteTask.updatedAt];
     
-    if (![self.context save:error])
-    {
-      return;
-    }
+    [self.context save:error];
+    if ([self errorOrCanceled:error]) { return; } 
   }
   for (NSArray *remoteLocalTasks in tasksToSync)
   {
@@ -335,17 +348,15 @@
     if (localTask.isDeleted)
     {
       [self.client deleteTask:&remoteTask error:error];
+      // Do not check canceled in this case
       if (*error) { return; }
       [self.context deleteObject:localTask];
     }
     else
     {
       NSTimeInterval remoteUpdatedInterval = [remoteTask.updatedAt timeIntervalSinceDate:localTask.updatedAt];
-      // NSLog(@"Remote: %0.8f Local: %0.8f", [remoteTask.updatedAt timeIntervalSinceReferenceDate], [localTask.updatedAt timeIntervalSinceReferenceDate]);
       if (remoteUpdatedInterval < 0 || localTask.isArchived)
       {
-        // NSLog(@"Local task is newer than remote task: %@", localTask.body);
-        
         [self copyLocalTask:localTask toRemoteTask:remoteTask];
         [self.client saveTask:&remoteTask taskList:nil error:error];
         if (*error) { return; }
@@ -360,7 +371,6 @@
       }
       else if (remoteUpdatedInterval > 0)
       {
-        // NSLog(@"Remote task is newer than local task: %@", localTask.body);
         [self copyRemoteTask:remoteTask toLocalTask:localTask];
       }
     }
@@ -370,10 +380,7 @@
       [self.context save:error];
     }
     
-    if (*error)
-    {
-      return;
-    }
+    if ([self errorOrCanceled:error]) { return; }
   }
 }
 

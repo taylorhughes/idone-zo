@@ -43,7 +43,6 @@
 		347401FA1066742200B764A1 /* SyncTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AF21EF102FC20B001FC4B7 /* SyncTest.m */; };
 		34762C35104EF27700498704 /* DNZOAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* DNZOAppDelegate.m */; };
 		34770B2A0FAFE45B00AD8397 /* ListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34770B270FAFE45B00AD8397 /* ListViewController.m */; };
-		34770B2B0FAFE45B00AD8397 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34770B290FAFE45B00AD8397 /* MainViewController.m */; };
 		34770B2C0FAFE45B00AD8397 /* ListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34770B270FAFE45B00AD8397 /* ListViewController.m */; };
 		34770B2D0FAFE45B00AD8397 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34770B290FAFE45B00AD8397 /* MainViewController.m */; };
 		34770B310FAFE4A300AD8397 /* ListView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34770B2F0FAFE4A300AD8397 /* ListView.xib */; };
@@ -81,14 +80,16 @@
 		34B7D8400FC3860600A91E43 /* checked.png in Resources */ = {isa = PBXBuildFile; fileRef = 34B7D83C0FC3860600A91E43 /* checked.png */; };
 		34B7D8410FC3860600A91E43 /* unchecked.png in Resources */ = {isa = PBXBuildFile; fileRef = 34B7D83D0FC3860600A91E43 /* unchecked.png */; };
 		34B9D5B210CCA75A0087EDCC /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B9D5B110CCA75A0087EDCC /* SettingsViewController.m */; };
-		34B9D5B310CCA75A0087EDCC /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B9D5B110CCA75A0087EDCC /* SettingsViewController.m */; };
 		34B9D6F210CDCBC00087EDCC /* SFHFKeychainUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B9D6F110CDCBC00087EDCC /* SFHFKeychainUtils.m */; };
-		34B9D6F310CDCBC00087EDCC /* SFHFKeychainUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B9D6F110CDCBC00087EDCC /* SFHFKeychainUtils.m */; };
 		34B9D6F810CDCCC50087EDCC /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34B9D6F710CDCCC50087EDCC /* Security.framework */; };
 		34B9D70F10CDCE110087EDCC /* SettingsHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B9D70E10CDCE110087EDCC /* SettingsHelper.m */; };
-		34B9D71010CDCE110087EDCC /* SettingsHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B9D70E10CDCE110087EDCC /* SettingsHelper.m */; };
 		34B9D7F410CF2F600087EDCC /* RevisionInfo.h.rb in Resources */ = {isa = PBXBuildFile; fileRef = 34B9D7F310CF2F600087EDCC /* RevisionInfo.h.rb */; };
 		34B9D7F510CF2F600087EDCC /* RevisionInfo.h.rb in Resources */ = {isa = PBXBuildFile; fileRef = 34B9D7F310CF2F600087EDCC /* RevisionInfo.h.rb */; };
+		34B9D82810CF33E90087EDCC /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34B9D6F710CDCCC50087EDCC /* Security.framework */; };
+		34B9D82910CF34180087EDCC /* SFHFKeychainUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B9D6F110CDCBC00087EDCC /* SFHFKeychainUtils.m */; };
+		34B9D82A10CF34180087EDCC /* SettingsHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B9D70E10CDCE110087EDCC /* SettingsHelper.m */; };
+		34B9D82B10CF34180087EDCC /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34770B290FAFE45B00AD8397 /* MainViewController.m */; };
+		34B9D82C10CF34180087EDCC /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B9D5B110CCA75A0087EDCC /* SettingsViewController.m */; };
 		34C51AC40FB92A9D0024A5CD /* EditProjectPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C51AC30FB92A9D0024A5CD /* EditProjectPicker.m */; };
 		34C51AC50FB92A9D0024A5CD /* EditProjectPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C51AC30FB92A9D0024A5CD /* EditProjectPicker.m */; };
 		34C74259107570400045F527 /* GTMRegex.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C74258107570400045F527 /* GTMRegex.m */; };
@@ -275,6 +276,7 @@
 				34FAABEE101148BC00B74477 /* CoreGraphics.framework in Frameworks */,
 				34FAABF3101148C400B74477 /* UIKit.framework in Frameworks */,
 				34FAAC2E1011490B00B74477 /* CoreData.framework in Frameworks */,
+				34B9D82810CF33E90087EDCC /* Security.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -715,7 +717,6 @@
 			files = (
 				3412FDD210279C1D00A0439E /* NSDictionary+Donezo.m in Sources */,
 				34770B2A0FAFE45B00AD8397 /* ListViewController.m in Sources */,
-				34770B2B0FAFE45B00AD8397 /* MainViewController.m in Sources */,
 				341E1E240FB138F000D5B454 /* TaskViewController.m in Sources */,
 				34C51AC40FB92A9D0024A5CD /* EditProjectPicker.m in Sources */,
 				3416EC260FC22C3D00D8BD53 /* TaskCell.m in Sources */,
@@ -752,9 +753,10 @@
 				349066EA10AF6C7200F2AAFF /* ArchivedListViewController.m in Sources */,
 				3443E32510B0B071000D5B27 /* DonezoDates.m in Sources */,
 				34FDCEF910B74D1300625D62 /* ConfirmationViewController.m in Sources */,
-				34B9D5B310CCA75A0087EDCC /* SettingsViewController.m in Sources */,
-				34B9D6F310CDCBC00087EDCC /* SFHFKeychainUtils.m in Sources */,
-				34B9D71010CDCE110087EDCC /* SettingsHelper.m in Sources */,
+				34B9D82910CF34180087EDCC /* SFHFKeychainUtils.m in Sources */,
+				34B9D82A10CF34180087EDCC /* SettingsHelper.m in Sources */,
+				34B9D82B10CF34180087EDCC /* MainViewController.m in Sources */,
+				34B9D82C10CF34180087EDCC /* SettingsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

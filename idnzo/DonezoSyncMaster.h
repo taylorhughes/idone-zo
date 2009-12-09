@@ -16,6 +16,8 @@
 @interface DonezoSyncMaster : NSObject {
   DonezoAPIClient *client;
   NSManagedObjectContext *context;
+  
+  BOOL canceled;
 }
 
 @property (retain, nonatomic) DonezoAPIClient *client;
@@ -27,5 +29,8 @@
 
 - (NSArray*) syncLists:(NSError**)error;
 - (void) syncList:(TaskList*)taskList error:(NSError**)error;
+
+- (void) cancel;
+- (BOOL) isCanceled;
 
 @end
