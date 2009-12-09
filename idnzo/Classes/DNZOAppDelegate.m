@@ -9,21 +9,22 @@
 #import "DNZOAppDelegate.h"
 
 NSString* const DonezoShouldSyncNotification  = @"DonezoShouldSyncNotification";
+NSString* const DonezoShouldResetAndSyncNotification = @"DonezoShouldResetAndSyncNotification";
 NSString* const DonezoDataUpdatedNotification = @"DonezoDataUpdatedNotification";
 
 @interface DNZOAppDelegate ()
 
-- (void)createInitialObjects;
+- (void) createInitialObjects;
+- (void) createSyncMaster;
 
 - (void) onSyncEvent:(NSNotification*)syncNotification;
+- (void) onResetAndSyncEvent:(NSNotification*)syncNotification;
 
 - (void) sync;
 - (void) sync:(TaskList*)list;
 
 @property (nonatomic, readonly) NSString *storePath;
-
 @property (nonatomic, retain) DonezoSyncMaster *syncMaster;
-
 @property (nonatomic, retain) NSOperationQueue *operationQueue;
 
 @end
@@ -50,9 +51,14 @@ NSString* const DonezoDataUpdatedNotification = @"DonezoDataUpdatedNotification"
     [self.operationQueue setMaxConcurrentOperationCount:1];
     
     NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
+    
     [dnc addObserver:self
             selector:@selector(onSyncEvent:) 
                 name:DonezoShouldSyncNotification
+              object:nil];
+    [dnc addObserver:self
+            selector:@selector(onResetAndSyncEvent:) 
+                name:DonezoShouldResetAndSyncNotification
               object:nil];
     
     NSLog(@"SQLite store: %@", self.storePath);
@@ -94,12 +100,49 @@ NSString* const DonezoDataUpdatedNotification = @"DonezoDataUpdatedNotification"
   [self sync:list];
 }
 
+
+- (void) onResetAndSyncEvent:(NSNotification*)syncNotification
+{
+  @synchronized (self) {
+    // This will stop soon after cancel is fired
+    [self.syncMaster cancel];
+    
+    self.donezoAPIClient = nil;
+    self.syncMaster = nil;
+  }
+  [self sync];
+}
+
+- (void) createSyncMaster
+{
+  NSString *donezoUsername = [SettingsHelper username];
+  NSString *donezoPassword = [SettingsHelper password];
+  NSString *donezoURL =      [SettingsHelper URL];
+  
+  NSLog(@"## Setting up to sync user %@ to URL %@ ##", donezoUsername, donezoURL);
+  self.donezoAPIClient = [[[DonezoAPIClient alloc] initWithUsername:donezoUsername 
+                                                        andPassword:donezoPassword
+                                                          toBaseUrl:donezoURL] autorelease];
+  
+  self.syncMaster = [[[DonezoSyncMaster alloc] initWithDonezoClient:self.donezoAPIClient 
+                                                        andContext:nil] autorelease];
+}
+
 - (void) sync
 {
   [self sync:nil];
 }
 - (void) sync:(TaskList*)list
-{ 
+{
+  if (![SettingsHelper isSyncEnabled])
+  {
+    NSLog(@"Ignoring new sync request.");
+    return;
+  }
+  
+  //
+  // Pause operation queue for now 
+  //
   [self.operationQueue setSuspended:YES];
   NSString *identifier = @"syncAll";
   if (list.key != nil)
@@ -147,11 +190,26 @@ NSString* const DonezoDataUpdatedNotification = @"DonezoDataUpdatedNotification"
   //
   // WARNING: Operates in a separate thread, do not make non-threadsafe calls here!
   //
+  if (![SettingsHelper isSyncEnabled])
+  {
+    NSLog(@"Sync is no longer enabled; returning.");
+    return;
+  }
+  
+  
+  DonezoSyncMaster *master;
+  @synchronized (self) {
+    if (!self.syncMaster)
+    {
+      [self createSyncMaster];
+    }
+    master = [self.syncMaster retain];
+  }
 
   [self showNetworkIndicator];
   
-  self.syncMaster.context = [[[NSManagedObjectContext alloc] init] autorelease];
-  [self.syncMaster.context setPersistentStoreCoordinator:self.persistentStoreCoordinator];
+  master.context = [[[NSManagedObjectContext alloc] init] autorelease];
+  [master.context setPersistentStoreCoordinator:self.persistentStoreCoordinator];
   
   NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
   [dnc addObserver:self
@@ -165,19 +223,20 @@ NSString* const DonezoDataUpdatedNotification = @"DonezoDataUpdatedNotification"
   if (object != nil)
   {
     list = (TaskList*)object;
-    list = (TaskList*)[self.syncMaster.context objectWithID:[list objectID]];
+    list = (TaskList*)[master.context objectWithID:[list objectID]];
   }
   
   if (list == nil)
   {
-    [self.syncMaster syncAll:&error];
+    [master syncAll:&error];
   }
   else
   {
-    [self.syncMaster syncList:list error:&error];
+    [master syncList:list error:&error];
   }
   
   [dnc removeObserver:self name:NSManagedObjectContextDidSaveNotification object:nil];
+  [master release];
   
   [self performSelectorOnMainThread:@selector(finishSync:) withObject:error waitUntilDone:YES];
 }
@@ -254,16 +313,7 @@ NSString* const DonezoDataUpdatedNotification = @"DonezoDataUpdatedNotification"
 }
 
 - (void) applicationDidFinishLaunching:(UIApplication *)application
-{ 
-  NSString *donezoUsername = [SettingsHelper username];
-  NSString *donezoPassword = [SettingsHelper password];
-  NSString *donezoURL =      [SettingsHelper URL];
-  
-  NSLog(@"Got user %@ for URL %@", donezoUsername, donezoURL);
-  
-  self.donezoAPIClient = [[DonezoAPIClient alloc] initWithUsername:donezoUsername andPassword:donezoPassword toBaseUrl:donezoURL];
-  self.syncMaster = [[DonezoSyncMaster alloc] initWithDonezoClient:self.donezoAPIClient andContext:nil];
-  
+{  
   [self sync];
   
   // Add the current view in the navigationController to the main window.

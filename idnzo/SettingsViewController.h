@@ -7,6 +7,7 @@
 //
 
 #include "TextFieldViewController.h"
+#include "DNZOAppDelegate.h"
 #include "SettingsHelper.h"
 
 @interface SettingsViewController : UITableViewController {

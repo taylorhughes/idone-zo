@@ -76,9 +76,13 @@
 + (NSString*) URL
 {
 #if TARGET_IPHONE_SIMULATOR
-  return @"http://dnzo-staging.appspot.com/";
+  #if true
+    return @"http://localhost:8081";
+  #else
+    return @"http://dnzo-staging.appspot.com/";
+  #endif
 #else
-  return @"http://www.done-zo.com/";
+  return @"https://www.done-zo.com/";
 #endif
 }
 

@@ -8,6 +8,12 @@
 
 #import "SettingsViewController.h"
 
+@interface SettingsViewController ()
+
+- (void) notifyResetAndSync;
+
+@end
+
 @implementation SettingsViewController
 
 @synthesize switchCell, switchWidget;
@@ -86,8 +92,15 @@
   {
     [self.tableView deleteSections:set withRowAnimation:UITableViewRowAnimationFade];
   }
+  
+  [self notifyResetAndSync];
 }
 
+- (void) notifyResetAndSync
+{
+  NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
+  [dnc postNotificationName:DonezoShouldResetAndSyncNotification object:self userInfo:nil];  
+}
 
 #pragma mark Table view methods
 
@@ -182,11 +195,18 @@
   self.username = [tfvc.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
   
   [SettingsHelper setUsername:self.username];
+  
+  if ([SettingsHelper hasPassword])
+  {
+    [self notifyResetAndSync];
+  }
 }
 - (void)savePassword:(id)sender
 {
   TextFieldViewController *tfvc = (TextFieldViewController*)sender;
   [SettingsHelper setPassword:tfvc.text];
+  
+  [self notifyResetAndSync];
 }
 
 

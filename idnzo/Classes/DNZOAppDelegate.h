@@ -16,6 +16,7 @@
 @class Project, Context, TaskList, Task, MainViewController, DonezoSyncMaster;
 
 extern NSString* const DonezoShouldSyncNotification;
+extern NSString* const DonezoShouldResetAndSyncNotification;
 extern NSString* const DonezoDataUpdatedNotification;
 
 extern UIColor*  const DonezoSelectedTextColor;
