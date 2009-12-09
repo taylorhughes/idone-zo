@@ -11,7 +11,7 @@
 require 'fileutils'
 
 def main
-  revs = `svn info #{ENV['SRCROOT']} -R |grep Revision`
+  revs = `svn info #{ENV['SRCROOT'].inspect} -R |grep Revision`
   revision = revs.collect do |line|
     line.gsub(/[^\d]+/,'').to_i
   end.max
