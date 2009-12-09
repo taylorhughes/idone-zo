@@ -93,7 +93,10 @@
     [self.tableView deleteSections:set withRowAnimation:UITableViewRowAnimationFade];
   }
   
-  [self notifyResetAndSync];
+  if ([SettingsHelper hasUsername])
+  {
+    [self notifyResetAndSync];
+  }
 }
 
 - (void) notifyResetAndSync

@@ -48,6 +48,12 @@
   return [DEFAULTS stringForKey:USERNAME_KEY];
 }
 
++ (BOOL) hasUsername
+{
+  NSString *user = [SettingsHelper username];
+  return user != nil && [user length] > 0;
+}
+
 + (void) setIsSyncEnabled:(BOOL)enabled
 {
   [DEFAULTS setBool:enabled forKey:SYNC_ENABLED_KEY];

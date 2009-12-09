@@ -13,6 +13,7 @@
 
 + (BOOL) isSyncEnabled;
 + (NSString*) username;
++ (BOOL) hasUsername;
 + (NSString*) password;
 + (BOOL) hasPassword;
 
