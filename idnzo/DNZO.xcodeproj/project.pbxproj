@@ -87,6 +87,8 @@
 		34B9D6F810CDCCC50087EDCC /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34B9D6F710CDCCC50087EDCC /* Security.framework */; };
 		34B9D70F10CDCE110087EDCC /* SettingsHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B9D70E10CDCE110087EDCC /* SettingsHelper.m */; };
 		34B9D71010CDCE110087EDCC /* SettingsHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B9D70E10CDCE110087EDCC /* SettingsHelper.m */; };
+		34B9D7F410CF2F600087EDCC /* RevisionInfo.h.rb in Resources */ = {isa = PBXBuildFile; fileRef = 34B9D7F310CF2F600087EDCC /* RevisionInfo.h.rb */; };
+		34B9D7F510CF2F600087EDCC /* RevisionInfo.h.rb in Resources */ = {isa = PBXBuildFile; fileRef = 34B9D7F310CF2F600087EDCC /* RevisionInfo.h.rb */; };
 		34C51AC40FB92A9D0024A5CD /* EditProjectPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C51AC30FB92A9D0024A5CD /* EditProjectPicker.m */; };
 		34C51AC50FB92A9D0024A5CD /* EditProjectPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C51AC30FB92A9D0024A5CD /* EditProjectPicker.m */; };
 		34C74259107570400045F527 /* GTMRegex.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C74258107570400045F527 /* GTMRegex.m */; };
@@ -209,6 +211,7 @@
 		34B9D6F710CDCCC50087EDCC /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		34B9D70D10CDCE110087EDCC /* SettingsHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsHelper.h; sourceTree = "<group>"; };
 		34B9D70E10CDCE110087EDCC /* SettingsHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsHelper.m; sourceTree = "<group>"; };
+		34B9D7F310CF2F600087EDCC /* RevisionInfo.h.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = RevisionInfo.h.rb; sourceTree = "<group>"; };
 		34C51AC20FB92A9D0024A5CD /* EditProjectPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditProjectPicker.h; sourceTree = "<group>"; };
 		34C51AC30FB92A9D0024A5CD /* EditProjectPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditProjectPicker.m; sourceTree = "<group>"; };
 		34C74256107570400045F527 /* GTMDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMDefines.h; sourceTree = "<group>"; };
@@ -322,6 +325,7 @@
 				34E13BFB1017CA92005A582E /* Donezo API */,
 				34174693101523BD00DEBB76 /* Models */,
 				3490B9A60FA7DB15004195D9 /* DNZO_Prefix.pch */,
+				34B9D7F310CF2F600087EDCC /* RevisionInfo.h.rb */,
 				29B97316FDCFA39411CA2CEA /* main.m */,
 				1D3623240D0F684500981E51 /* DNZOAppDelegate.h */,
 				1D3623250D0F684500981E51 /* DNZOAppDelegate.m */,
@@ -534,6 +538,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 348E18CA0FA7DE1F00B75000 /* Build configuration list for PBXNativeTarget "Test" */;
 			buildPhases = (
+				34B9D7D610CF2F130087EDCC /* ShellScript */,
 				348E18C10FA7DE1E00B75000 /* Resources */,
 				348E18C20FA7DE1E00B75000 /* Sources */,
 				348E18C30FA7DE1E00B75000 /* Frameworks */,
@@ -591,6 +596,7 @@
 				34FDCFBA10B7627E00625D62 /* ConfirmationView.xib in Resources */,
 				3488E39410C1FA9600D7921C /* ArchivedListView.xib in Resources */,
 				34916AEA10C4E359009F932A /* Default.png in Resources */,
+				34B9D7F410CF2F600087EDCC /* RevisionInfo.h.rb in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -607,6 +613,7 @@
 				3489371C10AA6BD80054237D /* TextFieldView.xib in Resources */,
 				34FDCFB910B7627E00625D62 /* ConfirmationView.xib in Resources */,
 				3488E39510C1FA9600D7921C /* ArchivedListView.xib in Resources */,
+				34B9D7F510CF2F600087EDCC /* RevisionInfo.h.rb in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -637,7 +644,20 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "REV=$(svn info $SRCROOT -R |grep Revision |sort -r |head -n 1 |sed -E -e s/[^0-9]+//g)\necho \"#define SVN_REVISION @\\\"$REV\\\"\" > $DERIVED_FILES_DIR/RevisionInfo.h";
+			shellScript = $SRCROOT/RevisionInfo.h.rb;
+		};
+		34B9D7D610CF2F130087EDCC /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = $SRCROOT/RevisionInfo.h.rb;
 		};
 /* End PBXShellScriptBuildPhase section */
 
