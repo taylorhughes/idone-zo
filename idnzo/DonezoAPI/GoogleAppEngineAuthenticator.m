@@ -24,7 +24,7 @@
 
 @end
 
-#define AUTH_URL @"https://google.com/accounts/ClientLogin"
+#define AUTH_URL @"https://www.google.com/accounts/ClientLogin"
 #ifndef USER_AGENT_STRING
 #define USER_AGENT_STRING @"GoogleAppEngineAuthenticator (unknown client)"
 #endif

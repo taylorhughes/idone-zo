@@ -88,7 +88,7 @@
     return @"http://dnzo-staging.appspot.com/";
   #endif
 #else
-  return @"https://www.done-zo.com/";
+  return @"https://dnzo.appspot.com/";
 #endif
 }
 

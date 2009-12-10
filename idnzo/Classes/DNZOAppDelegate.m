@@ -109,6 +109,8 @@ NSString* const DonezoDataUpdatedNotification = @"DonezoDataUpdatedNotification"
     
     self.donezoAPIClient = nil;
     self.syncMaster = nil;
+    
+    hasDisplayedError = NO;
   }
   [self sync];
 }
