@@ -41,6 +41,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
   [self recordViewedList:nil];
+  self.listViewController.taskList = nil;
 }
 
 - (ListViewController *)listViewController
@@ -68,7 +69,7 @@
   // Instantiate the detail view controller if necessary.
   if (settingsViewController == nil)
   {
-    settingsViewController = [[SettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    settingsViewController = [[SettingsViewController alloc] initWithNibName:@"SettingsView" bundle:nil];
   }
   return settingsViewController;
 }

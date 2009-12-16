@@ -8,9 +8,9 @@
 
 #import "DNZOAppDelegate.h"
 
-NSString* const DonezoShouldSyncNotification  = @"DonezoShouldSyncNotification";
+NSString* const DonezoShouldSyncNotification         = @"DonezoShouldSyncNotification";
 NSString* const DonezoShouldResetAndSyncNotification = @"DonezoShouldResetAndSyncNotification";
-NSString* const DonezoDataUpdatedNotification = @"DonezoDataUpdatedNotification";
+NSString* const DonezoDataUpdatedNotification        = @"DonezoDataUpdatedNotification";
 
 @interface DNZOAppDelegate ()
 
@@ -39,6 +39,8 @@ NSString* const DonezoDataUpdatedNotification = @"DonezoDataUpdatedNotification"
 @synthesize syncMaster;
 @synthesize donezoAPIClient;
 
+@synthesize managedObjectModel, managedObjectContext, persistentStoreCoordinator;
+
 - (id) init
 {
   self = [super init];
@@ -47,8 +49,9 @@ NSString* const DonezoDataUpdatedNotification = @"DonezoDataUpdatedNotification"
     networkIndicatorShown = 0;
     hasDisplayedError = NO;
     
-    self.operationQueue = [[[NSOperationQueue alloc] init] autorelease];
+    self.operationQueue = [[NSOperationQueue alloc] init];
     [self.operationQueue setMaxConcurrentOperationCount:1];
+    [self.operationQueue release];
     
     NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
     
@@ -62,28 +65,53 @@ NSString* const DonezoDataUpdatedNotification = @"DonezoDataUpdatedNotification"
               object:nil];
     
     NSLog(@"SQLite store: %@", self.storePath);
-    BOOL resetOnLaunch = NO;
-    BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:self.storePath];
-    if (resetOnLaunch && fileExists)
-    {
-      NSError *error = nil;
-      [[NSFileManager defaultManager] removeItemAtPath:self.storePath error:&error];
-      if (error)
-      {
-        NSLog(@"Could not delete the SQLite store! %@ (%@)", [error description], [error userInfo]);
-      }
-      else
-      {
-        fileExists = NO;
-      }
-    }
-    if (!fileExists)
+    if (![[NSFileManager defaultManager] fileExistsAtPath:self.storePath])
     {
       NSLog(@"Store does not exist. Adding initial objects...");
       [self createInitialObjects];
     }
   }
   return self;
+}
+
+- (BOOL) waitForSyncToFinishAndReinitializeDatastore
+{
+  BOOL success = YES;
+  NSLog(@"Waiting for operations to finish..");
+  [self.operationQueue waitUntilAllOperationsAreFinished];
+  
+  NSLog(@"Finished waiting to finish..");
+  @synchronized (self) {
+    [self.operationQueue setSuspended:YES];
+    
+    NSLog(@"Resetting ojects..");    
+    self.persistentStoreCoordinator = nil;
+    self.managedObjectModel = nil;
+    self.managedObjectContext = nil;
+    
+    NSError *error = nil;
+    [[NSFileManager defaultManager] removeItemAtPath:self.storePath error:&error];
+    if (error)
+    {
+      NSLog(@"Could not delete the SQLite store! %@ (%@)", [error description], [error userInfo]);
+      success = NO;
+    }
+    else
+    {
+      [self createInitialObjects];
+    }
+    
+    NSLog(@"Unsuspending queue...");
+    [self.operationQueue setSuspended:NO];
+  }
+  
+  //
+  // Empty out old data from other views, etc.
+  //
+  [[NSNotificationCenter defaultCenter] postNotificationName:DonezoDataUpdatedNotification
+                                                      object:self];
+  
+  return success;
 }
 
 - (void) onSyncEvent:(NSNotification*)syncNotification
@@ -289,6 +317,11 @@ NSString* const DonezoDataUpdatedNotification = @"DonezoDataUpdatedNotification"
   {
     NSLog(@"Sync completed successfully!");
   }
+
+  //NSDictionary *info = [NSDictionary dictionaryWithObject:list forKey:@"list"];
+  //[[NSNotificationCenter defaultCenter] postNotificationName:DonezoSyncFinishedNotification
+  //                                                    object:self
+  //                                                  userInfo:info];
 }
 
 - (void) showNetworkIndicator

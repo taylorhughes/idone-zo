@@ -75,6 +75,10 @@
 		349D81031091509100A61237 /* SortViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 349D81011091509100A61237 /* SortViewController.m */; };
 		34A282D8104DA3EB00F26A01 /* DonezoAPIClientTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 34770B340FAFE4C200AD8397 /* DonezoAPIClientTest.m */; };
 		34AF21F0102FC20B001FC4B7 /* MockDonezoAPIClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AF21ED102FC20B001FC4B7 /* MockDonezoAPIClient.m */; };
+		34B6072510D8829D00CCF883 /* SettingsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34B6072410D8829D00CCF883 /* SettingsView.xib */; };
+		34B6072610D8829D00CCF883 /* SettingsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34B6072410D8829D00CCF883 /* SettingsView.xib */; };
+		34B6072D10D8854500CCF883 /* dialog-background.png in Resources */ = {isa = PBXBuildFile; fileRef = 34B6072C10D8854500CCF883 /* dialog-background.png */; };
+		34B6072E10D8854500CCF883 /* dialog-background.png in Resources */ = {isa = PBXBuildFile; fileRef = 34B6072C10D8854500CCF883 /* dialog-background.png */; };
 		34B7D83E0FC3860600A91E43 /* checked.png in Resources */ = {isa = PBXBuildFile; fileRef = 34B7D83C0FC3860600A91E43 /* checked.png */; };
 		34B7D83F0FC3860600A91E43 /* unchecked.png in Resources */ = {isa = PBXBuildFile; fileRef = 34B7D83D0FC3860600A91E43 /* unchecked.png */; };
 		34B7D8400FC3860600A91E43 /* checked.png in Resources */ = {isa = PBXBuildFile; fileRef = 34B7D83C0FC3860600A91E43 /* checked.png */; };
@@ -203,6 +207,8 @@
 		34AF21ED102FC20B001FC4B7 /* MockDonezoAPIClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MockDonezoAPIClient.m; path = Test/MockDonezoAPIClient.m; sourceTree = "<group>"; };
 		34AF21EE102FC20B001FC4B7 /* SyncTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SyncTest.h; path = Test/SyncTest.h; sourceTree = "<group>"; };
 		34AF21EF102FC20B001FC4B7 /* SyncTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SyncTest.m; path = Test/SyncTest.m; sourceTree = "<group>"; };
+		34B6072410D8829D00CCF883 /* SettingsView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = SettingsView.xib; path = Resources/SettingsView.xib; sourceTree = "<group>"; };
+		34B6072C10D8854500CCF883 /* dialog-background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "dialog-background.png"; path = "Resources/dialog-background.png"; sourceTree = "<group>"; };
 		34B7D83C0FC3860600A91E43 /* checked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = checked.png; path = Resources/checked.png; sourceTree = "<group>"; };
 		34B7D83D0FC3860600A91E43 /* unchecked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = unchecked.png; path = Resources/unchecked.png; sourceTree = "<group>"; };
 		34B9D5B010CCA75A0087EDCC /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
@@ -359,6 +365,7 @@
 				341E1EFE0FB14F2900D5B454 /* TaskView.xib */,
 				34388FD41076B87500FC1AB3 /* TaskDatePickerView.xib */,
 				34FDCFB810B7627E00625D62 /* ConfirmationView.xib */,
+				34B6072410D8829D00CCF883 /* SettingsView.xib */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 				3452D4A21049CC26005C717C /* Entitlements.plist */,
 				34FAAB28101141B700B74477 /* Tasks.xcdatamodel */,
@@ -428,6 +435,7 @@
 		3496213B108682D30068B551 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				34B6072C10D8854500CCF883 /* dialog-background.png */,
 				34916AE910C4E359009F932A /* Default.png */,
 				348936D710AA66AD0054237D /* tableview-background.png */,
 				34962144108685B50068B551 /* sort-button.png */,
@@ -599,6 +607,8 @@
 				3488E39410C1FA9600D7921C /* ArchivedListView.xib in Resources */,
 				34916AEA10C4E359009F932A /* Default.png in Resources */,
 				34B9D7F410CF2F600087EDCC /* RevisionInfo.h.rb in Resources */,
+				34B6072610D8829D00CCF883 /* SettingsView.xib in Resources */,
+				34B6072E10D8854500CCF883 /* dialog-background.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -616,6 +626,8 @@
 				34FDCFB910B7627E00625D62 /* ConfirmationView.xib in Resources */,
 				3488E39510C1FA9600D7921C /* ArchivedListView.xib in Resources */,
 				34B9D7F510CF2F600087EDCC /* RevisionInfo.h.rb in Resources */,
+				34B6072510D8829D00CCF883 /* SettingsView.xib in Resources */,
+				34B6072D10D8854500CCF883 /* dialog-background.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -9,17 +9,24 @@
 #include "TextFieldViewController.h"
 #include "DNZOAppDelegate.h"
 #include "SettingsHelper.h"
+#include "ConfirmationViewController.h"
 
 @interface SettingsViewController : UITableViewController {
   UITableViewCell *switchCell;
   UISwitch *switchWidget;
   
   NSString *username;
+  ConfirmationViewController *confirm;
+  UIView *longOperationDialogView;
+  UILabel *longOperationLabel;
 }
 
 @property (nonatomic, retain) UITableViewCell *switchCell;
 @property (nonatomic, retain) UISwitch *switchWidget;
 @property (nonatomic) BOOL isSyncEnabled;
+@property (nonatomic, retain) IBOutlet UIView *longOperationDialogView;
+@property (nonatomic, retain) IBOutlet UILabel *longOperationLabel;
+@property (nonatomic, retain) ConfirmationViewController *confirm;
 
 @property (nonatomic, copy) NSString *username;
 

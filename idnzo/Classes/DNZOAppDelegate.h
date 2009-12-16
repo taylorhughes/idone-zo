@@ -44,14 +44,16 @@ extern UIColor*  const DonezoSelectedTextColor;
 @property (nonatomic, retain) IBOutlet UINavigationController *navigationController;
 @property (nonatomic, retain) IBOutlet MainViewController *mainController;
 
-@property (nonatomic, retain, readonly) NSManagedObjectModel *managedObjectModel;
-@property (nonatomic, retain, readonly) NSManagedObjectContext *managedObjectContext;
-@property (nonatomic, retain, readonly) NSPersistentStoreCoordinator *persistentStoreCoordinator;
+@property (nonatomic, retain) NSManagedObjectModel *managedObjectModel;
+@property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
+@property (nonatomic, retain) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
 @property (nonatomic, retain) DonezoAPIClient *donezoAPIClient;
 
 - (void) showNetworkIndicator;
 - (void) hideNetworkIndicator;
+
+- (BOOL) waitForSyncToFinishAndReinitializeDatastore;
 
 
 @end

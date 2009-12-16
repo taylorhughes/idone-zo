@@ -59,9 +59,11 @@
 {
   if (!suspendUpdates)
   {
-    // Is this necessary?
     [self resetTasks];
-    [self.tableView reloadData];    
+    if (self.taskList)
+    {
+      [self.tableView reloadData];
+    }
   }
 }
 
@@ -341,7 +343,7 @@
     self.confirm.afterHideAction = @selector(cleanupConfirmation);
     
     [self.confirm.confirmButton setTitle:@"Archive Completed Tasks" forState:UIControlStateNormal];
-    [self.confirm.cancelButton setTitle:@"Don't Archive" forState:UIControlStateNormal];
+    [self.confirm.cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
     
     [self.confirm show];
   }

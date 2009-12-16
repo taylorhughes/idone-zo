@@ -19,6 +19,11 @@
 @synthesize switchCell, switchWidget;
 @synthesize username;
 
+@synthesize longOperationDialogView;
+@synthesize longOperationLabel;
+
+@synthesize confirm;
+
 - (UITableViewCell*)switchCell
 {
   if (!switchCell)
@@ -192,18 +197,68 @@
   return nil;
 }
 
+- (void)reallySaveUsername:(id)sender
+{
+  [[NSNotificationCenter defaultCenter] postNotificationName:DonezoShouldSyncNotification object:self];
+  
+  [self.longOperationLabel setText:@"Syncing existing account..."];
+  self.longOperationDialogView.frame = self.navigationController.view.frame;
+  [self.navigationController.view addSubview:self.longOperationDialogView];
+  
+  [self performSelectorInBackground:@selector(reallySaveUsernameOperation:) withObject:self];
+}
+- (void)reallySaveUsernameOperation:(id)sender
+{
+  NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+  
+  DNZOAppDelegate *appDelegate = (DNZOAppDelegate *)[[UIApplication sharedApplication] delegate];
+  [appDelegate waitForSyncToFinishAndReinitializeDatastore];
+  
+  [SettingsHelper setUsername:self.username];
+  
+  [self.longOperationLabel setText:@"Syncing new account..."];
+  [[NSNotificationCenter defaultCenter] postNotificationName:DonezoShouldResetAndSyncNotification object:self];
+  
+  [self.longOperationDialogView removeFromSuperview];
+  
+  [pool release];
+}
+
+- (void)dontSaveUsername:(id)sender
+{
+  self.username = [SettingsHelper username];
+}
 - (void)saveUsername:(id)sender
 {
   TextFieldViewController *tfvc = (TextFieldViewController*)sender;
   self.username = [tfvc.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
   
-  [SettingsHelper setUsername:self.username];
-  
-  if ([SettingsHelper hasPassword])
+  if ([SettingsHelper hasUsername] &&
+      ![[self.username lowercaseString] isEqualToString:[[SettingsHelper username] lowercaseString]])
   {
-    [self notifyResetAndSync];
+    // Changed usernames!
+    self.confirm = [ConfirmationViewController confirmationViewWithSuperview:self.navigationController.view];
+    self.confirm.target = self;
+    
+    [self.confirm.confirmButton setTitle:@"Change Username" forState:UIControlStateNormal];
+    self.confirm.confirmAction = @selector(reallySaveUsername:);
+    
+    [self.confirm.cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
+    self.confirm.cancelAction = @selector(dontSaveUsername:);
+    
+    self.confirm.afterHideAction = @selector(cleanupConfirmation:);
+    [self.confirm show];
+  }
+  else
+  {
+    [SettingsHelper setUsername:self.username];
   }
 }
+- (void) cleanupConfirmation:(id)sender
+{
+  self.confirm = nil;
+}
+
 - (void)savePassword:(id)sender
 {
   TextFieldViewController *tfvc = (TextFieldViewController*)sender;
@@ -218,6 +273,9 @@
   [username release];
   [switchCell release];
   [switchWidget release];
+  [confirm release];
+  [longOperationDialogView release];
+  [longOperationLabel release];
   [super dealloc];
 }
 
