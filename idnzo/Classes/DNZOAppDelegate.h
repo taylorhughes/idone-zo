@@ -17,6 +17,7 @@
 
 extern NSString* const DonezoShouldSyncNotification;
 extern NSString* const DonezoShouldResetAndSyncNotification;
+extern NSString* const DonezoShouldResetNotification;
 extern NSString* const DonezoDataUpdatedNotification;
 
 extern UIColor*  const DonezoSelectedTextColor;
@@ -55,6 +56,7 @@ extern UIColor*  const DonezoSelectedTextColor;
 
 - (BOOL) waitForSyncToFinishAndReinitializeDatastore;
 
+- (void) synchronouslySyncAll;
 
 @end
 

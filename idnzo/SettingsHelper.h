@@ -20,6 +20,7 @@
 + (void) setIsSyncEnabled:(BOOL)enabled;
 + (void) setUsername:(NSString*)username;
 + (void) setPassword:(NSString*)username;
++ (void) resetPassword;
 
 + (NSString*) URL;
 

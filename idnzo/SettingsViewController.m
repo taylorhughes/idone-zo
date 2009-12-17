@@ -201,6 +201,7 @@
 
 - (void)reallySaveUsername
 {
+  // Cause one last sync.
   [[NSNotificationCenter defaultCenter] postNotificationName:DonezoShouldSyncNotification object:self];
   
   [self.longOperationLabel setText:@"Syncing existing account..."];
@@ -218,13 +219,14 @@
   
   DNZOAppDelegate *appDelegate = (DNZOAppDelegate *)[[UIApplication sharedApplication] delegate];
   [appDelegate waitForSyncToFinishAndReinitializeDatastore];
-  
+
   [SettingsHelper setUsername:self.username];
-  [self.tableView reloadData];
+  [SettingsHelper resetPassword];
   
-  [self.longOperationLabel setText:@"Syncing new account..."];
-  [[NSNotificationCenter defaultCenter] postNotificationName:DonezoShouldResetAndSyncNotification object:self];
+  [self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
   
+  [[NSNotificationCenter defaultCenter] postNotificationName:DonezoShouldResetNotification object:self];
+    
   [UIView beginAnimations:@"Hide View" context:nil];
   [self.longOperationDialogView setAlpha:0.0];
   [UIView commitAnimations];
@@ -266,7 +268,8 @@
     UIAlertView *alertTest = [[UIAlertView alloc]
                               initWithTitle:@"Really change user?"
                                     message:@"Changing your synced account will remove the tasks stored "
-                                             "on your phone and replace them with the new account's tasks."
+                                             "on your phone. After setting the new account's password, "
+                                             "the new tasks will be downloaded."
                                    delegate:self
                           cancelButtonTitle:@"Cancel"
                           otherButtonTitles:@"Change User",nil ];

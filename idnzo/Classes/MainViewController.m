@@ -45,7 +45,6 @@
 
 - (ListViewController *)listViewController
 {
-  // Instantiate the detail view controller if necessary.
   if (listViewController == nil)
   {
     listViewController = [[ListViewController alloc] initWithNibName:@"ListView" bundle:nil];
@@ -55,7 +54,6 @@
 
 - (ArchivedListViewController *)archivedListViewController
 {
-  // Instantiate the detail view controller if necessary.
   if (archivedListViewController == nil)
   {
     archivedListViewController = [[ArchivedListViewController alloc] initWithNibName:@"ArchivedListView" bundle:nil];
@@ -65,7 +63,6 @@
 
 - (SettingsViewController *)settingsViewController
 {
-  // Instantiate the detail view controller if necessary.
   if (settingsViewController == nil)
   {
     settingsViewController = [[SettingsViewController alloc] initWithNibName:@"SettingsView" bundle:nil];

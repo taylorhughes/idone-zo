@@ -79,6 +79,20 @@
   }
 }
 
++ (void) resetPassword
+{
+  NSError *error = nil;
+  
+  [SFHFKeychainUtils deleteItemForUsername:USERNAME_KEY 
+                            andServiceName:SERVICE_NAME
+                                     error:&error];
+  
+  if (error != nil)
+  {
+    NSLog(@"Error saving password! %@ (%@)", error, [error userInfo]);
+  }
+}
+
 + (NSString*) URL
 {
 #if TARGET_IPHONE_SIMULATOR

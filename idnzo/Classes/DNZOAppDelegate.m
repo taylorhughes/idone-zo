@@ -10,6 +10,7 @@
 
 NSString* const DonezoShouldSyncNotification         = @"DonezoShouldSyncNotification";
 NSString* const DonezoShouldResetAndSyncNotification = @"DonezoShouldResetAndSyncNotification";
+NSString* const DonezoShouldResetNotification        = @"DonezoShouldResetNotification";
 NSString* const DonezoDataUpdatedNotification        = @"DonezoDataUpdatedNotification";
 
 @interface DNZOAppDelegate ()
@@ -19,9 +20,11 @@ NSString* const DonezoDataUpdatedNotification        = @"DonezoDataUpdatedNotifi
 
 - (void) onSyncEvent:(NSNotification*)syncNotification;
 - (void) onResetAndSyncEvent:(NSNotification*)syncNotification;
+- (void) onResetEvent:(NSNotification*)syncNotification;
 
 - (void) sync;
 - (void) sync:(TaskList*)list;
+- (void) syncOperation:(NSObject*)object;
 
 @property (nonatomic, readonly) NSString *storePath;
 @property (nonatomic, retain) DonezoSyncMaster *syncMaster;
@@ -62,6 +65,10 @@ NSString* const DonezoDataUpdatedNotification        = @"DonezoDataUpdatedNotifi
     [dnc addObserver:self
             selector:@selector(onResetAndSyncEvent:) 
                 name:DonezoShouldResetAndSyncNotification
+              object:nil];
+    [dnc addObserver:self
+            selector:@selector(onResetEvent:) 
+                name:DonezoShouldResetNotification
               object:nil];
     
     NSLog(@"SQLite store: %@", self.storePath);
@@ -129,7 +136,7 @@ NSString* const DonezoDataUpdatedNotification        = @"DonezoDataUpdatedNotifi
 }
 
 
-- (void) onResetAndSyncEvent:(NSNotification*)syncNotification
+- (void) onResetEvent:(NSNotification*)syncNotification
 {
   @synchronized (self) {
     // This will stop soon after cancel is fired
@@ -140,6 +147,10 @@ NSString* const DonezoDataUpdatedNotification        = @"DonezoDataUpdatedNotifi
     
     hasDisplayedError = NO;
   }
+}
+- (void) onResetAndSyncEvent:(NSNotification*)syncNotification
+{
+  [self onResetEvent:syncNotification];
   [self sync];
 }
 
@@ -215,6 +226,11 @@ NSString* const DonezoDataUpdatedNotification        = @"DonezoDataUpdatedNotifi
   [self.operationQueue setSuspended:NO];
 }
 
+- (void) synchronouslySyncAll
+{
+  [self syncOperation:nil];
+}
+
 - (void) syncOperation:(NSObject*)object
 {
   //
@@ -225,7 +241,6 @@ NSString* const DonezoDataUpdatedNotification        = @"DonezoDataUpdatedNotifi
     NSLog(@"Sync is no longer enabled; returning.");
     return;
   }
-  
   
   DonezoSyncMaster *master;
   @synchronized (self) {
