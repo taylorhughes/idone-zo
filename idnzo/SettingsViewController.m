@@ -185,6 +185,8 @@
     tfvc.placeholder = @"some@user.com";
     tfvc.text = self.username;
     tfvc.textField.autocorrectionType = UITextAutocorrectionTypeNo;
+    tfvc.textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    tfvc.textField.keyboardType = UIKeyboardTypeEmailAddress;
     tfvc.saveAction = @selector(saveUsername:);
   }
   else
