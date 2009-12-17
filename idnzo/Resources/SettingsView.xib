@@ -36,11 +36,9 @@
 				<string key="IBProxiedObjectIdentifier">IBFirstResponder</string>
 			</object>
 			<object class="IBUITableView" id="831729638">
-				<reference key="NSNextResponder"/>
+				<nil key="NSNextResponder"/>
 				<int key="NSvFlags">274</int>
 				<string key="NSFrameSize">{320, 247}</string>
-				<reference key="NSSuperview"/>
-				<reference key="NSWindow"/>
 				<bool key="IBUIOpaque">NO</bool>
 				<bool key="IBUIClipsSubviews">YES</bool>
 				<bool key="IBUIClearsContextBeforeDrawing">NO</bool>
@@ -61,10 +59,15 @@
 					<object class="IBUIImageView" id="748044049">
 						<reference key="NSNextResponder" ref="430865453"/>
 						<int key="NSvFlags">290</int>
-						<string key="NSFrame">{{20, 68}, {280, 106}}</string>
+						<string key="NSFrame">{{20, 99}, {280, 106}}</string>
 						<reference key="NSSuperview" ref="430865453"/>
+						<object class="NSColor" key="IBUIBackgroundColor" id="572174151">
+							<int key="NSColorSpace">3</int>
+							<bytes key="NSWhite">MCAwAA</bytes>
+						</object>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClearsContextBeforeDrawing">NO</bool>
+						<float key="IBUIAlpha">0.75</float>
 						<int key="IBUIContentMode">4</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<object class="NSCustomResource" key="IBUIImage">
@@ -75,12 +78,9 @@
 					<object class="IBUIActivityIndicatorView" id="293070621">
 						<reference key="NSNextResponder" ref="430865453"/>
 						<int key="NSvFlags">288</int>
-						<string key="NSFrame">{{141, 117}, {37, 37}}</string>
+						<string key="NSFrame">{{141, 148}, {37, 37}}</string>
 						<reference key="NSSuperview" ref="430865453"/>
-						<object class="NSColor" key="IBUIBackgroundColor">
-							<int key="NSColorSpace">3</int>
-							<bytes key="NSWhite">MCAwAA</bytes>
-						</object>
+						<reference key="IBUIBackgroundColor" ref="572174151"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClearsContextBeforeDrawing">NO</bool>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
@@ -91,8 +91,9 @@
 					<object class="IBUILabel" id="718308821">
 						<reference key="NSNextResponder" ref="430865453"/>
 						<int key="NSvFlags">290</int>
-						<string key="NSFrame">{{40, 87}, {247, 22}}</string>
+						<string key="NSFrame">{{40, 118}, {247, 22}}</string>
 						<reference key="NSSuperview" ref="430865453"/>
+						<reference key="IBUIBackgroundColor" ref="572174151"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClipsSubviews">YES</bool>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
@@ -116,11 +117,11 @@
 						<int key="IBUITextAlignment">1</int>
 					</object>
 				</object>
-				<string key="NSFrameSize">{320, 360}</string>
+				<string key="NSFrameSize">{320, 459}</string>
 				<reference key="NSSuperview"/>
 				<object class="NSColor" key="IBUIBackgroundColor">
 					<int key="NSColorSpace">1</int>
-					<bytes key="NSRGB">MCAwIDAgMC4wOQA</bytes>
+					<bytes key="NSRGB">MCAwIDAgMC41AA</bytes>
 				</object>
 				<bool key="IBUIClearsContextBeforeDrawing">NO</bool>
 			</object>
@@ -243,7 +244,7 @@
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>{{35, 864}, {320, 247}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-					<string>{{571, 402}, {320, 360}}</string>
+					<string>{{2042, 403}, {320, 459}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>

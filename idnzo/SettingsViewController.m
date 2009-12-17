@@ -22,8 +22,6 @@
 @synthesize longOperationDialogView;
 @synthesize longOperationLabel;
 
-@synthesize confirm;
-
 - (UITableViewCell*)switchCell
 {
   if (!switchCell)
@@ -56,6 +54,10 @@
   [super viewDidLoad];
   
   self.title = @"Settings";
+  
+  self.longOperationDialogView.frame = self.navigationController.view.frame;
+  [self.longOperationDialogView setAlpha:0.0];
+  [self.navigationController.view addSubview:self.longOperationDialogView];
   
   self.isSyncEnabled = [SettingsHelper isSyncEnabled];
   self.username = [SettingsHelper username];
@@ -197,16 +199,19 @@
   return nil;
 }
 
-- (void)reallySaveUsername:(id)sender
+- (void)reallySaveUsername
 {
   [[NSNotificationCenter defaultCenter] postNotificationName:DonezoShouldSyncNotification object:self];
   
   [self.longOperationLabel setText:@"Syncing existing account..."];
-  self.longOperationDialogView.frame = self.navigationController.view.frame;
-  [self.navigationController.view addSubview:self.longOperationDialogView];
+  
+  [UIView beginAnimations:@"Show View" context:nil];
+  [self.longOperationDialogView setAlpha:1.0];
+  [UIView commitAnimations];
   
   [self performSelectorInBackground:@selector(reallySaveUsernameOperation:) withObject:self];
 }
+
 - (void)reallySaveUsernameOperation:(id)sender
 {
   NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
@@ -215,19 +220,41 @@
   [appDelegate waitForSyncToFinishAndReinitializeDatastore];
   
   [SettingsHelper setUsername:self.username];
+  [self.tableView reloadData];
   
   [self.longOperationLabel setText:@"Syncing new account..."];
   [[NSNotificationCenter defaultCenter] postNotificationName:DonezoShouldResetAndSyncNotification object:self];
   
-  [self.longOperationDialogView removeFromSuperview];
+  [UIView beginAnimations:@"Hide View" context:nil];
+  [self.longOperationDialogView setAlpha:0.0];
+  [UIView commitAnimations];
   
   [pool release];
 }
 
-- (void)dontSaveUsername:(id)sender
+- (void)dontSaveUsername
 {
   self.username = [SettingsHelper username];
 }
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+  switch(buttonIndex)
+  {
+    // save:
+    case 1:
+      [self reallySaveUsername];
+      break;
+      
+    // cancel
+    case 0:
+    default:
+      [self dontSaveUsername];
+      [self.tableView reloadData];
+      break;
+  }
+}
+
 - (void)saveUsername:(id)sender
 {
   TextFieldViewController *tfvc = (TextFieldViewController*)sender;
@@ -236,27 +263,21 @@
   if ([SettingsHelper hasUsername] &&
       ![[self.username lowercaseString] isEqualToString:[[SettingsHelper username] lowercaseString]])
   {
-    // Changed usernames!
-    self.confirm = [ConfirmationViewController confirmationViewWithSuperview:self.navigationController.view];
-    self.confirm.target = self;
+    UIAlertView *alertTest = [[UIAlertView alloc]
+                              initWithTitle:@"Really change user?"
+                                    message:@"Changing your synced account will remove the tasks stored "
+                                             "on your phone and replace them with the new account's tasks."
+                                   delegate:self
+                          cancelButtonTitle:@"Cancel"
+                          otherButtonTitles:@"Change User",nil ];
     
-    [self.confirm.confirmButton setTitle:@"Change Username" forState:UIControlStateNormal];
-    self.confirm.confirmAction = @selector(reallySaveUsername:);
-    
-    [self.confirm.cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
-    self.confirm.cancelAction = @selector(dontSaveUsername:);
-    
-    self.confirm.afterHideAction = @selector(cleanupConfirmation:);
-    [self.confirm show];
+    [alertTest show];
+    [alertTest autorelease];
   }
   else
   {
     [SettingsHelper setUsername:self.username];
   }
-}
-- (void) cleanupConfirmation:(id)sender
-{
-  self.confirm = nil;
 }
 
 - (void)savePassword:(id)sender
@@ -273,7 +294,6 @@
   [username release];
   [switchCell release];
   [switchWidget release];
-  [confirm release];
   [longOperationDialogView release];
   [longOperationLabel release];
   [super dealloc];

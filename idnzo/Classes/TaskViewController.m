@@ -544,8 +544,11 @@ static UIImage *unchecked;
 
 - (void) donezoDataUpdated:(NSNotification*)notification
 {
-  // NSLog(@"TaskViewController: Handled updated data.");
-  [self refresh];
+  if ([self.view window])
+  {
+    NSLog(@"Handling updated data in TaskViewController.");
+    [self refresh];
+  }
 }
 
 - (void)save

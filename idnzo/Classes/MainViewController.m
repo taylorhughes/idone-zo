@@ -41,7 +41,6 @@
 - (void)viewWillAppear:(BOOL)animated
 {
   [self recordViewedList:nil];
-  self.listViewController.taskList = nil;
 }
 
 - (ListViewController *)listViewController

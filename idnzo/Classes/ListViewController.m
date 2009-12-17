@@ -34,7 +34,8 @@
   suspendUpdates = NO;
   
   UIBarButtonItem *add = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
-                                                                       target:self action:@selector(onClickAddTask:)];
+                                                                       target:self
+                                                                       action:@selector(onClickAddTask:)];
   self.navigationItem.rightBarButtonItem = add;
   [add release];
   
@@ -60,7 +61,7 @@
   if (!suspendUpdates)
   {
     [self resetTasks];
-    if (self.taskList)
+    if ([self.view window])
     {
       [self.tableView reloadData];
     }
