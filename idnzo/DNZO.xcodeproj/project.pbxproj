@@ -40,7 +40,6 @@
 		3443E32510B0B071000D5B27 /* DonezoDates.m in Sources */ = {isa = PBXBuildFile; fileRef = 3443E32410B0B071000D5B27 /* DonezoDates.m */; };
 		3443E32610B0B071000D5B27 /* DonezoDates.m in Sources */ = {isa = PBXBuildFile; fileRef = 3443E32410B0B071000D5B27 /* DonezoDates.m */; };
 		3452D4A31049CC26005C717C /* Entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3452D4A21049CC26005C717C /* Entitlements.plist */; };
-		347401FA1066742200B764A1 /* SyncTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AF21EF102FC20B001FC4B7 /* SyncTest.m */; };
 		34762C35104EF27700498704 /* DNZOAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* DNZOAppDelegate.m */; };
 		34770B2A0FAFE45B00AD8397 /* ListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34770B270FAFE45B00AD8397 /* ListViewController.m */; };
 		34770B2C0FAFE45B00AD8397 /* ListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34770B270FAFE45B00AD8397 /* ListViewController.m */; };
@@ -98,6 +97,14 @@
 		34C51AC50FB92A9D0024A5CD /* EditProjectPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C51AC30FB92A9D0024A5CD /* EditProjectPicker.m */; };
 		34C74259107570400045F527 /* GTMRegex.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C74258107570400045F527 /* GTMRegex.m */; };
 		34C742F9107A98DA0045F527 /* GTMRegex.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C74258107570400045F527 /* GTMRegex.m */; };
+		34D7AAC410DB0D6B00298089 /* AHHyperlinkScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D7AABE10DB0D6B00298089 /* AHHyperlinkScanner.m */; };
+		34D7AAC510DB0D6B00298089 /* AHLinkLexer.l in Sources */ = {isa = PBXBuildFile; fileRef = 34D7AAC010DB0D6B00298089 /* AHLinkLexer.l */; };
+		34D7AAC610DB0D6B00298089 /* AHMarkedHyperlink.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D7AAC210DB0D6B00298089 /* AHMarkedHyperlink.m */; };
+		34D7AAC710DB0D6B00298089 /* AHHyperlinkScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D7AABE10DB0D6B00298089 /* AHHyperlinkScanner.m */; };
+		34D7AAC810DB0D6B00298089 /* AHLinkLexer.l in Sources */ = {isa = PBXBuildFile; fileRef = 34D7AAC010DB0D6B00298089 /* AHLinkLexer.l */; };
+		34D7AAC910DB0D6B00298089 /* AHMarkedHyperlink.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D7AAC210DB0D6B00298089 /* AHMarkedHyperlink.m */; };
+		34D7AAE710DB122400298089 /* HyperlinksTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D7AAE610DB122400298089 /* HyperlinksTest.m */; };
+		34D7AB1F10DB184700298089 /* SyncTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AF21EF102FC20B001FC4B7 /* SyncTest.m */; };
 		34E13DEA10225E54005A582E /* DonezoAPIClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E13DE310225E54005A582E /* DonezoAPIClient.m */; };
 		34E13DEB10225E54005A582E /* DonezoTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E13DE510225E54005A582E /* DonezoTask.m */; };
 		34E13DEC10225E54005A582E /* DonezoTaskList.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E13DE710225E54005A582E /* DonezoTaskList.m */; };
@@ -227,6 +234,15 @@
 		34C7430B107A9C3C0045F527 /* DonezoAPIClient_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DonezoAPIClient_Private.h; path = DonezoAPI/DonezoAPIClient_Private.h; sourceTree = "<group>"; };
 		34C743C1107C14120045F527 /* Task_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Task_Private.h; sourceTree = "<group>"; };
 		34C743C6107C14A60045F527 /* TaskList_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskList_Private.h; sourceTree = "<group>"; };
+		34D7AABD10DB0D6B00298089 /* AHHyperlinkScanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AHHyperlinkScanner.h; sourceTree = "<group>"; };
+		34D7AABE10DB0D6B00298089 /* AHHyperlinkScanner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AHHyperlinkScanner.m; sourceTree = "<group>"; };
+		34D7AABF10DB0D6B00298089 /* AHLinkLexer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AHLinkLexer.h; sourceTree = "<group>"; };
+		34D7AAC010DB0D6B00298089 /* AHLinkLexer.l */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.lex; path = AHLinkLexer.l; sourceTree = "<group>"; };
+		34D7AAC110DB0D6B00298089 /* AHMarkedHyperlink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AHMarkedHyperlink.h; sourceTree = "<group>"; };
+		34D7AAC210DB0D6B00298089 /* AHMarkedHyperlink.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AHMarkedHyperlink.m; sourceTree = "<group>"; };
+		34D7AAC310DB0D6B00298089 /* AutoHyperlinks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AutoHyperlinks.h; sourceTree = "<group>"; };
+		34D7AAE510DB122400298089 /* HyperlinksTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HyperlinksTest.h; path = Test/HyperlinksTest.h; sourceTree = "<group>"; };
+		34D7AAE610DB122400298089 /* HyperlinksTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HyperlinksTest.m; path = Test/HyperlinksTest.m; sourceTree = "<group>"; };
 		34E13DE210225E54005A582E /* DonezoAPIClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DonezoAPIClient.h; path = DonezoAPI/DonezoAPIClient.h; sourceTree = "<group>"; };
 		34E13DE310225E54005A582E /* DonezoAPIClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DonezoAPIClient.m; path = DonezoAPI/DonezoAPIClient.m; sourceTree = "<group>"; };
 		34E13DE410225E54005A582E /* DonezoTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DonezoTask.h; path = DonezoAPI/DonezoTask.h; sourceTree = "<group>"; };
@@ -428,6 +444,8 @@
 				34AF21EF102FC20B001FC4B7 /* SyncTest.m */,
 				34770B330FAFE4C200AD8397 /* DonezoAPIClientTest.h */,
 				34770B340FAFE4C200AD8397 /* DonezoAPIClientTest.m */,
+				34D7AAE510DB122400298089 /* HyperlinksTest.h */,
+				34D7AAE610DB122400298089 /* HyperlinksTest.m */,
 			);
 			name = "Test Cases";
 			sourceTree = "<group>";
@@ -455,6 +473,7 @@
 		34B9D6EE10CDCBAA0087EDCC /* Ext */ = {
 			isa = PBXGroup;
 			children = (
+				34D7AABC10DB0D6B00298089 /* AutoHyperlinks */,
 				34B9D6EF10CDCBB10087EDCC /* SFHF */,
 				34C74255107570400045F527 /* GTM */,
 				34F60D0C101FE6DB00577EFA /* JSON */,
@@ -479,6 +498,20 @@
 				34C74258107570400045F527 /* GTMRegex.m */,
 			);
 			path = GTM;
+			sourceTree = "<group>";
+		};
+		34D7AABC10DB0D6B00298089 /* AutoHyperlinks */ = {
+			isa = PBXGroup;
+			children = (
+				34D7AABD10DB0D6B00298089 /* AHHyperlinkScanner.h */,
+				34D7AABE10DB0D6B00298089 /* AHHyperlinkScanner.m */,
+				34D7AABF10DB0D6B00298089 /* AHLinkLexer.h */,
+				34D7AAC010DB0D6B00298089 /* AHLinkLexer.l */,
+				34D7AAC110DB0D6B00298089 /* AHMarkedHyperlink.h */,
+				34D7AAC210DB0D6B00298089 /* AHMarkedHyperlink.m */,
+				34D7AAC310DB0D6B00298089 /* AutoHyperlinks.h */,
+			);
+			path = AutoHyperlinks;
 			sourceTree = "<group>";
 		};
 		34E13BFB1017CA92005A582E /* Donezo API */ = {
@@ -720,6 +753,9 @@
 				34B9D5B210CCA75A0087EDCC /* SettingsViewController.m in Sources */,
 				34B9D6F210CDCBC00087EDCC /* SFHFKeychainUtils.m in Sources */,
 				34B9D70F10CDCE110087EDCC /* SettingsHelper.m in Sources */,
+				34D7AAC710DB0D6B00298089 /* AHHyperlinkScanner.m in Sources */,
+				34D7AAC810DB0D6B00298089 /* AHLinkLexer.l in Sources */,
+				34D7AAC910DB0D6B00298089 /* AHMarkedHyperlink.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -753,7 +789,6 @@
 				34AF21F0102FC20B001FC4B7 /* MockDonezoAPIClient.m in Sources */,
 				34A282D8104DA3EB00F26A01 /* DonezoAPIClientTest.m in Sources */,
 				34762C35104EF27700498704 /* DNZOAppDelegate.m in Sources */,
-				347401FA1066742200B764A1 /* SyncTest.m in Sources */,
 				34388F8D1076B18900FC1AB3 /* DatePickerViewController.m in Sources */,
 				34C742F9107A98DA0045F527 /* GTMRegex.m in Sources */,
 				343B0533108D6668007F2425 /* DonezoSyncOperation.m in Sources */,
@@ -769,6 +804,11 @@
 				34B9D82A10CF34180087EDCC /* SettingsHelper.m in Sources */,
 				34B9D82B10CF34180087EDCC /* MainViewController.m in Sources */,
 				34B9D82C10CF34180087EDCC /* SettingsViewController.m in Sources */,
+				34D7AAC410DB0D6B00298089 /* AHHyperlinkScanner.m in Sources */,
+				34D7AAC510DB0D6B00298089 /* AHLinkLexer.l in Sources */,
+				34D7AAC610DB0D6B00298089 /* AHMarkedHyperlink.m in Sources */,
+				34D7AAE710DB122400298089 /* HyperlinksTest.m in Sources */,
+				34D7AB1F10DB184700298089 /* SyncTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

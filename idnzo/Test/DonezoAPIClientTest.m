@@ -167,7 +167,7 @@
   NSString *a = [NSString stringWithFormat:@"%0.6f", [originalTask.sortDate timeIntervalSinceReferenceDate]];
   NSString *b = [NSString stringWithFormat:@"%0.6f", [newNewTask.sortDate timeIntervalSinceReferenceDate]];
   STAssertEqualObjects(a, b, @"New task's sort date was not saved properly.");
-  NSLog(@"A and B: %@ / %@", a, b);
+  //NSLog(@"A and B: %@ / %@", a, b);
 }
 
 - (void) testUpdateTask
