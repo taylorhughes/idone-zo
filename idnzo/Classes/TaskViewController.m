@@ -789,7 +789,7 @@ static UIImage *unchecked;
     {
       cell = [[[AdjustableTextLabelWidthCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:identifier] autorelease];
     }
-    cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
+    cell.accessoryType = UITableViewCellAccessoryNone;
     
     cell.textLabel.text = @"open URL";
     cell.detailTextLabel.text = [url absoluteString];
@@ -800,48 +800,51 @@ static UIImage *unchecked;
 
 - (NSIndexPath *)tableView:(UITableView *)tv willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-  if (!self.isEditing)
+  if (self.isEditing)
   {
-    return nil;
-  }
-  
-  UIViewController *controller = nil;
-  switch ([indexPath row])
-  {
-    case 0: 
-      // Project
-      controller = [[[EditProjectPicker alloc] init] autorelease];
-      ((EditProjectPicker*)controller).options = [Project projectNames:[self.task managedObjectContext]];
-      ((EditProjectPicker*)controller).selected = self.task.project.name;
-      ((EditProjectPicker*)controller).target = self;
-      ((EditProjectPicker*)controller).saveAction = @selector(saveProject:);
-      ((EditProjectPicker*)controller).placeholder = @"New Project";
-      ((EditProjectPicker*)controller).title = @"Project";
-      break;
-      
-    case 1:
-      // Contexts
-      controller = [[[EditProjectPicker alloc] init] autorelease];
-      ((EditProjectPicker*)controller).appendSelections = YES;
-      ((EditProjectPicker*)controller).options = [Context contextNames:[self.task managedObjectContext]];
-      ((EditProjectPicker*)controller).selected = [self.task contextsString];
-      ((EditProjectPicker*)controller).target = self;
-      ((EditProjectPicker*)controller).saveAction = @selector(saveContexts:);
-      ((EditProjectPicker*)controller).placeholder = @"@context";
-      ((EditProjectPicker*)controller).title = @"Contexts";
-      break;
-      
-    case 2:
-      controller = [[[DatePickerViewController alloc] initWithNibName:@"TaskDatePickerView" bundle:nil] autorelease];
-      ((DatePickerViewController*)controller).saveAction = @selector(saveDate:);
-      ((DatePickerViewController*)controller).target = self;
-      ((DatePickerViewController*)controller).selectedDate = self.task.dueDate;
-      break;
-  }
+    UIViewController *controller = nil;
+    switch ([indexPath row])
+    {
+      case 0: 
+        // Project
+        controller = [[[EditProjectPicker alloc] init] autorelease];
+        ((EditProjectPicker*)controller).options = [Project projectNames:[self.task managedObjectContext]];
+        ((EditProjectPicker*)controller).selected = self.task.project.name;
+        ((EditProjectPicker*)controller).target = self;
+        ((EditProjectPicker*)controller).saveAction = @selector(saveProject:);
+        ((EditProjectPicker*)controller).placeholder = @"New Project";
+        ((EditProjectPicker*)controller).title = @"Project";
+        break;
+        
+      case 1:
+        // Contexts
+        controller = [[[EditProjectPicker alloc] init] autorelease];
+        ((EditProjectPicker*)controller).appendSelections = YES;
+        ((EditProjectPicker*)controller).options = [Context contextNames:[self.task managedObjectContext]];
+        ((EditProjectPicker*)controller).selected = [self.task contextsString];
+        ((EditProjectPicker*)controller).target = self;
+        ((EditProjectPicker*)controller).saveAction = @selector(saveContexts:);
+        ((EditProjectPicker*)controller).placeholder = @"@context";
+        ((EditProjectPicker*)controller).title = @"Contexts";
+        break;
+        
+      case 2:
+        controller = [[[DatePickerViewController alloc] initWithNibName:@"TaskDatePickerView" bundle:nil] autorelease];
+        ((DatePickerViewController*)controller).saveAction = @selector(saveDate:);
+        ((DatePickerViewController*)controller).target = self;
+        ((DatePickerViewController*)controller).selectedDate = self.task.dueDate;
+        break;
+    }
 
-  if (controller)
+    if (controller)
+    {
+      [self.navigationController pushViewController:controller animated:YES];
+    }
+  }
+  else if ([indexPath section] == 1)
   {
-    [self.navigationController pushViewController:controller animated:YES];
+    NSURL *url = [self.urls objectAtIndex:[indexPath row]];
+    [[UIApplication sharedApplication] openURL:url];
   }
   
   return nil;
