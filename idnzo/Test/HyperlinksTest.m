@@ -29,7 +29,7 @@ static NSArray *stringsLinks;
                    @"(String: https://done-zo.com/l/tasks/?query=text) text!",
                    [NSArray arrayWithObject:@"https://done-zo.com/l/tasks/?query=text"],
                    
-                   @"String: tdawg.co.uk text! done-zo.com/l/t?query=text", 
+                   @"String: tdawg.co.uk text! zoobaru.zot.zoop done-zo.com/l/t?query=text", 
                    [NSArray arrayWithObjects:@"http://tdawg.co.uk", @"http://done-zo.com/l/t?query=text", nil],
                    
                    nil];

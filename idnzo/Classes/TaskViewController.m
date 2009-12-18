@@ -17,6 +17,7 @@ static UIImage *unchecked;
 
 @property (nonatomic, retain) NSManagedObjectContext *editingContext;
 @property (nonatomic, retain) Task *task;
+@property (nonatomic, retain) NSArray *urls;
 @property (nonatomic, retain) ConfirmationViewController *confirm;
 
 - (void) loadTask:(Task*)newTask editing:(BOOL)editing;
@@ -57,6 +58,7 @@ static UIImage *unchecked;
 }
 
 @synthesize task;
+@synthesize urls;
 @synthesize editingContext;
 @synthesize isEditing;
 @synthesize confirm;
@@ -117,6 +119,18 @@ static UIImage *unchecked;
   isFirstAppearance = NO;
 }
 
+- (NSArray*) urls
+{
+  if (!urls)
+  {
+    AHHyperlinkScanner *scanner = [[AHHyperlinkScanner alloc] initWithString:self.task.body usingStrictChecking:NO];
+    self.urls = [[scanner allURIs] valueForKey:@"URL"];
+    NSLog(@"Loaded %d URLs!", [self.urls count]);
+    [scanner release];
+  }
+  return urls;
+}
+
 - (BOOL) isNewTask
 {
   return isNewTask;
@@ -143,6 +157,8 @@ static UIImage *unchecked;
 - (void) loadTask:(Task*)newTask editing:(BOOL)editing positionInList:(NSInteger)position ofTotalCount:(NSInteger)total
 {
   self.task = newTask;
+  self.urls = nil;
+  
   if (position >= 0 && total > 0)
   {
     self.navigationItem.title = [NSString stringWithFormat:@"Task %d of %d", position + 1, total];
@@ -208,8 +224,22 @@ static UIImage *unchecked;
   
   isEditing = YES;
   
+  [self.tableView beginUpdates];
   [self.tableView insertRowsAtIndexPaths:insertedPaths withRowAnimation:animation];
   [self.tableView reloadRowsAtIndexPaths:updatedPaths withRowAnimation:animation];
+  
+  // this will repopulate itself
+  self.urls = nil;
+  if ([self.urls count] > 0)
+  {
+    NSMutableArray *deletedPaths = [NSMutableArray arrayWithCapacity:[self.urls count]];
+    for (NSInteger i = 0; i < [self.urls count]; i++)
+    {
+      [deletedPaths addObject:[NSIndexPath indexPathForRow:i inSection:1]];
+    }
+    [self.tableView deleteRowsAtIndexPaths:deletedPaths withRowAnimation:animation];
+  }
+  [self.tableView endUpdates];
     
   if (animated)
   {
@@ -282,8 +312,22 @@ static UIImage *unchecked;
       [updatedPaths addObject:[NSIndexPath indexPathForRow:2 inSection:0]];
     }
     
+    [self.tableView beginUpdates];
     [self.tableView deleteRowsAtIndexPaths:deletedPaths withRowAnimation:animation];
-    [self.tableView reloadRowsAtIndexPaths:updatedPaths withRowAnimation:animation];    
+    [self.tableView reloadRowsAtIndexPaths:updatedPaths withRowAnimation:animation];
+    
+    // this will repopulate itself
+    self.urls = nil;
+    if ([self.urls count] > 0)
+    {
+      NSMutableArray *insertedPaths = [NSMutableArray arrayWithCapacity:[self.urls count]];
+      for (NSInteger i = 0; i < [self.urls count]; i++)
+      {
+        [insertedPaths addObject:[NSIndexPath indexPathForRow:i inSection:1]];
+      }
+      [self.tableView insertRowsAtIndexPaths:insertedPaths withRowAnimation:animation];
+    }
+    [self.tableView endUpdates];
   }
   else
   {
@@ -345,7 +389,8 @@ static UIImage *unchecked;
   
   CGRect footerFrame = bottomView.frame;
   CGRect sectionFrame = [self.tableView rectForSection:0];
-  footerFrame.origin = CGPointMake(footerFrame.origin.x, self.tableView.tableHeaderView.frame.size.height + sectionFrame.size.height);
+  CGRect urlSectionFrame = [self.tableView rectForSection:1];
+  footerFrame.origin = CGPointMake(footerFrame.origin.x, self.tableView.tableHeaderView.frame.size.height + sectionFrame.size.height + urlSectionFrame.size.height);
   bottomView.frame = footerFrame;
 }
 
@@ -617,14 +662,16 @@ static UIImage *unchecked;
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tv
 {
-  return 1;
+  return 2;
 }
 
+/*
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
   //return @"Details";
   return nil;
 }
+*/
 
 - (BOOL)hasProject
 {
@@ -641,87 +688,114 @@ static UIImage *unchecked;
 
 - (NSInteger)tableView:(UITableView *)tv numberOfRowsInSection:(NSInteger)section
 { 
-  // Only one section
-  return [self hasProject] + [self hasContexts] + [self hasDueDate];
+  if (section == 0)
+  {
+    return [self hasProject] + [self hasContexts] + [self hasDueDate];
+  }
+  else if (!self.isEditing)
+  {
+    return [self.urls count];
+  }
+  return 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tv cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
   NSUInteger row = [indexPath row];
   
-  NSString *textLabel = nil;
-  NSString *detailLabel = nil;
+  if ([indexPath section] == 0)
+  {
+    NSString *textLabel = nil;
+    NSString *detailLabel = nil;
 
-  if ([self hasProject] && row == 0)
-  {
-    if (self.task.project != nil)
+    if ([self hasProject] && row == 0)
     {
-      textLabel = @"project";
-      detailLabel = self.task.project.name;
+      if (self.task.project != nil)
+      {
+        textLabel = @"project";
+        detailLabel = self.task.project.name;
+      }
+      else
+      {
+        textLabel = @"add project";
+      }
+    }
+    if ([self hasContexts] && row == [self hasProject])
+    {
+      if ([self.task.contexts count] > 0)
+      {
+        textLabel = @"contexts";
+        detailLabel = self.task.contextsString;
+      }
+      else
+      {
+        textLabel = @"add contexts";
+      }
+    }
+    if ([self hasDueDate] && row == [self hasProject] + [self hasContexts])
+    {
+      if (self.task.dueDate != nil)
+      {
+        textLabel = @"due date";
+        detailLabel = self.task.dueString;
+      }
+      else
+      {
+        textLabel = @"add due date";
+      }
+    }
+    
+    NSString *identifier = nil;
+    if (detailLabel == nil)
+    {
+      identifier = @"DetailCellLeft";
     }
     else
     {
-      textLabel = @"add project";
+      identifier = @"DetailCellRight";
     }
-  }
-  if ([self hasContexts] && row == [self hasProject])
-  {
-    if ([self.task.contexts count] > 0)
+    
+    AdjustableTextLabelWidthCell *cell = (AdjustableTextLabelWidthCell*)[self.tableView dequeueReusableCellWithIdentifier:identifier];
+    if (cell == nil)
     {
-      textLabel = @"contexts";
-      detailLabel = self.task.contextsString;
+      cell = [[[AdjustableTextLabelWidthCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:identifier] autorelease];
+    } 
+    cell.accessoryType = self.isEditing ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
+    
+    if (detailLabel)
+    {
+      cell.textLabel.text = textLabel;
+      cell.detailTextLabel.text = detailLabel;
     }
     else
     {
-      textLabel = @"add contexts";
+      // Setting this to an empty string is required to fix a rendering issue in iPhoneOS 3.1.2
+      cell.detailTextLabel.text = @"";
+      cell.autoresizesSubviews = YES;
+      cell.textLabel.textAlignment = UITextAlignmentLeft;
+      cell.textLabelWidth = 150.0;
+      cell.textLabel.text = textLabel;
     }
-  }
-  if ([self hasDueDate] && row == [self hasProject] + [self hasContexts])
-  {
-    if (self.task.dueDate != nil)
-    {
-      textLabel = @"due date";
-      detailLabel = self.task.dueString;
-    }
-    else
-    {
-      textLabel = @"add due date";
-    }
-  }
-  
-  NSString *identifier = nil;
-  if (detailLabel == nil)
-  {
-    identifier = @"DetailCellLeft";
+    
+    return cell;
   }
   else
   {
-    identifier = @"DetailCellRight";
+    NSURL *url = [self.urls objectAtIndex:row];
+    NSString *identifier = @"URLCell";
+    
+    UITableViewCell *cell = (UITableViewCell*)[self.tableView dequeueReusableCellWithIdentifier:identifier];
+    if (cell == nil)
+    {
+      cell = [[[AdjustableTextLabelWidthCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:identifier] autorelease];
+    }
+    cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
+    
+    cell.textLabel.text = @"open URL";
+    cell.detailTextLabel.text = [url absoluteString];
+    
+    return cell;
   }
-  
-  AdjustableTextLabelWidthCell *cell = (AdjustableTextLabelWidthCell*)[self.tableView dequeueReusableCellWithIdentifier:identifier];
-  if (cell == nil)
-  {
-    cell = [[[AdjustableTextLabelWidthCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:identifier] autorelease];
-  } 
-  cell.accessoryType = self.isEditing ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
-  
-  if (detailLabel)
-  {
-    cell.textLabel.text = textLabel;
-    cell.detailTextLabel.text = detailLabel;
-  }
-  else
-  {
-    // Setting this to an empty string is required to fix a rendering issue in iPhoneOS 3.1.2
-    cell.detailTextLabel.text = @"";
-    cell.autoresizesSubviews = YES;
-    cell.textLabel.textAlignment = UITextAlignmentLeft;
-    cell.textLabelWidth = 150.0;
-    cell.textLabel.text = textLabel;
-  }
-  
-  return cell;
 }
 
 - (NSIndexPath *)tableView:(UITableView *)tv willSelectRowAtIndexPath:(NSIndexPath *)indexPath

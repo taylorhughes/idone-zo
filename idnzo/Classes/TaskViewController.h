@@ -14,12 +14,15 @@
 #import "TextViewController.h"
 #import "AdjustableTextLabelWidthCell.h"
 #import "ConfirmationViewController.h"
+#import "AutoHyperlinks.h"
 
 @class Task;
 
 @interface TaskViewController : UITableViewController {
  @private
   Task *task;
+  NSArray *urls;
+  
   NSManagedObjectContext *editingContext;
   BOOL isEditing;
   
