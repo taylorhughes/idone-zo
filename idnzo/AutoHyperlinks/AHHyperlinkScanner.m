@@ -62,7 +62,8 @@
 	return [[[[self class] alloc] initWithString:inString usingStrictChecking:YES] autorelease];
 }
 
-/*
+#if TARGET_OS_MAC
+
 + (id)hyperlinkScannerWithAttributedString:(NSAttributedString *)inString
 {
 	return [[[[self class] alloc] initWithAttributedString:inString usingStrictChecking:NO] autorelease];
@@ -72,7 +73,8 @@
 {
 	return [[[[self class] alloc] initWithAttributedString:inString usingStrictChecking:NO] autorelease];
  }
- */
+
+#endif
 
 #pragma mark Init/Dealloc
 
@@ -92,7 +94,8 @@
 	return self;
 }
 
-/*
+#if TARGET_OS_MAC
+
 - (id)initWithAttributedString:(NSAttributedString *)inString usingStrictChecking:(BOOL)flag
 {
 	if((self = [self init])){
@@ -107,7 +110,8 @@
 	}
 	return self;
 }
-*/
+
+#endif
 
 - (id)init
 {

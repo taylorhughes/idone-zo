@@ -46,7 +46,11 @@ extern void AH_delete_buffer(AH_BUFFER_STATE, yyscan_t scanner);
 {
 	NSDictionary				*m_urlSchemes;
 	NSString					*m_scanString;
-	//NSAttributedString			*m_scanAttrString;
+  
+#if TARGET_OS_MAC
+	NSAttributedString			*m_scanAttrString;
+#endif
+  
 	BOOL						 m_strictChecking;
 	unsigned long				 m_scanLocation;
 	unsigned long				 m_scanStringLength;
@@ -69,13 +73,14 @@ extern void AH_delete_buffer(AH_BUFFER_STATE, yyscan_t scanner);
  */
 + (id)strictHyperlinkScannerWithString:(NSString *)inString;
 
+#if TARGET_OS_MAC
 /*!
  * @brief Allocs and inits a new lax AHHyperlinkScanner with the given attributed string
  *
  * @param inString the scanner's string
  * @return a new AHHyperlinkScanner
  */
-//+ (id)hyperlinkScannerWithAttributedString:(NSAttributedString *)inString;
++ (id)hyperlinkScannerWithAttributedString:(NSAttributedString *)inString;
 
 /*!
  * @brief Allocs and inits a new strict AHHyperlinkScanner with the given attributed string
@@ -83,7 +88,8 @@ extern void AH_delete_buffer(AH_BUFFER_STATE, yyscan_t scanner);
  * @param inString the scanner's string
  * @return a new AHHyperlinkScanner
  */
-//+ (id)strictHyperlinkScannerWithAttributedString:(NSAttributedString *)inString;
++ (id)strictHyperlinkScannerWithAttributedString:(NSAttributedString *)inString;
+#endif
 
 /*!
  * @brief Determine the validity of a given string with a custom strictness
@@ -106,6 +112,7 @@ extern void AH_delete_buffer(AH_BUFFER_STATE, yyscan_t scanner);
  */
 - (id)initWithString:(NSString *)inString usingStrictChecking:(BOOL)flag;
 
+#if TARGET_OS_MAC
 /*!
  * @brief Init
  *
@@ -115,8 +122,8 @@ extern void AH_delete_buffer(AH_BUFFER_STATE, yyscan_t scanner);
  * @param flag Sets strict checking preference.
  * @return A new AHHyperlinkScanner.
  */
- //- (id)initWithAttributedString:(NSAttributedString *)inString usingStrictChecking:(BOOL)flag;
-
+ - (id)initWithAttributedString:(NSAttributedString *)inString usingStrictChecking:(BOOL)flag;
+#endif
 
 /*!
  * @brief Determine the validity of the scanner's string using the set strictness
