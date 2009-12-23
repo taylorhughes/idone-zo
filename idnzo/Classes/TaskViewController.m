@@ -739,8 +739,13 @@ static UIImage *unchecked;
 
 - (NSIndexPath *)tableView:(UITableView *)tv willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+  if (!self.isEditing)
+  {
+    return nil;
+  }
+  
   UIViewController *controller = nil;
-
+  
   switch ([indexPath row])
   {
     case 0: 
