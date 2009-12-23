@@ -17,7 +17,6 @@ static UIImage *unchecked;
 
 @property (nonatomic, retain) NSManagedObjectContext *editingContext;
 @property (nonatomic, retain) Task *task;
-@property (nonatomic, retain) NSArray *urls;
 @property (nonatomic, retain) ConfirmationViewController *confirm;
 
 - (void) loadTask:(Task*)newTask editing:(BOOL)editing;
@@ -58,7 +57,6 @@ static UIImage *unchecked;
 }
 
 @synthesize task;
-@synthesize urls;
 @synthesize editingContext;
 @synthesize isEditing;
 @synthesize confirm;
@@ -79,8 +77,6 @@ static UIImage *unchecked;
 {
   [super viewDidLoad];
   
-  NSAssert(self.tableView.tableHeaderView == nil, @"Table header view should always be nil when this fires.");
-  
   [topButton addTarget:self action:@selector(onClickEditDescription:) forControlEvents:UIControlEventTouchUpInside];
   [topButton.titleLabel setLineBreakMode:UILineBreakModeWordWrap];
   [topCheckmark addTarget:self action:@selector(checkmarkClicked:) forControlEvents:UIControlEventTouchUpInside];
@@ -88,6 +84,8 @@ static UIImage *unchecked;
   self.tableView.tableHeaderView = [[[UIView alloc] init] autorelease];
   [self.tableView.tableHeaderView addSubview:bodyView];
   [self.tableView.tableHeaderView addSubview:bodyEditView];
+  
+  [topLabel setFont:[UIFont boldSystemFontOfSize:17.0f]];  
   
   bottomView.alpha = 0.0;
   [self.tableView addSubview:bottomView];
@@ -119,18 +117,6 @@ static UIImage *unchecked;
   isFirstAppearance = NO;
 }
 
-- (NSArray*) urls
-{
-  if (!urls)
-  {
-    AHHyperlinkScanner *scanner = [[AHHyperlinkScanner alloc] initWithString:self.task.body usingStrictChecking:NO];
-    self.urls = [[scanner allURIs] valueForKey:@"URL"];
-    NSLog(@"Loaded %d URLs!", [self.urls count]);
-    [scanner release];
-  }
-  return urls;
-}
-
 - (BOOL) isNewTask
 {
   return isNewTask;
@@ -157,7 +143,6 @@ static UIImage *unchecked;
 - (void) loadTask:(Task*)newTask editing:(BOOL)editing positionInList:(NSInteger)position ofTotalCount:(NSInteger)total
 {
   self.task = newTask;
-  self.urls = nil;
   
   if (position >= 0 && total > 0)
   {
@@ -228,17 +213,6 @@ static UIImage *unchecked;
   [self.tableView insertRowsAtIndexPaths:insertedPaths withRowAnimation:animation];
   [self.tableView reloadRowsAtIndexPaths:updatedPaths withRowAnimation:animation];
   
-  // this will repopulate itself
-  self.urls = nil;
-  if ([self.urls count] > 0)
-  {
-    NSMutableArray *deletedPaths = [NSMutableArray arrayWithCapacity:[self.urls count]];
-    for (NSInteger i = 0; i < [self.urls count]; i++)
-    {
-      [deletedPaths addObject:[NSIndexPath indexPathForRow:i inSection:1]];
-    }
-    [self.tableView deleteRowsAtIndexPaths:deletedPaths withRowAnimation:animation];
-  }
   [self.tableView endUpdates];
     
   if (animated)
@@ -316,17 +290,6 @@ static UIImage *unchecked;
     [self.tableView deleteRowsAtIndexPaths:deletedPaths withRowAnimation:animation];
     [self.tableView reloadRowsAtIndexPaths:updatedPaths withRowAnimation:animation];
     
-    // this will repopulate itself
-    self.urls = nil;
-    if ([self.urls count] > 0)
-    {
-      NSMutableArray *insertedPaths = [NSMutableArray arrayWithCapacity:[self.urls count]];
-      for (NSInteger i = 0; i < [self.urls count]; i++)
-      {
-        [insertedPaths addObject:[NSIndexPath indexPathForRow:i inSection:1]];
-      }
-      [self.tableView insertRowsAtIndexPaths:insertedPaths withRowAnimation:animation];
-    }
     [self.tableView endUpdates];
   }
   else
@@ -352,36 +315,48 @@ static UIImage *unchecked;
 
 - (void) refreshHeaderAndFooter
 {
-  CGFloat width = topLabel.frame.size.width;
+  // Adjust for padding on left and right of UITextField
+  CGFloat width = topLabel.frame.size.width - 16.0;
   // Resize body cell according to how tall the text is
   CGSize newSize = [self.task.body sizeWithFont:topLabel.font
                               constrainedToSize:CGSizeMake(width, 300.0f)
                                   lineBreakMode:UILineBreakModeWordWrap];
   
   CGFloat newHeight = newSize.height >= topLabel.font.pointSize ? newSize.height : topLabel.font.pointSize;
+  // Adjust for the amount of built-in padding on top and bottom of the UITextView
+  newHeight += 30.0;
   CGFloat heightDiff = newHeight - topLabel.frame.size.height;
-
-  topLabel.text = self.task.body;
-  [topButton setTitle:self.task.body forState:UIControlStateNormal];
-    
+  
   // NOTE: We don't reset the heights here, we just add the *difference* in the height.
   topLabel.frame = CGRectMake(topLabel.frame.origin.x,
                               topLabel.frame.origin.y,
                               topLabel.frame.size.width,
-                              topLabel.frame.size.height + heightDiff);
-  topButton.frame = CGRectMake(topButton.frame.origin.x,
-                               topButton.frame.origin.y,
-                               topButton.frame.size.width,
-                               topButton.frame.size.height + heightDiff);
-  
+                              newHeight);
   bodyView.frame = CGRectMake(bodyView.frame.origin.x,
                               bodyView.frame.origin.y,
                               bodyView.frame.size.width,
                               bodyView.frame.size.height + heightDiff);
+  
+  width = topButton.frame.size.width - topButton.contentEdgeInsets.left - topButton.contentEdgeInsets.right;
+  newSize = [self.task.body sizeWithFont:topButton.titleLabel.font
+                       constrainedToSize:CGSizeMake(width, 300.0f)
+                           lineBreakMode:UILineBreakModeWordWrap];
+  
+  newHeight = newSize.height >= topButton.titleLabel.font.pointSize ? newSize.height : topButton.titleLabel.font.pointSize;
+  // Adjust for the amount of built-in padding on top and bottom of the button
+  newHeight += 24.0;
+  heightDiff = newHeight - topButton.frame.size.height;
+  topButton.frame = CGRectMake(topButton.frame.origin.x,
+                               topButton.frame.origin.y,
+                               topButton.frame.size.width,
+                               newHeight);
   bodyEditView.frame = CGRectMake(bodyEditView.frame.origin.x,
                                   bodyEditView.frame.origin.y,
                                   bodyEditView.frame.size.width,
                                   bodyEditView.frame.size.height + heightDiff);
+  
+  topLabel.text = self.task.body;
+  [topButton setTitle:self.task.body forState:UIControlStateNormal];
   
   self.tableView.tableHeaderView.frame = !self.isEditing ? bodyView.frame : bodyEditView.frame;
   // Forces the size to be reloaded
@@ -662,16 +637,8 @@ static UIImage *unchecked;
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tv
 {
-  return 2;
+  return 1;
 }
-
-/*
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-  //return @"Details";
-  return nil;
-}
-*/
 
 - (BOOL)hasProject
 {
@@ -687,164 +654,129 @@ static UIImage *unchecked;
 }
 
 - (NSInteger)tableView:(UITableView *)tv numberOfRowsInSection:(NSInteger)section
-{ 
-  if (section == 0)
-  {
-    return [self hasProject] + [self hasContexts] + [self hasDueDate];
-  }
-  else if (!self.isEditing)
-  {
-    return [self.urls count];
-  }
-  return 0;
+{
+  return [self hasProject] + [self hasContexts] + [self hasDueDate];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tv cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
   NSUInteger row = [indexPath row];
   
-  if ([indexPath section] == 0)
-  {
-    NSString *textLabel = nil;
-    NSString *detailLabel = nil;
+  NSString *textLabel = nil;
+  NSString *detailLabel = nil;
 
-    if ([self hasProject] && row == 0)
+  if ([self hasProject] && row == 0)
+  {
+    if (self.task.project != nil)
     {
-      if (self.task.project != nil)
-      {
-        textLabel = @"project";
-        detailLabel = self.task.project.name;
-      }
-      else
-      {
-        textLabel = @"add project";
-      }
-    }
-    if ([self hasContexts] && row == [self hasProject])
-    {
-      if ([self.task.contexts count] > 0)
-      {
-        textLabel = @"contexts";
-        detailLabel = self.task.contextsString;
-      }
-      else
-      {
-        textLabel = @"add contexts";
-      }
-    }
-    if ([self hasDueDate] && row == [self hasProject] + [self hasContexts])
-    {
-      if (self.task.dueDate != nil)
-      {
-        textLabel = @"due date";
-        detailLabel = self.task.dueString;
-      }
-      else
-      {
-        textLabel = @"add due date";
-      }
-    }
-    
-    NSString *identifier = nil;
-    if (detailLabel == nil)
-    {
-      identifier = @"DetailCellLeft";
+      textLabel = @"project";
+      detailLabel = self.task.project.name;
     }
     else
     {
-      identifier = @"DetailCellRight";
+      textLabel = @"add project";
     }
-    
-    AdjustableTextLabelWidthCell *cell = (AdjustableTextLabelWidthCell*)[self.tableView dequeueReusableCellWithIdentifier:identifier];
-    if (cell == nil)
+  }
+  if ([self hasContexts] && row == [self hasProject])
+  {
+    if ([self.task.contexts count] > 0)
     {
-      cell = [[[AdjustableTextLabelWidthCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:identifier] autorelease];
-    } 
-    cell.accessoryType = self.isEditing ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
-    
-    if (detailLabel)
-    {
-      cell.textLabel.text = textLabel;
-      cell.detailTextLabel.text = detailLabel;
+      textLabel = @"contexts";
+      detailLabel = self.task.contextsString;
     }
     else
     {
-      // Setting this to an empty string is required to fix a rendering issue in iPhoneOS 3.1.2
-      cell.detailTextLabel.text = @"";
-      cell.autoresizesSubviews = YES;
-      cell.textLabel.textAlignment = UITextAlignmentLeft;
-      cell.textLabelWidth = 150.0;
-      cell.textLabel.text = textLabel;
+      textLabel = @"add contexts";
     }
-    
-    return cell;
+  }
+  if ([self hasDueDate] && row == [self hasProject] + [self hasContexts])
+  {
+    if (self.task.dueDate != nil)
+    {
+      textLabel = @"due date";
+      detailLabel = self.task.dueString;
+    }
+    else
+    {
+      textLabel = @"add due date";
+    }
+  }
+  
+  NSString *identifier = nil;
+  if (detailLabel == nil)
+  {
+    identifier = @"DetailCellLeft";
   }
   else
   {
-    NSURL *url = [self.urls objectAtIndex:row];
-    NSString *identifier = @"URLCell";
-    
-    UITableViewCell *cell = (UITableViewCell*)[self.tableView dequeueReusableCellWithIdentifier:identifier];
-    if (cell == nil)
-    {
-      cell = [[[AdjustableTextLabelWidthCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:identifier] autorelease];
-    }
-    cell.accessoryType = UITableViewCellAccessoryNone;
-    
-    cell.textLabel.text = @"open URL";
-    cell.detailTextLabel.text = [url absoluteString];
-    
-    return cell;
+    identifier = @"DetailCellRight";
   }
+  
+  AdjustableTextLabelWidthCell *cell = (AdjustableTextLabelWidthCell*)[self.tableView dequeueReusableCellWithIdentifier:identifier];
+  if (cell == nil)
+  {
+    cell = [[[AdjustableTextLabelWidthCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:identifier] autorelease];
+  } 
+  cell.accessoryType = self.isEditing ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
+  
+  if (detailLabel)
+  {
+    cell.textLabel.text = textLabel;
+    cell.detailTextLabel.text = detailLabel;
+  }
+  else
+  {
+    // Setting this to an empty string is required to fix a rendering issue in iPhoneOS 3.1.2
+    cell.detailTextLabel.text = @"";
+    cell.autoresizesSubviews = YES;
+    cell.textLabel.textAlignment = UITextAlignmentLeft;
+    cell.textLabelWidth = 150.0;
+    cell.textLabel.text = textLabel;
+  }
+  
+  return cell;
 }
 
 - (NSIndexPath *)tableView:(UITableView *)tv willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-  if (self.isEditing)
-  {
-    UIViewController *controller = nil;
-    switch ([indexPath row])
-    {
-      case 0: 
-        // Project
-        controller = [[[EditProjectPicker alloc] init] autorelease];
-        ((EditProjectPicker*)controller).options = [Project projectNames:[self.task managedObjectContext]];
-        ((EditProjectPicker*)controller).selected = self.task.project.name;
-        ((EditProjectPicker*)controller).target = self;
-        ((EditProjectPicker*)controller).saveAction = @selector(saveProject:);
-        ((EditProjectPicker*)controller).placeholder = @"New Project";
-        ((EditProjectPicker*)controller).title = @"Project";
-        break;
-        
-      case 1:
-        // Contexts
-        controller = [[[EditProjectPicker alloc] init] autorelease];
-        ((EditProjectPicker*)controller).appendSelections = YES;
-        ((EditProjectPicker*)controller).options = [Context contextNames:[self.task managedObjectContext]];
-        ((EditProjectPicker*)controller).selected = [self.task contextsString];
-        ((EditProjectPicker*)controller).target = self;
-        ((EditProjectPicker*)controller).saveAction = @selector(saveContexts:);
-        ((EditProjectPicker*)controller).placeholder = @"@context";
-        ((EditProjectPicker*)controller).title = @"Contexts";
-        break;
-        
-      case 2:
-        controller = [[[DatePickerViewController alloc] initWithNibName:@"TaskDatePickerView" bundle:nil] autorelease];
-        ((DatePickerViewController*)controller).saveAction = @selector(saveDate:);
-        ((DatePickerViewController*)controller).target = self;
-        ((DatePickerViewController*)controller).selectedDate = self.task.dueDate;
-        break;
-    }
+  UIViewController *controller = nil;
 
-    if (controller)
-    {
-      [self.navigationController pushViewController:controller animated:YES];
-    }
-  }
-  else if ([indexPath section] == 1)
+  switch ([indexPath row])
   {
-    NSURL *url = [self.urls objectAtIndex:[indexPath row]];
-    [[UIApplication sharedApplication] openURL:url];
+    case 0: 
+      // Project
+      controller = [[[EditProjectPicker alloc] init] autorelease];
+      ((EditProjectPicker*)controller).options = [Project projectNames:[self.task managedObjectContext]];
+      ((EditProjectPicker*)controller).selected = self.task.project.name;
+      ((EditProjectPicker*)controller).target = self;
+      ((EditProjectPicker*)controller).saveAction = @selector(saveProject:);
+      ((EditProjectPicker*)controller).placeholder = @"New Project";
+      ((EditProjectPicker*)controller).title = @"Project";
+      break;
+      
+    case 1:
+      // Contexts
+      controller = [[[EditProjectPicker alloc] init] autorelease];
+      ((EditProjectPicker*)controller).appendSelections = YES;
+      ((EditProjectPicker*)controller).options = [Context contextNames:[self.task managedObjectContext]];
+      ((EditProjectPicker*)controller).selected = [self.task contextsString];
+      ((EditProjectPicker*)controller).target = self;
+      ((EditProjectPicker*)controller).saveAction = @selector(saveContexts:);
+      ((EditProjectPicker*)controller).placeholder = @"@context";
+      ((EditProjectPicker*)controller).title = @"Contexts";
+      break;
+      
+    case 2:
+      controller = [[[DatePickerViewController alloc] initWithNibName:@"TaskDatePickerView" bundle:nil] autorelease];
+      ((DatePickerViewController*)controller).saveAction = @selector(saveDate:);
+      ((DatePickerViewController*)controller).target = self;
+      ((DatePickerViewController*)controller).selectedDate = self.task.dueDate;
+      break;
+  }
+
+  if (controller)
+  {
+    [self.navigationController pushViewController:controller animated:YES];
   }
   
   return nil;
