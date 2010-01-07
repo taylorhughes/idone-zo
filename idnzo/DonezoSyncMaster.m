@@ -357,12 +357,18 @@
       NSTimeInterval remoteUpdatedInterval = [remoteTask.updatedAt timeIntervalSinceDate:localTask.updatedAt];
       if (remoteUpdatedInterval < 0 || localTask.isArchived)
       {
+        // You might have archived the task while the task is being saved,
+        // which would prevent the task from being synced again by doSync==NO,
+        // so only set doSync=NO if the task was archived **before the save request happened**
+        BOOL wasArchived = localTask.isArchived;
+        
         [self copyLocalTask:localTask toRemoteTask:remoteTask];
         [self.client saveTask:&remoteTask taskList:nil error:error];
         if (*error) { return; }
         
         [localTask hasBeenUpdated:remoteTask.updatedAt];
-        if (localTask.isArchived)
+        
+        if (wasArchived)
         {
           // Now that we have sync'd the archival,
           // do not sync this task anymore.
