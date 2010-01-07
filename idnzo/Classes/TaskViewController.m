@@ -364,8 +364,8 @@ static UIImage *unchecked;
   
   CGRect footerFrame = bottomView.frame;
   CGRect sectionFrame = [self.tableView rectForSection:0];
-  CGRect urlSectionFrame = [self.tableView rectForSection:1];
-  footerFrame.origin = CGPointMake(footerFrame.origin.x, self.tableView.tableHeaderView.frame.size.height + sectionFrame.size.height + urlSectionFrame.size.height);
+  
+  footerFrame.origin = CGPointMake(footerFrame.origin.x, self.tableView.tableHeaderView.frame.size.height + sectionFrame.size.height);
   bottomView.frame = footerFrame;
 }
 
