@@ -72,6 +72,18 @@
 
 - (NSString *)getAuthToken:(NSError**)error
 {
+  NSString *trimmed = [self.username stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+  if (!self.username || [trimmed isEqualToString:@""])
+  {
+    NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
+    NSString *errorString = @"Failed to login to Google Accounts because the username is blank.";
+    
+    [errorDetail setValue:errorString forKey:NSLocalizedDescriptionKey];
+    *error = [NSError errorWithDomain:@"DonezoAPI" code:100 userInfo:errorDetail];
+    
+    return nil;
+  }
+  
   NSMutableDictionary *postBody = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                                    @"GOOGLE", @"accountType",
                                    @"ah", @"service",
@@ -135,7 +147,16 @@
     NSLog(@"Got an error from Google authentication: %@", responseError);
     
     NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
-    NSString *errorString = [NSString stringWithFormat:@"Failed to login to Google Accounts with error: %@", responseError];
+    NSString *errorString;
+    if ([responseError isEqual:@"BadAuthentication"])
+    {
+      errorString = [NSString stringWithFormat:@"Failed to login to Google Accounts; the username or password appears to be incorrect."];
+    }
+    else
+    {
+      errorString = [NSString stringWithFormat:@"Failed to login to Google Accounts due to an unrecognized error. (%@)", responseError];
+    }
+
     [errorDetail setValue:errorString forKey:NSLocalizedDescriptionKey];
     *error = [NSError errorWithDomain:@"DonezoAPI" code:100 userInfo:errorDetail];
     

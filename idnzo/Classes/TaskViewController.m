@@ -776,7 +776,7 @@ static UIImage *unchecked;
       ((EditProjectPicker*)controller).selected = [self.task contextsString];
       ((EditProjectPicker*)controller).target = self;
       ((EditProjectPicker*)controller).saveAction = @selector(saveContexts:);
-      ((EditProjectPicker*)controller).placeholder = @"@context";
+      ((EditProjectPicker*)controller).placeholder = @"@home @work";
       ((EditProjectPicker*)controller).title = @"Contexts";
       break;
       
