@@ -210,19 +210,9 @@ static UIImage *unchecked;
   {
     [updatedPaths addObject:[NSIndexPath indexPathForRow:i inSection:0]];
   }
-  
-  // Then add in the new rows at the proper current max index
-  if (![self hasProject])
+  for (NSInteger i = existingRows; i < 3; i++)
   {
-    [insertedPaths addObject:[NSIndexPath indexPathForRow:existingRows++ inSection:0]];
-  }
-  if (![self hasContexts])
-  {
-    [insertedPaths addObject:[NSIndexPath indexPathForRow:existingRows++ inSection:0]];
-  }
-  if (![self hasDueDate])
-  {
-    [insertedPaths addObject:[NSIndexPath indexPathForRow:existingRows++ inSection:0]];
+    [insertedPaths addObject:[NSIndexPath indexPathForRow:i inSection:0]];
   }
   
   isEditing = YES;
