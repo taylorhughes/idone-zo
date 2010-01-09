@@ -32,7 +32,7 @@
     self.switchWidget = [[UISwitch alloc] init];
     [self.switchWidget release];
     
-    CGFloat x = self.switchCell.frame.size.width - 120;
+    CGFloat x = self.switchCell.frame.size.width - 112;
     self.switchWidget.frame = CGRectMake(x,9,0,0);
     [self.switchCell addSubview:self.switchWidget];
     
@@ -140,7 +140,7 @@
   if ([indexPath section] == 0)
   {
     cell = self.switchCell;
-    cell.textLabel.text = @"Sync enabled";
+    cell.textLabel.text = @"Sync to done-zo.com";
   }
   else
   {
@@ -182,7 +182,7 @@
   if ([indexPath row] == 0)
   {
     tfvc.title = @"Google Username";
-    tfvc.placeholder = @"some@user.com";
+    tfvc.placeholder = @"john.smith@gmail.com";
     tfvc.text = self.username;
     tfvc.textField.autocorrectionType = UITextAutocorrectionTypeNo;
     tfvc.textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
