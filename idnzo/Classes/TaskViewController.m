@@ -203,13 +203,35 @@ static UIImage *unchecked;
   
   UITableViewRowAnimation animation = animated ? UITableViewRowAnimationFade : UITableViewRowAnimationNone;
   
-  [([self hasProject]) ?  updatedPaths : insertedPaths addObject:[NSIndexPath indexPathForRow:0 inSection:0]];
-  [([self hasContexts]) ? updatedPaths : insertedPaths addObject:[NSIndexPath indexPathForRow:1 inSection:0]];
-  [([self hasDueDate]) ?  updatedPaths : insertedPaths addObject:[NSIndexPath indexPathForRow:2 inSection:0]];
+  NSInteger existingRows = [self hasProject] + [self hasContexts] + [self hasDueDate];
+
+  // Update all existing rows in the table
+  for (NSInteger i = 0; i < existingRows; i++)
+  {
+    [updatedPaths addObject:[NSIndexPath indexPathForRow:i inSection:0]];
+  }
+  
+  // Then add in the new rows at the proper current max index
+  if (![self hasProject])
+  {
+    [insertedPaths addObject:[NSIndexPath indexPathForRow:existingRows++ inSection:0]];
+  }
+  if (![self hasContexts])
+  {
+    [insertedPaths addObject:[NSIndexPath indexPathForRow:existingRows++ inSection:0]];
+  }
+  if (![self hasDueDate])
+  {
+    [insertedPaths addObject:[NSIndexPath indexPathForRow:existingRows++ inSection:0]];
+  }
   
   isEditing = YES;
   
   [self.tableView beginUpdates];
+  
+  NSLog(@"Inserting: %@" , insertedPaths);
+  NSLog(@"Updating: %@" , updatedPaths);
+  
   [self.tableView insertRowsAtIndexPaths:insertedPaths withRowAnimation:animation];
   [self.tableView reloadRowsAtIndexPaths:updatedPaths withRowAnimation:animation];
   
