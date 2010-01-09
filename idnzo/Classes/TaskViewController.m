@@ -229,9 +229,6 @@ static UIImage *unchecked;
   
   [self.tableView beginUpdates];
   
-  NSLog(@"Inserting: %@" , insertedPaths);
-  NSLog(@"Updating: %@" , updatedPaths);
-  
   [self.tableView insertRowsAtIndexPaths:insertedPaths withRowAnimation:animation];
   [self.tableView reloadRowsAtIndexPaths:updatedPaths withRowAnimation:animation];
   
