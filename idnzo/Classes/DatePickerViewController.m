@@ -13,6 +13,7 @@
 
 @synthesize picker;
 @synthesize selectNoneButton;
+@synthesize textField;
 @synthesize target;
 @synthesize saveAction;
 
@@ -45,6 +46,7 @@
   [cancel release];
   
   self.picker.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:0];
+  
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -81,26 +83,55 @@
 {
   // This line forces the nibfile to load the view
   self.view;
-  // ... so that this line has an effect
+  // ... so this stuff has an effect
   if (!date)
   {
     // Output the current date to a string, then read it back in as UTC;
     // this allows us to get the current date as 10/10/2010 00:00:00 UTC, 
     // for example if it's 10/10/2010 in the current timezone but not in UTC.
-    NSDateFormatter *formatter = [[[NSDateFormatter alloc] init] retain];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateStyle:NSDateFormatterShortStyle];
     [formatter setTimeStyle:NSDateFormatterNoStyle];
     NSString *stringDate = [formatter stringFromDate:[NSDate date]];
     [formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
     date = [formatter dateFromString:stringDate];
+    [formatter release];
   }
+  
   [self.picker setDate:date animated:NO];
+  [self updateTextField];
 }
 
 - (void)onClickSelectNoneButton:(id)sender
 {
   noneSelected = YES;
-  [self save:sender];
+  [self updateTextField];
+}
+
+- (IBAction)pickerValueChanged:(id)sender
+{
+  noneSelected = NO;
+  [self updateTextField];
+}
+
+- (void)updateTextField
+{
+  NSDate *date = [self selectedDate];
+  
+  if (!date)
+  {
+    [textField setText:@""];
+  }
+  else
+  {
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateStyle:NSDateFormatterLongStyle];
+    [formatter setTimeStyle:NSDateFormatterNoStyle];
+    [formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+    
+    [textField setText:[formatter stringFromDate:date]];
+    [formatter release];
+  }
 }
 
 - (void)dealloc
