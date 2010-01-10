@@ -31,6 +31,8 @@
 {
   [super viewDidLoad];
   
+  loadingIndicatorShown = 0;
+  
   self.queue = [[NSOperationQueue alloc] init];
   [self.queue release];
 }
