@@ -73,6 +73,8 @@
 		349D81021091509100A61237 /* SortViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 349D81011091509100A61237 /* SortViewController.m */; };
 		349D81031091509100A61237 /* SortViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 349D81011091509100A61237 /* SortViewController.m */; };
 		34A282D8104DA3EB00F26A01 /* DonezoAPIClientTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 34770B340FAFE4C200AD8397 /* DonezoAPIClientTest.m */; };
+		34A8317910FA3C01002418C2 /* FilterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34A8317810FA3C01002418C2 /* FilterView.xib */; };
+		34A8317A10FA3C01002418C2 /* FilterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34A8317810FA3C01002418C2 /* FilterView.xib */; };
 		34AF21F0102FC20B001FC4B7 /* MockDonezoAPIClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AF21ED102FC20B001FC4B7 /* MockDonezoAPIClient.m */; };
 		34B6072510D8829D00CCF883 /* SettingsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34B6072410D8829D00CCF883 /* SettingsView.xib */; };
 		34B6072610D8829D00CCF883 /* SettingsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34B6072410D8829D00CCF883 /* SettingsView.xib */; };
@@ -210,6 +212,7 @@
 		349BE2681095007400C80146 /* FilterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilterViewController.m; sourceTree = "<group>"; };
 		349D81001091509100A61237 /* SortViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SortViewController.h; sourceTree = "<group>"; };
 		349D81011091509100A61237 /* SortViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SortViewController.m; sourceTree = "<group>"; };
+		34A8317810FA3C01002418C2 /* FilterView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = FilterView.xib; path = Resources/FilterView.xib; sourceTree = "<group>"; };
 		34AF21EC102FC20B001FC4B7 /* MockDonezoAPIClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MockDonezoAPIClient.h; path = Test/MockDonezoAPIClient.h; sourceTree = "<group>"; };
 		34AF21ED102FC20B001FC4B7 /* MockDonezoAPIClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MockDonezoAPIClient.m; path = Test/MockDonezoAPIClient.m; sourceTree = "<group>"; };
 		34AF21EE102FC20B001FC4B7 /* SyncTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SyncTest.h; path = Test/SyncTest.h; sourceTree = "<group>"; };
@@ -385,6 +388,7 @@
 				8D1107310486CEB800E47090 /* Info.plist */,
 				3452D4A21049CC26005C717C /* Entitlements.plist */,
 				34FAAB28101141B700B74477 /* Tasks.xcdatamodel */,
+				34A8317810FA3C01002418C2 /* FilterView.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -642,6 +646,7 @@
 				34B9D7F410CF2F600087EDCC /* RevisionInfo.h.rb in Resources */,
 				34B6072610D8829D00CCF883 /* SettingsView.xib in Resources */,
 				34B6072E10D8854500CCF883 /* dialog-background.png in Resources */,
+				34A8317910FA3C01002418C2 /* FilterView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -661,6 +666,7 @@
 				34B9D7F510CF2F600087EDCC /* RevisionInfo.h.rb in Resources */,
 				34B6072510D8829D00CCF883 /* SettingsView.xib in Resources */,
 				34B6072D10D8854500CCF883 /* dialog-background.png in Resources */,
+				34A8317A10FA3C01002418C2 /* FilterView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

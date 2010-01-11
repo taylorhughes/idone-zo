@@ -17,6 +17,7 @@
   NSArray *sections;
   
   NSObject *selectedObject;
+  UIView *emptyFilterView;
 }
 
 @property (nonatomic, retain) NSArray *contexts;
@@ -24,6 +25,8 @@
 @property (nonatomic, retain) NSArray *dueDates;
 
 @property (nonatomic, retain) NSObject *selectedObject;
+
+@property (nonatomic, retain) IBOutlet UIView *emptyFilterView;
 
 - (void) reset;
 

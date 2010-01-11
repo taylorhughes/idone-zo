@@ -52,7 +52,10 @@
   [tableView reloadData];
 }
 
-
+//-(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+//{
+//  return interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown;
+//}
 
 
 
@@ -74,6 +77,7 @@
   if (taskViewController == nil)
   {
     self.taskViewController = [[TaskViewController alloc] initWithNibName:@"TaskView" bundle:nil];
+    [self.taskViewController release];
   }
   return taskViewController;
 }
@@ -83,6 +87,7 @@
   if (sortViewController == nil)
   {
     self.sortViewController = [[SortViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    [self.sortViewController release];
   }
   return sortViewController;
 }
@@ -91,7 +96,8 @@
 {
   if (filterViewController == nil)
   {
-    self.filterViewController = [[FilterViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    self.filterViewController = [[FilterViewController alloc] initWithNibName:@"FilterView" bundle:nil];
+    [self.filterViewController release];
   }
   return filterViewController;
 }
@@ -461,7 +467,7 @@
   
   UINavigationController *modalNavigationController =
     [[[UINavigationController alloc] initWithRootViewController:self.filterViewController] autorelease];
-  [self.navigationController presentModalViewController:modalNavigationController animated:YES];
+  [self.navigationController presentModalViewController:modalNavigationController animated:YES];    
 }
 
 

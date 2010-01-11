@@ -23,6 +23,8 @@
 
 @synthesize selectedObject;
 
+@synthesize emptyFilterView;
+
 - (id) initWithStyle:(UITableViewStyle)style
 {
   self = [super initWithStyle:style];
@@ -51,6 +53,15 @@
                                                                         action:@selector(onClickDone:)];
   [self.navigationItem setRightBarButtonItem:done animated:animated];
   [done release];
+  
+  if ([self.projects count] + [self.contexts count] + [self.dueDates count] == 0)
+  {
+    self.tableView.tableHeaderView = self.emptyFilterView;
+  }
+  else
+  {
+    self.tableView.tableHeaderView = nil;
+  }
   
   [self.tableView reloadData];
 }
