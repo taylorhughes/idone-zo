@@ -33,6 +33,7 @@ static UIImage *unchecked;
 
 - (void) save;
 - (void) save:(BOOL)doRefresh;
+- (void) save:(BOOL)doRefresh andSync:(BOOL)doSync;
 
 - (void) refresh;
 - (void) refreshHeaderAndFooter;
@@ -523,14 +524,14 @@ static UIImage *unchecked;
   if (self.task.key)
   {
     self.task.isDeleted = YES;
-    [self.task hasBeenUpdated]; 
+    [self save:NO];
   }
   else
   {
+    // This task was not saved remotely, so we don't need to sync it.
     [self.editingContext deleteObject:self.task];
-  }
-  
-  [self save:NO];
+    [self save:NO andSync:NO];
+  }  
 
   self.confirm.afterHideAction = @selector(finishDeletingTask);
 }
@@ -587,6 +588,11 @@ static UIImage *unchecked;
 
 - (void) save:(BOOL)doRefresh
 {
+  [self save:doRefresh andSync:YES];
+}
+
+- (void) save:(BOOL)doRefresh andSync:(BOOL)doSync
+{
   [self.task hasBeenUpdated];
   
   NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
@@ -600,13 +606,18 @@ static UIImage *unchecked;
   }
   [dnc removeObserver:self name:NSManagedObjectContextDidSaveNotification object:self.editingContext];
   
-  [self notifySync];
+  if (doSync)
+  {
+    [self notifySync];
+  }
   
   if (doRefresh)
   {
     [self refresh];
   }
 }
+
+
 
 - (void) notifySync
 {
@@ -615,7 +626,7 @@ static UIImage *unchecked;
   [dnc postNotificationName:DonezoDataUpdatedNotification object:self];
   
   NSDictionary *info = [NSDictionary dictionaryWithObject:self.task.taskList forKey:@"list"];
-  [dnc postNotificationName:DonezoShouldSyncNotification object:self userInfo:info];
+  [dnc postNotificationName:DonezoShouldSyncNotification object:self userInfo:info];    
 }
 
 
