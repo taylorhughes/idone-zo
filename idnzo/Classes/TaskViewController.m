@@ -271,29 +271,13 @@ static UIImage *unchecked;
     UITableViewRowAnimation animation = animated ? UITableViewRowAnimationFade : UITableViewRowAnimationNone;
     
     NSInteger numRows = [self hasProject] + [self hasContexts] + [self hasDueDate];
-    if (![self hasProject])
+    for (NSInteger i = 0; i < numRows; i++)
     {
-      [deletedPaths addObject:[NSIndexPath indexPathForRow:0 inSection:0]];
+      [updatedPaths addObject:[NSIndexPath indexPathForRow:i inSection:0]];
     }
-    else if (numRows >= 1)
+    for (NSInteger i = numRows; i < 3; i++)
     {
-      [updatedPaths addObject:[NSIndexPath indexPathForRow:0 inSection:0]];
-    }
-    if (![self hasContexts])
-    {
-      [deletedPaths addObject:[NSIndexPath indexPathForRow:1 inSection:0]];  
-    }
-    else if (numRows >= 2)
-    {
-      [updatedPaths addObject:[NSIndexPath indexPathForRow:1 inSection:0]];
-    }
-    if (![self hasDueDate])
-    {
-      [deletedPaths addObject:[NSIndexPath indexPathForRow:2 inSection:0]];
-    }
-    else if (numRows == 3)
-    {
-      [updatedPaths addObject:[NSIndexPath indexPathForRow:2 inSection:0]];
+      [deletedPaths addObject:[NSIndexPath indexPathForRow:i inSection:0]];
     }
     
     [self.tableView beginUpdates];
