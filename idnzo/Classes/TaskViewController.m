@@ -761,47 +761,70 @@ static UIImage *unchecked;
 {
   if (!self.isEditing)
   {
-    return nil;
+    NSObject *filteredObject = nil;
+    if ([self hasProject] && [indexPath row] == 0)
+    {
+      filteredObject = self.task.project;
+    }
+    else if ([self hasContexts] && [indexPath row] == [self hasProject])
+    {
+      filteredObject = [[self.task.contexts allObjects] objectAtIndex:0];
+    }
+    else if ([self hasDueDate] && [indexPath row] == [self hasProject] + [self hasContexts])
+    {
+      filteredObject = self.task.dueDate;
+    }
+    
+    NSDictionary *info = [NSDictionary dictionaryWithObject:filteredObject forKey:@"filteredObject"];
+    
+    NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
+    [dnc postNotificationName:DonezoShouldFilterListNotification
+                       object:self
+                     userInfo:info];
+    
+    [self.navigationController popViewControllerAnimated:YES];
   }
-  
-  UIViewController *controller = nil;
-  
-  switch ([indexPath row])
+  else
   {
-    case 0: 
-      // Project
-      controller = [[[EditProjectPicker alloc] init] autorelease];
-      ((EditProjectPicker*)controller).options = [Project projectNames:[self.task managedObjectContext]];
-      ((EditProjectPicker*)controller).selected = self.task.project.name;
-      ((EditProjectPicker*)controller).target = self;
-      ((EditProjectPicker*)controller).saveAction = @selector(saveProject:);
-      ((EditProjectPicker*)controller).placeholder = @"New Project";
-      ((EditProjectPicker*)controller).title = @"Project";
-      break;
-      
-    case 1:
-      // Contexts
-      controller = [[[EditProjectPicker alloc] init] autorelease];
-      ((EditProjectPicker*)controller).appendSelections = YES;
-      ((EditProjectPicker*)controller).options = [Context contextNames:[self.task managedObjectContext]];
-      ((EditProjectPicker*)controller).selected = [self.task contextsString];
-      ((EditProjectPicker*)controller).target = self;
-      ((EditProjectPicker*)controller).saveAction = @selector(saveContexts:);
-      ((EditProjectPicker*)controller).placeholder = @"@home @work";
-      ((EditProjectPicker*)controller).title = @"Contexts";
-      break;
-      
-    case 2:
-      controller = [[[DatePickerViewController alloc] initWithNibName:@"TaskDatePickerView" bundle:nil] autorelease];
-      ((DatePickerViewController*)controller).saveAction = @selector(saveDate:);
-      ((DatePickerViewController*)controller).target = self;
-      ((DatePickerViewController*)controller).selectedDate = self.task.dueDate;
-      break;
-  }
+    UIViewController *controller = nil;
+    
+    switch ([indexPath row])
+    {
+      case 0: 
+        // Project
+        controller = [[[EditProjectPicker alloc] init] autorelease];
+        ((EditProjectPicker*)controller).options = [Project projectNames:[self.task managedObjectContext]];
+        ((EditProjectPicker*)controller).selected = self.task.project.name;
+        ((EditProjectPicker*)controller).target = self;
+        ((EditProjectPicker*)controller).saveAction = @selector(saveProject:);
+        ((EditProjectPicker*)controller).placeholder = @"New Project";
+        ((EditProjectPicker*)controller).title = @"Project";
+        break;
+        
+      case 1:
+        // Contexts
+        controller = [[[EditProjectPicker alloc] init] autorelease];
+        ((EditProjectPicker*)controller).appendSelections = YES;
+        ((EditProjectPicker*)controller).options = [Context contextNames:[self.task managedObjectContext]];
+        ((EditProjectPicker*)controller).selected = [self.task contextsString];
+        ((EditProjectPicker*)controller).target = self;
+        ((EditProjectPicker*)controller).saveAction = @selector(saveContexts:);
+        ((EditProjectPicker*)controller).placeholder = @"@home @work";
+        ((EditProjectPicker*)controller).title = @"Contexts";
+        break;
+        
+      case 2:
+        controller = [[[DatePickerViewController alloc] initWithNibName:@"TaskDatePickerView" bundle:nil] autorelease];
+        ((DatePickerViewController*)controller).saveAction = @selector(saveDate:);
+        ((DatePickerViewController*)controller).target = self;
+        ((DatePickerViewController*)controller).selectedDate = self.task.dueDate;
+        break;
+    }
 
-  if (controller)
-  {
-    [self.navigationController pushViewController:controller animated:YES];
+    if (controller)
+    {
+      [self.navigationController pushViewController:controller animated:YES];
+    }
   }
   
   return nil;
