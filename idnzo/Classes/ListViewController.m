@@ -6,6 +6,7 @@
 - (void) notifySync;
 - (void) notifySync:(BOOL)userForced;
 - (void) resetTasks;
+- (void) filterList:(id)sender;
 
 @property (retain, nonatomic) NSArray *tasks;
 @property (retain, nonatomic) NSArray *filteredTasks;
@@ -19,11 +20,15 @@
 
 @synthesize tableView;
 @synthesize taskList;
+
 @synthesize tasks;
 @synthesize filteredTasks;
+@synthesize filteredObject;
+
 @synthesize taskViewController;
 @synthesize sortViewController;
 @synthesize filterViewController;
+
 @synthesize confirm;
 
 
@@ -40,9 +45,15 @@
   [add release];
   
   NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
+  
   [dnc addObserver:self
           selector:@selector(donezoDataUpdated:) 
               name:DonezoDataUpdatedNotification
+            object:nil];
+  
+  [dnc addObserver:self
+          selector:@selector(filterList:)
+              name:DonezoShouldFilterListNotification
             object:nil];
 }
 
@@ -70,6 +81,17 @@
     }
   }
 }
+
+- (void) filterList:(NSNotification*)notification
+{
+  self.filteredObject = [[notification userInfo] objectForKey:@"filteredObject"];
+  
+  // viewWillAppear automatically force-reloads these:
+  //[self resetTasks];
+  //[self.tableView reloadData];
+}
+
+
 
 - (TaskViewController *)taskViewController
 {
@@ -108,7 +130,7 @@
   taskList = [list retain];
   self.title = taskList.name;
   
-  [self.filterViewController reset];
+  self.filteredObject = nil;
   [self.sortViewController reset];
   // Scroll to top
   [self.tableView scrollRectToVisible:CGRectMake(0,0,1,1) animated:NO];
@@ -170,7 +192,7 @@
 {  
   if (!filteredTasks)
   {
-    NSObject *filter = self.filterViewController.selectedObject;
+    NSObject *filter = self.filteredObject;
     
     if (!filter)
     {
@@ -219,7 +241,7 @@
     [strings addObject:sortString];
   }
   
-  NSObject *filter = self.filterViewController.selectedObject;
+  NSObject *filter = self.filteredObject;
   if (filter != nil)
   {
     NSString *filterString = @"";
@@ -461,6 +483,7 @@
     }
   }
   
+  [self.filterViewController setSelectedObject:self.filteredObject];
   self.filterViewController.contexts = [[contexts allObjects] sortedArrayUsingSelector:@selector(compare:)];
   self.filterViewController.projects = [[projects allObjects] sortedArrayUsingSelector:@selector(compare:)];
   self.filterViewController.dueDates = [[dueDates allObjects] sortedArrayUsingSelector:@selector(compare:)];
@@ -477,6 +500,7 @@
   [taskList release];
   [tasks release];
   [filteredTasks release];
+  [filteredObject release];
   [taskViewController release];
   [sortViewController release];
   [filterViewController release];

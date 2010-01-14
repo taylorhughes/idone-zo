@@ -9,6 +9,7 @@
 #import "Task.h"
 #import "Project.h"
 #import "Context.h"
+#import "DNZOAppDelegate.h"
 
 @interface FilterViewController : UITableViewController {
   NSArray *contexts;
@@ -24,10 +25,9 @@
 @property (nonatomic, retain) NSArray *projects;
 @property (nonatomic, retain) NSArray *dueDates;
 
-@property (nonatomic, retain) NSObject *selectedObject;
-
 @property (nonatomic, retain) IBOutlet UIView *emptyFilterView;
 
 - (void) reset;
+- (void) setSelectedObject:(NSObject *)object;
 
 @end

@@ -20,7 +20,10 @@
   NSArray *filteredTasks;
   TaskViewController *taskViewController;
   SortViewController *sortViewController;
+  
   FilterViewController *filterViewController;
+  NSObject *filteredObject;
+  
   BOOL suspendUpdates;
   ConfirmationViewController *confirm;
 }
@@ -29,6 +32,7 @@
 @property (retain, nonatomic) TaskList *taskList;
 @property (retain, readonly, nonatomic) NSArray *tasks;
 @property (retain, readonly, nonatomic) NSArray *filteredTasks;
+@property (retain, nonatomic) NSObject *filteredObject;
 @property (retain, nonatomic) TaskViewController *taskViewController;
 
 - (IBAction) askToArchiveTasks:(id)sender;

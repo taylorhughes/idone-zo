@@ -11,6 +11,7 @@
 @interface FilterViewController ()
 
 @property (nonatomic, retain) NSArray *sections;
+@property (nonatomic, retain) NSObject *selectedObject;
 
 @end
 
@@ -190,6 +191,19 @@
   }
   
   [self.tableView reloadData];
+  
+  NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
+  
+  NSDictionary *info = [NSDictionary dictionary];
+  if (self.selectedObject)
+  {
+    info = [NSDictionary dictionaryWithObject:self.selectedObject forKey:@"filteredObject"];
+  }
+  
+  [dnc postNotificationName:DonezoShouldFilterListNotification 
+                     object:self
+                   userInfo:info];
+  
   [self.navigationController.parentViewController dismissModalViewControllerAnimated:YES];
 }
 
