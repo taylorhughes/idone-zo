@@ -55,6 +55,11 @@
           selector:@selector(filterList:)
               name:DonezoShouldFilterListNotification
             object:nil];
+  
+  [dnc addObserver:self
+          selector:@selector(toggleCompletedTask:)
+              name:DonezoShouldToggleCompletedTaskNotification
+            object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -263,10 +268,10 @@
   if ([strings count] > 0)
   {
     //                                          \u25EE vertical ellipsis
-    //                                          \u2219 bullet
     //                                          \u2236 "ratio" (:)
     //                                          \u205D tricolon
     //                                          \u2223 tall thin bar
+    //                                          \u2219 bullet
     return [strings componentsJoinedByString:@" \u2219 "];
   }
   
@@ -306,34 +311,32 @@
   return cell;
 }
 
+- (void)toggleCompletedTask:(NSNotification*)notification
+{
+  Task* clickedTask = [[notification userInfo] objectForKey:@"task"];
+  
+  clickedTask.isComplete = !clickedTask.isComplete;
+  [clickedTask hasBeenUpdated];
+  
+  DNZOAppDelegate *appDelegate = (DNZOAppDelegate *)[[UIApplication sharedApplication] delegate];
+  NSError *error = nil;
+  if (![appDelegate.managedObjectContext save:&error])
+  {
+    NSLog(@"Error saving clicked task: %@ %@", [error description], [error userInfo]);
+  }
+  
+  [self notifySync];
+  [self.tableView reloadData];
+}
+
 - (NSIndexPath *)tableView:(UITableView *)tv willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 { 
-  TaskCell *cell = (TaskCell*)[self.tableView cellForRowAtIndexPath:indexPath];
   Task *clickedTask = [self.filteredTasks objectAtIndex:indexPath.row];
   
-  if (cell.taskCellView.wasCompleted)
-  {
-    cell.taskCellView.wasCompleted = NO;
-    clickedTask.isComplete = !clickedTask.isComplete;
-    [clickedTask hasBeenUpdated];
-    
-    DNZOAppDelegate *appDelegate = (DNZOAppDelegate *)[[UIApplication sharedApplication] delegate];
-    NSError *error = nil;
-    if (![appDelegate.managedObjectContext save:&error])
-    {
-      NSLog(@"Error saving clicked task: %@ %@", [error description], [error userInfo]);
-    }
-    
-    [self notifySync];
-    [self.tableView reloadData];
-  }
-  else
-  {
-    TaskViewController *controller = self.taskViewController;
-    [controller loadTask:clickedTask editing:NO positionInList:[indexPath row] ofTotalCount:[self.filteredTasks count]];
-    
-    [self.navigationController pushViewController:controller animated:YES];    
-  }
+  TaskViewController *controller = self.taskViewController;
+  [controller loadTask:clickedTask editing:NO positionInList:[indexPath row] ofTotalCount:[self.filteredTasks count]];
+  
+  [self.navigationController pushViewController:controller animated:YES];
   
   return nil;
 }

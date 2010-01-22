@@ -16,14 +16,14 @@
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
-	if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])
+  if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])
   {
     CGRect frame = CGRectMake(0.0, 0.0, self.contentView.bounds.size.width, self.contentView.bounds.size.height);
     taskCellView = [[TaskCellView alloc] initWithFrame:frame];
     taskCellView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self.contentView addSubview:taskCellView];
   }
-	return self;
+  return self;
 }
 
 - (void) displayLocalTask:(Task*)task
@@ -33,10 +33,11 @@
 
 - (void) displayLocalTask:(Task*)task archived:(BOOL)isArchived
 {
+  self.taskCellView.task = task;
+  
   // We could probably use task.isArchived, but that feels wrong
   self.taskCellView.archivedDisplay = isArchived;
   self.taskCellView.isComplete = task.isComplete;
-  
   
   self.taskCellView.body = task.body;
   
@@ -65,6 +66,8 @@
 
 - (void) displayRemoteTask:(DonezoTask*)task
 {
+  self.taskCellView.task = nil;
+  
   self.taskCellView.archivedDisplay = YES;
   
   self.taskCellView.body = task.body; //[@"[remote] " stringByAppendingString:task.body];
@@ -95,7 +98,7 @@
 
 - (void)dealloc
 {
-	[taskCellView release];
+  [taskCellView release];
   [super dealloc];
 }
 

@@ -23,19 +23,25 @@
   self = [super init];
   if (self != nil)
   {
-    self.textView = [[[UITextView alloc] init] autorelease];
+    self.textView = [[UITextView alloc] init];
+    [self.textView release];
     self.view = self.textView;
     
-    UIBarButtonItem *save   = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave
-                                                                             target:self
-                                                                             action:@selector(save:)] autorelease];
+    self.textView.delegate = self;
     
-    UIBarButtonItem *cancel = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
-                                                                             target:self
-                                                                             action:@selector(cancel:)] autorelease];
+    UIBarButtonItem *save   = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave
+                                                                            target:self
+                                                                            action:@selector(save:)];
+    
+    UIBarButtonItem *cancel = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
+                                                                            target:self
+                                                                            action:@selector(cancel:)];
     
     self.navigationItem.rightBarButtonItem = save;
     self.navigationItem.leftBarButtonItem = cancel;
+
+    [save release];
+    [cancel release];
   }
   return self;
 }
@@ -75,6 +81,22 @@
     [target performSelector:cancelAction withObject:self];
   }
 }
+
+- (BOOL)textView:(UITextView *)tv shouldChangeTextInRange:(NSRange)original replacementText:(NSString *)replacement
+{
+  // If a newline is found, do not allow the change
+  if ([replacement rangeOfString:@"\n"].location != NSNotFound)
+  {
+    return NO;
+  }
+  
+         // Deleting text, so that's always OK
+  return (original.length >= replacement.length) ||
+         // ... or if the new lenght is less than the max length
+         (tv.text.length + original.length < DONEZO_MAX_TASK_BODY_LENGTH);
+}
+
+
 
 - (void)dealloc
 {

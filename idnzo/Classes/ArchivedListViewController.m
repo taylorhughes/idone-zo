@@ -33,6 +33,8 @@
   
   loadingIndicatorShown = 0;
   
+  self.loadingView.hidden = YES;
+  
   self.queue = [[NSOperationQueue alloc] init];
   [self.queue release];
 }
@@ -51,8 +53,6 @@
   self.remoteTasks = nil;
   
   [self.tableView reloadData];
-  
-  self.loadingView.hidden = NO;
 }
 
 - (void) viewDidAppear:(BOOL)animated
@@ -65,6 +65,7 @@
 {
   @synchronized (self)
   {
+    NSLog(@"Showing loading indicator... %d", loadingIndicatorShown);
     if (loadingIndicatorShown++ >= 0)
     {
       self.loadingView.hidden = NO;

@@ -16,9 +16,9 @@ static UIImage *checked;
 @synthesize isComplete;
 @synthesize body;
 @synthesize details;
-@synthesize wasCompleted;
 @synthesize highlighted;
 @synthesize archivedDisplay;
+@synthesize task;
 
 // horizontal space between project / context / date
 #define PADDING_BETWEEN_DETAILS 5.0
@@ -79,19 +79,38 @@ static UIImage *checked;
   }
 }
 
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+- (BOOL)touchedCheckbox:(NSSet *)touches
 {
   UITouch *touch = (UITouch*) [[touches allObjects] objectAtIndex:0];
   CGPoint relative = [touch locationInView:self];
   UIImage *image = self.isComplete ? checked : unchecked;
-  if (relative.x >= IMAGE_LEFT - TOUCH_BUFFER && relative.x <= IMAGE_LEFT + image.size.width  + TOUCH_BUFFER &&
-      relative.y >= IMAGE_TOP  - TOUCH_BUFFER && relative.y <= IMAGE_TOP  + image.size.height + TOUCH_BUFFER)
+  return (relative.x >= IMAGE_LEFT - TOUCH_BUFFER && relative.x <= IMAGE_LEFT + image.size.width  + TOUCH_BUFFER &&
+          relative.y >= IMAGE_TOP  - TOUCH_BUFFER && relative.y <= IMAGE_TOP  + image.size.height + TOUCH_BUFFER);
+}
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+  if (![self touchedCheckbox:touches])
   {
-    // hit the checkbox
-    self.wasCompleted = YES;
+    [super touchesBegan:touches withEvent:event]; 
   }
-  
-  [super touchesBegan:touches withEvent:event];
+}
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+  if ([self touchedCheckbox:touches])
+  {
+    NSDictionary *info = [NSDictionary dictionaryWithObject:self.task forKey:@"task"];
+    
+    NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
+    [dnc postNotificationName:DonezoShouldToggleCompletedTaskNotification
+                       object:self
+                     userInfo:info];
+  }
+  else
+  {
+    [super touchesEnded:touches withEvent:event];
+  }
 }
 
 - (void)drawRect:(CGRect)rect

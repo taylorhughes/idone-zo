@@ -82,14 +82,23 @@ static UIImage *unchecked;
   [topButton.titleLabel setLineBreakMode:UILineBreakModeWordWrap];
   [topCheckmark addTarget:self action:@selector(checkmarkClicked:) forControlEvents:UIControlEventTouchUpInside];
   
-  self.tableView.tableHeaderView = [[[UIView alloc] init] autorelease];
+  self.tableView.tableHeaderView = [[UIView alloc] init];
   [self.tableView.tableHeaderView addSubview:bodyView];
   [self.tableView.tableHeaderView addSubview:bodyEditView];
+  [self.tableView.tableHeaderView release];
   
   [topLabel setFont:[UIFont boldSystemFontOfSize:17.0f]];  
   
   bottomView.alpha = 0.0;
   [self.tableView addSubview:bottomView];
+  
+  // This view is different because animations get all screwy if the bottomView is the tableFooterView
+  UIView *bottomViewPlaceholder = [[UIView alloc] init];
+  // Make this view the same size as the bottomView, but it will just always be there so it can scroll.
+  bottomViewPlaceholder.frame = CGRectMake(0, 0, bottomView.frame.size.width, bottomView.frame.size.height);
+  // Assign this after creating the frame so it registers the size properly
+  self.tableView.tableFooterView = bottomViewPlaceholder;
+  [bottomViewPlaceholder release];
   
   [self cancel:NO];
   
@@ -313,7 +322,7 @@ static UIImage *unchecked;
   CGFloat width = topLabel.frame.size.width - 16.0;
   // Resize body cell according to how tall the text is
   CGSize newSize = [self.task.body sizeWithFont:topLabel.font
-                              constrainedToSize:CGSizeMake(width, 300.0f)
+                              constrainedToSize:CGSizeMake(width, MAXFLOAT)
                                   lineBreakMode:UILineBreakModeWordWrap];
   
   CGFloat newHeight = newSize.height >= topLabel.font.pointSize ? newSize.height : topLabel.font.pointSize;
@@ -333,7 +342,7 @@ static UIImage *unchecked;
   
   width = topButton.frame.size.width - topButton.contentEdgeInsets.left - topButton.contentEdgeInsets.right;
   newSize = [self.task.body sizeWithFont:topButton.titleLabel.font
-                       constrainedToSize:CGSizeMake(width, 300.0f)
+                       constrainedToSize:CGSizeMake(width, MAXFLOAT)
                            lineBreakMode:UILineBreakModeWordWrap];
   
   newHeight = newSize.height >= topButton.titleLabel.font.pointSize ? newSize.height : topButton.titleLabel.font.pointSize;
@@ -349,7 +358,10 @@ static UIImage *unchecked;
                                   bodyEditView.frame.size.width,
                                   bodyEditView.frame.size.height + heightDiff);
   
-  topLabel.text = self.task.body;
+  if (![topLabel.text isEqualToString:self.task.body])
+  {
+    topLabel.text = self.task.body;
+  }
   [topButton setTitle:self.task.body forState:UIControlStateNormal];
   
   self.tableView.tableHeaderView.frame = !self.isEditing ? bodyView.frame : bodyEditView.frame;
@@ -359,7 +371,8 @@ static UIImage *unchecked;
   CGRect footerFrame = bottomView.frame;
   CGRect sectionFrame = [self.tableView rectForSection:0];
   
-  footerFrame.origin = CGPointMake(footerFrame.origin.x, self.tableView.tableHeaderView.frame.size.height + sectionFrame.size.height);
+  footerFrame.origin = CGPointMake(footerFrame.origin.x, 
+                                   self.tableView.tableHeaderView.frame.size.height + sectionFrame.size.height);
   bottomView.frame = footerFrame;
 }
 

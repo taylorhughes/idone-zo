@@ -18,3 +18,10 @@
 #define USER_AGENT_STRING [NSString stringWithFormat:@"Done-zo iPhone v%@ (rev. %@, http://done-zo.com/)", DONEZO_VERSION, SVN_REVISION]
 
 #define DONEZO_SELECTED_TEXT_COLOR [UIColor colorWithRed:(50.0/255.0) green:(79.0/255.0) blue:(133.0/255.0) alpha:1.0]
+
+#define DONEZO_MAX_TASK_BODY_LENGTH 500
+#define DONEZO_MAX_PROJECT_NAME_LENGTH 50
+#define DONEZO_MAX_CONTEXT_NAME_LENGTH 50
+
+#define DONEZO_MAX_NUM_TASKS 100
+#define DONEZO_MAX_NUM_LISTS 10

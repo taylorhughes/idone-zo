@@ -11,7 +11,7 @@
 //    by a central UITextView, which takes up the whole screen and offers a
 //    keyboard when shown.
 //  
-@interface TextViewController : UIViewController <UITextFieldDelegate> {
+@interface TextViewController : UIViewController <UITextViewDelegate> {
   NSString *text;
   UITextView *textView;
   NSObject *target;

@@ -97,7 +97,7 @@
 {
 #if TARGET_IPHONE_SIMULATOR
   #if true
-    return @"http://localhost:8081";
+    return @"http://localhost:8081/";
   #else
     return @"http://dnzo-staging.appspot.com/";
   #endif

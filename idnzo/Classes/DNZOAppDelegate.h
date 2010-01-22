@@ -20,6 +20,7 @@ extern NSString* const DonezoShouldResetAndSyncNotification;
 extern NSString* const DonezoShouldResetNotification;
 extern NSString* const DonezoDataUpdatedNotification;
 extern NSString* const DonezoShouldFilterListNotification;
+extern NSString* const DonezoShouldToggleCompletedTaskNotification;
 
 @interface DNZOAppDelegate : NSObject <UIApplicationDelegate> {
   UIWindow *window;

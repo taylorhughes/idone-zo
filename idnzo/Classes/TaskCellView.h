@@ -8,6 +8,7 @@
 
 #import "Task.h"
 #import "Project.h"
+#import "DNZOAppDelegate.h"
 
 @class Task, Project;
 
@@ -15,9 +16,10 @@
   NSString *body;
   NSArray *details;
   BOOL isComplete;
-  BOOL wasCompleted;
   BOOL highlighted;
   BOOL archivedDisplay;
+  
+  Task *task;
 }
 
 @property (nonatomic) BOOL isComplete;
@@ -26,9 +28,9 @@
 @property (nonatomic, retain) NSArray *details;
 @property (nonatomic, assign) BOOL archivedDisplay;
 
-// Indicates whether the checkbox was clicked/touched with the latest event
-@property (nonatomic, assign) BOOL wasCompleted;
 @property (nonatomic, getter=isHighlighted) BOOL highlighted;
+
+@property (nonatomic, retain) Task *task;
 
 + (NSInteger) height;
 

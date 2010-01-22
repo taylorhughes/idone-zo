@@ -13,6 +13,7 @@ NSString* const DonezoShouldResetAndSyncNotification = @"DonezoShouldResetAndSyn
 NSString* const DonezoShouldResetNotification        = @"DonezoShouldResetNotification";
 NSString* const DonezoDataUpdatedNotification        = @"DonezoDataUpdatedNotification";
 NSString* const DonezoShouldFilterListNotification   = @"DonezoShouldFilterListNotification";
+NSString* const DonezoShouldToggleCompletedTaskNotification = @"DonezoShouldToggleCompletedTaskNotification";
 
 
 @interface DNZOAppDelegate ()
