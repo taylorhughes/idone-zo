@@ -65,11 +65,9 @@
 {
   @synchronized (self)
   {
-    NSLog(@"Showing loading indicator... %d", loadingIndicatorShown);
     if (loadingIndicatorShown++ >= 0)
     {
-      self.loadingView.hidden = NO;
-      [self.loadingView setNeedsDisplay];
+      [self performSelectorOnMainThread:@selector(showLoadingView) withObject:nil waitUntilDone:YES];
     }    
   }
   [(DNZOAppDelegate *)[[UIApplication sharedApplication] delegate] showNetworkIndicator];
@@ -80,13 +78,19 @@
   {
     if (--loadingIndicatorShown <= 0)
     {
-      self.loadingView.hidden = YES;
-      [self.loadingView setNeedsDisplay];
+      [self performSelectorOnMainThread:@selector(hideLoadingView) withObject:nil waitUntilDone:YES];
     }
   }
   [(DNZOAppDelegate *)[[UIApplication sharedApplication] delegate] hideNetworkIndicator];
 }
-
+- (void) showLoadingView
+{
+  self.loadingView.hidden = NO;
+}
+- (void) hideLoadingView
+{
+  self.loadingView.hidden = YES;
+}
 
 - (NSArray*) localTasks
 {
