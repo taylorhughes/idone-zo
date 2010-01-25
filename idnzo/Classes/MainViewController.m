@@ -7,8 +7,7 @@
 
 - (void) loadListViewForList:(TaskList*)list;
 - (void) loadListViewForList:(TaskList*)list animated:(BOOL)animated;
-- (void) recordViewedList:(NSObject*)object;
-- (void) loadLastViewedList:(NSObject*)object;
+- (void) recordViewedList:(TaskList*)list;
 
 @end
 
@@ -18,12 +17,11 @@
 
 - (void)viewDidLoad
 {
-  NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-  NSString *listName = [defaults objectForKey:@"lastListViewed"];
-  NSLog(@"Last viewed list was %@", listName);
-  if (listName != nil)
+  DNZOAppDelegate *appDelegate = (DNZOAppDelegate *)[[UIApplication sharedApplication] delegate];
+  TaskList *lastViewed = [SettingsHelper lastViewedListInContext:appDelegate.managedObjectContext];
+  if (lastViewed != nil)
   {
-    [self loadLastViewedList:listName];
+    [self loadListViewForList:lastViewed animated:NO];
   }
   
   UIBarButtonItem *add = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
@@ -116,37 +114,15 @@
   return [NSArray arrayWithObjects:start, end, nil];
 }
 
-- (void) loadLastViewedList:(NSObject*)object
+- (void) recordViewedList:(TaskList*)list
 {
-  DNZOAppDelegate *appDelegate = (DNZOAppDelegate *)[[UIApplication sharedApplication] delegate];
-  
-  NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
-  request.entity = [NSEntityDescription entityForName:@"TaskList" inManagedObjectContext:appDelegate.managedObjectContext];
-  [request setPredicate:[NSPredicate predicateWithFormat:@"name = %@", object]];
-  
-  NSError *error = nil;
-  NSArray *results = [appDelegate.managedObjectContext executeFetchRequest:request error:&error];
-  if (error == nil && [results count] > 0)
-  {
-    [self loadListViewForList:[results objectAtIndex:0] animated:NO];
-  }
-  else
-  {
-    NSLog(@"Couldn't load list view for list with name %@!", object);
-  }
-}
-
-- (void) recordViewedList:(NSObject*)object
-{
-  NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-  [defaults setObject:object forKey:@"lastListViewed"];
+  [SettingsHelper setLastViewedList:list];
 }
 
 - (void) loadListViewForList:(TaskList*)list animated:(BOOL)animated
 {
   self.listViewController.taskList = list;
-  
-  [self recordViewedList:[list name]];
+  [self recordViewedList:list];
   
   [self.navigationController pushViewController:self.listViewController animated:animated];
 }

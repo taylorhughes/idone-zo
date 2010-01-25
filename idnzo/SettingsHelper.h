@@ -23,6 +23,12 @@
 + (void) setPassword:(NSString*)username;
 + (void) resetPassword;
 
++ (void) setLastViewedList:(TaskList*)list;
++ (TaskList*) lastViewedListInContext:(NSManagedObjectContext*)context;
+
++ (void) setFilteredObject:(NSManagedObject*)object forList:(TaskList*)list;
++ (NSManagedObject*) filteredObjectForList:(TaskList*)list;
+
 + (NSString*) URL;
 
 @end

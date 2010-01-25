@@ -10,11 +10,23 @@
 
 #define DEFAULTS [NSUserDefaults standardUserDefaults]
 
+#define SERVICE_NAME @"Done-zo"
+
 #define SYNC_ENABLED_KEY @"syncEnabled"
 #define USERNAME_KEY @"username"
 #define PASSWORD_KEY @"password"
+#define FILTERED_OBJECT_KEY_FORMAT @"filteredObject-%@"
+#define LAST_VIEWED_LIST_KEY @"lastViewedList"
 
-#define SERVICE_NAME @"Done-zo"
+
+@interface SettingsHelper (Private)
+
++ (NSManagedObject*) managedObjectForKey:(NSString*)key inContext:(NSManagedObjectContext*)context;
++ (void) setManagedObject:(NSManagedObject*)object forKey:(NSString*)key;
+
++ (NSString*) filteredObjectKeyForList:(TaskList*)list;
+
+@end
 
 
 @implementation SettingsHelper
@@ -93,34 +105,58 @@
   }
 }
 
-+ (NSString*) filteredObjectKeyForList:(TaskList*)list
++ (NSManagedObject*) managedObjectForKey:(NSString*)key inContext:(NSManagedObjectContext*)context
 {
-  NSString *listURI = [[[list objectID] URIRepresentation] absoluteString];
-  return [NSString stringWithFormat:@"filteredObject-%@", listURI];
-}
-
-+ (void) setFilteredObject:(NSManagedObject*)object forList:(TaskList*)list
-{
-  NSString *key = [self filteredObjectKeyForList:list];
-  NSString *objectURI = [[[object objectID] URIRepresentation] absoluteString];
-  [DEFAULTS setObject:objectURI forKey:key];
-}
-
-+ (NSManagedObject*) filteredObjectForList:(TaskList*)list
-{
-  NSString *key = [self filteredObjectKeyForList:list];
-  
   NSManagedObject *object = nil;
   NSString *filteredURI = [DEFAULTS objectForKey:key];
   if (filteredURI)
   {
     NSURL *url = [NSURL URLWithString:filteredURI];
-    NSManagedObjectID *mid = [[[list managedObjectContext] persistentStoreCoordinator] managedObjectIDForURIRepresentation:url];
-    object = [[list managedObjectContext] objectWithID:mid];
+    NSManagedObjectID *mid = [[context persistentStoreCoordinator] managedObjectIDForURIRepresentation:url];
+    object = [context objectWithID:mid];
   }
   
   return object;
 }
+
++ (void) setManagedObject:(NSManagedObject*)object forKey:(NSString*)key
+{
+  NSString *objectURI = [[[object objectID] URIRepresentation] absoluteString];
+  [DEFAULTS setObject:objectURI forKey:key];
+}
+
+
++ (NSString*) filteredObjectKeyForList:(TaskList*)list
+{
+  NSString *listURI = [[[list objectID] URIRepresentation] absoluteString];
+  return [NSString stringWithFormat:FILTERED_OBJECT_KEY_FORMAT, listURI];
+}
+
++ (void) setFilteredObject:(NSManagedObject*)object forList:(TaskList*)list
+{
+  NSString *key = [self filteredObjectKeyForList:list];
+  [self setManagedObject:object forKey:key];
+}
+
++ (NSManagedObject*) filteredObjectForList:(TaskList*)list
+{
+  NSString *key = [self filteredObjectKeyForList:list];
+  return [self managedObjectForKey:key inContext:[list managedObjectContext]];
+}
+
+
+
++ (void) setLastViewedList:(TaskList*)list
+{
+  [self setManagedObject:list forKey:LAST_VIEWED_LIST_KEY];
+}
+
++ (TaskList*) lastViewedListInContext:(NSManagedObjectContext*)context
+{
+  return (TaskList*)[self managedObjectForKey:LAST_VIEWED_LIST_KEY inContext:context];
+}
+
+
 
 + (NSString*) URL
 {

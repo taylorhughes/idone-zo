@@ -179,9 +179,9 @@ static UIImage *unchecked;
 {  
   DNZOAppDelegate *appDelegate = (DNZOAppDelegate *)[[UIApplication sharedApplication] delegate];
   
-	// Create a new managed object context for the new book -- set its persistent store coordinator to the same as that from the fetched results controller's context.
-	self.editingContext = [[[NSManagedObjectContext alloc] init] autorelease];
-	[self.editingContext setPersistentStoreCoordinator:[appDelegate.managedObjectContext persistentStoreCoordinator]];
+  // Create a new managed object context for the new book -- set its persistent store coordinator to the same as that from the fetched results controller's context.
+  self.editingContext = [[[NSManagedObjectContext alloc] init] autorelease];
+  [self.editingContext setPersistentStoreCoordinator:[appDelegate.managedObjectContext persistentStoreCoordinator]];
   
   if (self.task != nil)
   {
