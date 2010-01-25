@@ -7,6 +7,7 @@
 //
 
 #import "SFHFKeychainUtils.h"
+#import "TaskList.h"
 
 @interface SettingsHelper : NSObject {
 }

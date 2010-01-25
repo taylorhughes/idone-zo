@@ -93,6 +93,35 @@
   }
 }
 
++ (NSString*) filteredObjectKeyForList:(TaskList*)list
+{
+  NSString *listURI = [[[list objectID] URIRepresentation] absoluteString];
+  return [NSString stringWithFormat:@"filteredObject-%@", listURI];
+}
+
++ (void) setFilteredObject:(NSManagedObject*)object forList:(TaskList*)list
+{
+  NSString *key = [self filteredObjectKeyForList:list];
+  NSString *objectURI = [[[object objectID] URIRepresentation] absoluteString];
+  [DEFAULTS setObject:objectURI forKey:key];
+}
+
++ (NSManagedObject*) filteredObjectForList:(TaskList*)list
+{
+  NSString *key = [self filteredObjectKeyForList:list];
+  
+  NSManagedObject *object = nil;
+  NSString *filteredURI = [DEFAULTS objectForKey:key];
+  if (filteredURI)
+  {
+    NSURL *url = [NSURL URLWithString:filteredURI];
+    NSManagedObjectID *mid = [[[list managedObjectContext] persistentStoreCoordinator] managedObjectIDForURIRepresentation:url];
+    object = [[list managedObjectContext] objectWithID:mid];
+  }
+  
+  return object;
+}
+
 + (NSString*) URL
 {
 #if TARGET_IPHONE_SIMULATOR

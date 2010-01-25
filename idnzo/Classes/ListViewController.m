@@ -23,7 +23,6 @@
 
 @synthesize tasks;
 @synthesize filteredTasks;
-@synthesize filteredObject;
 
 @synthesize taskViewController;
 @synthesize sortViewController;
@@ -87,9 +86,16 @@
   }
 }
 
+- (NSManagedObject*)filteredObject
+{
+  return [SettingsHelper filteredObjectForList:self.taskList];
+}
+
 - (void) filterList:(NSNotification*)notification
 {
-  self.filteredObject = [[notification userInfo] objectForKey:@"filteredObject"];
+  NSManagedObject *object = (NSManagedObject*) [[notification userInfo] objectForKey:@"filteredObject"];
+  
+  [SettingsHelper setFilteredObject:object forList:self.taskList];
   
   // viewWillAppear automatically force-reloads these:
   //[self resetTasks];
@@ -135,7 +141,6 @@
   taskList = [list retain];
   self.title = taskList.name;
   
-  self.filteredObject = nil;
   [self.sortViewController reset];
   // Scroll to top
   [self.tableView scrollRectToVisible:CGRectMake(0,0,1,1) animated:NO];
@@ -503,11 +508,13 @@
   [taskList release];
   [tasks release];
   [filteredTasks release];
-  [filteredObject release];
+  
   [taskViewController release];
   [sortViewController release];
   [filterViewController release];
+  
   [confirm release];
+  
   [super dealloc];
 }
 
