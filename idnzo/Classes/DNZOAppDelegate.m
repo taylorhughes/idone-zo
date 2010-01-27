@@ -13,6 +13,7 @@ NSString* const DonezoShouldResetAndSyncNotification = @"DonezoShouldResetAndSyn
 NSString* const DonezoShouldResetNotification        = @"DonezoShouldResetNotification";
 NSString* const DonezoDataUpdatedNotification        = @"DonezoDataUpdatedNotification";
 NSString* const DonezoShouldFilterListNotification   = @"DonezoShouldFilterListNotification";
+NSString* const DonezoShouldSortListNotification     = @"DonezoShouldSortListNotification";
 NSString* const DonezoShouldToggleCompletedTaskNotification = @"DonezoShouldToggleCompletedTaskNotification";
 
 

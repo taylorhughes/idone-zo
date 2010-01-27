@@ -56,6 +56,11 @@
             object:nil];
   
   [dnc addObserver:self
+          selector:@selector(sortList:)
+              name:DonezoShouldSortListNotification
+            object:nil];
+  
+  [dnc addObserver:self
           selector:@selector(toggleCompletedTask:)
               name:DonezoShouldToggleCompletedTaskNotification
             object:nil];
@@ -90,6 +95,19 @@
 {
   return [SettingsHelper filteredObjectForList:self.taskList];
 }
+- (NSString*)sortKey
+{
+  NSString *key = [SettingsHelper sortKeyForList:self.taskList];
+  if (key != nil)
+  {
+    return key;
+  }
+  return [SortViewController defaultSortKey];
+}
+- (BOOL)sortDescending
+{
+  return [SettingsHelper isSortDescendingForList:self.taskList];
+}
 
 - (void) filterList:(NSNotification*)notification
 {
@@ -100,6 +118,15 @@
   // viewWillAppear automatically force-reloads these:
   //[self resetTasks];
   //[self.tableView reloadData];
+}
+
+- (void) sortList:(NSNotification*)notification
+{
+  NSString *sortKey = (NSString*) [[notification userInfo] objectForKey:@"sortKey"];
+  NSNumber *descending = (NSNumber*) [[notification userInfo] objectForKey:@"descending"];
+  
+  [SettingsHelper setSortKey:sortKey forList:self.taskList];
+  [SettingsHelper setSortDescending:[descending intValue] forList:self.taskList];
 }
 
 
@@ -141,7 +168,6 @@
   taskList = [list retain];
   self.title = taskList.name;
   
-  [self.sortViewController reset];
   // Scroll to top
   [self.tableView scrollRectToVisible:CGRectMake(0,0,1,1) animated:NO];
   
@@ -162,18 +188,18 @@
     
     NSFetchRequest *fetchRequest = [self.taskList tasksForListRequest];
     // Case-insensitive body sort
-    NSString *sortKey = self.sortViewController.sortKey;
+    NSString *sortKey = self.sortKey;
     NSSortDescriptor *sort = nil;
-    if (sortKey && ([sortKey isEqual:@"body"] || [sortKey isEqual:@"project.name"]))
+    if ([sortKey isEqual:@"body"] || [sortKey isEqual:@"project.name"])
     {
       sort = [[[NSSortDescriptor alloc] initWithKey:sortKey
-                                          ascending:!self.sortViewController.descending
+                                          ascending:!self.sortDescending
                                            selector:@selector(localizedCaseInsensitiveCompare:)] autorelease];
     }
     else
     {
       sort = [[[NSSortDescriptor alloc] initWithKey:sortKey
-                                          ascending:!self.sortViewController.descending] autorelease];      
+                                          ascending:!self.sortDescending] autorelease];      
     }
 
     NSSortDescriptor *secondarySort = [[NSSortDescriptor alloc] initWithKey:@"body" 
@@ -243,11 +269,11 @@
 {
   NSMutableArray *strings = [NSMutableArray arrayWithCapacity:2];
   
-  if (![self.sortViewController isDefaultSort])
+  if (![SortViewController isDefaultSort:self.sortKey])
   {
     NSString *sortString = [NSString stringWithFormat:@"%@ %@", 
-                            (self.sortViewController.descending ? @"\u25BC" : @"\u25B2"),
-                            [self.sortViewController sortedTitle]];
+                            (self.sortDescending ? @"\u25BC" : @"\u25B2"),
+                            [SortViewController sortedTitleForKey:self.sortKey]];
     [strings addObject:sortString];
   }
   
@@ -463,6 +489,9 @@
 
 - (IBAction) sort:(id)sender
 {
+  [self.sortViewController setSortKey:self.sortKey];
+  [self.sortViewController setDescending:self.sortDescending];
+  
   UINavigationController *modalNavigationController =
     [[[UINavigationController alloc] initWithRootViewController:self.sortViewController] autorelease];
   [self.navigationController presentModalViewController:modalNavigationController animated:YES];  

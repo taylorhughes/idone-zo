@@ -6,16 +6,18 @@
 //  Copyright 2009 Two-Stitch Software. All rights reserved.
 //
 
+#import "DNZOAppDelegate.h"
+
 @interface SortViewController : UITableViewController {
   BOOL descending;
   NSInteger selectedIndex;
 }
 
-@property (nonatomic, readonly) NSString *sortKey;
-@property (nonatomic, readonly) BOOL descending;
+@property (nonatomic, copy) NSString *sortKey;
+@property (nonatomic) BOOL descending;
 
-- (BOOL)isDefaultSort;
-- (NSString*)sortedTitle;
-- (void) reset;
++ (NSString*)defaultSortKey;
++ (BOOL)isDefaultSort:(NSString*)sortKey;
++ (NSString*)sortedTitleForKey:(NSString*)sortKey;
 
 @end

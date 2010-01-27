@@ -15,7 +15,11 @@
 #define SYNC_ENABLED_KEY @"syncEnabled"
 #define USERNAME_KEY @"username"
 #define PASSWORD_KEY @"password"
+
 #define FILTERED_OBJECT_KEY_FORMAT @"filteredObject-%@"
+#define SORT_KEY_KEY_FORMAT @"sortKey-%@"
+#define SORT_DESCENDING_FORMAT @"sortDesc-%@"
+
 #define LAST_VIEWED_LIST_KEY @"lastViewedList"
 
 
@@ -157,6 +161,38 @@
     return object;
   }
   return [self managedObjectForKey:key inContext:[list managedObjectContext]];
+}
+
+
++ (NSString*) sortKeyKeyForList:(TaskList*)list
+{
+  NSString *listURI = [[[list objectID] URIRepresentation] absoluteString];
+  return [NSString stringWithFormat:SORT_KEY_KEY_FORMAT, listURI];
+}
++ (void) setSortKey:(NSString*)sortKey forList:(TaskList*)list
+{
+  NSString *key = [self sortKeyKeyForList:list];
+  [DEFAULTS setObject:sortKey forKey:key];
+}
++ (NSString*) sortKeyForList:(TaskList*)list
+{
+  return [DEFAULTS objectForKey:[self sortKeyKeyForList:list]]; 
+}
+
+
++ (NSString*) sortDescendingKeyForList:(TaskList*)list
+{
+  NSString *listURI = [[[list objectID] URIRepresentation] absoluteString];
+  return [NSString stringWithFormat:SORT_DESCENDING_FORMAT, listURI];
+}
++ (void) setSortDescending:(BOOL)descending forList:(TaskList*)list
+{
+  NSString *key = [self sortDescendingKeyForList:list];
+  [DEFAULTS setBool:descending forKey:key];
+}
++ (BOOL) isSortDescendingForList:(TaskList*)list
+{
+  return [DEFAULTS boolForKey:[self sortDescendingKeyForList:list]];
 }
 
 

@@ -29,6 +29,12 @@
 + (void) setFilteredObject:(NSObject*)object forList:(TaskList*)list;
 + (NSObject*) filteredObjectForList:(TaskList*)list;
 
++ (void) setSortKey:(NSString*)sortKey forList:(TaskList*)list;
++ (NSString*) sortKeyForList:(TaskList*)list;
+
++ (void) setSortDescending:(BOOL)descending forList:(TaskList*)list;
++ (BOOL) isSortDescendingForList:(TaskList*)list;
+
 + (NSString*) URL;
 
 @end

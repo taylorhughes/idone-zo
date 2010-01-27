@@ -10,11 +10,62 @@
 
 @interface SortViewController ()
 
-- (NSString*) titleForIndex:(NSUInteger)index;
++ (NSString*) titleForIndex:(NSUInteger)index;
 
 @end
 
 @implementation SortViewController
+
+
+NSArray *sortKeys;
+
++ (void) initialize
+{
+  sortKeys = [NSArray arrayWithObjects:
+              @"sortDate",
+              @"body",
+              @"project.name",
+              @"dueDate",
+              @"complete",
+              nil];
+  [sortKeys retain];
+}
+
++ (NSString*) sortKeyForIndex:(NSInteger)index
+{
+  return [sortKeys objectAtIndex:index];
+}
+
++ (NSString*)sortedTitleForKey:(NSString*)sortKey;
+{
+  return [self titleForIndex:[sortKeys indexOfObject:sortKey]];
+}
+
++ (NSString*) titleForIndex:(NSUInteger)index
+{
+  switch (index)
+  {
+    case 1:
+      return @"Task";
+    case 2:
+      return @"Project";
+    case 3:
+      return @"Due Date";
+    case 4:
+      return @"Completed";
+  }
+  return @"Default";
+}
+
++ (NSString*)defaultSortKey
+{
+  return [sortKeys objectAtIndex:0];
+}
++ (BOOL) isDefaultSort:(NSString*)sortKey
+{
+  return [sortKeys indexOfObject:sortKey] == 0;
+}
+
 
 @synthesize descending;
 
@@ -37,30 +88,20 @@
                                                                         action:@selector(onClickDone:)];
   [self.navigationItem setRightBarButtonItem:done animated:animated];
   [done release];
+  
+  [self.tableView reloadData];
 }
 
-- (BOOL)isDefaultSort
+- (void) setSortKey:(NSString*)sortKey
 {
-  return selectedIndex == 0;
+  // Load the view so we know the "view loaded" event has fired.
+  self.view;
+  selectedIndex = [sortKeys indexOfObject:sortKey];
 }
-
 - (NSString*) sortKey
 {
-  // return the proper sorter given the current selection
-  switch (selectedIndex)
-  {
-    case 1:
-      return @"body";
-    case 2:
-      return @"project.name";
-    case 3:
-      return @"dueDate";
-    case 4:
-      return @"complete";
-  }
-  return @"sortDate";
+  return [sortKeys objectAtIndex:selectedIndex];
 }
-
 
 #pragma mark Table view methods
 
@@ -74,27 +115,6 @@
   return 5;
 }
 
-- (NSString*) sortedTitle
-{
-  return [self titleForIndex:selectedIndex];
-}
-
-- (NSString*) titleForIndex:(NSUInteger)index
-{
-  switch (index)
-  {
-    case 1:
-      return @"Task";
-    case 2:
-      return @"Project";
-    case 3:
-      return @"Due Date";
-    case 4:
-      return @"Completed";
-  }
-  return @"Default";
-}
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
   static NSString *CellIdentifier = @"Cell";
@@ -105,7 +125,7 @@
     cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier] autorelease];
   }
   
-  cell.textLabel.text = [self titleForIndex:[indexPath row]];
+  cell.textLabel.text = [[self class] titleForIndex:[indexPath row]];
   
   cell.textLabel.textColor = [UIColor blackColor];
   cell.accessoryType = UITableViewCellAccessoryNone;
@@ -143,6 +163,18 @@
 
   selectedIndex = [indexPath row];
   
+  
+  NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
+  
+  NSMutableDictionary *info = [NSMutableDictionary dictionary];
+  [info setObject:self.sortKey forKey:@"sortKey"];
+  [info setObject:[NSNumber numberWithInt:self.descending] forKey:@"descending"];
+  
+  [dnc postNotificationName:DonezoShouldSortListNotification 
+                     object:self
+                   userInfo:info];
+  
+  
   [self.tableView reloadData];
   [self.navigationController.parentViewController dismissModalViewControllerAnimated:YES];
 }
@@ -152,11 +184,6 @@
   [self.navigationController.parentViewController dismissModalViewControllerAnimated:YES];
 }
 
-- (void)reset
-{
-  selectedIndex = 0;
-  [self.tableView reloadData];
-}
 
 - (void)dealloc
 {
