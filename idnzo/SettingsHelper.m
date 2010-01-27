@@ -132,15 +132,30 @@
   return [NSString stringWithFormat:FILTERED_OBJECT_KEY_FORMAT, listURI];
 }
 
-+ (void) setFilteredObject:(NSManagedObject*)object forList:(TaskList*)list
++ (void) setFilteredObject:(NSObject*)object forList:(TaskList*)list
 {
   NSString *key = [self filteredObjectKeyForList:list];
-  [self setManagedObject:object forKey:key];
+  
+  if ([object isKindOfClass:[NSManagedObject class]])
+  {
+    [self setManagedObject:(NSManagedObject*)object forKey:key];
+  }
+  else
+  {
+    [DEFAULTS setObject:(NSDate*)object forKey:key];
+  }
 }
 
-+ (NSManagedObject*) filteredObjectForList:(TaskList*)list
++ (NSObject*) filteredObjectForList:(TaskList*)list
 {
   NSString *key = [self filteredObjectKeyForList:list];
+  
+  NSObject *object = [DEFAULTS objectForKey:key];
+  
+  if ([object isKindOfClass:[NSDate class]])
+  {
+    return object;
+  }
   return [self managedObjectForKey:key inContext:[list managedObjectContext]];
 }
 

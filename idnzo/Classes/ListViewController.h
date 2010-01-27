@@ -31,7 +31,7 @@
 @property (retain, nonatomic) TaskList *taskList;
 @property (retain, readonly, nonatomic) NSArray *tasks;
 @property (retain, readonly, nonatomic) NSArray *filteredTasks;
-@property (readonly, nonatomic) NSManagedObject *filteredObject;
+@property (readonly, nonatomic) NSObject *filteredObject;
 @property (retain, nonatomic) TaskViewController *taskViewController;
 
 - (IBAction) askToArchiveTasks:(id)sender;

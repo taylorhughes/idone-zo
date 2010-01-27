@@ -86,14 +86,14 @@
   }
 }
 
-- (NSManagedObject*)filteredObject
+- (NSObject*)filteredObject
 {
   return [SettingsHelper filteredObjectForList:self.taskList];
 }
 
 - (void) filterList:(NSNotification*)notification
 {
-  NSManagedObject *object = (NSManagedObject*) [[notification userInfo] objectForKey:@"filteredObject"];
+  NSObject *object = (NSObject*) [[notification userInfo] objectForKey:@"filteredObject"];
   
   [SettingsHelper setFilteredObject:object forList:self.taskList];
   
@@ -454,7 +454,7 @@
 - (void) onClickAddTask:(id)sender
 {
   TaskViewController *tvc = [[[TaskViewController alloc] initWithNibName:@"TaskView" bundle:nil] autorelease];
-  [tvc loadEditingWithNewTaskForList:self.taskList];
+  [tvc loadEditingWithNewTaskForList:self.taskList withFilteredObject:self.filteredObject];
   
   UINavigationController *modalNavigationController =
     [[[UINavigationController alloc] initWithRootViewController:tvc] autorelease];

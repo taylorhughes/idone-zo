@@ -39,7 +39,7 @@
 }
 
 - (void) loadTask:(Task*)newTask editing:(BOOL)editing positionInList:(NSInteger)position ofTotalCount:(NSInteger)total;
-- (void) loadEditingWithNewTaskForList:(TaskList*)list;
+- (void) loadEditingWithNewTaskForList:(TaskList*)list withFilteredObject:(NSObject*)object;
 
 - (IBAction) askToDeleteTask:(id)sender;
 

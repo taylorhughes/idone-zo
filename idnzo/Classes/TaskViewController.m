@@ -132,7 +132,7 @@ static UIImage *unchecked;
   return isNewTask;
 }
 
-- (void) loadEditingWithNewTaskForList:(TaskList*)list
+- (void) loadEditingWithNewTaskForList:(TaskList*)list withFilteredObject:(NSObject*)filter
 {
   isNewTask = YES;
   
@@ -141,6 +141,20 @@ static UIImage *unchecked;
   
   [self loadTask:nil editing:YES];
   self.task.taskList = (TaskList*)[self.editingContext objectWithID:[list objectID]];
+  
+  if ([filter isKindOfClass:[NSDate class]])
+  {
+    self.task.dueDate = (NSDate*)filter;
+  }
+  else if ([filter isKindOfClass:[Project class]])
+  {
+    self.task.project = (Project*)[self.editingContext objectWithID:[(NSManagedObject*)filter objectID]];
+  }
+  else if ([filter isKindOfClass:[Context class]])
+  {
+    Context *context = (Context*)[self.editingContext objectWithID:[(NSManagedObject*)filter objectID]];
+    [self.task addContextsObject:context];    
+  }
   
   isFirstAppearance = YES;
 }
