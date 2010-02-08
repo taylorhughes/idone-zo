@@ -69,12 +69,6 @@
   [tableView reloadData];
 }
 
-//-(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-//{
-//  return interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown;
-//}
-
-
 
 - (void) donezoDataUpdated:(NSNotification*)notification
 {

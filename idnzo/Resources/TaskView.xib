@@ -175,7 +175,7 @@
 					<bool key="EncodedWithXMLCoder">YES</bool>
 					<object class="IBUIButton" id="564365875">
 						<reference key="NSNextResponder" ref="556448982"/>
-						<int key="NSvFlags">264</int>
+						<int key="NSvFlags">266</int>
 						<string key="NSFrame">{{10, 10}, {300, 41}}</string>
 						<reference key="NSSuperview" ref="556448982"/>
 						<bool key="IBUIOpaque">NO</bool>
@@ -406,7 +406,7 @@
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-					<string>{{525, 789}, {320, 67}}</string>
+					<string>{{525, 689}, {320, 67}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>{{485, 578}, {320, 90}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>

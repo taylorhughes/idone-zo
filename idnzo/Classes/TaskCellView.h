@@ -18,6 +18,7 @@
   BOOL isComplete;
   BOOL highlighted;
   BOOL archivedDisplay;
+  BOOL isTouchingCheckbox;
   
   Task *task;
 }

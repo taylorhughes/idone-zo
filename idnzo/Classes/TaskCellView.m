@@ -63,9 +63,10 @@ static UIImage *checked;
 {
   if (self = [super initWithFrame:frame])
   {
-		self.opaque = YES;
+    self.opaque = YES;
     self.backgroundColor = [UIColor whiteColor];
     self.multipleTouchEnabled = YES;
+    isTouchingCheckbox = NO;
   }
   return self;
 }
@@ -90,12 +91,30 @@ static UIImage *checked;
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-  if (![self touchedCheckbox:touches])
+  if ([self touchedCheckbox:touches])
   {
+    isTouchingCheckbox = YES;
+    [self setNeedsDisplay];
+  }
+  else
+  {
+    isTouchingCheckbox = NO;
     [super touchesBegan:touches withEvent:event]; 
   }
 }
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
+{
+  if (isTouchingCheckbox)
+  {
+    isTouchingCheckbox = NO;
+    [self setNeedsDisplay];
+  }
+  else
+  {
+    [super touchesCancelled:touches withEvent:event];
+  }
 
+}
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
   if ([self touchedCheckbox:touches])
@@ -111,24 +130,50 @@ static UIImage *checked;
   {
     [super touchesEnded:touches withEvent:event];
   }
+  
+  if (isTouchingCheckbox)
+  {
+    isTouchingCheckbox = NO;
+    [self setNeedsDisplay];
+  }
+}
+
+//
+// Darker: whether to draw the checkbox image like it's being pressed (like a button)
+//
+- (void) drawImage:(BOOL)darker
+{
+  UIImage *image = self.isComplete ? checked : unchecked;
+  
+  CGRect rect = CGRectMake(IMAGE_LEFT, IMAGE_TOP, image.size.width, image.size.height);
+  
+  if (darker)
+  {
+    // Draws it once, then draws over it again with a dark copy of itself
+    [image drawInRect:rect];
+    [image drawInRect:rect blendMode:kCGBlendModeDifference alpha:0.4];
+  }
+  else
+  {
+    [image drawInRect:rect];
+  }
 }
 
 - (void)drawRect:(CGRect)rect
 { 
-	CGContextRef context = UIGraphicsGetCurrentContext();
-	
-	// Color and font for the task body text
-	UIColor *mainTextColor = self.isHighlighted ? [UIColor whiteColor] : [UIColor blackColor];
-	UIFont *mainFont = [UIFont boldSystemFontOfSize:MAIN_TEXT_SIZE];
+  CGContextRef context = UIGraphicsGetCurrentContext();
   
-	// Color and font for the details text
-	UIColor *secondaryTextColor = self.isHighlighted ? [UIColor whiteColor] : [UIColor darkGrayColor];
-	UIFont *secondaryFont = [UIFont systemFontOfSize:SECONDARY_TEXT_SIZE];
-  
+  // Color and font for the task body text
+  UIColor *mainTextColor = self.isHighlighted ? [UIColor whiteColor] : [UIColor blackColor];
+  UIFont *mainFont = [UIFont boldSystemFontOfSize:MAIN_TEXT_SIZE];
+
+  // Color and font for the details text
+  UIColor *secondaryTextColor = self.isHighlighted ? [UIColor whiteColor] : [UIColor darkGrayColor];
+  UIFont *secondaryFont = [UIFont systemFontOfSize:SECONDARY_TEXT_SIZE];
+
   if (!self.archivedDisplay)
   {
-    UIImage *image = self.isComplete ? checked : unchecked;
-    [image drawInRect:CGRectMake(IMAGE_LEFT, IMAGE_TOP, image.size.width, image.size.height)];    
+    [self drawImage:isTouchingCheckbox];
   }
   
   if (self.isComplete && !self.archivedDisplay)
