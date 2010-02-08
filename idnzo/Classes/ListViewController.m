@@ -7,12 +7,12 @@
 - (void) notifySync:(BOOL)userForced;
 - (void) resetTasks;
 - (void) filterList:(id)sender;
+- (void) archiveTasks;
 
 @property (retain, nonatomic) NSArray *tasks;
 @property (retain, nonatomic) NSArray *filteredTasks;
 @property (retain, nonatomic) SortViewController *sortViewController;
 @property (retain, nonatomic) FilterViewController *filterViewController;
-@property (retain, nonatomic) ConfirmationViewController *confirm;
 
 @end
 
@@ -27,9 +27,6 @@
 @synthesize taskViewController;
 @synthesize sortViewController;
 @synthesize filterViewController;
-
-@synthesize confirm;
-
 
 - (void)viewDidLoad
 {
@@ -399,22 +396,25 @@
   }
   else
   {
-    self.confirm = [ConfirmationViewController confirmationViewWithSuperview:self.navigationController.view];
+    UIActionSheet *sheet = [[UIActionSheet alloc] init];
     
-    self.confirm.target = self;
-    self.confirm.confirmAction = @selector(archiveTasks);
-    self.confirm.afterHideAction = @selector(cleanupConfirmation);
+    [sheet addButtonWithTitle:@"Archive Completed Tasks"];
+    [sheet addButtonWithTitle:@"Cancel"];
+    [sheet setDestructiveButtonIndex:0];
+    [sheet setCancelButtonIndex:1];
+    [sheet setDelegate:self];
     
-    [self.confirm.confirmButton setTitle:@"Archive Completed Tasks" forState:UIControlStateNormal];
-    [self.confirm.cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
+    [sheet showInView:self.navigationController.view];
     
-    [self.confirm show];
+    [sheet release];
   }
 }
-
-- (void)cleanupConfirmation
+- (void)actionSheet:(UIActionSheet *)sheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-  self.confirm = nil;
+  if (buttonIndex == 0)
+  {
+    [self archiveTasks];
+  }
 }
 
 - (void)archiveTasks
@@ -541,8 +541,6 @@
   [taskViewController release];
   [sortViewController release];
   [filterViewController release];
-  
-  [confirm release];
   
   [super dealloc];
 }

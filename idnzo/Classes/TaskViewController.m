@@ -17,7 +17,6 @@ static UIImage *unchecked;
 
 @property (nonatomic, retain) NSManagedObjectContext *editingContext;
 @property (nonatomic, retain) Task *task;
-@property (nonatomic, retain) ConfirmationViewController *confirm;
 
 - (void) loadTask:(Task*)newTask editing:(BOOL)editing;
 - (BOOL) isNewTask;
@@ -44,6 +43,9 @@ static UIImage *unchecked;
 
 - (void)notifySync;
 
+- (void)deleteTask;
+- (void)finishDeletingTask;
+
 @end
 
 @implementation TaskViewController
@@ -60,7 +62,6 @@ static UIImage *unchecked;
 @synthesize task;
 @synthesize editingContext;
 @synthesize isEditing;
-@synthesize confirm;
 
 - (id) init
 {
@@ -505,25 +506,35 @@ static UIImage *unchecked;
 
 - (IBAction) askToDeleteTask:(id)sender
 {
-  UIView *superview = self.navigationController.view;
+  UIActionSheet *sheet = [[UIActionSheet alloc] init];
   
-  self.confirm = [ConfirmationViewController confirmationViewWithSuperview:superview];
+  [sheet addButtonWithTitle:@"Delete Task"];
+  [sheet addButtonWithTitle:@"Cancel"];
+  [sheet setDestructiveButtonIndex:0];
+  [sheet setCancelButtonIndex:1];
+  [sheet setDelegate:self];
   
-  [self.confirm.confirmButton setTitle:@"Delete Task" forState:UIControlStateNormal];
-  [self.confirm.cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
+  [sheet showInView:self.navigationController.view];
   
-  self.confirm.target = self;
-  self.confirm.confirmAction = @selector(deleteTask);
-  // This is overwritten by deleteTask() if the task is deleted
-  self.confirm.afterHideAction = @selector(cleanupConfirmation);
-  
-  [self.confirm show];
+  [sheet release];
 }
 
-- (void) cleanupConfirmation
+- (void)actionSheet:(UIActionSheet *)sheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-  self.confirm = nil;
+  if (buttonIndex == 0)
+  {
+    [self deleteTask];
+  }
 }
+- (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+  if (buttonIndex == 0)
+  {
+    // This is after the animation is complete
+    [self finishDeletingTask];
+  }
+}
+
 - (void) deleteTask
 {  
   // This happens when deleting completed tasks 
@@ -543,16 +554,12 @@ static UIImage *unchecked;
     [self.editingContext deleteObject:self.task];
     [self save:NO andSync:NO];
   }  
-
-  self.confirm.afterHideAction = @selector(finishDeletingTask);
 }
 - (void) finishDeletingTask
 { 
   [self.navigationController popViewControllerAnimated:YES];
   self.editingContext = nil;
   self.task = nil;
-  
-  [self cleanupConfirmation];
 }
 
 

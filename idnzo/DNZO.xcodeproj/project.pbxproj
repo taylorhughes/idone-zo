@@ -139,10 +139,6 @@
 		34FAABF3101148C400B74477 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34FAABF1101148C400B74477 /* UIKit.framework */; };
 		34FAAC2D1011490B00B74477 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34FAAC2C1011490B00B74477 /* CoreData.framework */; };
 		34FAAC2E1011490B00B74477 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34FAAC2C1011490B00B74477 /* CoreData.framework */; };
-		34FDCEF910B74D1300625D62 /* ConfirmationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FDCEF710B74D1300625D62 /* ConfirmationViewController.m */; };
-		34FDCEFB10B74D1300625D62 /* ConfirmationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FDCEF710B74D1300625D62 /* ConfirmationViewController.m */; };
-		34FDCFB910B7627E00625D62 /* ConfirmationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34FDCFB810B7627E00625D62 /* ConfirmationView.xib */; };
-		34FDCFBA10B7627E00625D62 /* ConfirmationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34FDCFB810B7627E00625D62 /* ConfirmationView.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -274,9 +270,6 @@
 		34FAABEC101148BC00B74477 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		34FAABF1101148C400B74477 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		34FAAC2C1011490B00B74477 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
-		34FDCEF610B74D1300625D62 /* ConfirmationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfirmationViewController.h; sourceTree = "<group>"; };
-		34FDCEF710B74D1300625D62 /* ConfirmationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConfirmationViewController.m; sourceTree = "<group>"; };
-		34FDCFB810B7627E00625D62 /* ConfirmationView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ConfirmationView.xib; path = Resources/ConfirmationView.xib; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -329,8 +322,6 @@
 				349BE2681095007400C80146 /* FilterViewController.m */,
 				34307870109FF37D00A66D5A /* AdjustableTextLabelWidthCell.h */,
 				34307871109FF37D00A66D5A /* AdjustableTextLabelWidthCell.m */,
-				34FDCEF610B74D1300625D62 /* ConfirmationViewController.h */,
-				34FDCEF710B74D1300625D62 /* ConfirmationViewController.m */,
 			);
 			name = Subviews;
 			path = Classes;
@@ -383,7 +374,6 @@
 				3488E39310C1FA9600D7921C /* ArchivedListView.xib */,
 				341E1EFE0FB14F2900D5B454 /* TaskView.xib */,
 				34388FD41076B87500FC1AB3 /* TaskDatePickerView.xib */,
-				34FDCFB810B7627E00625D62 /* ConfirmationView.xib */,
 				34B6072410D8829D00CCF883 /* SettingsView.xib */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 				3452D4A21049CC26005C717C /* Entitlements.plist */,
@@ -640,7 +630,6 @@
 				34962145108685B50068B551 /* sort-button.png in Resources */,
 				348936D810AA66AD0054237D /* tableview-background.png in Resources */,
 				3489371B10AA6BD80054237D /* TextFieldView.xib in Resources */,
-				34FDCFBA10B7627E00625D62 /* ConfirmationView.xib in Resources */,
 				3488E39410C1FA9600D7921C /* ArchivedListView.xib in Resources */,
 				34916AEA10C4E359009F932A /* Default.png in Resources */,
 				34B9D7F410CF2F600087EDCC /* RevisionInfo.h.rb in Resources */,
@@ -661,7 +650,6 @@
 				343890031076BD8200FC1AB3 /* datepicker-background.png in Resources */,
 				348936D910AA66AD0054237D /* tableview-background.png in Resources */,
 				3489371C10AA6BD80054237D /* TextFieldView.xib in Resources */,
-				34FDCFB910B7627E00625D62 /* ConfirmationView.xib in Resources */,
 				3488E39510C1FA9600D7921C /* ArchivedListView.xib in Resources */,
 				34B9D7F510CF2F600087EDCC /* RevisionInfo.h.rb in Resources */,
 				34B6072510D8829D00CCF883 /* SettingsView.xib in Resources */,
@@ -755,7 +743,6 @@
 				3489369610AA5E870054237D /* TextFieldViewController.m in Sources */,
 				349066EB10AF6C7200F2AAFF /* ArchivedListViewController.m in Sources */,
 				3443E32610B0B071000D5B27 /* DonezoDates.m in Sources */,
-				34FDCEFB10B74D1300625D62 /* ConfirmationViewController.m in Sources */,
 				34B9D5B210CCA75A0087EDCC /* SettingsViewController.m in Sources */,
 				34B9D6F210CDCBC00087EDCC /* SFHFKeychainUtils.m in Sources */,
 				34B9D70F10CDCE110087EDCC /* SettingsHelper.m in Sources */,
@@ -805,7 +792,6 @@
 				3489369710AA5E870054237D /* TextFieldViewController.m in Sources */,
 				349066EA10AF6C7200F2AAFF /* ArchivedListViewController.m in Sources */,
 				3443E32510B0B071000D5B27 /* DonezoDates.m in Sources */,
-				34FDCEF910B74D1300625D62 /* ConfirmationViewController.m in Sources */,
 				34B9D82910CF34180087EDCC /* SFHFKeychainUtils.m in Sources */,
 				34B9D82A10CF34180087EDCC /* SettingsHelper.m in Sources */,
 				34B9D82B10CF34180087EDCC /* MainViewController.m in Sources */,

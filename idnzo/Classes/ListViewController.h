@@ -8,12 +8,11 @@
 #import "FilterViewController.h"
 #import "TaskCell.h"
 #import "TaskCellView.h"
-#import "ConfirmationViewController.h"
 
 @class TaskList, Task, TaskViewController, MainViewController, SortViewController, \
        FilterViewController, TaskCell, TaskCellView;
 
-@interface ListViewController : UIViewController {
+@interface ListViewController : UIViewController <UIActionSheetDelegate> {
   IBOutlet UITableView *tableView;
   TaskList *taskList;
   NSArray *tasks;
@@ -24,7 +23,6 @@
   FilterViewController *filterViewController;
   
   BOOL suspendUpdates;
-  ConfirmationViewController *confirm;
 }
 
 @property (nonatomic, retain) UITableView *tableView;

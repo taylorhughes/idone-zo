@@ -9,7 +9,6 @@
 #include "TextFieldViewController.h"
 #include "DNZOAppDelegate.h"
 #include "SettingsHelper.h"
-#include "ConfirmationViewController.h"
 
 @interface SettingsViewController : UITableViewController {
   UITableViewCell *switchCell;

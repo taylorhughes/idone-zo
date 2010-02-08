@@ -13,11 +13,10 @@
 #import "DatePickerViewController.h"
 #import "TextViewController.h"
 #import "AdjustableTextLabelWidthCell.h"
-#import "ConfirmationViewController.h"
 
 @class Task;
 
-@interface TaskViewController : UITableViewController {
+@interface TaskViewController : UITableViewController <UIActionSheetDelegate> {
  @private
   Task *task;
   
@@ -34,8 +33,6 @@
   
   BOOL isNewTask;
   BOOL isFirstAppearance;
-  
-  ConfirmationViewController *confirm;
 }
 
 - (void) loadTask:(Task*)newTask editing:(BOOL)editing positionInList:(NSInteger)position ofTotalCount:(NSInteger)total;
