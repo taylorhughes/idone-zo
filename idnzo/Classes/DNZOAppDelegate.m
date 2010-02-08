@@ -320,9 +320,28 @@ NSString* const DonezoShouldToggleCompletedTaskNotification = @"DonezoShouldTogg
     
     if (!hasDisplayedError)
     {
+      NSString *errorDescription = [[error localizedDescription] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+      if ([errorDescription length] > 0)
+      {
+        // Capitalize first letter
+        errorDescription = [errorDescription stringByReplacingCharactersInRange:NSMakeRange(0,1)
+                                                                     withString:[[errorDescription substringToIndex:1]
+                                                                                 capitalizedString]];
+        // Ensure it ends with some kind of punctuation, if not end a period
+        NSString *lastCharacter = [errorDescription substringFromIndex:([errorDescription length] - 1)];
+        if ([[lastCharacter stringByTrimmingCharactersInSet:[NSCharacterSet punctuationCharacterSet]] length] > 0)
+        {
+          errorDescription = [errorDescription stringByAppendingString:@"."];
+        }
+      }
+      else
+      {
+        errorDescription = @"An unknown error has occurred.";
+      }
+
       UIAlertView *errorAlert = [[UIAlertView alloc]
                                  initWithTitle:@"Done-zo sync error"
-                                 message:[error localizedDescription]
+                                 message:errorDescription
                                  delegate:nil
                                  cancelButtonTitle:@"OK"
                                  otherButtonTitles:nil];
