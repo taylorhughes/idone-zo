@@ -14,7 +14,7 @@
 @property (retain, nonatomic) UITextField *textField;
 @end
 
-#define FONT_SIZE 18.0
+#define FONT_SIZE 17.0
 #define TEXT_FIELD_VPADDING 11.0
 #define TEXT_FIELD_HPADDING 10.0
 
