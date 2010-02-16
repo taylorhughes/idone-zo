@@ -150,7 +150,12 @@
     NSString *errorString;
     if ([responseError isEqual:@"BadAuthentication"])
     {
-      errorString = [NSString stringWithFormat:@"Failed to login to Google Accounts; the username or password appears to be incorrect."];
+      errorString = @"Failed to login to Google Accounts; the username or password appears to be incorrect.";
+    }
+    else if ([responseError isEqual:@"CaptchaRequired"])
+    {
+      errorString = @"Failed to login to Google Accounts; there have been too many failed login attempts. "
+                     "Log into your Google Account in a web browser, then try again.";
     }
     else
     {
