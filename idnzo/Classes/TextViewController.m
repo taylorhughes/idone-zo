@@ -9,8 +9,12 @@
 #import "TextViewController.h"
 
 @interface TextViewController ()
+
 - (void) save:(id)sender;
 - (void) cancel:(id)sender;
+
+- (void)registerForKeyboardNotifications;
+
 @end
 
 @implementation TextViewController
@@ -25,7 +29,11 @@
   {
     self.textView = [[UITextView alloc] init];
     [self.textView release];
-    self.view = self.textView;
+    
+    self.view = [[UIView alloc] init];
+    [self.view release];
+    
+    [self.view addSubview:self.textView];
     
     self.textView.delegate = self;
     
@@ -42,14 +50,65 @@
 
     [save release];
     [cancel release];
+    
+    keyboardShown = NO;
+    
+    [self registerForKeyboardNotifications];
   }
   return self;
 }
+
+- (void)registerForKeyboardNotifications
+{
+  [[NSNotificationCenter defaultCenter] addObserver:self
+                                           selector:@selector(keyboardWasShown:)
+                                               name:UIKeyboardDidShowNotification
+                                             object:nil];
+  
+  [[NSNotificationCenter defaultCenter] addObserver:self
+                                           selector:@selector(keyboardWasHidden:)
+                                               name:UIKeyboardDidHideNotification
+                                             object:nil];
+}
+
+- (void)keyboardWasShown:(NSNotification*)notification
+{
+  if (keyboardShown) return;
+  
+  NSDictionary* info = [notification userInfo];
+  
+  NSValue* value = [info objectForKey:UIKeyboardBoundsUserInfoKey];
+  CGSize keyboardSize = [value CGRectValue].size;
+  
+  CGRect viewFrame = [self.textView frame];
+  viewFrame.size.height -= keyboardSize.height;
+  self.textView.frame = viewFrame;
+  
+  keyboardShown = YES;
+}
+
+
+// Called when the UIKeyboardDidHideNotification is sent
+- (void)keyboardWasHidden:(NSNotification*)notification
+{
+  NSDictionary* info = [notification userInfo];
+  
+  NSValue* value = [info objectForKey:UIKeyboardBoundsUserInfoKey];
+  CGSize keyboardSize = [value CGRectValue].size;
+  
+  CGRect viewFrame = [self.textView frame];
+  viewFrame.size.height += keyboardSize.height;
+  self.textView.frame = viewFrame;
+  
+  keyboardShown = NO;
+}
+
 
 - (void)viewWillAppear:(BOOL)animated
 {
   [super viewWillAppear:animated];
   
+  self.textView.frame = self.view.frame;
   self.textView.text = self.text;
   
   self.navigationItem.title = self.title;

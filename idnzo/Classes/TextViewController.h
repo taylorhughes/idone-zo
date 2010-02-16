@@ -17,6 +17,7 @@
   NSObject *target;
   SEL saveAction;
   SEL cancelAction;
+  BOOL keyboardShown;
 }
 
 @property (nonatomic, copy) NSString *text;
