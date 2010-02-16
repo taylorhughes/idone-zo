@@ -19,6 +19,8 @@ NSString* const DonezoShouldToggleCompletedTaskNotification = @"DonezoShouldTogg
 
 @interface DNZOAppDelegate ()
 
+- (void) firstRun;
+
 - (void) createInitialObjects;
 - (void) createSyncMaster;
 
@@ -79,7 +81,7 @@ NSString* const DonezoShouldToggleCompletedTaskNotification = @"DonezoShouldTogg
     if (![[NSFileManager defaultManager] fileExistsAtPath:self.storePath])
     {
       NSLog(@"Store does not exist. Adding initial objects...");
-      [self createInitialObjects];
+      [self firstRun];
     }
   }
   return self;
@@ -365,19 +367,17 @@ NSString* const DonezoShouldToggleCompletedTaskNotification = @"DonezoShouldTogg
 - (void) showNetworkIndicator
 {
   @synchronized (self) {
-    if (networkIndicatorShown <= 0)
+    if (networkIndicatorShown++ <= 0)
     {
       UIApplication* app = [UIApplication sharedApplication];
       app.networkActivityIndicatorVisible = YES;
     }
-    networkIndicatorShown++;
   }
 }
 - (void) hideNetworkIndicator
 {
   @synchronized (self) {
-    networkIndicatorShown--;
-    if (networkIndicatorShown <= 0)
+    if (--networkIndicatorShown <= 0)
     {
       UIApplication* app = [UIApplication sharedApplication];
       app.networkActivityIndicatorVisible = NO;
@@ -472,15 +472,42 @@ NSString* const DonezoShouldToggleCompletedTaskNotification = @"DonezoShouldTogg
   return [basePath stringByAppendingPathComponent:@"donezo.sqlite"];
 }
 
-- (void)createInitialObjects
-{   
-  NSLog(@"> Adding TaskList...");
+
+- (void) firstRun
+{
+  [self createInitialObjects];
   
+  UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Welcome to Done-zo!"
+                                                  message:@"We can synchronize your tasks with done-zo.com using "
+                                                           "your Google Account. Do you want to set this up?"
+                                                 delegate:self
+                                        cancelButtonTitle:@"No thanks"
+                                        otherButtonTitles:@"Set up sync",nil];
+  [alert show];
+  [alert release];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+  if (buttonIndex == 1)
+  {
+    // Set up sync: Show settings page in a modal view
+    SettingsViewController *settings = [[SettingsViewController alloc] initWithNibName:@"SettingsView" bundle:nil];
+    UINavigationController *settingsNav = [[UINavigationController alloc] initWithRootViewController:settings];
+    
+    [self.navigationController presentModalViewController:settingsNav animated:YES];
+    
+    [settings release];
+    [settingsNav release];
+  }
+}
+
+
+- (void) createInitialObjects
+{   
   TaskList *list = (TaskList*)[NSEntityDescription insertNewObjectForEntityForName:@"TaskList" inManagedObjectContext:self.managedObjectContext];
   
   list.name = @"Tasks";
-  
-  NSLog(@"> Adding task...");
   
   Project *project = (Project*)[NSEntityDescription insertNewObjectForEntityForName:@"Project" inManagedObjectContext:self.managedObjectContext];
   project.name = @"Done-zo";
@@ -491,7 +518,7 @@ NSString* const DonezoShouldToggleCompletedTaskNotification = @"DonezoShouldTogg
   Task *task = (Task*)[NSEntityDescription insertNewObjectForEntityForName:@"Task" inManagedObjectContext:self.managedObjectContext];
   
   task.taskList = list;
-  task.body = @"Welcome to Done-zo!";
+  task.body = @"Welcome to Done-zo iPhone!";
   
   task.contexts = [NSSet setWithObjects:context, nil];
   task.project = project;
@@ -507,6 +534,8 @@ NSString* const DonezoShouldToggleCompletedTaskNotification = @"DonezoShouldTogg
   {
     NSLog(@"Added new default objects.");
   }
+  
+  [SettingsHelper setLastViewedList:list];
 }
 
 // Save all changes to the database, then close it.

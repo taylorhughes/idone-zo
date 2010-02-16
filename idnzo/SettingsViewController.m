@@ -67,7 +67,21 @@
 {
   [super viewWillAppear:animated];
   
+  if ([self.navigationController.viewControllers count] == 1)
+  {
+    // In a modal view; add a button
+    UIBarButtonItem *done = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
+                                                                          target:self 
+                                                                          action:@selector(dismiss:)];
+    self.navigationItem.rightBarButtonItem = done;
+    [done release];
+  }
+  
   [self.tableView reloadData];
+}
+- (void) dismiss:(id)sender
+{
+  [self.navigationController dismissModalViewControllerAnimated:YES];
 }
 
 - (BOOL) isSyncEnabled

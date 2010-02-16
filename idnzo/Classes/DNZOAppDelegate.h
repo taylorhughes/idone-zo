@@ -12,6 +12,7 @@
 #import "DonezoSyncMaster.h"
 #import "DonezoSyncOperation.h"
 #import "SettingsHelper.h"
+#import "SettingsViewController.h"
 
 @class Project, Context, TaskList, Task, MainViewController, DonezoSyncMaster;
 
