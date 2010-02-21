@@ -65,6 +65,38 @@
   }
   
   [self.tableView reloadData];
+  
+  NSIndexPath *selectedPath = nil;
+  if (self.selectedObject)
+  {
+    for (NSUInteger i = 0; i < [self.sections count]; i++)
+    {
+      NSArray *section = (NSArray*)[self.sections objectAtIndex:i];
+      for (NSUInteger j = 0; j < [section count]; j++)
+      {
+        if ([self.selectedObject isEqual:[section objectAtIndex:j]])
+        {
+          selectedPath = [NSIndexPath indexPathForRow:j inSection:i];
+          break;
+        }
+      }
+      if (selectedPath != nil)
+      {
+        break;
+      }
+    }
+  }
+  
+  if (selectedPath != nil)
+  {
+    [self.tableView scrollToRowAtIndexPath:selectedPath 
+                          atScrollPosition:UITableViewScrollPositionMiddle 
+                                  animated:NO];
+  }
+  else
+  {
+    [self.tableView scrollRectToVisible:CGRectMake(0,0,10,10) animated:NO];
+  }
 }
 
 - (NSArray*)sections
