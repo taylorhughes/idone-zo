@@ -256,6 +256,36 @@
 }
 
 
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+  if (editingStyle == UITableViewCellEditingStyleDelete)
+  {
+    Task *task = [self.filteredTasks objectAtIndex:[indexPath row]];
+    
+    NSLog(@"Deleting task: %@", task.body);
+    
+    task.isDeleted = YES;
+    [task hasBeenUpdated];
+    
+    [self resetTasks];
+    [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+    
+    // This will cause a donezodataupdated sync which will cause tasks to be reset and the table to be reloaded
+    // So this should happen *after* deleteRowsAtIndexPaths is called
+    [task.managedObjectContext save:nil];
+    
+    if (task.key)
+    {
+      [self notifySync];
+    }
+    else
+    {
+      [task.managedObjectContext deleteObject:task];
+      [task.managedObjectContext save:nil];
+    }
+  }
+}
+
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
   NSMutableArray *strings = [NSMutableArray arrayWithCapacity:2];
@@ -340,9 +370,8 @@
   clickedTask.isComplete = !clickedTask.isComplete;
   [clickedTask hasBeenUpdated];
   
-  DNZOAppDelegate *appDelegate = (DNZOAppDelegate *)[[UIApplication sharedApplication] delegate];
   NSError *error = nil;
-  if (![appDelegate.managedObjectContext save:&error])
+  if (![clickedTask.managedObjectContext save:&error])
   {
     NSLog(@"Error saving clicked task: %@ %@", [error description], [error userInfo]);
   }

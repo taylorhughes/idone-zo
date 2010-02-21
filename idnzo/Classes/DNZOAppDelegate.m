@@ -478,8 +478,8 @@ NSString* const DonezoShouldToggleCompletedTaskNotification = @"DonezoShouldTogg
   [self createInitialObjects];
   
   UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Welcome to Done-zo!"
-                                                  message:@"We can synchronize your tasks with done-zo.com using "
-                                                           "your Google Account. Do you want to set this up?"
+                                                  message:@"We can synchronize your task lists\nwith Done-zo.com using "
+                                                           "your\nGoogle Account. Do you want\nto set this up?"
                                                  delegate:self
                                         cancelButtonTitle:@"No thanks"
                                         otherButtonTitles:@"Set up sync",nil];

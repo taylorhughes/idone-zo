@@ -10,6 +10,13 @@
 
 #pragma mark TaskCell implementation
 
+@interface TaskCell (Private)
+
+- (void) manuallyAnimateTransitionIfNeeded;
+- (void) handleInterimTransitionUpdate:(id)userInfo;
+
+@end
+
 @implementation TaskCell
 
 @synthesize taskCellView;
@@ -22,9 +29,119 @@
     taskCellView = [[TaskCellView alloc] initWithFrame:frame];
     taskCellView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self.contentView addSubview:taskCellView];
+    
+    // Keep things in the top left when stuff gets resized
+    self.contentView.contentMode = UIViewContentModeTopLeft;
+    taskCellView.contentMode = UIViewContentModeTopLeft;
+    // Don't stretch anything
+    taskCellView.contentStretch = CGRectZero;
+    
+    contentViewTransitionTimer = nil;
+    contentViewBeginFrame = CGRectZero;
+    contentViewEndFrame = CGRectZero;
+    isAboutToTransition = NO;
+    isTransitioning = NO;
   }
   return self;
 }
+
+
+
+
+- (void) aboutToTransition
+{
+  @synchronized(self)
+  {
+    if (isTransitioning) { return; }
+    
+    contentViewBeginFrame = taskCellView.frame;
+  }
+}
+#define TIMER_INTERVAL 0.02f
+#define TIMER_DURATION 0.25f
+#define MAX_LOOPS 100
+- (void) manuallyAnimateTransitionIfNeeded
+{
+  @synchronized(self)
+  {
+    if (isTransitioning || CGRectEqualToRect(contentViewBeginFrame, CGRectZero)) { return; }
+    contentViewEndFrame = taskCellView.frame;
+    if (contentViewBeginFrame.size.width == contentViewEndFrame.size.width) { return; }
+    
+    taskCellView.frame = contentViewBeginFrame;
+    
+    isTransitioning = YES;
+    NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithObject:[NSNumber numberWithInt:0] forKey:@"loops"];
+    contentViewTransitionTimer = [NSTimer scheduledTimerWithTimeInterval:TIMER_INTERVAL
+                                                                  target:self
+                                                                selector:@selector(handleInterimTransitionUpdate:)
+                                                                userInfo:userInfo
+                                                                 repeats:YES];
+    [contentViewTransitionTimer retain];
+  }
+}
+- (void) handleInterimTransitionUpdate:(id)sender
+{ 
+  CGFloat difference = (TIMER_INTERVAL / TIMER_DURATION) * (contentViewEndFrame.size.width - contentViewBeginFrame.size.width);
+  CGFloat newWidth = taskCellView.frame.size.width + difference;
+  
+  // This is load bearing: This contentView size might be different now from when we started
+  CGFloat endWidth = self.contentView.frame.size.width;
+  
+  NSMutableDictionary *userInfo = [contentViewTransitionTimer userInfo]; 
+  NSInteger numLoops = [[userInfo objectForKey:@"loops"] intValue];
+  
+  if (difference > 0 && newWidth >= endWidth ||
+      difference < 0 && newWidth <= endWidth ||
+      numLoops > MAX_LOOPS)
+  {
+    if (numLoops > MAX_LOOPS)
+    {
+      NSLog(@"Exceeded the maximum number of loops for this transition! Something is awry.");
+    }
+    
+    newWidth = endWidth;
+    
+    @synchronized(self)
+    {
+      isTransitioning = NO;
+      contentViewBeginFrame = CGRectZero;
+      contentViewEndFrame = CGRectZero;
+      
+      [contentViewTransitionTimer invalidate];
+      [contentViewTransitionTimer release];
+      contentViewTransitionTimer = nil;
+    }
+  }
+  
+  // Set up this variable such that if this shit ever goes haywire it stops it.
+  [userInfo setValue:[NSNumber numberWithInt:(numLoops + 1)] forKey:@"loops"];
+  
+  taskCellView.frame = CGRectMake(taskCellView.frame.origin.x, 
+                                  taskCellView.frame.origin.y, 
+                                  newWidth,
+                                  taskCellView.frame.size.height);
+  [taskCellView setNeedsDisplay];
+}
+
+- (void) layoutSubviews
+{
+  [super layoutSubviews];
+  
+  [self manuallyAnimateTransitionIfNeeded];
+}
+
+- (void) willTransitionToState:(UITableViewCellStateMask)state
+{
+  [self aboutToTransition];
+  
+  [super willTransitionToState:state];
+  
+  [self manuallyAnimateTransitionIfNeeded];
+}
+
+
+
 
 - (void) displayLocalTask:(Task*)task
 {
@@ -96,9 +213,12 @@
   [self.taskCellView setNeedsDisplay];
 }
 
+
+
 - (void)dealloc
 {
   [taskCellView release];
+  [contentViewTransitionTimer release];
   [super dealloc];
 }
 

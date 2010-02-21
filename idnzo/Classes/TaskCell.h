@@ -14,6 +14,12 @@
 
 @interface TaskCell : UITableViewCell {
   TaskCellView *taskCellView;
+  
+  NSTimer *contentViewTransitionTimer;
+  CGRect contentViewBeginFrame;
+  CGRect contentViewEndFrame;
+  BOOL isAboutToTransition;
+  BOOL isTransitioning;
 }
 
 @property (nonatomic, retain, readonly) TaskCellView *taskCellView;
