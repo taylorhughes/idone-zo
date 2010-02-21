@@ -14,6 +14,7 @@
 
 #define SYNC_ENABLED_KEY @"syncEnabled"
 #define USERNAME_KEY @"username"
+#define SYNCED_USERNAME_KEY @"syncedUsername"
 #define PASSWORD_KEY @"password"
 
 #define FILTERED_OBJECT_KEY_FORMAT @"filteredObject-%@"
@@ -64,9 +65,20 @@
   return [DEFAULTS stringForKey:USERNAME_KEY];
 }
 
++ (NSString*) syncedUsername
+{
+  return [DEFAULTS stringForKey:SYNCED_USERNAME_KEY];
+}
+
 + (BOOL) hasUsername
 {
   NSString *user = [SettingsHelper username];
+  return user != nil && [user length] > 0;
+}
+
++ (BOOL) hasSyncedUsername
+{
+  NSString *user = [self syncedUsername];
   return user != nil && [user length] > 0;
 }
 
@@ -78,6 +90,11 @@
 + (void) setUsername:(NSString*)username
 {
   [DEFAULTS setValue:username forKey:USERNAME_KEY];
+}
+
++ (void) setSyncedUsername:(NSString*)username
+{
+  [DEFAULTS setValue:username forKey:SYNCED_USERNAME_KEY];
 }
 
 + (void) setPassword:(NSString*)password

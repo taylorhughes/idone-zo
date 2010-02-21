@@ -14,12 +14,15 @@
 
 + (BOOL) isSyncEnabled;
 + (NSString*) username;
++ (NSString*) syncedUsername;
 + (BOOL) hasUsername;
++ (BOOL) hasSyncedUsername;
 + (NSString*) password;
 + (BOOL) hasPassword;
 
 + (void) setIsSyncEnabled:(BOOL)enabled;
 + (void) setUsername:(NSString*)username;
++ (void) setSyncedUsername:(NSString*)username;
 + (void) setPassword:(NSString*)username;
 + (void) resetPassword;
 

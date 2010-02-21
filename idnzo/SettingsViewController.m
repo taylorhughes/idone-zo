@@ -22,6 +22,16 @@
 @synthesize longOperationDialogView;
 @synthesize longOperationLabel;
 
++ (SettingsViewController*) settingsViewControllerWithSyncEnabled
+{
+  [SettingsHelper setIsSyncEnabled:YES];
+  return [self settingsViewController];
+}
++ (SettingsViewController*) settingsViewController
+{
+  return [[[SettingsViewController alloc] initWithNibName:@"SettingsView" bundle:nil] autorelease];
+}
+
 - (UITableViewCell*)switchCell
 {
   if (!switchCell)
@@ -79,18 +89,40 @@
   
   [self.tableView reloadData];
 }
+
+- (void) viewDidDisappear:(BOOL)animated
+{
+  [super viewDidDisappear:animated];
+  
+  if ([self.navigationController.viewControllers count] > 1)
+  {
+    // If we go deeper (ie. to edit the username/pass), do not do this. Only do this if we go further up.
+    return;
+  }
+  
+  if ([SettingsHelper isSyncEnabled] && ![SettingsHelper hasUsername])
+  {
+    // If they don't set a username, just set sync to be disabled.
+    [SettingsHelper setIsSyncEnabled:NO];
+    self.isSyncEnabled = NO;
+  }
+}
+
 - (void) dismiss:(id)sender
 {
   [self.navigationController dismissModalViewControllerAnimated:YES];
 }
 
+//
+// PROPERTY ACCESSOR / MUTATOR
+//
 - (BOOL) isSyncEnabled
 {
   return self.switchWidget.on;
 }
-- (void) setIsSyncEnabled:(BOOL)on
+- (void) setIsSyncEnabled:(BOOL)enabled
 {
-  [self.switchWidget setOn:on animated:NO];
+  self.switchWidget.on = enabled;
 }
 
 - (void) onClickSwitch:(id)sender
@@ -217,8 +249,11 @@
 
 - (void)reallySaveUsername
 {
-  // Cause one last sync.
-  [[NSNotificationCenter defaultCenter] postNotificationName:DonezoShouldSyncNotification object:self];
+  if ([SettingsHelper hasUsername])
+  {
+    // It is possible that there is no username set currently, if they first set it to a blank box.
+    [[NSNotificationCenter defaultCenter] postNotificationName:DonezoShouldSyncNotification object:self];
+  }
   
   [self.longOperationLabel setText:@"Syncing existing account..."];
   
@@ -235,8 +270,9 @@
   
   DNZOAppDelegate *appDelegate = (DNZOAppDelegate *)[[UIApplication sharedApplication] delegate];
   [appDelegate waitForSyncToFinishAndReinitializeDatastore];
-
+  
   [SettingsHelper setUsername:self.username];
+  [SettingsHelper setSyncedUsername:self.username];
   [SettingsHelper resetPassword];
   
   [self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
@@ -278,8 +314,14 @@
   TextFieldViewController *tfvc = (TextFieldViewController*)sender;
   self.username = [tfvc.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
   
-  if ([SettingsHelper hasUsername] &&
-      ![[self.username lowercaseString] isEqualToString:[[SettingsHelper username] lowercaseString]])
+  if ([self.username length] == 0)
+  {
+    // Do not change the sync'd username; that is, the app has had a chance to sync
+    // to a different account already, so don't erase the fact that it has synced.
+    [SettingsHelper setUsername:self.username];
+  }
+  else if ([SettingsHelper hasSyncedUsername] && 
+           ![[self.username lowercaseString] isEqualToString:[[SettingsHelper syncedUsername] lowercaseString]])
   {
     UIAlertView *alertTest = [[UIAlertView alloc]
                               initWithTitle:@"Really change user?"
@@ -296,6 +338,7 @@
   else
   {
     [SettingsHelper setUsername:self.username];
+    [SettingsHelper setSyncedUsername:self.username];
   }
 }
 

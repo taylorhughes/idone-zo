@@ -242,9 +242,9 @@ NSString* const DonezoShouldToggleCompletedTaskNotification = @"DonezoShouldTogg
   //
   // WARNING: Operates in a separate thread, do not make non-threadsafe calls here!
   //
-  if (![SettingsHelper isSyncEnabled])
+  if (![SettingsHelper isSyncEnabled] || ![SettingsHelper hasUsername] || ![SettingsHelper hasPassword])
   {
-    NSLog(@"Sync is no longer enabled; returning.");
+    NSLog(@"Sync is no longer enabled or no username or password; returning.");
     return;
   }
   
@@ -492,12 +492,11 @@ NSString* const DonezoShouldToggleCompletedTaskNotification = @"DonezoShouldTogg
   if (buttonIndex == 1)
   {
     // Set up sync: Show settings page in a modal view
-    SettingsViewController *settings = [[SettingsViewController alloc] initWithNibName:@"SettingsView" bundle:nil];
+    SettingsViewController *settings = [SettingsViewController settingsViewControllerWithSyncEnabled];
     UINavigationController *settingsNav = [[UINavigationController alloc] initWithRootViewController:settings];
     
     [self.navigationController presentModalViewController:settingsNav animated:YES];
     
-    [settings release];
     [settingsNav release];
   }
 }

@@ -27,6 +27,9 @@
 
 @property (nonatomic, copy) NSString *username;
 
++ (SettingsViewController*) settingsViewControllerWithSyncEnabled;
++ (SettingsViewController*) settingsViewController;
+
 - (void) onClickSwitch:(id)sender;
 
 @end

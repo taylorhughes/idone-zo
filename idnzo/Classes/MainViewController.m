@@ -63,7 +63,7 @@
 {
   if (settingsViewController == nil)
   {
-    settingsViewController = [[SettingsViewController alloc] initWithNibName:@"SettingsView" bundle:nil];
+    settingsViewController = [[SettingsViewController settingsViewController] retain];
   }
   return settingsViewController;
 }
