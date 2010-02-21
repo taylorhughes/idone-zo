@@ -592,9 +592,8 @@ static UIImage *unchecked;
 
 - (void) donezoDataUpdated:(NSNotification*)notification
 {
-  if ([self.view window])
+  if ([self.view window] && [notification object] != self)
   {
-    NSLog(@"Handling updated data in TaskViewController.");
     [self refresh];
   }
 }
@@ -633,6 +632,8 @@ static UIImage *unchecked;
   {
     [self refresh];
   }
+  
+  [dnc postNotificationName:DonezoDataUpdatedNotification object:self];
 }
 
 

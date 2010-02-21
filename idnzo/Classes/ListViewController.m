@@ -283,6 +283,9 @@
       [task.managedObjectContext deleteObject:task];
       [task.managedObjectContext save:nil];
     }
+    
+    NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
+    [dnc postNotificationName:DonezoDataUpdatedNotification object:self];
   }
 }
 
@@ -477,6 +480,9 @@
     
     suspendUpdates = NO;
   }
+  
+  NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
+  [dnc postNotificationName:DonezoDataUpdatedNotification object:self];
 }
 
 - (IBAction) sync:(id)sender

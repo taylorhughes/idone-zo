@@ -57,9 +57,11 @@
     contentViewBeginFrame = taskCellView.frame;
   }
 }
+
 #define TIMER_INTERVAL 0.02f
 #define TIMER_DURATION 0.25f
-#define MAX_LOOPS 100
+#define MAX_LOOPS 20
+
 - (void) manuallyAnimateTransitionIfNeeded
 {
   @synchronized(self)
@@ -67,11 +69,22 @@
     if (isTransitioning || CGRectEqualToRect(contentViewBeginFrame, CGRectZero)) { return; }
     contentViewEndFrame = taskCellView.frame;
     if (contentViewBeginFrame.size.width == contentViewEndFrame.size.width) { return; }
+        
+    CGFloat difference = (TIMER_INTERVAL / TIMER_DURATION) * (contentViewEndFrame.size.width - contentViewBeginFrame.size.width);
+    if (fabs(difference) < 1)
+    {
+      NSLog(@"Transition difference was less than 1. Returning instead of making the transition.");
+      return;
+    }
     
+    // Begin transition.
     taskCellView.frame = contentViewBeginFrame;
-    
     isTransitioning = YES;
+    
     NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithObject:[NSNumber numberWithInt:0] forKey:@"loops"];
+    [userInfo setValue:[NSNumber numberWithFloat:difference] forKey:@"difference"];
+    [userInfo setValue:[NSNumber numberWithInt:MAX_LOOPS]    forKey:@"remainingLoops"];
+      
     contentViewTransitionTimer = [NSTimer scheduledTimerWithTimeInterval:TIMER_INTERVAL
                                                                   target:self
                                                                 selector:@selector(handleInterimTransitionUpdate:)
@@ -82,20 +95,21 @@
 }
 - (void) handleInterimTransitionUpdate:(id)sender
 { 
-  CGFloat difference = (TIMER_INTERVAL / TIMER_DURATION) * (contentViewEndFrame.size.width - contentViewBeginFrame.size.width);
+  NSMutableDictionary *userInfo = [contentViewTransitionTimer userInfo]; 
+  NSInteger numLoops = [[userInfo objectForKey:@"remainingLoops"] intValue];
+  CGFloat difference = [[userInfo objectForKey:@"difference"] floatValue];
+  
   CGFloat newWidth = taskCellView.frame.size.width + difference;
   
   // This is load bearing: This contentView size might be different now from when we started
   CGFloat endWidth = self.contentView.frame.size.width;
   
-  NSMutableDictionary *userInfo = [contentViewTransitionTimer userInfo]; 
-  NSInteger numLoops = [[userInfo objectForKey:@"loops"] intValue];
   
   if (difference > 0 && newWidth >= endWidth ||
       difference < 0 && newWidth <= endWidth ||
-      numLoops > MAX_LOOPS)
+      numLoops <= 0)
   {
-    if (numLoops > MAX_LOOPS)
+    if (numLoops <= 0)
     {
       NSLog(@"Exceeded the maximum number of loops for this transition! Something is awry.");
     }
@@ -115,7 +129,7 @@
   }
   
   // Set up this variable such that if this shit ever goes haywire it stops it.
-  [userInfo setValue:[NSNumber numberWithInt:(numLoops + 1)] forKey:@"loops"];
+  [userInfo setValue:[NSNumber numberWithInt:(numLoops - 1)] forKey:@"remainingLoops"];
   
   taskCellView.frame = CGRectMake(taskCellView.frame.origin.x, 
                                   taskCellView.frame.origin.y, 
