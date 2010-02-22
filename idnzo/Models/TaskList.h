@@ -24,6 +24,8 @@
 @property (nonatomic, readonly) NSFetchRequest *tasksForListRequest;
 @property (nonatomic, readonly) NSUInteger displayTasksCount;
 
+@property (nonatomic, assign) BOOL isDeleted;
+
 @end
 
 @interface TaskList (CoreDataGeneratedAccessors)

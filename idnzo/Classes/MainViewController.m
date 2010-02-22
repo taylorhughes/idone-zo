@@ -176,7 +176,6 @@
 
 - (void) donzoDataUpdated:(NSNotification*)notification
 {
-  // NSLog(@"MainViewController: Handled updated data.");
   self.taskLists = nil;
   [self.tableView reloadData];
 }
@@ -187,22 +186,21 @@
   {
     DNZOAppDelegate *appDelegate = (DNZOAppDelegate *)[[UIApplication sharedApplication] delegate];
     
-    NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"TaskList" inManagedObjectContext:appDelegate.managedObjectContext];
-    request.entity = entity;
+    NSFetchRequest *listsRequest = [appDelegate.managedObjectModel fetchRequestFromTemplateWithName:@"taskLists"
+                                                                              substitutionVariables:[NSDictionary dictionary]];
     
     NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
     NSArray *sorters = [NSArray arrayWithObjects:sort, nil];
-    request.sortDescriptors = sorters;
+    listsRequest.sortDescriptors = sorters;
     [sort release];
     
     NSError *error;
     
-    self.taskLists = [appDelegate.managedObjectContext executeFetchRequest:request error:&error];
+    self.taskLists = [appDelegate.managedObjectContext executeFetchRequest:listsRequest error:&error];
     if (self.taskLists == nil)
     {
       // handle error
-      NSLog(@"No task lists, shit!");
+      NSLog(@"No task lists, something is majorly wrong.");
     }
   }
   return taskLists;
@@ -212,6 +210,40 @@
 
 #pragma mark Table Delegate and Data Source Methods
 
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+  return [indexPath section] == 0 && [self.taskLists count] > 1;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+  if (editingStyle == UITableViewCellEditingStyleDelete)
+  {
+    TaskList *list = [self.taskLists objectAtIndex:[indexPath row]];
+    
+    list.isDeleted = YES;
+    
+    if (!list.key)
+    {
+      [list.managedObjectContext deleteObject:list];
+    }
+    
+    NSError *error = nil;
+    [list.managedObjectContext save:&error];
+    if (error != nil)
+    {
+      NSLog(@"Error deleting list object! %@ %@", [error description], [error userInfo]);
+    }
+    
+    self.taskLists = nil;
+    [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+    
+    NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
+    [dnc postNotificationName:DonezoDataUpdatedNotification object:self];
+    [dnc postNotificationName:DonezoShouldSyncNotification object:self];
+  }
+}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tv
 {

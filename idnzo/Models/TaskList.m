@@ -39,6 +39,15 @@
   return [appDelegate.managedObjectContext countForFetchRequest:self.tasksForListRequest error:nil];
 }
 
+- (BOOL)isDeleted
+{
+  return [self.deleted intValue];
+}
+- (void)setIsDeleted:(BOOL)isDeleted
+{
+  self.deleted = [NSNumber numberWithInt:isDeleted];
+}
+
 - (void) dealloc
 {
   [tasksForListRequest release];

@@ -101,6 +101,7 @@
   
   NSMutableArray *localListsToDelete = [NSMutableArray arrayWithCapacity:[savedLocalLists count]];
   NSMutableArray *localListsToAddRemotely = [NSMutableArray arrayWithCapacity:[newLocalLists count]];
+  NSMutableArray *localRemoteListsToDelete = [NSMutableArray arrayWithCapacity:[newRemoteLists count]];
   
   //
   // For the lists we have saved before, try to find the matching remote list.
@@ -120,17 +121,12 @@
     
     if (existingRemoteList)
     {
-      //if (localList.deleted)
-      //{
-      //  // delete remote list
-      //}
-      //else
-      //{
-
-      // remove object from collection of new lists; we know about it already
       [newRemoteLists removeObject:existingRemoteList];
       
-      //}
+      if (localList.isDeleted)
+      {
+        [localRemoteListsToDelete addObject:[NSArray arrayWithObjects:localList, existingRemoteList, nil]];
+      }
     }
     else
     {
@@ -222,6 +218,26 @@
     // In this case, do not check canceled -- would leave data inconsistent
     if (*error) { return nil; }
     listToAdd.key = list.key;
+    
+    [self.context save:error];
+    // Now we can check canceled
+    if ([self errorOrCanceled:error]) { return nil; }
+  }
+  
+  //
+  // NOTE: This has to happen AFTER new lists are added, in case we are removing 
+  // all remote lists and replacing them. In that case, the list count must not
+  // reach ZERO or the donezo API will return a 400.
+  //
+  for (NSArray *localRemotePair in localRemoteListsToDelete)
+  {
+    TaskList *localList = [localRemotePair objectAtIndex:0];
+    DonezoTaskList *remoteList = [localRemotePair objectAtIndex:1];
+    
+    [self.client deleteList:&remoteList error:error];
+    // Do not check canceled in this case
+    if (*error) { return nil; }
+    [self.context deleteObject:localList];
     
     [self.context save:error];
     // Now we can check canceled
