@@ -242,7 +242,7 @@ static NSInteger compareLocalRemoteTasks(id a, id b, void *context)
   if (cell == nil)
   {
     cell = [[[TaskCell alloc] initWithFrame:CGRectZero reuseIdentifier:@"MyIdentifier"] autorelease];
-    //cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
   }
   
   NSObject *obj = [[self allTasks] objectAtIndex:[indexPath row]];
