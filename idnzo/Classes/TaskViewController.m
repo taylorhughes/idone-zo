@@ -117,12 +117,17 @@ static UIImage *unchecked;
 - (void) viewWillAppear:(BOOL)animated
 {
   [super viewWillAppear:animated];
-  // This is important because by now self.view has the proper bounds
-  [self refresh];
   
   if ([self isNewTask] && isFirstAppearance)
   {
+    // Don't refresh the main view in this case; we load the task body editor directly instead
     [self editDescription:NO];
+  }
+  else
+  {
+    // This is in viewWillAppear because by now self.view has the proper bounds
+    // Note: This should not be called when the task is null; causes issues in iPhone 3.0.1
+    [self refresh];
   }
   
   isFirstAppearance = NO;
@@ -332,10 +337,11 @@ static UIImage *unchecked;
 }
 
 - (void) refreshHeaderAndFooter
-{
+{  
   // Adjust for padding on left and right of UITextField
   CGFloat width = topLabel.frame.size.width - 16.0;
   // Resize body cell according to how tall the text is
+
   CGSize newSize = [self.task.body sizeWithFont:topLabel.font
                               constrainedToSize:CGSizeMake(width, MAXFLOAT)
                                   lineBreakMode:UILineBreakModeWordWrap];
