@@ -9,8 +9,6 @@
 @property (nonatomic, copy) NSString *baseUrl;
 @property (nonatomic, readonly) NSString *apiUrl;
 
-- (BOOL)login:(NSError**)error;
-
 - (NSObject*)getObjectFromPath:(NSString*)path withKey:(NSString*)key error:(NSError**)error;
 - (NSObject*)getObjectFromPath:(NSString*)path withKey:(NSString*)key usingMethod:(NSString*)method andBody:(NSString*)body error:(NSError**)error;
 

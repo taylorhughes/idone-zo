@@ -25,6 +25,8 @@
 - (id) initWithUsername:(NSString*)username andPassword:(NSString*)password;
 - (id) initWithUsername:(NSString*)username andPassword:(NSString*)password toBaseUrl:(NSString*)baseURL;
 
+- (BOOL)login:(NSError**)error;
+
 - (NSArray*) getLists:(NSError**)error;
 - (DonezoTaskList*) getListWithKey:(NSString*)key error:(NSError**)error;
 - (NSArray*) getTasksForListWithKey:(NSString*)key error:(NSError**)error;

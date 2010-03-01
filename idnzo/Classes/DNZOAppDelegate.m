@@ -256,7 +256,7 @@ NSString* const DonezoShouldToggleCompletedTaskNotification = @"DonezoShouldTogg
     }
     master = [self.syncMaster retain];
   }
-
+  
   [self showNetworkIndicator];
   
   master.context = [[[NSManagedObjectContext alloc] init] autorelease];
@@ -277,13 +277,19 @@ NSString* const DonezoShouldToggleCompletedTaskNotification = @"DonezoShouldTogg
     list = (TaskList*)[master.context objectWithID:[list objectID]];
   }
   
-  if (list == nil)
+  // Make sure we can login first before setting the sync'd username
+  if ([self.donezoAPIClient login:&error])
   {
-    [master syncAll:&error];
-  }
-  else
-  {
-    [master syncList:list error:&error];
+    [SettingsHelper setSyncedUsername:[SettingsHelper username]];
+    
+    if (list == nil)
+    {
+      [master syncAll:&error];
+    }
+    else
+    {
+      [master syncList:list error:&error];
+    }
   }
   
   [dnc removeObserver:self name:NSManagedObjectContextDidSaveNotification object:nil];
@@ -341,12 +347,11 @@ NSString* const DonezoShouldToggleCompletedTaskNotification = @"DonezoShouldTogg
         errorDescription = @"An unknown error has occurred.";
       }
 
-      UIAlertView *errorAlert = [[UIAlertView alloc]
-                                 initWithTitle:@"Done-zo sync error"
-                                 message:errorDescription
-                                 delegate:nil
-                                 cancelButtonTitle:@"OK"
-                                 otherButtonTitles:nil];
+      UIAlertView *errorAlert = [[UIAlertView alloc] initWithTitle:@"Done-zo sync error"
+                                                           message:errorDescription
+                                                          delegate:nil
+                                                 cancelButtonTitle:@"OK"
+                                                 otherButtonTitles:nil];
       [errorAlert show];
       [errorAlert release];
       

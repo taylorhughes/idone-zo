@@ -272,7 +272,6 @@
   [appDelegate waitForSyncToFinishAndReinitializeDatastore];
   
   [SettingsHelper setUsername:self.username];
-  [SettingsHelper setSyncedUsername:self.username];
   [SettingsHelper resetPassword];
   
   [self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
@@ -338,7 +337,6 @@
   else
   {
     [SettingsHelper setUsername:self.username];
-    [SettingsHelper setSyncedUsername:self.username];
   }
 }
 
