@@ -61,14 +61,7 @@
   //
   @synchronized(self)
   {
-    if (self.gaeAuth.hasLoggedIn)
-    {
-      loggedIn = YES;
-    }
-    else
-    {
-      loggedIn = [self.gaeAuth login:error];
-    }
+    loggedIn = self.gaeAuth.hasLoggedIn || [self.gaeAuth login:error];
   }
   return loggedIn;
 }

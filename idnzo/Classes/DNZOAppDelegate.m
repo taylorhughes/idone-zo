@@ -9,6 +9,7 @@
 #import "DNZOAppDelegate.h"
 
 NSString* const DonezoShouldSyncNotification         = @"DonezoShouldSyncNotification";
+NSString* const DonezoSyncStatusChangedNotification  = @"DonezoSyncStatusChangedNotification";
 NSString* const DonezoShouldResetAndSyncNotification = @"DonezoShouldResetAndSyncNotification";
 NSString* const DonezoShouldResetNotification        = @"DonezoShouldResetNotification";
 NSString* const DonezoDataUpdatedNotification        = @"DonezoDataUpdatedNotification";
@@ -31,6 +32,7 @@ NSString* const DonezoShouldToggleCompletedTaskNotification = @"DonezoShouldTogg
 - (void) sync;
 - (void) sync:(TaskList*)list;
 - (void) syncOperation:(NSObject*)object;
+- (NSString*) operationIdentifierForListOrNil:(TaskList*)list;
 
 @property (nonatomic, readonly) NSString *storePath;
 @property (nonatomic, retain) DonezoSyncMaster *syncMaster;
@@ -57,6 +59,7 @@ NSString* const DonezoShouldToggleCompletedTaskNotification = @"DonezoShouldTogg
   {
     networkIndicatorShown = 0;
     hasDisplayedError = NO;
+    syncOperations = [[NSMutableDictionary alloc] init];
     
     self.operationQueue = [[NSOperationQueue alloc] init];
     [self.operationQueue setMaxConcurrentOperationCount:1];
@@ -175,6 +178,24 @@ NSString* const DonezoShouldToggleCompletedTaskNotification = @"DonezoShouldTogg
                                                         andContext:nil] autorelease];
 }
 
+#define SYNC_ALL_IDENTIFIER @"syncAll"
+- (NSString*) operationIdentifierForListOrNil:(TaskList*)list
+{
+  if (list && list.key)
+  {
+    return [NSString stringWithFormat:@"syncList:%@", list.key];
+  }
+  return SYNC_ALL_IDENTIFIER;
+}
+
+- (BOOL) isSyncing:(TaskList*)list
+{
+  NSNumber *allCount =  [syncOperations objectForKey:SYNC_ALL_IDENTIFIER];
+  NSNumber *listCount = [syncOperations objectForKey:[self operationIdentifierForListOrNil:list]];
+  
+  return [allCount intValue] > 0 || [listCount intValue] > 0;
+}
+
 - (void) sync
 {
   [self sync:nil];
@@ -191,15 +212,12 @@ NSString* const DonezoShouldToggleCompletedTaskNotification = @"DonezoShouldTogg
   // Pause operation queue for now 
   //
   [self.operationQueue setSuspended:YES];
-  NSString *identifier = @"syncAll";
-  if (list.key != nil)
-  {
-    identifier = [NSString stringWithFormat:@"syncList:%@", list.key];
-  }
-  else
+  
+  if (!list.key)
   {
     list = nil;
   }
+  NSString *identifier = [self operationIdentifierForListOrNil:list];
   
   BOOL operationQueued = NO;
   for (DonezoSyncOperation *operation in [self.operationQueue operations])
@@ -224,6 +242,14 @@ NSString* const DonezoShouldToggleCompletedTaskNotification = @"DonezoShouldTogg
                                           selector:@selector(syncOperation:)
                                           object:list];
     syncOperation.identifier = identifier;
+    
+    NSNumber *number = [syncOperations objectForKey:identifier];
+    if (!number)
+    {
+      number = [NSNumber numberWithInt:0];
+    }
+    [syncOperations setValue:[NSNumber numberWithInt:([number intValue] + 1)] forKey:identifier];
+    [[NSNotificationCenter defaultCenter] postNotificationName:DonezoSyncStatusChangedNotification object:nil];
     
     [self.operationQueue addOperation:syncOperation];
     [syncOperation release];    
@@ -276,6 +302,7 @@ NSString* const DonezoShouldToggleCompletedTaskNotification = @"DonezoShouldTogg
     list = (TaskList*)object;
     list = (TaskList*)[master.context objectWithID:[list objectID]];
   }
+  NSString *identifier = [self operationIdentifierForListOrNil:list];
   
   // Make sure we can login first before setting the sync'd username
   if ([self.donezoAPIClient login:&error])
@@ -295,7 +322,10 @@ NSString* const DonezoShouldToggleCompletedTaskNotification = @"DonezoShouldTogg
   [dnc removeObserver:self name:NSManagedObjectContextDidSaveNotification object:nil];
   [master release];
   
-  [self performSelectorOnMainThread:@selector(finishSync:) withObject:error waitUntilDone:YES];
+  NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:2];
+  [dict setValue:error      forKey:@"error"];
+  [dict setValue:identifier forKey:@"identifier"];
+  [self performSelectorOnMainThread:@selector(finishSync:) withObject:dict waitUntilDone:YES];
 }
 
 - (void) contextDidSave:(NSNotification*)saveNotification
@@ -318,7 +348,9 @@ NSString* const DonezoShouldToggleCompletedTaskNotification = @"DonezoShouldTogg
 // Operates on the main thread
 - (void) finishSync:(id)arg
 {
-  NSError *error = (NSError*)arg;
+  NSDictionary *dict   = (NSDictionary*)arg;
+  NSError *error       = (NSError*)[dict valueForKey:@"error"];
+  NSString *identifier = (NSString*)[dict valueForKey:@"identifier"];
   
   [self hideNetworkIndicator];
   
@@ -363,10 +395,12 @@ NSString* const DonezoShouldToggleCompletedTaskNotification = @"DonezoShouldTogg
     NSLog(@"Sync completed successfully!");
   }
 
-  //NSDictionary *info = [NSDictionary dictionaryWithObject:list forKey:@"list"];
-  //[[NSNotificationCenter defaultCenter] postNotificationName:DonezoSyncFinishedNotification
-  //                                                    object:self
-  //                                                  userInfo:info];
+  NSNumber *num = [syncOperations objectForKey:identifier];
+  [syncOperations setValue:[NSNumber numberWithInt:([num intValue] - 1)] forKey:identifier];
+  
+  [[NSNotificationCenter defaultCenter] postNotificationName:DonezoSyncStatusChangedNotification
+                                                      object:self
+                                                    userInfo:nil];
 }
 
 - (void) showNetworkIndicator
@@ -559,6 +593,7 @@ NSString* const DonezoShouldToggleCompletedTaskNotification = @"DonezoShouldTogg
 
 - (void)dealloc
 {
+  [syncOperations release];
   [operationQueue release];
   [donezoAPIClient release];
   [syncMaster release];

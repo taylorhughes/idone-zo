@@ -47,6 +47,11 @@
               name:DonezoDataUpdatedNotification
             object:nil];
   
+  [dnc addObserver:self 
+          selector:@selector(donezoSyncStatusChanged:)
+              name:DonezoSyncStatusChangedNotification
+            object:nil];
+  
   [dnc addObserver:self
           selector:@selector(filterList:)
               name:DonezoShouldFilterListNotification
@@ -63,12 +68,6 @@
             object:nil];
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-  [self resetTasks];
-  [tableView reloadData];
-}
-
 
 - (void) donezoDataUpdated:(NSNotification*)notification
 {
@@ -81,6 +80,30 @@
     }
   }
 }
+- (void) updateSyncStatusButton
+{
+  DNZOAppDelegate *appDelegate = (DNZOAppDelegate *)[[UIApplication sharedApplication] delegate];
+  syncButton.enabled = ![appDelegate isSyncing:self.taskList];
+}
+
+- (void) donezoSyncStatusChanged:(NSNotification*)notification
+{
+  // Only bother updating if we're showing
+  if ([self.view window])
+  {
+    [self updateSyncStatusButton];
+  }
+}
+
+
+- (void)viewWillAppear:(BOOL)animated
+{
+  [self resetTasks];
+  [tableView reloadData];
+  
+  [self updateSyncStatusButton];
+}
+
 
 - (NSObject*)filteredObject
 {

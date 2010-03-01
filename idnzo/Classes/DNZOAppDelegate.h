@@ -17,6 +17,7 @@
 @class Project, Context, TaskList, Task, MainViewController, DonezoSyncMaster;
 
 extern NSString* const DonezoShouldSyncNotification;
+extern NSString* const DonezoSyncStatusChangedNotification;
 extern NSString* const DonezoShouldResetAndSyncNotification;
 extern NSString* const DonezoShouldResetNotification;
 extern NSString* const DonezoDataUpdatedNotification;
@@ -38,6 +39,7 @@ extern NSString* const DonezoShouldToggleCompletedTaskNotification;
   DonezoAPIClient *donezoAPIClient;
   DonezoSyncMaster *syncMaster;
   
+  NSDictionary *syncOperations;
   NSOperationQueue *operationQueue;
   NSInteger networkIndicatorShown;
   BOOL hasDisplayedError;
@@ -59,6 +61,8 @@ extern NSString* const DonezoShouldToggleCompletedTaskNotification;
 - (BOOL) waitForSyncToFinishAndReinitializeDatastore;
 
 - (void) synchronouslySyncAll;
+
+- (BOOL) isSyncing:(TaskList*)list;
 
 @end
 

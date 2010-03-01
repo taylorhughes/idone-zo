@@ -14,6 +14,8 @@
 
 @interface ListViewController : UIViewController <UIActionSheetDelegate> {
   IBOutlet UITableView *tableView;
+  IBOutlet UIBarButtonItem *syncButton;
+  
   TaskList *taskList;
   NSArray *tasks;
   NSArray *filteredTasks;
