@@ -80,10 +80,79 @@
     }
   }
 }
+
+// Number of pixels smaller the spinner should be than its default size.
+#define SPINNER_SIZE_ADJUSTMENT 2
 - (void) updateSyncStatusButton
 {
+  // If syncing is not enabled, remove the sync button from view.
+  if (![SettingsHelper isSyncEnabled])
+  {
+    NSMutableArray *array = [toolbar.items mutableCopy];
+    // Noop if syncButton is not in there
+    [array removeObject:rightmostFlexibleSpace];
+    [array removeObject:syncButton];
+    if (syncingIndicator)
+    {
+      [array removeObject:syncingIndicator];
+    }
+    toolbar.items = array;
+    [array release];
+    
+    return;
+  }
+  else
+  {
+    if (![toolbar.items containsObject:rightmostFlexibleSpace])
+    {
+      NSMutableArray *array = [toolbar.items mutableCopy];
+      [array addObject:rightmostFlexibleSpace];
+      toolbar.items = array;
+      [array release];
+    }
+  }
+
+  
   DNZOAppDelegate *appDelegate = (DNZOAppDelegate *)[[UIApplication sharedApplication] delegate];
-  syncButton.enabled = ![appDelegate isSyncing:self.taskList];
+  
+  if (!syncingIndicator)
+  {
+    UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+
+    // Make the frame slightly smaller to match the refresh button
+    CGRect frame = spinner.frame;
+    frame.size = CGSizeMake(frame.size.width - SPINNER_SIZE_ADJUSTMENT, frame.size.height - SPINNER_SIZE_ADJUSTMENT);
+    spinner.frame = frame;
+    [spinner startAnimating];
+    
+    syncingIndicator = [[UIBarButtonItem alloc] initWithCustomView:spinner];
+    
+    [spinner release];
+  }
+  
+  if ([appDelegate isSyncing:self.taskList])
+  {
+    NSMutableArray *array = [toolbar.items mutableCopy];
+    // Noop if syncButton is not in there
+    [array removeObject:syncButton];
+    if (![toolbar.items containsObject:syncingIndicator])
+    {
+      [array addObject:syncingIndicator];
+    }
+    toolbar.items = array;
+    [array release];
+  }
+  else
+  {
+    NSMutableArray *array = [toolbar.items mutableCopy];
+    [array removeObject:syncingIndicator];
+    if (![toolbar.items containsObject:syncButton])
+    {
+      [array addObject:syncButton];
+    }
+    toolbar.items = array;
+    [array release];
+  }
 }
 
 - (void) donezoSyncStatusChanged:(NSNotification*)notification
@@ -593,6 +662,8 @@
   [taskViewController release];
   [sortViewController release];
   [filterViewController release];
+  
+  [syncingIndicator release];
   
   [super dealloc];
 }

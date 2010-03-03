@@ -14,7 +14,12 @@
 
 @interface ListViewController : UIViewController <UIActionSheetDelegate> {
   IBOutlet UITableView *tableView;
+  // Bottom toolbar containing the sync button, etc.
+  IBOutlet UIToolbar *toolbar;
   IBOutlet UIBarButtonItem *syncButton;
+  IBOutlet UIBarButtonItem *rightmostFlexibleSpace;
+  // Created here, not in the nibfile
+  UIBarButtonItem *syncingIndicator;
   
   TaskList *taskList;
   NSArray *tasks;
