@@ -600,6 +600,19 @@
 
 - (void) onClickAddTask:(id)sender
 {
+  if ([self.tasks count] >= DONEZO_MAX_NUM_TASKS)
+  {
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Too many tasks!"
+                                                    message:@"You've hit the maximum number of tasks for this list. Try subdividing your work into multiple lists."
+                                                   delegate:nil
+                                          cancelButtonTitle:@"OK"
+                                          otherButtonTitles:nil];
+    [alert show];
+    [alert release];
+    
+    return;
+  }
+  
   TaskViewController *tvc = [[[TaskViewController alloc] initWithNibName:@"TaskView" bundle:nil] autorelease];
   [tvc loadEditingWithNewTaskForList:self.taskList withFilteredObject:self.filteredObject];
   

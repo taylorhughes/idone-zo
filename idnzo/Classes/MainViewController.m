@@ -134,6 +134,20 @@
 
 - (void) onClickAddList:(id)sender
 {
+  if ([self.taskLists count] >= DONEZO_MAX_NUM_LISTS)
+  {
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Too many task lists!"
+                                                    message:@"You've hit the maximum number of lists. "
+                                                             "Try combining your tasks into fewer lists and filtering by project."
+                                                   delegate:nil
+                                          cancelButtonTitle:@"OK"
+                                          otherButtonTitles:nil];
+    [alert show];
+    [alert release];
+    
+    return;
+  }
+  
   TextFieldViewController *tfvc = [[TextFieldViewController alloc] initWithNibName:@"TextFieldView" bundle:nil];
   
   tfvc.title = @"Add Task List";

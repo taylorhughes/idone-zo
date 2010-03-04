@@ -96,10 +96,27 @@
   {
     return nil;
   }
-  else if (response == nil || [response statusCode] >= 400)
+  else if (response == nil || [response statusCode] >= 500)
   {
+    //
+    // 500s occur when something goes wrong, eg. datastore timeouts. 
+    // Usually transient issues.
+    //
     NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
-    NSString *errorString = [NSString stringWithFormat:@"Bad response code from Done-zo. The service seems to be unavailable."];
+    NSString *errorString = [NSString stringWithFormat:@"Encountered trouble accessing Done-zo. The service might be temporarily unavailable."];
+    [errorDetail setValue:errorString forKey:NSLocalizedDescriptionKey];
+    *error = [NSError errorWithDomain:@"DonezoAPI" code:100 userInfo:errorDetail];
+    
+    return nil;
+  }
+  else if ([response statusCode] >= 400)
+  {
+    //
+    // 40x response code is indicative of some kind of application error,
+    // eg. too many tasks or task lists
+    //
+    NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
+    NSString *errorString = [NSString stringWithFormat:@"Encountered a problem syncing your tasks. If the problem persists, contact support@done-zo.com."];
     [errorDetail setValue:errorString forKey:NSLocalizedDescriptionKey];
     *error = [NSError errorWithDomain:@"DonezoAPI" code:100 userInfo:errorDetail];
     
