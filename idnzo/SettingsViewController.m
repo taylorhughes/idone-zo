@@ -186,6 +186,7 @@
   if ([indexPath section] == 0)
   {
     cell = self.switchCell;
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.textLabel.text = @"Sync to done-zo.com";
   }
   else
