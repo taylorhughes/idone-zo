@@ -195,6 +195,7 @@
       if (cell == nil)
       {
         cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:@"TextViewCell"] autorelease];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         [cell.contentView addSubview:self.textField];
         
         CGRect frame = cell.contentView.frame;

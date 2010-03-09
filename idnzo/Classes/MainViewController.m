@@ -150,7 +150,7 @@
   
   TextFieldViewController *tfvc = [[TextFieldViewController alloc] initWithNibName:@"TextFieldView" bundle:nil];
   
-  tfvc.title = @"Add Task List";
+  tfvc.title = @"New Task List";
   tfvc.placeholder = @"New Task List";
   tfvc.saveAction = @selector(addList:);
   tfvc.target = self;
