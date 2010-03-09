@@ -13,7 +13,7 @@
 
 @synthesize picker;
 @synthesize selectNoneButton;
-@synthesize textField;
+@synthesize tableView;
 @synthesize target;
 @synthesize saveAction;
 
@@ -46,7 +46,6 @@
   [cancel release];
   
   self.picker.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:0];
-  
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -116,22 +115,43 @@
 
 - (void)updateTextField
 {
-  NSDate *date = [self selectedDate];
+  [self.tableView reloadData];
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+  return 1;
+}
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+  return 1;
+}
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+  static NSString *cellIdentifier = @"Cell";
   
-  if (!date)
+  UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+  if (cell == nil)
   {
-    [textField setText:@""];
+    cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellIdentifier] autorelease];
   }
-  else
+    
+  NSDate *date = [self selectedDate];
+  cell.textLabel.text = @"";
+  cell.selectionStyle = UITableViewCellSelectionStyleNone;
+  
+  if (date)
   {
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateStyle:NSDateFormatterLongStyle];
     [formatter setTimeStyle:NSDateFormatterNoStyle];
     [formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
     
-    [textField setText:[formatter stringFromDate:date]];
+    cell.textLabel.text = [formatter stringFromDate:date];
     [formatter release];
   }
+  
+  return cell;
 }
 
 - (void)dealloc

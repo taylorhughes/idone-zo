@@ -6,10 +6,10 @@
 //  Copyright 2009 Two-Stitch Software. All rights reserved.
 //
 
-@interface DatePickerViewController : UIViewController {
+@interface DatePickerViewController : UIViewController <UITableViewDelegate,UITableViewDataSource> {
   UIDatePicker *picker;
   UIButton *selectNoneButton;
-  UITextField *textField;
+  UITableView *tableView;
   NSObject *target;
   SEL saveAction;
   
@@ -22,7 +22,7 @@
 
 @property (retain, nonatomic) IBOutlet UIDatePicker *picker;
 @property (retain, nonatomic) IBOutlet UIButton *selectNoneButton;
-@property (retain, nonatomic) IBOutlet UITextField *textField;
+@property (retain, nonatomic) IBOutlet UITableView *tableView;
 @property (retain, nonatomic) NSObject *target;
 @property (nonatomic) SEL saveAction;
 @property (copy, nonatomic) NSDate *selectedDate;
