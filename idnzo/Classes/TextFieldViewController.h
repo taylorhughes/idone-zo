@@ -10,8 +10,8 @@
 //  TextFieldViewController -- This is a controller for a view containing
 //    only a single UITextField, which is a text box.
 //  
-@interface TextFieldViewController : UIViewController {
-  IBOutlet UITextField *textField;
+@interface TextFieldViewController : UITableViewController <UITextFieldDelegate> {
+  UITextField *textField;
   NSString *text;
   NSString *placeholder;
   NSObject *target;
@@ -23,9 +23,11 @@
 @property (nonatomic, retain) NSString *placeholder;
 @property (nonatomic, retain) NSObject *target;
 
-@property (nonatomic, readonly) UITextField *textField;
+@property (nonatomic, retain) UITextField *textField;
 
 @property (nonatomic) SEL saveAction;
 @property (nonatomic) SEL cancelAction;
+
++ (TextFieldViewController*) textFieldViewController;
 
 @end

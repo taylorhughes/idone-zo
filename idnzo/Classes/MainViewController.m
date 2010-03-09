@@ -148,7 +148,7 @@
     return;
   }
   
-  TextFieldViewController *tfvc = [[TextFieldViewController alloc] initWithNibName:@"TextFieldView" bundle:nil];
+  TextFieldViewController *tfvc = [TextFieldViewController textFieldViewController];
   
   tfvc.title = @"New Task List";
   tfvc.placeholder = @"New Task List";

@@ -31,8 +31,6 @@
 		34307873109FF37D00A66D5A /* AdjustableTextLabelWidthCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 34307871109FF37D00A66D5A /* AdjustableTextLabelWidthCell.m */; };
 		34388F8C1076B18900FC1AB3 /* DatePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34388F8B1076B18900FC1AB3 /* DatePickerViewController.m */; };
 		34388F8D1076B18900FC1AB3 /* DatePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34388F8B1076B18900FC1AB3 /* DatePickerViewController.m */; };
-		34388FD51076B87500FC1AB3 /* TaskDatePickerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34388FD41076B87500FC1AB3 /* TaskDatePickerView.xib */; };
-		34388FD61076B87500FC1AB3 /* TaskDatePickerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34388FD41076B87500FC1AB3 /* TaskDatePickerView.xib */; };
 		343890031076BD8200FC1AB3 /* datepicker-background.png in Resources */ = {isa = PBXBuildFile; fileRef = 343890021076BD8200FC1AB3 /* datepicker-background.png */; };
 		343890041076BD8200FC1AB3 /* datepicker-background.png in Resources */ = {isa = PBXBuildFile; fileRef = 343890021076BD8200FC1AB3 /* datepicker-background.png */; };
 		343B0532108D6668007F2425 /* DonezoSyncOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 343B0531108D6668007F2425 /* DonezoSyncOperation.m */; };
@@ -40,6 +38,8 @@
 		3443E32510B0B071000D5B27 /* DonezoDates.m in Sources */ = {isa = PBXBuildFile; fileRef = 3443E32410B0B071000D5B27 /* DonezoDates.m */; };
 		3443E32610B0B071000D5B27 /* DonezoDates.m in Sources */ = {isa = PBXBuildFile; fileRef = 3443E32410B0B071000D5B27 /* DonezoDates.m */; };
 		3452D4A31049CC26005C717C /* Entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3452D4A21049CC26005C717C /* Entitlements.plist */; };
+		346EF3BE114621E90064C195 /* TaskDatePickerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 346EF3BD114621E90064C195 /* TaskDatePickerView.xib */; };
+		346EF3BF114621E90064C195 /* TaskDatePickerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 346EF3BD114621E90064C195 /* TaskDatePickerView.xib */; };
 		34762C35104EF27700498704 /* DNZOAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* DNZOAppDelegate.m */; };
 		34770B2A0FAFE45B00AD8397 /* ListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34770B270FAFE45B00AD8397 /* ListViewController.m */; };
 		34770B2C0FAFE45B00AD8397 /* ListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34770B270FAFE45B00AD8397 /* ListViewController.m */; };
@@ -55,8 +55,6 @@
 		3489369710AA5E870054237D /* TextFieldViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3489369510AA5E870054237D /* TextFieldViewController.m */; };
 		348936D810AA66AD0054237D /* tableview-background.png in Resources */ = {isa = PBXBuildFile; fileRef = 348936D710AA66AD0054237D /* tableview-background.png */; };
 		348936D910AA66AD0054237D /* tableview-background.png in Resources */ = {isa = PBXBuildFile; fileRef = 348936D710AA66AD0054237D /* tableview-background.png */; };
-		3489371B10AA6BD80054237D /* TextFieldView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3489371A10AA6BD80054237D /* TextFieldView.xib */; };
-		3489371C10AA6BD80054237D /* TextFieldView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3489371A10AA6BD80054237D /* TextFieldView.xib */; };
 		349066EA10AF6C7200F2AAFF /* ArchivedListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 349066E910AF6C7200F2AAFF /* ArchivedListViewController.m */; };
 		349066EB10AF6C7200F2AAFF /* ArchivedListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 349066E910AF6C7200F2AAFF /* ArchivedListViewController.m */; };
 		34916AEA10C4E359009F932A /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 34916AE910C4E359009F932A /* Default.png */; };
@@ -166,13 +164,13 @@
 		34307871109FF37D00A66D5A /* AdjustableTextLabelWidthCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdjustableTextLabelWidthCell.m; sourceTree = "<group>"; };
 		34388F8A1076B18900FC1AB3 /* DatePickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatePickerViewController.h; sourceTree = "<group>"; };
 		34388F8B1076B18900FC1AB3 /* DatePickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatePickerViewController.m; sourceTree = "<group>"; };
-		34388FD41076B87500FC1AB3 /* TaskDatePickerView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskDatePickerView.xib; sourceTree = "<group>"; };
 		343890021076BD8200FC1AB3 /* datepicker-background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "datepicker-background.png"; path = "Resources/datepicker-background.png"; sourceTree = "<group>"; };
 		343B0530108D6668007F2425 /* DonezoSyncOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DonezoSyncOperation.h; sourceTree = "<group>"; };
 		343B0531108D6668007F2425 /* DonezoSyncOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DonezoSyncOperation.m; sourceTree = "<group>"; };
 		3443E32310B0B071000D5B27 /* DonezoDates.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DonezoDates.h; path = DonezoAPI/DonezoDates.h; sourceTree = "<group>"; };
 		3443E32410B0B071000D5B27 /* DonezoDates.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DonezoDates.m; path = DonezoAPI/DonezoDates.m; sourceTree = "<group>"; };
 		3452D4A21049CC26005C717C /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Entitlements.plist; sourceTree = "<group>"; };
+		346EF3BD114621E90064C195 /* TaskDatePickerView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = TaskDatePickerView.xib; path = Resources/TaskDatePickerView.xib; sourceTree = "<group>"; };
 		34770B260FAFE45B00AD8397 /* ListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ListViewController.h; path = Classes/ListViewController.h; sourceTree = "<group>"; };
 		34770B270FAFE45B00AD8397 /* ListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ListViewController.m; path = Classes/ListViewController.m; sourceTree = "<group>"; };
 		34770B280FAFE45B00AD8397 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MainViewController.h; path = Classes/MainViewController.h; sourceTree = "<group>"; };
@@ -188,7 +186,6 @@
 		3489369410AA5E870054237D /* TextFieldViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextFieldViewController.h; sourceTree = "<group>"; };
 		3489369510AA5E870054237D /* TextFieldViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextFieldViewController.m; sourceTree = "<group>"; };
 		348936D710AA66AD0054237D /* tableview-background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "tableview-background.png"; path = "Resources/tableview-background.png"; sourceTree = "<group>"; };
-		3489371A10AA6BD80054237D /* TextFieldView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = TextFieldView.xib; path = Resources/TextFieldView.xib; sourceTree = "<group>"; };
 		348E18C60FA7DE1E00B75000 /* Test.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Test.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		348E18C70FA7DE1E00B75000 /* Test-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Test-Info.plist"; sourceTree = "<group>"; };
 		349066E810AF6C7200F2AAFF /* ArchivedListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ArchivedListViewController.h; path = classes/ArchivedListViewController.h; sourceTree = "<group>"; };
@@ -368,12 +365,11 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				3489371A10AA6BD80054237D /* TextFieldView.xib */,
+				346EF3BD114621E90064C195 /* TaskDatePickerView.xib */,
 				34770B300FAFE4A300AD8397 /* MainWindow.xib */,
 				34770B2F0FAFE4A300AD8397 /* ListView.xib */,
 				3488E39310C1FA9600D7921C /* ArchivedListView.xib */,
 				341E1EFE0FB14F2900D5B454 /* TaskView.xib */,
-				34388FD41076B87500FC1AB3 /* TaskDatePickerView.xib */,
 				34B6072410D8829D00CCF883 /* SettingsView.xib */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 				3452D4A21049CC26005C717C /* Entitlements.plist */,
@@ -620,7 +616,6 @@
 				34B7D8400FC3860600A91E43 /* checked.png in Resources */,
 				34B7D8410FC3860600A91E43 /* unchecked.png in Resources */,
 				3452D4A31049CC26005C717C /* Entitlements.plist in Resources */,
-				34388FD61076B87500FC1AB3 /* TaskDatePickerView.xib in Resources */,
 				343890041076BD8200FC1AB3 /* datepicker-background.png in Resources */,
 				34961D56107EE6740068B551 /* red-button.png in Resources */,
 				34961E4C107FFAFC0068B551 /* confirm-cancel.png in Resources */,
@@ -629,13 +624,13 @@
 				34961F0C1082AA0F0068B551 /* confirm-cancel-highlighted.png in Resources */,
 				34962145108685B50068B551 /* sort-button.png in Resources */,
 				348936D810AA66AD0054237D /* tableview-background.png in Resources */,
-				3489371B10AA6BD80054237D /* TextFieldView.xib in Resources */,
 				3488E39410C1FA9600D7921C /* ArchivedListView.xib in Resources */,
 				34916AEA10C4E359009F932A /* Default.png in Resources */,
 				34B9D7F410CF2F600087EDCC /* RevisionInfo.h.rb in Resources */,
 				34B6072610D8829D00CCF883 /* SettingsView.xib in Resources */,
 				34B6072E10D8854500CCF883 /* dialog-background.png in Resources */,
 				34A8317910FA3C01002418C2 /* FilterView.xib in Resources */,
+				346EF3BE114621E90064C195 /* TaskDatePickerView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -646,15 +641,14 @@
 				341E1F000FB14F2900D5B454 /* TaskView.xib in Resources */,
 				34B7D83E0FC3860600A91E43 /* checked.png in Resources */,
 				34B7D83F0FC3860600A91E43 /* unchecked.png in Resources */,
-				34388FD51076B87500FC1AB3 /* TaskDatePickerView.xib in Resources */,
 				343890031076BD8200FC1AB3 /* datepicker-background.png in Resources */,
 				348936D910AA66AD0054237D /* tableview-background.png in Resources */,
-				3489371C10AA6BD80054237D /* TextFieldView.xib in Resources */,
 				3488E39510C1FA9600D7921C /* ArchivedListView.xib in Resources */,
 				34B9D7F510CF2F600087EDCC /* RevisionInfo.h.rb in Resources */,
 				34B6072510D8829D00CCF883 /* SettingsView.xib in Resources */,
 				34B6072D10D8854500CCF883 /* dialog-background.png in Resources */,
 				34A8317A10FA3C01002418C2 /* FilterView.xib in Resources */,
+				346EF3BF114621E90064C195 /* TaskDatePickerView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

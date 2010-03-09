@@ -33,6 +33,7 @@
     appendSelections = NO;
     
     self.textField = [[UITextField alloc] initWithFrame:CGRectZero];
+    [self.textField release];
     self.textField.delegate = self;
     
     self.textField.textColor = [UIColor blackColor];

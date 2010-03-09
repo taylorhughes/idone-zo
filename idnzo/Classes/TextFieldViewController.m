@@ -8,7 +8,7 @@
 
 #import "TextFieldViewController.h"
 
-@interface TextFieldViewController ()
+@interface TextFieldViewController (Private)
 
 - (BOOL) wasPresentedModally;
 
@@ -17,21 +17,48 @@
 @implementation TextFieldViewController
 
 @synthesize text, placeholder;
+@synthesize textField;
 
 @synthesize target;
 @synthesize saveAction, cancelAction;
 
+#define FONT_SIZE 17.0
+#define TEXT_FIELD_VPADDING 11.0
+#define TEXT_FIELD_HPADDING 10.0
+#define TEXT_FIELD_WIDTH_ADJUSTMENT 5.0
 
-- (UITextField *)textField
+
++ (TextFieldViewController*) textFieldViewController 
 {
-  // ensure this is loaded
-  self.view;
-  return textField;
+  return [[[TextFieldViewController alloc] initWithStyle:UITableViewStyleGrouped] autorelease];
 }
 
 - (BOOL) wasPresentedModally
 {
   return [[self.navigationController viewControllers] count] == 1;
+}
+
+- (id) initWithStyle:(UITableViewStyle)style
+{
+  self = [super initWithStyle:style];
+  if (self != nil)
+  {
+    self.textField = [[UITextField alloc] initWithFrame:CGRectZero];
+    [self.textField release];
+    self.textField.delegate = self;
+    
+    self.textField.textColor = [UIColor blackColor];
+    self.textField.font = [UIFont boldSystemFontOfSize:FONT_SIZE];
+    
+    self.textField.keyboardType = UIKeyboardTypeDefault;
+    self.textField.autocorrectionType = UITextAutocorrectionTypeDefault;
+    self.textField.clearButtonMode = UITextFieldViewModeWhileEditing;
+    
+    self.textField.contentMode = UIViewContentModeLeft;
+    
+    [self.tableView setContentInset:UIEdgeInsetsMake(58.0f, 0, 0, 0)];
+  }
+  return self;
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -99,11 +126,51 @@
   }
 }
 
+- (BOOL)textFieldShouldReturn:(UITextField *)aTextField
+{
+  //[self.textField resignFirstResponder];
+  //[self.tableView reloadData];
+  //return YES;
+  return NO;
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+  return 1;
+}
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+  return 1;
+}
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+  UITableViewCell *cell = nil;
+  
+  cell = [tableView dequeueReusableCellWithIdentifier:@"TextViewCell"];
+  if (cell == nil)
+  {
+    cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:@"TextViewCell"] autorelease];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    [cell.contentView addSubview:self.textField];
+    
+    CGRect frame = cell.contentView.frame;
+    self.textField.frame = CGRectMake(frame.origin.x + TEXT_FIELD_HPADDING, 
+                                      frame.origin.y + TEXT_FIELD_VPADDING,
+                                      frame.size.width - TEXT_FIELD_HPADDING * 3 - TEXT_FIELD_WIDTH_ADJUSTMENT,
+                                      frame.size.height - TEXT_FIELD_VPADDING * 2);
+  }
+  
+  return cell;
+}
+
+
 - (void) dealloc
 {
-  [text dealloc];
-  [placeholder dealloc];
-  [textField dealloc];
+  [text release];
+  [placeholder release];
+  [textField release];
+  [target release];
+  
   [super dealloc];
 }
 

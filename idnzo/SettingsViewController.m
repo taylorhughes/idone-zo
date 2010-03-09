@@ -222,7 +222,7 @@
     return nil;
   }
   
-  TextFieldViewController *tfvc = [[TextFieldViewController alloc] initWithNibName:@"TextFieldView" bundle:nil];
+  TextFieldViewController *tfvc = [TextFieldViewController textFieldViewController];
   
   tfvc.target = self;
   
