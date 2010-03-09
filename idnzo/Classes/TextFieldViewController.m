@@ -56,6 +56,7 @@
     
     self.textField.contentMode = UIViewContentModeLeft;
     
+    // Should be 67 pixels to be perfectly vertically centered, but that looks weird.
     [self.tableView setContentInset:UIEdgeInsetsMake(58.0f, 0, 0, 0)];
   }
   return self;
