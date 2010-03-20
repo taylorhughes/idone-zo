@@ -31,7 +31,7 @@
   
   NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
   [dnc addObserver:self
-          selector:@selector(donzoDataUpdated:) 
+          selector:@selector(donezoDataUpdated:) 
               name:DonezoDataUpdatedNotification
             object:nil];
 }
@@ -188,8 +188,9 @@
   [dnc postNotificationName:DonezoShouldSyncNotification object:self];
 }
 
-- (void) donzoDataUpdated:(NSNotification*)notification
+- (void) donezoDataUpdated:(NSNotification*)notification
 {
+  NSLog(@"Handling donezoDataUpdated notification");
   self.taskLists = nil;
   [self.tableView reloadData];
 }
@@ -234,6 +235,13 @@
 {
   if (editingStyle == UITableViewCellEditingStyleDelete)
   {
+    NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
+    // Temporarily suspend updates so the list doesn't explode when, during sync, 
+    // a DonezoDataUpdatedNotification comes in and wipes out the list on context save
+    [dnc removeObserver:self
+                   name:DonezoDataUpdatedNotification
+                 object:nil];
+    
     TaskList *list = [self.taskLists objectAtIndex:[indexPath row]];
     
     list.isDeleted = YES;
@@ -253,7 +261,11 @@
     self.taskLists = nil;
     [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
     
-    NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
+    [dnc addObserver:self
+            selector:@selector(donezoDataUpdated:) 
+                name:DonezoDataUpdatedNotification
+              object:nil];
+    
     [dnc postNotificationName:DonezoDataUpdatedNotification object:self];
     [dnc postNotificationName:DonezoShouldSyncNotification object:self];
   }
