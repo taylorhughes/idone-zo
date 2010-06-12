@@ -177,7 +177,7 @@
   TaskList *newList = (TaskList*)[NSEntityDescription insertNewObjectForEntityForName:@"TaskList" inManagedObjectContext:context];
   newList.name = name;
   
-  NSError *error;
+  NSError *error = nil;
   if (![context save:&error])
   {
     NSLog(@"Error saving new task list with name %@ and error %@", name, [error localizedDescription]);
@@ -209,7 +209,7 @@
     listsRequest.sortDescriptors = sorters;
     [sort release];
     
-    NSError *error;
+    NSError *error = nil;
     
     self.taskLists = [appDelegate.managedObjectContext executeFetchRequest:listsRequest error:&error];
     if (self.taskLists == nil)

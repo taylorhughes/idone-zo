@@ -228,7 +228,6 @@
 
   NSString *body = [[NSDictionary dictionaryWithObject:(*list).name forKey:@"task_list_name"] toFormEncodedString];
   
-  //NSLog(@"Body looks like %@", body);
   NSDictionary *dict = (NSDictionary*)[self getObjectFromPath:@"/l/" withKey:@"task_list" usingMethod:@"POST" andBody:body error:error];
   
   if (*error)
@@ -311,7 +310,6 @@
   NSDictionary *dict = [*task toDictionary];
   NSString *body = [dict toFormEncodedString];
   
-  //NSLog(@"Body looks like %@", body);
   dict = (NSDictionary*)[self getObjectFromPath:path withKey:@"task" usingMethod:method andBody:body error:error];
   
   if (*error)
@@ -326,10 +324,7 @@
   if (![self login:error]) { return; }
   
   NSString *path = [NSString stringWithFormat:@"/t/%@/", (*task).key];  
-  //NSString *result = 
   [self responseFromRequestToPath:path withMethod:@"DELETE" andBody:nil error:error];
-  
-  //NSLog(@"Result from DELETE: %@", result);
   
   if (*error)
   {

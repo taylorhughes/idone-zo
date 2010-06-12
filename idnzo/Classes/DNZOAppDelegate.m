@@ -439,7 +439,7 @@ NSString* const DonezoShouldToggleCompletedTaskNotification = @"DonezoShouldTogg
  */
 - (IBAction) saveAction:(id)sender
 {
-  NSError *error;
+  NSError *error = nil;
   if (![self.managedObjectContext save:&error])
   {
     NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
@@ -488,7 +488,7 @@ NSString* const DonezoShouldToggleCompletedTaskNotification = @"DonezoShouldTogg
 {
 	if (persistentStoreCoordinator == nil)
   {    
-    NSError *error;
+    NSError *error = nil;
     NSURL *storeUrl = [NSURL fileURLWithPath:self.storePath];
     persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
     if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeUrl options:nil error:&error])
@@ -581,7 +581,7 @@ NSString* const DonezoShouldToggleCompletedTaskNotification = @"DonezoShouldTogg
 {
   if (managedObjectContext != nil)
   {
-    NSError *error;
+    NSError *error = nil;
     if ([managedObjectContext hasChanges] && ![managedObjectContext save:&error])
     {
 			// Handle error

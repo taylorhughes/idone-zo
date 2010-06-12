@@ -621,7 +621,7 @@ static UIImage *unchecked;
   NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
   [dnc addObserver:self selector:@selector(editingContextDidSave:) name:NSManagedObjectContextDidSaveNotification object:self.editingContext];
   
-  NSError *error;
+  NSError *error = nil;
   if (![self.editingContext save:&error])
   {
     // Update to handle the error appropriately.

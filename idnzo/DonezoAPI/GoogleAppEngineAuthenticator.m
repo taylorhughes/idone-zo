@@ -140,7 +140,6 @@
     }
   }
 
-  // If google returned an error in the body [google returns Error=Bad Authentication in the body. which is weird, not sure if they use status codes]
   NSObject *responseError = [token objectForKey:@"Error"];
   if (responseError != nil)
   {
@@ -189,7 +188,7 @@
   NSString *authURL = [[self.url absoluteString] stringByAppendingPathComponent:@"_ah/login"];
   authURL = [authURL stringByAppendingFormat:@"?%@", [authArgs toFormEncodedString]];
   
-  NSError *cookieError;
+  NSError *cookieError = nil;
   NSMutableURLRequest *cookieRequest = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:authURL]];
   
   [cookieRequest setHTTPMethod:@"GET"];
