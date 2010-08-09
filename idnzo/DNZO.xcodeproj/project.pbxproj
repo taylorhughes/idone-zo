@@ -53,18 +53,12 @@
 		3489366910AA5D950054237D /* TextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3489366710AA5D950054237D /* TextViewController.m */; };
 		3489369610AA5E870054237D /* TextFieldViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3489369510AA5E870054237D /* TextFieldViewController.m */; };
 		3489369710AA5E870054237D /* TextFieldViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3489369510AA5E870054237D /* TextFieldViewController.m */; };
-		348936D810AA66AD0054237D /* tableview-background.png in Resources */ = {isa = PBXBuildFile; fileRef = 348936D710AA66AD0054237D /* tableview-background.png */; };
-		348936D910AA66AD0054237D /* tableview-background.png in Resources */ = {isa = PBXBuildFile; fileRef = 348936D710AA66AD0054237D /* tableview-background.png */; };
 		349066EA10AF6C7200F2AAFF /* ArchivedListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 349066E910AF6C7200F2AAFF /* ArchivedListViewController.m */; };
 		349066EB10AF6C7200F2AAFF /* ArchivedListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 349066E910AF6C7200F2AAFF /* ArchivedListViewController.m */; };
 		34916AEA10C4E359009F932A /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 34916AE910C4E359009F932A /* Default.png */; };
 		3494869810152A3B00DF81F3 /* TaskList.m in Sources */ = {isa = PBXBuildFile; fileRef = 3494869710152A3B00DF81F3 /* TaskList.m */; };
 		3494869910152A3B00DF81F3 /* TaskList.m in Sources */ = {isa = PBXBuildFile; fileRef = 3494869710152A3B00DF81F3 /* TaskList.m */; };
 		34961D56107EE6740068B551 /* red-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 34961D55107EE6740068B551 /* red-button.png */; };
-		34961E4C107FFAFC0068B551 /* confirm-cancel.png in Resources */ = {isa = PBXBuildFile; fileRef = 34961E49107FFAFC0068B551 /* confirm-cancel.png */; };
-		34961E4D107FFAFC0068B551 /* confirm-delete.png in Resources */ = {isa = PBXBuildFile; fileRef = 34961E4A107FFAFC0068B551 /* confirm-delete.png */; };
-		34961E4E107FFAFC0068B551 /* confirm-dialog.png in Resources */ = {isa = PBXBuildFile; fileRef = 34961E4B107FFAFC0068B551 /* confirm-dialog.png */; };
-		34961F0C1082AA0F0068B551 /* confirm-cancel-highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 34961F0B1082AA0F0068B551 /* confirm-cancel-highlighted.png */; };
 		34962145108685B50068B551 /* sort-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 34962144108685B50068B551 /* sort-button.png */; };
 		349BE2691095007500C80146 /* FilterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 349BE2681095007400C80146 /* FilterViewController.m */; };
 		349BE26A1095007500C80146 /* FilterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 349BE2681095007400C80146 /* FilterViewController.m */; };
@@ -93,6 +87,17 @@
 		34B9D82A10CF34180087EDCC /* SettingsHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B9D70E10CDCE110087EDCC /* SettingsHelper.m */; };
 		34B9D82B10CF34180087EDCC /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34770B290FAFE45B00AD8397 /* MainViewController.m */; };
 		34B9D82C10CF34180087EDCC /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B9D5B110CCA75A0087EDCC /* SettingsViewController.m */; };
+		34B9F413120FB80A0032A02D /* checked@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 34B9F410120FB8090032A02D /* checked@2x.png */; };
+		34B9F414120FB80A0032A02D /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 34B9F411120FB80A0032A02D /* icon@2x.png */; };
+		34B9F415120FB80A0032A02D /* unchecked@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 34B9F412120FB80A0032A02D /* unchecked@2x.png */; };
+		34B9F42D120FBA4C0032A02D /* sort-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 34B9F42C120FBA4C0032A02D /* sort-button@2x.png */; };
+		34B9F448120FBEB30032A02D /* black-button-highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 34B9F444120FBEB30032A02D /* black-button-highlighted.png */; };
+		34B9F449120FBEB30032A02D /* black-button-highlighted@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 34B9F445120FBEB30032A02D /* black-button-highlighted@2x.png */; };
+		34B9F44A120FBEB30032A02D /* black-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 34B9F446120FBEB30032A02D /* black-button.png */; };
+		34B9F44B120FBEB30032A02D /* black-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 34B9F447120FBEB30032A02D /* black-button@2x.png */; };
+		34B9F44E120FBF710032A02D /* datepicker-background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 34B9F44D120FBF710032A02D /* datepicker-background@2x.png */; };
+		34B9F454120FC0030032A02D /* dialog-background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 34B9F453120FC0030032A02D /* dialog-background@2x.png */; };
+		34B9F458120FC0A40032A02D /* red-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 34B9F457120FC0A40032A02D /* red-button@2x.png */; };
 		34C51AC40FB92A9D0024A5CD /* EditProjectPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C51AC30FB92A9D0024A5CD /* EditProjectPicker.m */; };
 		34C51AC50FB92A9D0024A5CD /* EditProjectPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C51AC30FB92A9D0024A5CD /* EditProjectPicker.m */; };
 		34C74259107570400045F527 /* GTMRegex.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C74258107570400045F527 /* GTMRegex.m */; };
@@ -185,7 +190,6 @@
 		3489366710AA5D950054237D /* TextViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextViewController.m; sourceTree = "<group>"; };
 		3489369410AA5E870054237D /* TextFieldViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextFieldViewController.h; sourceTree = "<group>"; };
 		3489369510AA5E870054237D /* TextFieldViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextFieldViewController.m; sourceTree = "<group>"; };
-		348936D710AA66AD0054237D /* tableview-background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "tableview-background.png"; path = "Resources/tableview-background.png"; sourceTree = "<group>"; };
 		348E18C60FA7DE1E00B75000 /* Test.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Test.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		348E18C70FA7DE1E00B75000 /* Test-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Test-Info.plist"; sourceTree = "<group>"; };
 		349066E810AF6C7200F2AAFF /* ArchivedListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ArchivedListViewController.h; path = classes/ArchivedListViewController.h; sourceTree = "<group>"; };
@@ -196,10 +200,6 @@
 		3494869610152A3B00DF81F3 /* TaskList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskList.h; sourceTree = "<group>"; };
 		3494869710152A3B00DF81F3 /* TaskList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaskList.m; sourceTree = "<group>"; };
 		34961D55107EE6740068B551 /* red-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "red-button.png"; path = "Resources/red-button.png"; sourceTree = "<group>"; };
-		34961E49107FFAFC0068B551 /* confirm-cancel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "confirm-cancel.png"; path = "Resources/confirm-cancel.png"; sourceTree = "<group>"; };
-		34961E4A107FFAFC0068B551 /* confirm-delete.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "confirm-delete.png"; path = "Resources/confirm-delete.png"; sourceTree = "<group>"; };
-		34961E4B107FFAFC0068B551 /* confirm-dialog.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "confirm-dialog.png"; path = "Resources/confirm-dialog.png"; sourceTree = "<group>"; };
-		34961F0B1082AA0F0068B551 /* confirm-cancel-highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "confirm-cancel-highlighted.png"; path = "Resources/confirm-cancel-highlighted.png"; sourceTree = "<group>"; };
 		34962144108685B50068B551 /* sort-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "sort-button.png"; path = "Resources/sort-button.png"; sourceTree = "<group>"; };
 		349BE2671095007400C80146 /* FilterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilterViewController.h; sourceTree = "<group>"; };
 		349BE2681095007400C80146 /* FilterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilterViewController.m; sourceTree = "<group>"; };
@@ -222,6 +222,17 @@
 		34B9D70D10CDCE110087EDCC /* SettingsHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsHelper.h; sourceTree = "<group>"; };
 		34B9D70E10CDCE110087EDCC /* SettingsHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsHelper.m; sourceTree = "<group>"; };
 		34B9D7F310CF2F600087EDCC /* RevisionInfo.h.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = RevisionInfo.h.rb; sourceTree = "<group>"; };
+		34B9F410120FB8090032A02D /* checked@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "checked@2x.png"; path = "Resources/checked@2x.png"; sourceTree = "<group>"; };
+		34B9F411120FB80A0032A02D /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icon@2x.png"; path = "Resources/icon@2x.png"; sourceTree = "<group>"; };
+		34B9F412120FB80A0032A02D /* unchecked@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "unchecked@2x.png"; path = "Resources/unchecked@2x.png"; sourceTree = "<group>"; };
+		34B9F42C120FBA4C0032A02D /* sort-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "sort-button@2x.png"; path = "Resources/sort-button@2x.png"; sourceTree = "<group>"; };
+		34B9F444120FBEB30032A02D /* black-button-highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "black-button-highlighted.png"; path = "Resources/black-button-highlighted.png"; sourceTree = "<group>"; };
+		34B9F445120FBEB30032A02D /* black-button-highlighted@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "black-button-highlighted@2x.png"; path = "Resources/black-button-highlighted@2x.png"; sourceTree = "<group>"; };
+		34B9F446120FBEB30032A02D /* black-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "black-button.png"; path = "Resources/black-button.png"; sourceTree = "<group>"; };
+		34B9F447120FBEB30032A02D /* black-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "black-button@2x.png"; path = "Resources/black-button@2x.png"; sourceTree = "<group>"; };
+		34B9F44D120FBF710032A02D /* datepicker-background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "datepicker-background@2x.png"; path = "Resources/datepicker-background@2x.png"; sourceTree = "<group>"; };
+		34B9F453120FC0030032A02D /* dialog-background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "dialog-background@2x.png"; path = "Resources/dialog-background@2x.png"; sourceTree = "<group>"; };
+		34B9F457120FC0A40032A02D /* red-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "red-button@2x.png"; path = "Resources/red-button@2x.png"; sourceTree = "<group>"; };
 		34C51AC20FB92A9D0024A5CD /* EditProjectPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditProjectPicker.h; sourceTree = "<group>"; };
 		34C51AC30FB92A9D0024A5CD /* EditProjectPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditProjectPicker.m; sourceTree = "<group>"; };
 		34C74256107570400045F527 /* GTMDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMDefines.h; sourceTree = "<group>"; };
@@ -444,18 +455,24 @@
 			isa = PBXGroup;
 			children = (
 				34B6072C10D8854500CCF883 /* dialog-background.png */,
+				34B9F453120FC0030032A02D /* dialog-background@2x.png */,
 				34916AE910C4E359009F932A /* Default.png */,
-				348936D710AA66AD0054237D /* tableview-background.png */,
 				34962144108685B50068B551 /* sort-button.png */,
+				34B9F42C120FBA4C0032A02D /* sort-button@2x.png */,
 				34961D55107EE6740068B551 /* red-button.png */,
+				34B9F457120FC0A40032A02D /* red-button@2x.png */,
 				34770B430FAFE67B00AD8397 /* icon.png */,
+				34B9F411120FB80A0032A02D /* icon@2x.png */,
 				34B7D83C0FC3860600A91E43 /* checked.png */,
+				34B9F410120FB8090032A02D /* checked@2x.png */,
 				34B7D83D0FC3860600A91E43 /* unchecked.png */,
-				34961E4B107FFAFC0068B551 /* confirm-dialog.png */,
-				34961E4A107FFAFC0068B551 /* confirm-delete.png */,
-				34961E49107FFAFC0068B551 /* confirm-cancel.png */,
-				34961F0B1082AA0F0068B551 /* confirm-cancel-highlighted.png */,
+				34B9F412120FB80A0032A02D /* unchecked@2x.png */,
 				343890021076BD8200FC1AB3 /* datepicker-background.png */,
+				34B9F44D120FBF710032A02D /* datepicker-background@2x.png */,
+				34B9F444120FBEB30032A02D /* black-button-highlighted.png */,
+				34B9F445120FBEB30032A02D /* black-button-highlighted@2x.png */,
+				34B9F446120FBEB30032A02D /* black-button.png */,
+				34B9F447120FBEB30032A02D /* black-button@2x.png */,
 			);
 			name = Images;
 			sourceTree = "<group>";
@@ -612,18 +629,14 @@
 				34770B310FAFE4A300AD8397 /* ListView.xib in Resources */,
 				34770B320FAFE4A300AD8397 /* MainWindow.xib in Resources */,
 				34770B440FAFE67B00AD8397 /* icon.png in Resources */,
+				34B9F414120FB80A0032A02D /* icon@2x.png in Resources */,
 				341E1F020FB14F2900D5B454 /* TaskView.xib in Resources */,
 				34B7D8400FC3860600A91E43 /* checked.png in Resources */,
 				34B7D8410FC3860600A91E43 /* unchecked.png in Resources */,
 				3452D4A31049CC26005C717C /* Entitlements.plist in Resources */,
 				343890041076BD8200FC1AB3 /* datepicker-background.png in Resources */,
 				34961D56107EE6740068B551 /* red-button.png in Resources */,
-				34961E4C107FFAFC0068B551 /* confirm-cancel.png in Resources */,
-				34961E4D107FFAFC0068B551 /* confirm-delete.png in Resources */,
-				34961E4E107FFAFC0068B551 /* confirm-dialog.png in Resources */,
-				34961F0C1082AA0F0068B551 /* confirm-cancel-highlighted.png in Resources */,
 				34962145108685B50068B551 /* sort-button.png in Resources */,
-				348936D810AA66AD0054237D /* tableview-background.png in Resources */,
 				3488E39410C1FA9600D7921C /* ArchivedListView.xib in Resources */,
 				34916AEA10C4E359009F932A /* Default.png in Resources */,
 				34B9D7F410CF2F600087EDCC /* RevisionInfo.h.rb in Resources */,
@@ -631,6 +644,16 @@
 				34B6072E10D8854500CCF883 /* dialog-background.png in Resources */,
 				34A8317910FA3C01002418C2 /* FilterView.xib in Resources */,
 				346EF3BE114621E90064C195 /* TaskDatePickerView.xib in Resources */,
+				34B9F413120FB80A0032A02D /* checked@2x.png in Resources */,
+				34B9F415120FB80A0032A02D /* unchecked@2x.png in Resources */,
+				34B9F42D120FBA4C0032A02D /* sort-button@2x.png in Resources */,
+				34B9F448120FBEB30032A02D /* black-button-highlighted.png in Resources */,
+				34B9F449120FBEB30032A02D /* black-button-highlighted@2x.png in Resources */,
+				34B9F44A120FBEB30032A02D /* black-button.png in Resources */,
+				34B9F44B120FBEB30032A02D /* black-button@2x.png in Resources */,
+				34B9F44E120FBF710032A02D /* datepicker-background@2x.png in Resources */,
+				34B9F454120FC0030032A02D /* dialog-background@2x.png in Resources */,
+				34B9F458120FC0A40032A02D /* red-button@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -642,7 +665,6 @@
 				34B7D83E0FC3860600A91E43 /* checked.png in Resources */,
 				34B7D83F0FC3860600A91E43 /* unchecked.png in Resources */,
 				343890031076BD8200FC1AB3 /* datepicker-background.png in Resources */,
-				348936D910AA66AD0054237D /* tableview-background.png in Resources */,
 				3488E39510C1FA9600D7921C /* ArchivedListView.xib in Resources */,
 				34B9D7F510CF2F600087EDCC /* RevisionInfo.h.rb in Resources */,
 				34B6072510D8829D00CCF883 /* SettingsView.xib in Resources */,
