@@ -113,7 +113,7 @@
 
 - (void) testInsertTask
 {
-  DonezoTask *originalTask = [[[DonezoTask init] alloc] autorelease];
+  DonezoTask *originalTask = [[[DonezoTask alloc] init] autorelease];
   originalTask.body = [NSString stringWithFormat:@"My new task!! %@", [NSDate date]];
   originalTask.project = @"Some project";
   originalTask.contexts = [NSArray arrayWithObject:@"home"];
