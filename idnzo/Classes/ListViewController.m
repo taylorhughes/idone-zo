@@ -637,7 +637,7 @@
   NSMutableSet *projects = [NSMutableSet setWithCapacity:[self.tasks count]];
   NSMutableSet *contexts = [NSMutableSet setWithCapacity:[self.tasks count]];
   NSMutableSet *dueDates = [NSMutableSet setWithCapacity:[self.tasks count]];
-  
+
   for (Task* task in self.tasks)
   {
     if (task.project)
@@ -653,7 +653,19 @@
       [dueDates addObject:task.dueDate];
     }
   }
-  
+
+  // Always add the filteredObject, since we might have loaded a list with a whack
+  // filtered object after it is sync'd away.
+  if (self.filteredObject) {
+    if ([self.filteredObject isKindOfClass:[Context class]]) {
+      [contexts addObject:self.filteredObject];
+    } else if ([self.filteredObject isKindOfClass:[Project class]]) {
+      [projects addObject:self.filteredObject];
+    } else if ([self.filteredObject isKindOfClass:[NSDate class]]) {
+      [dueDates addObject:self.filteredObject];
+    }
+  }
+
   [self.filterViewController setSelectedObject:self.filteredObject];
   self.filterViewController.contexts = [[contexts allObjects] sortedArrayUsingSelector:@selector(compare:)];
   self.filterViewController.projects = [[projects allObjects] sortedArrayUsingSelector:@selector(compare:)];
