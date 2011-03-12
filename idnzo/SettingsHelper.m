@@ -41,6 +41,11 @@
   return [DEFAULTS boolForKey:SYNC_ENABLED_KEY];
 }
 
++ (BOOL) canSync
+{
+  return [self isSyncEnabled] && [self hasUsername] && [self hasPassword];
+}
+
 + (NSString*) password
 {
   NSError *error = nil;

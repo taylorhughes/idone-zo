@@ -86,7 +86,7 @@
 - (void) updateSyncStatusButton
 {
   // If syncing is not enabled, remove the sync button from view.
-  if (![SettingsHelper isSyncEnabled])
+  if (![SettingsHelper canSync])
   {
     NSMutableArray *array = [toolbar.items mutableCopy];
     // Noop if syncButton is not in there

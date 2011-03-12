@@ -13,6 +13,7 @@
 }
 
 + (BOOL) isSyncEnabled;
++ (BOOL) canSync;
 + (NSString*) username;
 + (NSString*) syncedUsername;
 + (BOOL) hasUsername;

@@ -21,6 +21,7 @@ NSString* const DonezoShouldToggleCompletedTaskNotification = @"DonezoShouldTogg
 @interface DNZOAppDelegate ()
 
 - (void) firstRun;
+- (void) passwordReset;
 
 - (void) createInitialObjects;
 - (void) createSyncMaster;
@@ -202,7 +203,7 @@ NSString* const DonezoShouldToggleCompletedTaskNotification = @"DonezoShouldTogg
 }
 - (void) sync:(TaskList*)list
 {
-  if (![SettingsHelper isSyncEnabled])
+  if (![SettingsHelper canSync])
   {
     NSLog(@"Ignoring new sync request.");
     return;
@@ -268,7 +269,7 @@ NSString* const DonezoShouldToggleCompletedTaskNotification = @"DonezoShouldTogg
   //
   // WARNING: Operates in a separate thread, do not make non-threadsafe calls here!
   //
-  if (![SettingsHelper isSyncEnabled] || ![SettingsHelper hasUsername] || ![SettingsHelper hasPassword])
+  if (![SettingsHelper canSync])
   {
     NSLog(@"Sync is no longer enabled or no username or password; returning.");
     return;
@@ -425,12 +426,20 @@ NSString* const DonezoShouldToggleCompletedTaskNotification = @"DonezoShouldTogg
 }
 
 - (void) applicationDidFinishLaunching:(UIApplication *)application
-{  
+{
   [self sync];
-  
+
   // Add the current view in the navigationController to the main window.
   [window addSubview:navigationController.view];
   [window makeKeyAndVisible];
+
+  // Just do this once when the app is loaded.
+  if ([SettingsHelper isSyncEnabled] && [SettingsHelper hasUsername] && ![SettingsHelper hasPassword])
+  {
+    // Password can be removed from the keychain after upgrading in certain
+    // circumstances; prompt them to re-enter.
+    [self passwordReset];
+  }
 }
 
 /**
@@ -517,10 +526,25 @@ NSString* const DonezoShouldToggleCompletedTaskNotification = @"DonezoShouldTogg
   [self createInitialObjects];
   
   UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Welcome to Done-zo!"
-                                                  message:@"We can synchronize your task lists\nwith Done-zo.com using "
-                                                           "your\nGoogle Account. Do you want\nto set this up?"
+                                                  message:@"We can synchronize your task lists\n"
+                                                           "with Done-zo.com using your\n"
+                                                           "Google Account. Do you want\n"
+                                                           "to set this up?"
                                                  delegate:self
                                         cancelButtonTitle:@"No thanks"
+                                        otherButtonTitles:@"Set up sync",nil];
+  [alert show];
+  [alert release];
+}
+
+- (void) passwordReset
+{
+  UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Welcome back to Done-zo!"
+                                                  message:@"Please re-enter your password,\n"
+                                                           "it may have been lost during\n"
+                                                           "an upgrade."
+                                                 delegate:self
+                                        cancelButtonTitle:@"Later"
                                         otherButtonTitles:@"Set up sync",nil];
   [alert show];
   [alert release];

@@ -159,7 +159,7 @@
 
 - (NSArray*) remoteTasks
 {
-  if (!remoteTasks && [SettingsHelper isSyncEnabled])
+  if (!remoteTasks && [SettingsHelper canSync])
   {
     @synchronized(self)
     {
