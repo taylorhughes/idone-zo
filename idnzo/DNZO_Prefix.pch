@@ -14,7 +14,7 @@
 #define SVN_REVISION @"unknown"
 #endif
 
-#define DONEZO_VERSION @"1.0.3"
+#define DONEZO_VERSION @"1.1"
 #define USER_AGENT_STRING [NSString stringWithFormat:@"Done-zo iPhone v%@ (rev. %@, http://done-zo.com/)", DONEZO_VERSION, SVN_REVISION]
 
 #define DONEZO_SELECTED_TEXT_COLOR [UIColor colorWithRed:(50.0/255.0) green:(79.0/255.0) blue:(133.0/255.0) alpha:1.0]
