@@ -18,6 +18,7 @@
 + (Project*) findOrCreateProjectWithName:(NSString*)name inContext:(NSManagedObjectContext*)context;
 
 @property (nonatomic, retain) NSString * name;
+@property (nonatomic, assign) BOOL isDeleted;
 
 - (NSInteger)compare:(Project*)other;
 

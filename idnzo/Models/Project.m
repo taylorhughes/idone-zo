@@ -7,6 +7,7 @@
 //
 
 #import "Project.h"
+#import "Project_Private.h"
 
 @interface Project ()
 + (NSArray*)projects:(NSManagedObjectContext*)context;
@@ -15,6 +16,7 @@
 @implementation Project 
 
 @dynamic name;
+@dynamic deleted;
 
 + (NSArray*)projects:(NSManagedObjectContext*)context
 {
@@ -44,7 +46,10 @@
   NSMutableArray *array = [[[NSMutableArray alloc] init] autorelease];
   for (Project *project in [self projects:context])
   {
-    [array addObject:project.name];
+    if (![project isDeleted])
+    {
+      [array addObject:project.name];
+    }
   }
   return array;
 }
@@ -82,6 +87,15 @@
 - (NSInteger)compare:(Project*)other
 {
   return [self.name compare:other.name];
+}
+
+- (BOOL)isDeleted
+{
+  return [self.deleted intValue];
+}
+- (void)setIsDeleted:(BOOL)isDeleted
+{
+  self.deleted = [NSNumber numberWithInt:isDeleted];
 }
 
 @end

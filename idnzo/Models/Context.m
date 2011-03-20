@@ -7,11 +7,13 @@
 //
 
 #import "Context.h"
+#import "Context_Private.h"
 
 
 @implementation Context 
 
 @dynamic name;
+@dynamic deleted;
 
 + (Context*) findContextWithName:(NSString*)name inContext:(NSManagedObjectContext*)context
 {
@@ -50,6 +52,27 @@
   return contexts;
 }
 
++ (NSSet*) findOrCreateContextsFromString:(NSString*)string inContext:(NSManagedObjectContext*)context
+{
+  string = [string lowercaseString];
+
+  NSMutableCharacterSet *set = [NSMutableCharacterSet lowercaseLetterCharacterSet];
+  [set formUnionWithCharacterSet:[NSCharacterSet decimalDigitCharacterSet]];
+  [set addCharactersInString:@"-_"];
+  [set invert];
+
+  NSMutableArray *contextsArray = [NSMutableArray arrayWithArray:[string componentsSeparatedByCharactersInSet:set]];
+  for (int i = [contextsArray count] - 1; i >= 0; i--)
+  {
+    if ([[contextsArray objectAtIndex:i] isEqual:@""])
+    {
+      [contextsArray removeObjectAtIndex:i];
+    }
+  }
+  
+  return [NSSet setWithArray:[Context findOrCreateContextsWithNames:contextsArray inContext:context]];
+}
+
 + (NSArray*)contexts:(NSManagedObjectContext*)context
 {
   NSFetchRequest *request = [[NSFetchRequest alloc] init];
@@ -78,7 +101,10 @@
   NSMutableArray *array = [[[NSMutableArray alloc] init] autorelease];
   for (Context *context in [self contexts:inContext])
   {
-    [array addObject:[NSString stringWithFormat:@"@%@", context.name]];
+    if (![context isDeleted])
+    {
+      [array addObject:[NSString stringWithFormat:@"@%@", context.name]];
+    }
   }
   return array;
 }
@@ -87,6 +113,15 @@
 - (NSInteger) compare:(Context*)other
 {
   return [self.name compare:other.name];
+}
+
+- (BOOL)isDeleted
+{
+  return [self.deleted intValue];
+}
+- (void)setIsDeleted:(BOOL)isDeleted
+{
+  self.deleted = [NSNumber numberWithInt:isDeleted];
 }
 
 @end

@@ -10,6 +10,7 @@
 
 @interface EditProjectPicker()
 - (void) save:(id)sender;
+- (void) delete:(NSString*)string fromSender:(id)sender;
 - (void) cancel:(id)sender;
 @property (retain, nonatomic) UITextField *textField;
 @end
@@ -20,7 +21,7 @@
 
 @implementation EditProjectPicker
 
-@synthesize options, target, saveAction;
+@synthesize options, target, saveAction, deleteAction;
 @synthesize appendSelections;
 @synthesize textField;
 @synthesize title;
@@ -142,19 +143,20 @@
   [self.navigationController popViewControllerAnimated:YES];
 }
 
+- (void) delete:(NSString*)string fromSender:(id)sender
+{  
+  if (target && deleteAction)
+  {
+    [target performSelector:deleteAction withObject:string withObject:sender];
+  }
+}
+
 - (void)cancel:(id)sender
 {
   [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark Text view methods
-
-//- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
-//{
-//  // Commented out because this causes crazy behavior that crashes on saving a new project
-//  [self.tableView reloadData];
-//  return YES;
-//}
 
 - (BOOL)textFieldShouldReturn:(UITextField *)aTextField
 {
@@ -232,51 +234,65 @@
   return cell;
 }
 
+- (NSString*) removeOption:(NSString*)option fromSelection:(NSString*)selected
+{
+  if (self.appendSelections)
+  {
+    // Replace just this portion of the string.
+    NSString *pattern = [NSString stringWithFormat:@"(^|[[:space:]]+)@?%@($|[[:space:]]+)",
+                         [option stringByReplacingOccurrencesOfString:@"@" withString:@""]];
+    GTMRegex *regex = [GTMRegex regexWithPattern:pattern options:kGTMRegexOptionIgnoreCase];
+    selected = [regex stringByReplacingMatchesInString:selected withReplacement:@"\\1"];
+    selected = [selected stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];        
+  }
+  else
+  {
+    selected = nil;
+  }
+
+  return selected;
+}
+
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
   if ([indexPath section] == 1)
   {    
     UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
     NSString *option = cell.textLabel.text;
-    if (self.appendSelections)
-    {
-      if (![self selectedContains:option])
-      {
-        if (self.selected != nil && ![self.selected isEqual:@""])
-        {
-          self.selected = [self.selected stringByAppendingFormat:@" %@", option];
-        }
-        else
-        {
-          self.selected = cell.textLabel.text;
-        }
-      }
-      else
-      {
-        NSString *pattern = [NSString stringWithFormat:@"(^|[[:space:]]+)@?%@($|[[:space:]]+)",
-                              [option stringByReplacingOccurrencesOfString:@"@" withString:@""]];
-        GTMRegex *regex = [GTMRegex regexWithPattern:pattern options:kGTMRegexOptionIgnoreCase];
-        self.selected = [regex stringByReplacingMatchesInString:self.selected withReplacement:@"\\1"];
-        self.selected = [self.selected stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-      }
+    NSString *selected = self.selected;
 
+    if ([self selectedContains:option])
+    {
+      // Remove
+      selected = [self removeOption:option fromSelection:selected];
     }
     else
     {
-      if ([self.selected isEqual:cell.textLabel.text])
+      if (self.appendSelections)
       {
-        self.selected = nil;
+        if (selected != nil && ![selected isEqual:@""])
+        {
+          selected = [selected stringByAppendingFormat:@" %@", option];
+        }
+        else
+        {
+          selected = option;
+        }
       }
       else
       {
-        self.selected = cell.textLabel.text;
+        selected = option;
       }
+    }
+
+    self.selected = selected;
+    if (!self.appendSelections) {
       [self save:self];
     }
     
     return indexPath;
   }
-  
+
   return nil;
 }
 
@@ -284,6 +300,35 @@
 {
   [self.tableView reloadData];
 }
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+  return [indexPath section] == 1 && [self deleteAction];
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+  if (editingStyle != UITableViewCellEditingStyleDelete)
+  {
+    return;
+  }
+
+  NSString *option = [self.options objectAtIndex:[indexPath row]];
+
+  [self delete:option fromSender:self];
+
+  if ([self selectedContains:option])
+  {
+    self.selected = [self removeOption:option fromSelection:self.selected];    
+  }
+
+  NSMutableArray *mutableOptions = [self.options mutableCopy];
+  [mutableOptions removeObjectAtIndex:[indexPath row]];
+  self.options = mutableOptions;
+
+  [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+}
+
 
 - (void)dealloc
 {

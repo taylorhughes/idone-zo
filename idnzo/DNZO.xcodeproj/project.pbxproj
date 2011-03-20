@@ -13,6 +13,8 @@
 		3412017110294BF200A0439E /* DonezoSyncMaster.m in Sources */ = {isa = PBXBuildFile; fileRef = 3412016F10294BF200A0439E /* DonezoSyncMaster.m */; };
 		3412FD561027961B00A0439E /* NSDictionary+Donezo.m in Sources */ = {isa = PBXBuildFile; fileRef = 3412FD551027961B00A0439E /* NSDictionary+Donezo.m */; };
 		3412FDD210279C1D00A0439E /* NSDictionary+Donezo.m in Sources */ = {isa = PBXBuildFile; fileRef = 3412FD551027961B00A0439E /* NSDictionary+Donezo.m */; };
+		3415C8E01336B88B009E8344 /* Tasks.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3415C8DF1336B88B009E8344 /* Tasks.xcdatamodeld */; };
+		3415C8E11336B88B009E8344 /* Tasks.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3415C8DF1336B88B009E8344 /* Tasks.xcdatamodeld */; };
 		3416EC260FC22C3D00D8BD53 /* TaskCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3416EC230FC22C3D00D8BD53 /* TaskCell.m */; };
 		3416EC270FC22C3D00D8BD53 /* TaskCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3416EC250FC22C3D00D8BD53 /* TaskCellView.m */; };
 		3416EC280FC22C3D00D8BD53 /* TaskCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3416EC230FC22C3D00D8BD53 /* TaskCell.m */; };
@@ -132,8 +134,6 @@
 		34F60D23101FE6DB00577EFA /* SBJsonBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F60D15101FE6DB00577EFA /* SBJsonBase.m */; };
 		34F60D24101FE6DB00577EFA /* SBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F60D17101FE6DB00577EFA /* SBJsonParser.m */; };
 		34F60D25101FE6DB00577EFA /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F60D19101FE6DB00577EFA /* SBJsonWriter.m */; };
-		34FAAB29101141B700B74477 /* Tasks.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 34FAAB28101141B700B74477 /* Tasks.xcdatamodel */; };
-		34FAAB2A101141B700B74477 /* Tasks.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 34FAAB28101141B700B74477 /* Tasks.xcdatamodel */; };
 		34FAABE81011487800B74477 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34FAABE71011487800B74477 /* Foundation.framework */; };
 		34FAABE91011487800B74477 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34FAABE71011487800B74477 /* Foundation.framework */; };
 		34FAABED101148BC00B74477 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34FAABEC101148BC00B74477 /* CoreGraphics.framework */; };
@@ -152,6 +152,9 @@
 		3412016F10294BF200A0439E /* DonezoSyncMaster.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DonezoSyncMaster.m; sourceTree = "<group>"; };
 		3412FD541027961B00A0439E /* NSDictionary+Donezo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSDictionary+Donezo.h"; path = "DonezoAPI/NSDictionary+Donezo.h"; sourceTree = "<group>"; };
 		3412FD551027961B00A0439E /* NSDictionary+Donezo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSDictionary+Donezo.m"; path = "DonezoAPI/NSDictionary+Donezo.m"; sourceTree = "<group>"; };
+		3415C8E21336B88B009E8344 /* Tasks.2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Tasks.2.xcdatamodel; sourceTree = "<group>"; };
+		3415C8E51336B8E7009E8344 /* Context_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Context_Private.h; sourceTree = "<group>"; };
+		3415C8E61336B8F1009E8344 /* Project_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Project_Private.h; sourceTree = "<group>"; };
 		3416EC220FC22C3D00D8BD53 /* TaskCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskCell.h; sourceTree = "<group>"; };
 		3416EC230FC22C3D00D8BD53 /* TaskCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaskCell.m; sourceTree = "<group>"; };
 		3416EC240FC22C3D00D8BD53 /* TaskCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskCellView.h; sourceTree = "<group>"; };
@@ -384,7 +387,7 @@
 				34B6072410D8829D00CCF883 /* SettingsView.xib */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 				3452D4A21049CC26005C717C /* Entitlements.plist */,
-				34FAAB28101141B700B74477 /* Tasks.xcdatamodel */,
+				3415C8DF1336B88B009E8344 /* Tasks.xcdatamodeld */,
 				34A8317810FA3C01002418C2 /* FilterView.xib */,
 			);
 			name = Resources;
@@ -423,8 +426,10 @@
 			isa = PBXGroup;
 			children = (
 				34174694101523BD00DEBB76 /* Context.h */,
+				3415C8E51336B8E7009E8344 /* Context_Private.h */,
 				34174695101523BD00DEBB76 /* Context.m */,
 				34174696101523BD00DEBB76 /* Project.h */,
+				3415C8E61336B8F1009E8344 /* Project_Private.h */,
 				34174697101523BD00DEBB76 /* Project.m */,
 				34174698101523BD00DEBB76 /* Task.h */,
 				34C743C1107C14120045F527 /* Task_Private.h */,
@@ -738,7 +743,7 @@
 				34C51AC50FB92A9D0024A5CD /* EditProjectPicker.m in Sources */,
 				3416EC280FC22C3D00D8BD53 /* TaskCell.m in Sources */,
 				3416EC290FC22C3D00D8BD53 /* TaskCellView.m in Sources */,
-				34FAAB29101141B700B74477 /* Tasks.xcdatamodel in Sources */,
+				3415C8E01336B88B009E8344 /* Tasks.xcdatamodeld in Sources */,
 				341746A0101523BD00DEBB76 /* Context.m in Sources */,
 				341746A1101523BD00DEBB76 /* Project.m in Sources */,
 				341746A2101523BD00DEBB76 /* Task.m in Sources */,
@@ -785,7 +790,7 @@
 				34C51AC40FB92A9D0024A5CD /* EditProjectPicker.m in Sources */,
 				3416EC260FC22C3D00D8BD53 /* TaskCell.m in Sources */,
 				3416EC270FC22C3D00D8BD53 /* TaskCellView.m in Sources */,
-				34FAAB2A101141B700B74477 /* Tasks.xcdatamodel in Sources */,
+				3415C8E11336B88B009E8344 /* Tasks.xcdatamodeld in Sources */,
 				3417469C101523BD00DEBB76 /* Context.m in Sources */,
 				3417469D101523BD00DEBB76 /* Project.m in Sources */,
 				3417469E101523BD00DEBB76 /* Task.m in Sources */,
@@ -1032,6 +1037,20 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		3415C8DF1336B88B009E8344 /* Tasks.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				34FAAB28101141B700B74477 /* Tasks.xcdatamodel */,
+				3415C8E21336B88B009E8344 /* Tasks.2.xcdatamodel */,
+			);
+			currentVersion = 3415C8E21336B88B009E8344 /* Tasks.2.xcdatamodel */;
+			path = Tasks.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 29B97313FDCFA39411CA2CEA /* Project object */;
 }

@@ -16,6 +16,7 @@
   UITextField *textField;
   NSObject *target;
   SEL saveAction;
+  SEL deleteAction;
   BOOL appendSelections;
   NSString *title;
 }
@@ -27,6 +28,7 @@
 @property (retain, nonatomic) NSObject *target;
 @property (nonatomic) BOOL appendSelections;
 @property (nonatomic) SEL saveAction;
+@property (nonatomic) SEL deleteAction;
 @property (retain, nonatomic) NSString *placeholder;
 @property (retain, nonatomic) NSString *title;
 

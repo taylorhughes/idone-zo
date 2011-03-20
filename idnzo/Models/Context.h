@@ -14,12 +14,14 @@
 }
 
 @property (nonatomic, retain) NSString * name;
+@property (nonatomic, assign) BOOL isDeleted;
 
 - (NSInteger) compare:(Context*)other;
 
 + (Context*) findContextWithName:(NSString*)name inContext:(NSManagedObjectContext*)context;
 + (Context*) findOrCreateContextWithName:(NSString*)name inContext:(NSManagedObjectContext*)context;
 + (NSArray*) findOrCreateContextsWithNames:(NSArray*)names inContext:(NSManagedObjectContext*)context;
++ (NSSet*) findOrCreateContextsFromString:(NSString*)string inContext:(NSManagedObjectContext*)context;
 
 + (NSArray*) contexts:(NSManagedObjectContext*)context;
 + (NSArray*) contextNames:(NSManagedObjectContext*)inContext;

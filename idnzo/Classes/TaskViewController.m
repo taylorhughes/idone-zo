@@ -462,28 +462,51 @@ static UIImage *unchecked;
   NSString *newProject = [(EditProjectPicker*)sender selected];
   
   self.task.project = [Project findOrCreateProjectWithName:newProject inContext:[self.task managedObjectContext]];
+  if ([self.task.project isDeleted])
+  {
+    // If they've re-entered a deleted project name, show it again.
+    [self.task.project setIsDeleted:NO];
+  }
   [self save];
 }
+- (void) deleteProject:(NSString*)name fromSender:(id)sender
+{
+  Project *project = [Project findOrCreateProjectWithName:name inContext:[self.task managedObjectContext]];
+  [project setIsDeleted:YES];
+
+  // Don't need to update anything for this change.
+  [self save:NO andSync:NO];
+}
+
 - (void) saveContexts:(id)sender
 {
-  NSString *contexts = [[(EditProjectPicker*)sender selected] lowercaseString];
-  NSMutableCharacterSet *set = [NSMutableCharacterSet lowercaseLetterCharacterSet];
-  [set formUnionWithCharacterSet:[NSCharacterSet decimalDigitCharacterSet]];
-  [set addCharactersInString:@"-_"];
-  [set invert];
+  NSString *contexts = [(EditProjectPicker*)sender selected];
   
-  NSMutableArray *contextsArray = [NSMutableArray arrayWithArray:[contexts componentsSeparatedByCharactersInSet:set]];
-  for (int i = [contextsArray count] - 1; i >= 0; i--)
+  self.task.contexts = [Context findOrCreateContextsFromString:contexts inContext:[self.task managedObjectContext]];
+
+  for (Context *context in self.task.contexts)
   {
-    if ([[contextsArray objectAtIndex:i] isEqual:@""])
+    if ([context isDeleted])
     {
-      [contextsArray removeObjectAtIndex:i];
+      // If we've entered a deleted context, show it again.
+      [context setIsDeleted:NO];
     }
   }
-  
-  self.task.contexts = [NSSet setWithArray:[Context findOrCreateContextsWithNames:contextsArray inContext:[self.task managedObjectContext]]];
   [self save];
 }
+- (void) deleteContext:(NSString*)name fromSender:(id)sender
+{
+  NSSet *contexts = [Context findOrCreateContextsFromString:name
+                                                  inContext:[self.task managedObjectContext]];
+  for (Context *context in contexts)
+  {
+    [context setIsDeleted:YES];
+  }
+
+  // Don't need to update anything for this change.
+  [self save:NO andSync:NO];
+}
+
 - (void)saveDate:(id)sender
 {
   self.task.dueDate = [(DatePickerViewController*)sender selectedDate];
@@ -822,6 +845,7 @@ static UIImage *unchecked;
         ((EditProjectPicker*)controller).selected = self.task.project.name;
         ((EditProjectPicker*)controller).target = self;
         ((EditProjectPicker*)controller).saveAction = @selector(saveProject:);
+        ((EditProjectPicker*)controller).deleteAction = @selector(deleteProject:fromSender:);
         ((EditProjectPicker*)controller).placeholder = @"New Project";
         ((EditProjectPicker*)controller).title = @"Project";
         break;
@@ -834,6 +858,7 @@ static UIImage *unchecked;
         ((EditProjectPicker*)controller).selected = [self.task contextsString];
         ((EditProjectPicker*)controller).target = self;
         ((EditProjectPicker*)controller).saveAction = @selector(saveContexts:);
+        ((EditProjectPicker*)controller).deleteAction = @selector(deleteContext:fromSender:);
         ((EditProjectPicker*)controller).placeholder = @"@home @work";
         ((EditProjectPicker*)controller).title = @"Contexts";
         break;

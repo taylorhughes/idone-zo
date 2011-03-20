@@ -483,7 +483,9 @@ NSString* const DonezoShouldToggleCompletedTaskNotification = @"DonezoShouldTogg
 {
   if (managedObjectModel == nil)
   {
-    managedObjectModel = [[NSManagedObjectModel mergedModelFromBundles:nil] retain];
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"Tasks" ofType:@"momd"];
+    NSURL *momURL = [NSURL fileURLWithPath:path];
+    managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:momURL];
   }
   return managedObjectModel;
 }
@@ -499,8 +501,15 @@ NSString* const DonezoShouldToggleCompletedTaskNotification = @"DonezoShouldTogg
   {    
     NSError *error = nil;
     NSURL *storeUrl = [NSURL fileURLWithPath:self.storePath];
+
+    // Enables automatic migration to the updated datamodel.
+    NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
+                               [NSNumber numberWithBool:YES], NSMigratePersistentStoresAutomaticallyOption,
+                               [NSNumber numberWithBool:YES], NSInferMappingModelAutomaticallyOption,
+                               nil];
+
     persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
-    if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeUrl options:nil error:&error])
+    if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeUrl options:options error:&error])
     {
       NSLog(@"Could not initialize persistentStoreCoordinator: %@ %@", [error description], [error userInfo]);
     }
