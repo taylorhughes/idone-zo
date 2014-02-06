@@ -233,15 +233,15 @@
 
 + (NSString*) URL
 {
-#if TARGET_IPHONE_SIMULATOR
-  #if true
-    return @"http://localhost:8081/";
-  #else
-    return @"http://dnzo-staging.appspot.com/";
-  #endif
-#else
+//#if TARGET_IPHONE_SIMULATOR
+//  #if true
+//    return @"http://localhost:8081/";
+//  #else
+//    return @"http://dnzo-staging.appspot.com/";
+//  #endif
+//#else
   return @"https://dnzo.appspot.com/";
-#endif
+//#endif
 }
 
 @end
