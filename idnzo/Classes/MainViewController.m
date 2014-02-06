@@ -157,7 +157,7 @@
   
   UINavigationController *modalNavigationController =
     [[[UINavigationController alloc] initWithRootViewController:tfvc] autorelease];
-  [self.navigationController presentModalViewController:modalNavigationController animated:YES];  
+  [self presentViewController:modalNavigationController animated:YES completion:nil];
 }
 
 - (void) addList:(id)sender

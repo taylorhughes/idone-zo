@@ -101,7 +101,7 @@
   
   if ([self wasPresentedModally])
   {
-    [self.navigationController dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
   }
   else
   {
@@ -119,7 +119,7 @@
   
   if ([self wasPresentedModally])
   {
-    [self.navigationController dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
   }
   else
   {

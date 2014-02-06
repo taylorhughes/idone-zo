@@ -448,7 +448,7 @@ static UIImage *unchecked;
   if ([self isNewTask] && self.task.body == nil)
   {
     self.editingContext = nil;
-    [self.navigationController.parentViewController dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
   }
   else
   {
@@ -691,7 +691,7 @@ static UIImage *unchecked;
   }
   else
   {
-    [self.navigationController.parentViewController dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
     
     // Reload task with new updated task
     DNZOAppDelegate *appDelegate = (DNZOAppDelegate *)[[UIApplication sharedApplication] delegate];

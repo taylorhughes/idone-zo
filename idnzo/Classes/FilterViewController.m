@@ -236,12 +236,12 @@
                      object:self
                    userInfo:info];
   
-  [self.navigationController.parentViewController dismissModalViewControllerAnimated:YES];
+  [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)onClickDone:(id)sender
 {
-  [self.navigationController.parentViewController dismissModalViewControllerAnimated:YES];
+  [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)reset

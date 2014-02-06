@@ -176,12 +176,12 @@ NSArray *sortKeys;
   
   
   [self.tableView reloadData];
-  [self.navigationController.parentViewController dismissModalViewControllerAnimated:YES];
+  [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)onClickDone:(id)sender
 {
-  [self.navigationController.parentViewController dismissModalViewControllerAnimated:YES];
+  [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 

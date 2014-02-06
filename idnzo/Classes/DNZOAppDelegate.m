@@ -567,8 +567,8 @@ NSString* const DonezoShouldToggleCompletedTaskNotification = @"DonezoShouldTogg
     SettingsViewController *settings = [SettingsViewController settingsViewControllerWithSyncEnabled];
     UINavigationController *settingsNav = [[UINavigationController alloc] initWithRootViewController:settings];
     
-    [self.navigationController presentModalViewController:settingsNav animated:YES];
-    
+    [self.navigationController presentViewController:settingsNav animated:YES completion:nil];
+
     [settingsNav release];
   }
 }

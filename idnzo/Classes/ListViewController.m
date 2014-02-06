@@ -618,7 +618,7 @@
   
   UINavigationController *modalNavigationController =
     [[[UINavigationController alloc] initWithRootViewController:tvc] autorelease];
-  [self.navigationController presentModalViewController:modalNavigationController animated:YES];
+  [self.navigationController presentViewController:modalNavigationController animated:YES completion:nil];
 }
 
 - (IBAction) sort:(id)sender
@@ -628,7 +628,7 @@
   
   UINavigationController *modalNavigationController =
     [[[UINavigationController alloc] initWithRootViewController:self.sortViewController] autorelease];
-  [self.navigationController presentModalViewController:modalNavigationController animated:YES];  
+  [self.navigationController presentViewController:modalNavigationController animated:YES completion:nil];
 }
 
 - (IBAction) filter:(id)sender
@@ -673,7 +673,7 @@
   
   UINavigationController *modalNavigationController =
     [[[UINavigationController alloc] initWithRootViewController:self.filterViewController] autorelease];
-  [self.navigationController presentModalViewController:modalNavigationController animated:YES];    
+  [self.navigationController presentViewController:modalNavigationController animated:YES completion:nil];
 }
 
 

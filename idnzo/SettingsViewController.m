@@ -110,7 +110,7 @@
 
 - (void) dismiss:(id)sender
 {
-  [self.navigationController dismissModalViewControllerAnimated:YES];
+  [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 //
